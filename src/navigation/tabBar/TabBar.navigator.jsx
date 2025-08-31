@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ROUTES } from "@constants/Routes";
-import { CardScreen, PromocodeScreen } from "@screens";
+import { CardScreen, SettingsScreen } from "@screens";
 import TabBar from "./TabBar";
 import { fastSpring } from "@constants/Easings";
 import { useUnistyles } from "react-native-unistyles";
@@ -33,8 +33,8 @@ export default function MainTabNavigator() {
 			}}
 		>
 			<Tab.Screen options={options} name={ROUTES.TAB_CHATS} component={CardScreen} />
-			<Tab.Screen options={options} name={ROUTES.TAB_SEARCH} component={PromocodeScreen} />
-			<Tab.Screen options={options} name={ROUTES.TAB_SETTINGS} component={PromocodeScreen} />
+			<Tab.Screen options={options} name={ROUTES.TAB_SEARCH} component={SettingsScreen} />
+			<Tab.Screen options={options} name={ROUTES.TAB_SETTINGS} component={SettingsScreen} />
 		</Tab.Navigator>
 	);
 }

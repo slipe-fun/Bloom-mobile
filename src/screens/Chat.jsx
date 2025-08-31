@@ -4,30 +4,22 @@ import Footer from "@components/chatScreen/footer/Footer";
 import Message from "@components/chatScreen/message/Message";
 import { useCallback, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
-import Animated, {
-  LinearTransition,
-  useAnimatedStyle,
-} from "react-native-reanimated";
+import Animated, { LinearTransition } from "react-native-reanimated";
 import { quickSpring } from "@constants/Easings";
 import Transition from "react-native-screen-transitions";
 import EmptyModal from "@components/chatScreen/emptyModal/EmptyModal";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
-import { useAnimatedKeyboard } from "react-native-reanimated";
 const TransitionList = Transition.createTransitionAwareComponent(
   Animated.FlatList
 );
 
 export default function ChatScreen({ route }) {
   const { chat } = route.params;
-  const keyboard = useAnimatedKeyboard();
 
   const [messages, setMessages] = useState(
     Array.from({ length: 0 }).map((_, i) => ({ id: i.toString() }))
   );
-
-  const animatedStyles = useAnimatedStyle(() => ({
-    marginBottom: keyboard.height.value,
-  }));
 
   const addMessage = (e) => {
     setMessages((prev) => [
@@ -40,11 +32,14 @@ export default function ChatScreen({ route }) {
     return <Message message={{ text: item.text, isMe: item.isMe }} />;
   }, []);
 
-  return (
+    return (
     <View style={styles.container}>
       <Header chat={chat} />
-      <Animated.View style={[styles.list, animatedStyles]}>
-        <EmptyModal visible={messages.length === 0}/>
+      <EmptyModal visible={messages.length === 0} />
+      <KeyboardAvoidingView
+        behavior="translate-with-padding"
+        style={styles.list}
+      >
         <TransitionList
           data={messages}
           renderItem={renderItem}
@@ -60,7 +55,7 @@ export default function ChatScreen({ route }) {
             .stiffness(quickSpring.stiffness)}
         />
         <Footer onSend={addMessage} />
-      </Animated.View>
+      </KeyboardAvoidingView>
     </View>
   );
 }

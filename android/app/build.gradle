@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+import org.apache.tools.ant.taskdefs.condition.Os
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
@@ -89,6 +90,16 @@ android {
 
     namespace 'com.anonymous.myapp'
     defaultConfig {
+        externalNativeBuild {
+            cmake {
+                def cmakeDir = "${android.sdkDirectory}/cmake/3.22.1/bin"
+                def ninjaExecutable = Os.isFamily(Os.FAMILY_WINDOWS) ? "ninja.exe" : "ninja"
+                def ninjaPath = "${cmakeDir}/${ninjaExecutable}".replace("\\", "/")
+
+                arguments "-DCMAKE_MAKE_PROGRAM=${ninjaPath}",
+                "-DCMAKE_OBJECT_PATH_MAX=1024"
+            }
+        }
         applicationId 'com.anonymous.myapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion

@@ -53,7 +53,7 @@ export default function Footer({ onSend }) {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   
   useEffect(() => {
-   const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () => {
+   const keyboardShowListener = Keyboard.addListener("keyboardDidShow", (e) => {
       setKeyboardVisible(true);
     }); 
     const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {

@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { enableScreens } from "react-native-screens";
 import AppNavigator from 'src/navigation/AppNavigator';
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 enableScreens();
 
@@ -24,10 +25,12 @@ export default function App() {
 
 	return (
 		<SafeAreaProvider>
+			<KeyboardProvider>
 			<GestureHandlerRootView style={{ flex: 1, backgroundColor: "#000000" }}>
 				<StatusBar style='dark' />
 				<AppNavigator/>
 			</GestureHandlerRootView>
+			</KeyboardProvider>
 		</SafeAreaProvider>
 	);
 }

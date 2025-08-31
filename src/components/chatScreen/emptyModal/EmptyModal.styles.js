@@ -7,7 +7,6 @@ export const styles = StyleSheet.create((theme) => ({
         position: "absolute",
         paddingHorizontal: 40,
         justifyContent: "center",   
-        bottom: 60,
         alignItems: "center",
     },
     modal: {
