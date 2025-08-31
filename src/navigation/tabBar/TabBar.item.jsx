@@ -20,7 +20,7 @@ export default function TabBarItem({ route, focused, onPress }) {
 	const { theme } = useUnistyles();
 
 	const TABS_COLORS = {
-		tab_chats: theme.colors.primary,
+		tab_chats: theme.colors.cyan,
 		tab_search: theme.colors.yellow,
 		tab_settings: theme.colors.green,
 	};
