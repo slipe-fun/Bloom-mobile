@@ -1,13 +1,13 @@
 import { View } from "react-native";
-import Header from "@components/chatScreen/header/Header";
-import Footer from "@components/chatScreen/footer/Footer";
-import Message from "@components/chatScreen/message/Message";
+import Header from "@components/chatScreen/header";
+import Footer from "@components/chatScreen/footer";
+import Message from "@components/chatScreen/message";
 import { useCallback, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { quickSpring } from "@constants/Easings";
 import Transition from "react-native-screen-transitions";
-import EmptyModal from "@components/chatScreen/emptyModal/EmptyModal";
+import EmptyModal from "@components/chatScreen/emptyModal";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 const TransitionList = Transition.createTransitionAwareComponent(

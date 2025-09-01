@@ -6,7 +6,7 @@ import MainTabNavigator from "./tabBar/TabBar.navigator";
 import { interpolate } from "react-native-reanimated";
 import ChatScreen from "@screens/Chat";
 import { ROUTES } from "@constants/Routes";
-import { fastSpring, slowSpring } from "@constants/Easings";
+import { slowSpring } from "@constants/Easings";
 
 const RootStack = createNativeStackNavigator();
 

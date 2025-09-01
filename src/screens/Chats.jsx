@@ -1,4 +1,4 @@
-import Header from "@components/chatsScreen/header/Header";
+import Header from "@components/chatsScreen/header";
 import { View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { StyleSheet } from "react-native-unistyles";
@@ -6,9 +6,9 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue
 } from "react-native-reanimated";
-import Chat from "@components/chatsScreen/chat/Chat";
+import Chat from "@components/chatsScreen/chat";
 import useChatsScreenStore from "@stores/ChatsScreen";
-import SearchView from "@components/chatsScreen/searchView/SearchView";
+import SearchView from "@components/chatsScreen/searchView";
 
 const data = Array.from({ length: 100 }).map((_, i) => ({ id: i.toString() }));
 

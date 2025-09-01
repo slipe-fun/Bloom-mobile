@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ROUTES } from "@constants/Routes";
 import { CardScreen, SettingsScreen } from "@screens";
-import TabBar from "./TabBar";
+import TabBar from ".";
 import { fastSpring } from "@constants/Easings";
 import { useUnistyles } from "react-native-unistyles";
 
