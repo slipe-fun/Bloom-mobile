@@ -7,7 +7,8 @@ import { ROUTES } from "@constants/Routes";
 import { slowSpring } from "@constants/Easings";
 import { useState, useEffect } from "react";  
 import { createSecureStorage } from "@lib/Storage";
-import { SplashScreen } from "expo-splash-screen";
+import * as SplashScreen from "expo-splash-screen";
+import AuthNavigator from "./AuthNavigator";
 
 const RootStack = createNativeStackNavigator();
 
@@ -62,8 +63,7 @@ export default function AppNavigator() {
           presentation: "card",
         }}
       >
-        <RootStack.Screen name={ROUTES.SIGN_UP} component={SignUpScreen} />
-        <RootStack.Screen name={ROUTES.WELCOME} component={WelcomeScreen} />
+        <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
         {isAuthenticated && (
           <>
             <RootStack.Screen name="MainApp" component={MainTabNavigator} />

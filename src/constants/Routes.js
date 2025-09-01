@@ -9,5 +9,6 @@ export const ROUTES = {
 
   // Auth
   SIGN_UP: "sign_up",
+  AUTH: "auth",
   WELCOME: "welcome",
 };

@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native-unistyles";
 
 export const styles = StyleSheet.create((theme) => ({
   button: {
-    backgroundColor: theme.colors.primary,
     height: 44,
     paddingHorizontal: theme.spacing.xxl,
     borderRadius: theme.radius.full,
