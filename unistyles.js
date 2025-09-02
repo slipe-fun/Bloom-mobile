@@ -59,7 +59,13 @@ export const lightTheme = {
 		pink: "#FF66F5",
 		yellow: "#FFB566",
 		cyan: "#28A8E9",
-		cyanBackdrop: "#28a8e959",
+
+		// Backdrops
+		cyanBackdrop: "#28A8E959",
+		orangeBackdrop: "#FF531B33",
+		orangePlaceholder: "#FF531B80",
+		primaryBackdrop: "#0A84FF33",
+		primaryPlaceholder: "#0A84FF80",
 	},
 	...base,
 };

@@ -7,9 +7,12 @@ import useInsets from "@hooks/UseInsets";
 import Slider from "@components/auth/welcomeScreen/slider";
 import { useSharedValue, useAnimatedStyle, interpolateColor } from "react-native-reanimated";
 import Gradient from "@components/auth/gradient";
+import { ROUTES } from "@constants/Routes";
+import { useNavigation } from "@react-navigation/native";
 
 export default function WelcomeScreen() {
   const { theme } = useUnistyles();
+  const navigation = useNavigation();
   const [activeSlide, setActiveSlide] = useState(0);
   const insets = useInsets();
   const position = useSharedValue(0);
@@ -67,9 +70,12 @@ export default function WelcomeScreen() {
       <Slider page={activeSlide} slides={slides} setPage={setActiveSlide} position={position} offset={offset}/>
       <View style={[styles.buttonContainer, { paddingBottom: insets.bottom + theme.spacing.lg }]}>
         <Button
+          onPress={() => navigation.navigate(ROUTES.REGISTER)}
           animatedStyle={animatedStyle}
           shimmer
-        />
+        >
+         Начать общение!
+        </Button>
       </View>
     </View>
   );

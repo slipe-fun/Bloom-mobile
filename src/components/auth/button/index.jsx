@@ -14,11 +14,12 @@ import { quickSpring } from "@constants/Easings";
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
-export default function Button({ animatedStyle, shimmer = false }) {
+export default function Button({ animatedStyle, shimmer = false, onPress, children }) {
   const scale = useSharedValue(1);
   const shimmerX = useSharedValue(-200);
 
   const handlePress = () => {
+    onPress?.();
     scale.value = shimmer ? withSpring(1.1, quickSpring) : withSpring(1.05, quickSpring);
   };
 
@@ -50,7 +51,7 @@ export default function Button({ animatedStyle, shimmer = false }) {
       onPressIn={handlePress}
       onPressOut={handleRelease}
     >
-      <Text style={styles.text}>Начать общение!</Text>
+      <Text style={styles.text}>{children}</Text>
 
       {shimmer && (
         <AnimatedLinearGradient

@@ -24,8 +24,10 @@ export const styles = StyleSheet.create((theme) => ({
     zIndex: 1,
     color: theme.colors.text,
     borderRadius: theme.radius.full,
+    fontSize: theme.fontSize.sm,
+		lineHeight: theme.lineHeight.sm,
+    fontFamily: theme.fontFamily.medium,
     backgroundColor: theme.colors.foreground,
-    borderWidth: 1,
-    borderColor: theme.colors.foreground,
+    borderWidth: 0,
   },
 }));

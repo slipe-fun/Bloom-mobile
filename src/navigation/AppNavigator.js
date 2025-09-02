@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "react-native-screen-transitions";
 import MainTabNavigator from "./tabBar/TabBar.navigator";
 import { interpolate } from "react-native-reanimated";
-import { ChatScreen, WelcomeScreen, SignUpScreen } from "@screens";
+import { ChatScreen } from "@screens";
 import { ROUTES } from "@constants/Routes";
 import { slowSpring } from "@constants/Easings";
 import { useState, useEffect } from "react";  
@@ -63,10 +63,9 @@ export default function AppNavigator() {
           presentation: "card",
         }}
       >
-        <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
-        {isAuthenticated && (
+        {isAuthenticated ? (
           <>
-            <RootStack.Screen name="MainApp" component={MainTabNavigator} />
+            <RootStack.Screen name={ROUTES.MAIN} component={MainTabNavigator} />
             <RootStack.Screen
               options={{
                 enableTransitions: true,
@@ -125,6 +124,8 @@ export default function AppNavigator() {
               component={ChatScreen}
             />
           </>
+        ) : (
+          <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
         )}
       </RootStack.Navigator>
     </NavigationContainer>
