@@ -1,5 +1,5 @@
 import { Text, Pressable, TextInput } from "react-native";
-import { styles } from "./Header.styles";
+import { styles } from "./header.styles";
 import useInsets from "@hooks/UseInsets";
 import { useState, useRef } from "react";
 import Icon from "@components/ui/Icon";
