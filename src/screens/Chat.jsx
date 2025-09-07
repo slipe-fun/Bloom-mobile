@@ -2,13 +2,15 @@ import { View } from "react-native";
 import Header from "@components/chatScreen/header";
 import Footer from "@components/chatScreen/footer";
 import Message from "@components/chatScreen/message";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { quickSpring } from "@constants/Easings";
 import Transition from "react-native-screen-transitions";
 import EmptyModal from "@components/chatScreen/emptyModal";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import getChatFromStorage from "@lib/getChatFromStorage";
+import encrypt from "@lib/skid/encrypt";
 
 const TransitionList = Transition.createTransitionAwareComponent(
   Animated.FlatList
@@ -21,18 +23,24 @@ export default function ChatScreen({ route }) {
     Array.from({ length: 0 }).map((_, i) => ({ id: i.toString() }))
   );
 
-  const addMessage = (e) => {
-    setMessages((prev) => [
-      { id: (prev.length + 1).toString(), isMe: true, text: e },
-      ...prev,
-    ]);
+  const addMessage = async (e) => {
+    try {
+      const chatData = await getChatFromStorage(chat?.id);
+      const encrypted = encrypt(e, chatData?.keys?.my, chatData?.keys?.recipient, messages?.length);
+      setMessages((prev) => [
+        { id: (prev.length + 1).toString(), isMe: true, payload: encrypted },
+        ...prev,
+      ]);      
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const renderItem = useCallback(({ item }) => {
-    return <Message message={{ text: item.text, isMe: item.isMe }} />;
-  }, []);
+    return <Message message={item} chat={chat}/>;
+  }, [chat]);
 
-    return (
+  return (
     <View style={styles.container}>
       <Header chat={chat} />
       <EmptyModal visible={messages.length === 0} />

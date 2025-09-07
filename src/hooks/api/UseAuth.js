@@ -19,8 +19,8 @@ export function useAuth() {
         const url = `${API_URL}/auth/${mode}`;
         const res = await axios.post(url, { username: username?.toLowerCase(), password });
 
-        await storageRef.current?.set("token", res.data.token);
-        await storageRef.current?.set("user_id", res.data.id);
+        await storageRef.current?.set("token", res.data?.token);
+        await storageRef.current?.set("user_id", JSON.stringify(res.data?.user?.id));
 
         navigation.replace(ROUTES.MAIN);
 

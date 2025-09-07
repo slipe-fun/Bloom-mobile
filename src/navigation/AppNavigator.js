@@ -5,7 +5,7 @@ import { interpolate } from "react-native-reanimated";
 import { ChatScreen } from "@screens";
 import { ROUTES } from "@constants/Routes";
 import { slowSpring } from "@constants/Easings";
-import { useState, useEffect } from "react";  
+import { useState, useEffect } from "react";
 import { createSecureStorage } from "@lib/Storage";
 import * as SplashScreen from "expo-splash-screen";
 import AuthNavigator from "./AuthNavigator";
@@ -25,6 +25,7 @@ export default function AppNavigator() {
       try {
         storageInstance = await createSecureStorage("user-storage");
         const token = storageInstance.getString("token");
+
         setIsAuthenticated(!!token);
 
         listener = storageInstance.addOnValueChangedListener((changedKey) => {
@@ -43,13 +44,13 @@ export default function AppNavigator() {
     return () => {
       try {
         listener?.remove();
-      } catch {}
+      } catch { }
     };
   }, []);
 
   useEffect(() => {
     if (!isLoading && isNavReady) {
-      SplashScreen.hideAsync().catch(() => {});
+      SplashScreen.hideAsync().catch(() => { });
     }
   }, [isLoading, isNavReady]);
 

@@ -5,10 +5,22 @@ import Svg, { Path } from "react-native-svg";
 import { quickSpring } from "@constants/Easings";
 
 import Animated, { ZoomIn } from "react-native-reanimated";
+import decrypt from "@lib/skid/decrypt";
+import { useEffect, useState } from "react";
+import getChatFromStorage from "@lib/getChatFromStorage";
 
-export default function Message({ message }) {
+export default function Message({ message, chat }) {
   const { theme } = useUnistyles();
   const isMe = message.isMe;
+
+  const [decrypted, setDecrypted] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      const _chat = await getChatFromStorage(chat?.id);
+      setDecrypted(decrypt(message?.payload, isMe ? null : _chat?.keys?.my, isMe ? _chat?.keys?.my : _chat?.keys?.recipient, isMe));
+    })()
+  }, [])
 
   return (
     <View style={styles.messageWrapper(isMe)}>
@@ -19,7 +31,7 @@ export default function Message({ message }) {
           .stiffness(quickSpring.stiffness)}
         style={styles.message(isMe)}
       >
-        <Text style={styles.text(isMe)}>{message.text}</Text>
+        <Text style={styles.text(isMe)}>{decrypted.content}</Text>
         <Svg
           width="22"
           height="15"

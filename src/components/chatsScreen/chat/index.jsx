@@ -20,7 +20,7 @@ export default function Chat({ chat }) {
       <View style={styles.content}>
         <View style={styles.headerRow}>
           <View style={styles.nameWrapper}>
-            <Text style={styles.name}>{chat.name}</Text>
+            <Text style={styles.name}>{chat?.recipient?.username}</Text>
             {chat.unreadCount > 0 && <View style={styles.unreadMark} />}
           </View>
           <View style={styles.metaRow}>

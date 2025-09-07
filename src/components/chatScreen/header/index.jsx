@@ -15,7 +15,7 @@ export default function Header({ chat }) {
         <Icon icon="chevron.left" size={24} color="black" />
       </Pressable>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{chat.name}</Text>
+        <Text style={styles.title}>{chat?.recipient?.username}</Text>
         <Text style={styles.time}>Last seen recently</Text>
       </View>
       <Pressable>
