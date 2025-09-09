@@ -12,10 +12,11 @@ import Animated, {
 import { fastSpring } from "@constants/Easings";
 import { useUnistyles } from "react-native-unistyles";
 import useChatsScreenStore from "@stores/ChatsScreen";
+import Title from "./title";
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-export default function Header() {
+export default function Header({ scrollY }) {
   const insets = useInsets();
   const fullWidth = useSharedValue(0);
   const { theme } = useUnistyles();
@@ -82,7 +83,7 @@ export default function Header() {
         <Pressable style={styles.button}>
           <Icon icon="filter" size={24} color="black" />
         </Pressable>
-        <Text style={styles.title}>Сообщения</Text>
+       <Title scrollY={scrollY} state="connecting" />
         <Pressable style={styles.button}>
           <Icon icon="pencil" size={24} color="black" />
         </Pressable>

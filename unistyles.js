@@ -22,9 +22,10 @@ const base = {
 		xs: 12,
 		sm: 14,
 		md: 16,
-		lg: 20,
-		xl: 28,
-		xxl: 32,
+		lg: 18,
+		xl: 20,
+		xxl: 28,
+		xxxl: 32,
 	},
 	radius: {
 		sm: 12,
