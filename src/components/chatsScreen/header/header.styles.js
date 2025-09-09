@@ -12,12 +12,6 @@ export const styles = StyleSheet.create(theme => ({
         alignItems: "center",
 		gap: theme.spacing.lg,
 	},
-    title: {
-		fontSize: theme.fontSize.md,
-        lineHeight: theme.lineHeight.md,
-		color: theme.colors.text,
-		fontFamily: theme.fontFamily.semibold,
-	},
 	topHeader: {
 		width: "100%",
 		flexDirection: "row",
@@ -31,25 +25,5 @@ export const styles = StyleSheet.create(theme => ({
 		justifyContent: "center",
 		borderRadius: theme.radius.full,
 		backgroundColor: theme.colors.foreground,
-	},
-	inputWrapper: {
-		height: 40,
-		flexDirection: 'row',
-		width: "100%",
-		overflow: "hidden",
-		gap: theme.spacing.sm,
-		alignItems: "center",
-		justifyContent: "center",
-		borderRadius: theme.radius.full,
-		backgroundColor: theme.colors.foreground,
-	},
-	input: {
-		fontSize: theme.fontSize.sm,
-		lineHeight: theme.lineHeight.sm,
-		paddingVertical: theme.spacing.sm,
-		height: 40,
-		textAlignVertical: "center",
-		color: theme.colors.text,
-		fontFamily: theme.fontFamily.medium,
 	}
 }));
