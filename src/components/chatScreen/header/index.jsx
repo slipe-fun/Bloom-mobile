@@ -3,7 +3,7 @@ import { View, Text, Pressable } from "react-native";
 import Icon from "@components/ui/Icon";
 import FastImage from "@d11/react-native-fast-image";
 import { useNavigation } from "@react-navigation/native";
-import useInsets from "@hooks/UseInsets";
+import useInsets from "@hooks/useInsets";
 
 export default function Header({ chat }) {
   const navigation = useNavigation();

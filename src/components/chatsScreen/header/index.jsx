@@ -1,6 +1,6 @@
 import { Pressable } from "react-native";
 import { styles } from "./Header.styles";
-import useInsets from "@hooks/UseInsets";
+import useInsets from "@hooks/useInsets";
 import { useState } from "react";
 import Icon from "@components/ui/Icon";
 import Animated, {

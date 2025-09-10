@@ -5,10 +5,11 @@ import { createSecureStorage } from "@lib/Storage";
 import { ROUTES } from "@constants/Routes";
 import { useNavigation } from "@react-navigation/native";
 
-export function useAuth() {
+export default function useAuth() { 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const storageRef = useRef(null);
+
   const navigation = useNavigation();
 
   const auth = useCallback(

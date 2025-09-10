@@ -1,5 +1,5 @@
 import Header from "@components/chatsScreen/header";
-import useInsets from "@hooks/UseInsets";
+import useInsets from "@hooks/useInsets";
 import { View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 

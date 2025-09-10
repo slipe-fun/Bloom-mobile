@@ -1,6 +1,6 @@
 import { Keyboard, Pressable, TextInput } from "react-native";
 import { styles } from "./Footer.styles";
-import useInsets from "@hooks/UseInsets";
+import useInsets from "@hooks/useInsets";
 import Icon from "@components/ui/Icon";
 import { useUnistyles } from "react-native-unistyles";
 import { useEffect, useState } from "react";
