@@ -1,7 +1,7 @@
 import { Pressable } from "react-native";
 import { styles } from "./Header.styles";
 import useInsets from "@hooks/useInsets";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "@components/ui/Icon";
 import Animated, {
   interpolate,
@@ -11,10 +11,13 @@ import Animated, {
 import useChatsScreenStore from "@stores/ChatsScreen";
 import Title from "./title";
 import SearchBar from "./searchBar";
+import { useWebSocket } from "@providers/WebSocketContext";
 
 export default function Header({ scrollY }) {
+  const ws = useWebSocket();
   const insets = useInsets();
   const [value, setValue] = useState("");
+  const [status, setStatus] = useState("connecting");
   const focusedValue = useSharedValue(1);
 
   const { setHeaderHeight } = useChatsScreenStore();
@@ -33,6 +36,13 @@ export default function Header({ scrollY }) {
     opacity: focusedValue.value,
   }));
 
+  useEffect(() => {
+    if (ws) {
+      ws.onopen = () => setStatus("connected");
+      ws.onclose = () => setStatus("connecting");
+    }
+  }, [ws]);
+
   return (
     <Animated.View
       onLayout={onHeaderLayout}
@@ -42,7 +52,7 @@ export default function Header({ scrollY }) {
         <Pressable style={styles.button}>
           <Icon icon="filter" size={24} color="black" />
         </Pressable>
-       <Title scrollY={scrollY} state="connecting" />
+       <Title scrollY={scrollY} state={status} />
         <Pressable style={styles.button}>
           <Icon icon="pencil" size={24} color="black" />
         </Pressable>

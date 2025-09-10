@@ -12,7 +12,7 @@ export default function MainNavigator() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name={ROUTES.MAIN} component={MainTabNavigator} />
+      <Stack.Screen name={ROUTES.TAB_NAVIGATOR} component={MainTabNavigator} />
       <Stack.Screen name={ROUTES.CHAT} component={ChatScreen} options={chatTransition(insets)} />
     </Stack.Navigator>
   );
