@@ -22,7 +22,7 @@ export default function TabBarItem({ route, focused, onPress }) {
 	const TABS_COLORS = {
 		tab_chats: theme.colors.cyan,
 		tab_search: theme.colors.yellow,
-		tab_settings: theme.colors.green,
+		tab_settings: theme.colors.orange,
 	};
 
 	const animatedStyle = useAnimatedStyle(() => ({

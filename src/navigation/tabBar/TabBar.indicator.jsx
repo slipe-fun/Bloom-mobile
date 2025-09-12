@@ -17,7 +17,7 @@ export default function TabBarIndicator({ index = 0, count = 3 }) {
 	const { width } = useWindowDimensions();
 	const { theme } = useUnistyles();
 
-	const TABS_COLORS = [theme.colors.cyan, theme.colors.yellow, theme.colors.green];
+	const TABS_COLORS = [theme.colors.cyan, theme.colors.yellow, theme.colors.orange];
 
 	const calculatedWidth = width - 32;
 	const tabWidth = calculatedWidth / count;

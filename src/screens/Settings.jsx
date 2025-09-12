@@ -8,7 +8,6 @@ export default function PromocodeScreen() {
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
-			<Header title='Промокод' />
 		</View>
 	);
 }
