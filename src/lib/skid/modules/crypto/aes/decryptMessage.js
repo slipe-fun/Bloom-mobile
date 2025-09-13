@@ -1,7 +1,7 @@
-import { gcm } from "@noble/ciphers/aes";
+import { gcmsiv } from "@noble/ciphers/aes";
 
 export default function decryptMessage(cekRaw, iv, ciphertext) {
-  const cipher = gcm(cekRaw, iv);
+  const cipher = gcmsiv(cekRaw, iv);
   const plain = cipher.decrypt(ciphertext);
   const decoded = new TextDecoder().decode(plain);
   try {

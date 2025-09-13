@@ -40,7 +40,7 @@ export default function Title({ state, scrollY }) {
       <View style={styles.charStack}>
         {title.split("").map((char, i) => (
           <AnimatedText
-            key={i}
+            key={char}
             style={[styles.char, animatedCharStyle]}
             entering={getCharEnter(i)}
             exiting={getCharExit(i)}

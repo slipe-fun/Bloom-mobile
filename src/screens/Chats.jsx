@@ -5,7 +5,7 @@ import Animated from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list";
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
-import { useChatScroll } from "@hooks/useChatScroll";
+import { useSnapScroll } from "@hooks/useSnapScroll";
 import { useChatList } from "@providers/ChatsContext";
 import useChatsScreenStore from "@stores/ChatsScreen";
 import ChatItem from "@components/chatScreen/ChatItem";
@@ -16,7 +16,7 @@ export default function ChatsScreen() {
   const { headerHeight } = useChatsScreenStore();
   const [userId, setUserId] = useState();
   const chats = useChatList();
-  const { scrollY, listRef, onEndDrag, onScroll } = useChatScroll();
+  const { scrollY, listRef, scrollHandler } = useSnapScroll(56, 100);
 
   return (
     <View style={styles.container}>
@@ -24,16 +24,15 @@ export default function ChatsScreen() {
       <SearchView />
       <AnimatedFlashList
         ref={listRef}
-        // data={chats}
-        // renderItem={({ item }) => <ChatItem item={item} userId={userId} />}
-        // keyExtractor={(item) => item?.id.toString()}
+        data={chats}
+        renderItem={({ item }) => <ChatItem item={item} userId={userId} />}
+        keyExtractor={(item) => item?.id.toString()}
         // Props for testing scrollY
-        data={[1,2,3,4,5,6,7,8,9,10,11,12,13,14]}
-        renderItem={() => <View style={{ height: 100, backgroundColor: "red", marginBottom: 10, width: '100%' }} />}
+        // data={[1,2,3,4,5,6,7,8,9,10,11,12,13,14]}
+        // renderItem={() => <View style={{ height: 100, backgroundColor: "red", marginBottom: 10, width: '100%' }} />}
         estimatedItemSize={100}
         contentContainerStyle={{ paddingTop: headerHeight }}
-        onScrollEndDrag={onEndDrag}
-        onScroll={onScroll}
+        onScroll={scrollHandler}
         scrollEventThrottle={16}
         removeClippedSubviews
         maxToRenderPerBatch={10}

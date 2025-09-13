@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native-unistyles";
 import Button from "@components/auth/button";
 import Gradient from "@components/auth/gradient";
 import useInsets from "@hooks/useInsets";
-import { useAuth } from "@hooks/api/useAuth";
+import useAuth from "@hooks/api/useAuth";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { useUnistyles } from "react-native-unistyles";
