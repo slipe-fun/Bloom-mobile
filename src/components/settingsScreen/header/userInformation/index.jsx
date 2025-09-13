@@ -7,7 +7,7 @@ import { styles } from "./userInformation.styles";
 import { useUnistyles } from "react-native-unistyles";
 import useSettingsScreenStore from "@stores/settingsScreen";
 
-export default function UserInformation({ scrollY }) {
+export default function UserInformation({ scrollY, user }) {
   const { theme } = useUnistyles();
   const { snapEndPosition } = useSettingsScreenStore();
 
@@ -37,12 +37,12 @@ export default function UserInformation({ scrollY }) {
   return (
     <Animated.View style={[styles.container, animatedContainerStyle]}>
       <Animated.Text style={[styles.text, animatedStyle]}>
-        Duckiy Duckins
+        {user?.display_name || user?.username}
       </Animated.Text>
       <Animated.View style={[styles.subContainer, animatedSubContainerStyle]}>
-        <Animated.Text style={[styles.subText, animatedSubTextStyle]}>@duckiy</Animated.Text>
+        <Animated.Text style={[styles.subText, animatedSubTextStyle]}>@{user?.username}</Animated.Text>
         <Animated.View style={[styles.separator, animatedSubSeparatorStyle]} />
-        <Animated.Text style={[styles.subText, animatedSubTextStyle]}>ID:500</Animated.Text>
+        <Animated.Text style={[styles.subText, animatedSubTextStyle]}>ID: {user?.id}</Animated.Text>
       </Animated.View>
     </Animated.View>
   );

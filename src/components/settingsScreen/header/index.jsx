@@ -9,7 +9,7 @@ import HeaderButtons from "./buttons";
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
-export default function Header({ scrollY }) {
+export default function Header({ scrollY, user }) {
   const insets = useInsets();
   const { setHeaderHeight, snapEndPosition } = useSettingsScreenStore();
 
@@ -50,7 +50,7 @@ export default function Header({ scrollY }) {
       <Animated.View style={[styles.content, { paddingTop: insets.top }, animatedContentStyle]}>
         <HeaderAvatar scrollY={scrollY} />
 
-        <UserInformation scrollY={scrollY} />
+        <UserInformation scrollY={scrollY} user={user}/>
 
         <HeaderButtons scrollY={scrollY} />
 

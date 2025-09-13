@@ -9,7 +9,7 @@ export default function ChatItem({ item, userId }) {
       chat={{
         lastMessage: item?.last_message ?
           (userId === item?.last_message?.author_id ? "Вы: " : `${recipient?.username}: `)
-            + item?.last_message?.content || "Вы:" : "Вы:",
+            + item?.last_message?.content || "Вы присоединились к чату" : "Вы присоединились к чату",
         lastMessageTime: formatSentTime(item?.last_message?.date) || "",
         recipient,
         id: item?.id,
