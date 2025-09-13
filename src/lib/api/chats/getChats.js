@@ -20,22 +20,27 @@ export default async function getChats(ws) {
       chats = []
     }
     response?.data?.map(chat => {
-      if (chats.find(_chat => _chat?.id === chat?.id)) return
-      const myKeys = generateKeys();
-      
-      ws.send(JSON.stringify({
-        type: "add_keys",
-        chat_id: chat?.id,
-        kyberPublicKey: myKeys.kyberPublicKey,
-        ecdhPublicKey: myKeys.ecdhPublicKey,
-        edPublicKey: myKeys.edPublicKey
-      }))
+      const recipient = chat?.members?.find(member => member?.id !== parseInt(Storage.getString("user_id")));
+      const me = chat?.members?.find(member => member?.id === parseInt(Storage.getString("user_id")))
+
+      let myKeys;
+      if (me?.kyberPublicKey?.length === 0) {
+        myKeys = generateKeys();
+        
+        ws.send(JSON.stringify({
+          type: "add_keys",
+          chat_id: chat?.id,
+          kyberPublicKey: myKeys.kyberPublicKey,
+          ecdhPublicKey: myKeys.ecdhPublicKey,
+          edPublicKey: myKeys.edPublicKey
+        }))        
+      }
 
       chats = [...chats, {
         id: chat?.id,
         keys: {
-          my: {...myKeys},
-          recipient: {...chat?.members?.find(member => member?.id !== Storage.getString("user_id"))}
+          my: {...(myKeys || me)},
+          recipient: {...recipient}
         }
       }];
     })
