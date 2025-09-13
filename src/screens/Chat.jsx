@@ -32,14 +32,14 @@ export default function ChatScreen({ route }) {
   const addMessage = async (e) => {
     try {
       const storage = await createSecureStorage("user-storage");
-      await sendMessage(e, chat?.id, messages?.length, ws).catch(console.log);;
+      await sendMessage(e, chat?.id, messages?.length, ws).catch(console.log)
 
       setMessages((prev) => [...prev, { 
           id: String((prev.length + 1)), 
           isMe: true, 
           chat_id: chat?.id, 
           content: e, 
-          author_id: storage?.getString("user_id"),
+          author_id: parseInt(storage?.getString("user_id")),
           date: new Date(),
           seen: false
         }]);

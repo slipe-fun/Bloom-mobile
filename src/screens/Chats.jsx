@@ -10,6 +10,7 @@ import { useChatList } from "@providers/ChatsContext";
 import useChatsScreenStore from "@stores/ChatsScreen";
 import ChatItem from "@components/chatScreen/ChatItem";
 import { createSecureStorage } from "@lib/Storage";
+import getChatFromStorage from "@lib/getChatFromStorage";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 

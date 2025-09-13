@@ -23,8 +23,8 @@ export default async function getChats(ws) {
       const recipient = chat?.members?.find(member => member?.id !== parseInt(Storage.getString("user_id")));
       const me = chat?.members?.find(member => member?.id === parseInt(Storage.getString("user_id")))
 
-      let myKeys;
-      if (me?.kyberPublicKey?.length === 0) {
+      var myKeys;
+      if (!me?.kyberSecretKey || !me?.kyberSecretKey?.length || me?.kyberSecretKey?.length === 0) {
         myKeys = generateKeys();
         
         ws.send(JSON.stringify({
@@ -33,17 +33,30 @@ export default async function getChats(ws) {
           kyberPublicKey: myKeys.kyberPublicKey,
           ecdhPublicKey: myKeys.ecdhPublicKey,
           edPublicKey: myKeys.edPublicKey
-        }))        
+        }))
       }
 
-      chats = [...chats, {
-        id: chat?.id,
-        keys: {
-          my: {...(myKeys || me)},
-          recipient: {...recipient}
+      const _chat = chats?.find(_chat => _chat?.id === chat?.id)
+      if (_chat) {
+        const chatIndex = chats?.find(_chat => _chat?.id === chat?.id);
+        chats[chatIndex] = {
+          id: chat?.id,
+          keys: {
+            my: {...(myKeys || me)},
+            recipient: {...recipient}
+          }
         }
-      }];
+      } else {
+        chats.push({
+          id: chat?.id,
+          keys: {
+            my: {...(myKeys || me)},
+            recipient: {...recipient}
+          }
+        });        
+      }
     })
+    console.log(chats)
     Storage.set("chats", JSON.stringify(chats))
 
     return response.data;    
