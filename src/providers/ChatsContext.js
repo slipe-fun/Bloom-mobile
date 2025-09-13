@@ -4,6 +4,7 @@ import { getChats } from "@lib/api";
 import setChatKeysToStorage from "@lib/setChatKeysToStorage";
 import generateKeys from "@lib/skid/generateKeys";
 import { createSecureStorage } from "@lib/Storage";
+import initRealm from "@lib/initRealm";
 
 const ChatsContext = createContext(null);
 
@@ -11,11 +12,35 @@ export default function ChatsProvider({ children }) {
     const [chats, setChats] = useState([]);
     const ws = useWebSocket();
 
+    async function sort(chats) {
+        const enrichedChats = await Promise.all(
+            chats?.map(async chat => {
+                const realm = await initRealm();
+                const lastMessage = realm
+                    .objects("Message")
+                    .filtered("chat_id == $0", chat?.id)
+                    .sorted("date", true)[0];
+
+                return {
+                    ...chat,
+                    last_message: lastMessage
+                };
+            })
+        );
+
+        return enrichedChats.sort((a, b) => {
+            const dateA = a.last_message?.date ? new Date(a.last_message.date) : 0;
+            const dateB = b.last_message?.date ? new Date(b.last_message.date) : 0;
+            return dateB - dateA;
+        });
+    }
+
+
     useEffect(() => {
         if (ws) {
             (async () => {
                 const _chats = await getChats(ws);
-                if (_chats) setChats(_chats);
+                if (_chats) setChats(await sort(_chats));
             })()
 
             ws.addEventListener("message", async (msg) => {
@@ -63,7 +88,7 @@ export default function ChatsProvider({ children }) {
 
                     Storage.set("chats", JSON.stringify(_chats));
 
-                    setChats(prev => [...prev, message?.chat])
+                    setChats(async prev => await sort([...prev, message?.chat]));
                 }
             });
         }

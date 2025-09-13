@@ -3,12 +3,13 @@ import SearchView from "@components/chatsScreen/searchView";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import { useSnapScroll } from "@hooks/useSnapScroll";
 import { useChatList } from "@providers/ChatsContext";
 import useChatsScreenStore from "@stores/ChatsScreen";
 import ChatItem from "@components/chatScreen/ChatItem";
+import { createSecureStorage } from "@lib/Storage";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
@@ -18,6 +19,14 @@ export default function ChatsScreen() {
   const chats = useChatList();
   const { scrollY, listRef, scrollHandler } = useSnapScroll(56, 100);
 
+  useEffect(() => {
+    (async () => {
+      const storage = await createSecureStorage("user-storage");
+
+      setUserId(storage.getString("user_id"));
+    })()
+  }, [])
+
   return (
     <View style={styles.container}>
       <Header scrollY={scrollY} />
@@ -25,7 +34,7 @@ export default function ChatsScreen() {
       <AnimatedFlashList
         ref={listRef}
         data={chats}
-        renderItem={({ item }) => <ChatItem item={item} userId={userId} />}
+        renderItem={({ item }) => <ChatItem item={item} userId={parseInt(userId)} />}
         keyExtractor={(item) => item?.id.toString()}
         // Props for testing scrollY
         // data={[1,2,3,4,5,6,7,8,9,10,11,12,13,14]}
