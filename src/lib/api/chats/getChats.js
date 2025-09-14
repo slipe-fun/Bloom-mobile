@@ -2,6 +2,7 @@ import axios from "axios";
 import { createSecureStorage } from "@lib/Storage";
 import { API_URL } from "@constants/Api";
 import generateKeys from "@lib/skid/generateKeys";
+import getChatFromStorage from "@lib/getChatFromStorage";
 
 export default async function getChats(ws) {
   try {
@@ -19,14 +20,15 @@ export default async function getChats(ws) {
     } catch {
       chats = []
     }
-    response?.data?.map(chat => {
+    await Promise.all(response?.data?.map(async chat => {
       const recipient = chat?.members?.find(member => member?.id !== parseInt(Storage.getString("user_id")));
       const me = chat?.members?.find(member => member?.id === parseInt(Storage.getString("user_id")))
+      const chatInStorage = await getChatFromStorage(chat?.id);
 
       var myKeys;
-      if (!me?.kyberSecretKey || !me?.kyberSecretKey?.length || me?.kyberSecretKey?.length === 0) {
+      if (!chatInStorage?.keys?.my?.kyberSecretKey) {
         myKeys = generateKeys();
-        
+
         ws.send(JSON.stringify({
           type: "add_keys",
           chat_id: chat?.id,
@@ -38,27 +40,30 @@ export default async function getChats(ws) {
 
       const _chat = chats?.find(_chat => _chat?.id === chat?.id)
       if (_chat) {
-        const chatIndex = chats?.find(_chat => _chat?.id === chat?.id);
-        chats[chatIndex] = {
-          id: chat?.id,
-          keys: {
-            my: {...(myKeys || me)},
-            recipient: {...recipient}
+        const chatIndex = chats?.findIndex(_chat => _chat?.id === chat?.id);
+        if (chatIndex !== -1) {
+          chats[chatIndex] = {
+            id: chat?.id,
+            keys: {
+              my: { ...(myKeys || chatInStorage?.keys?.my || me) },
+              recipient: { ...recipient }
+            }
           }
         }
+
       } else {
         chats.push({
           id: chat?.id,
           keys: {
-            my: {...(myKeys || me)},
-            recipient: {...recipient}
+            my: { ...(myKeys || chatInStorage?.keys?.my || me) },
+            recipient: { ...recipient }
           }
-        });        
+        });
       }
-    })
-    console.log(chats)
+    }))
+
     Storage.set("chats", JSON.stringify(chats))
 
-    return response.data;    
-  } catch (err) {console.log(err)}
+    return response.data;
+  } catch (err) { console.log(err) }
 }
