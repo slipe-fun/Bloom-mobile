@@ -12,6 +12,11 @@ export default function ChatsProvider({ children }) {
     const [chats, setChats] = useState([]);
     const ws = useWebSocket();
 
+
+    function safeObject(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
     async function sort(chats) {
         const enrichedChats = await Promise.all(
             chats?.map(async chat => {
@@ -23,7 +28,7 @@ export default function ChatsProvider({ children }) {
 
                 return {
                     ...chat,
-                    last_message: lastMessage
+                    last_message: safeObject(lastMessage)
                 };
             })
         );
@@ -35,13 +40,12 @@ export default function ChatsProvider({ children }) {
         });
     }
 
-
     useEffect(() => {
         if (ws) {
             (async () => {
                 const _chats = await getChats(ws);
                 if (_chats) setChats(await sort(_chats));
-            })()
+            })();
 
             ws.addEventListener("message", async (msg) => {
                 const Storage = await createSecureStorage("user-storage");
@@ -63,9 +67,9 @@ export default function ChatsProvider({ children }) {
                 } else if (message?.chat) {
                     let _chats;
                     try {
-                        _chats = JSON.parse(Storage.getString("chats"))
+                        _chats = JSON.parse(Storage.getString("chats"));
                     } catch {
-                        _chats = []
+                        _chats = [];
                     }
 
                     const myKeys = generateKeys();
@@ -76,7 +80,7 @@ export default function ChatsProvider({ children }) {
                         kyberPublicKey: myKeys.kyberPublicKey,
                         ecdhPublicKey: myKeys.ecdhPublicKey,
                         edPublicKey: myKeys.edPublicKey
-                    }))
+                    }));
 
                     _chats = [..._chats, {
                         id: message?.chat?.id,
@@ -84,7 +88,7 @@ export default function ChatsProvider({ children }) {
                             my: { ...myKeys },
                             recipient: {}
                         }
-                    }]
+                    }];
 
                     Storage.set("chats", JSON.stringify(_chats));
 
@@ -93,6 +97,41 @@ export default function ChatsProvider({ children }) {
             });
         }
     }, [ws]);
+
+    useEffect(() => {
+        let realm;
+        let listeners = [];
+
+        (async () => {
+            realm = await initRealm();
+
+            chats.forEach(chat => {
+                const messages = realm.objects("Message").filtered("chat_id == $0", chat.id);
+                const listener = (collection, changes) => {
+                    if (changes.insertions.length > 0) {
+                        setChats(async prev => {
+                            const updated = prev.map(c =>
+                                c.id === chat.id
+                                    ? { ...c, last_message: safeObject(messages.sorted("date", true)[0]) }
+                                    : c
+                            );
+                            const sorted = await sort(updated);
+                            setChats(sorted);
+                        });
+                    }
+                };
+                messages.addListener(listener);
+                listeners.push({ messages, listener });
+            });
+        })();
+
+        return () => {
+            listeners.forEach(({ messages, listener }) => {
+                messages.removeListener(listener);
+            });
+            if (realm && !realm.isClosed) realm.close();
+        };
+    }, [chats]);
 
     return (
         <ChatsContext.Provider value={chats}>
