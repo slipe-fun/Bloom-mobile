@@ -5,6 +5,9 @@ import sendMessage from "@lib/sendMessage";
 import { createSecureStorage } from "@lib/Storage";
 import initRealm from "@lib/initRealm";
 import Realm from "realm";
+import getChatMessages from "@lib/api/messages/getChatMessages";
+import decrypt from "@lib/skid/decrypt";
+import getChatFromStorage from "@lib/getChatFromStorage";
 
 function uniqueById(arr) {
     const seen = new Set();
@@ -20,6 +23,7 @@ export default function useChatMessages(chat_id) {
     const newMessages = useMessagesList();
     const ws = useWebSocket();
 
+    // send message func
     const addMessage = async (content) => {
         try {
             const storage = await createSecureStorage("user-storage");
@@ -41,6 +45,69 @@ export default function useChatMessages(chat_id) {
         }
     };
 
+    // sync messages with server
+    useEffect(() => {
+        (async () => {
+            const storage = await createSecureStorage("user-storage");
+            const realm = await initRealm();
+
+            const lastMessage = realm
+                .objects("Message")
+                .filtered("chat_id == $0", chat_id)
+                .sorted("id", true)[0] ?? null;
+
+            const messages = await getChatMessages(chat_id, lastMessage?.id);
+
+            const chat = await getChatFromStorage(chat_id);
+
+            if (!chat) return
+
+            const myKeys = chat?.keys?.my;
+            const recipientKeys = chat?.keys?.recipient;
+
+            const decryptedMessages = messages.map(message => {
+                try {
+                    return {
+                        ...decrypt(message, myKeys, recipientKeys, false),
+                        chat_id: message?.chat_id,
+                        id: message?.id,
+                    };
+                } catch (error) {
+                    if (error.message === "invalid polyval tag") {
+                        try {
+                            return {
+                                ...decrypt(message, myKeys, myKeys, true),
+                                chat_id: message?.chat_id,
+                                id: message?.id,
+                            };
+                        } catch { }
+                    }
+                }
+            }).map(message => ({ ...message, isMe: message.from_id === parseInt(storage.getString("user_id")) })).filter(Boolean)
+
+            setMessages(prev => [...prev, ...decryptedMessages].sort((a, b) => a.id - b.id))
+
+            realm.write(() => {
+                decryptedMessages.forEach(message => {
+                    realm.create(
+                        "Message",
+                        {
+                            id: message?.id,
+                            chat_id: message?.chat_id,
+                            content: message?.content,
+                            author_id: message?.from_id,
+                            date: new Date(),
+                            seen: new Date(),
+                        },
+                        Realm.UpdateMode.Modified
+                    );
+                });
+            });
+
+        })()
+    }, [chat_id])
+
+    // get messages from realm storage
     useEffect(() => {
         (async () => {
             const storage = await createSecureStorage("user-storage");
@@ -60,6 +127,8 @@ export default function useChatMessages(chat_id) {
         })();
     }, [chat_id]);
 
+
+    // get messages from socket
     useEffect(() => {
         if (!newMessages?.messages?.length) return;
 
