@@ -12,8 +12,8 @@ export default function ChatsProvider({ children }) {
     const [chats, setChats] = useState([]);
     const ws = useWebSocket();
 
-
     function safeObject(obj) {
+        if (!obj) return;
         return JSON.parse(JSON.stringify(obj));
     }
 
@@ -48,51 +48,59 @@ export default function ChatsProvider({ children }) {
             })();
 
             ws.addEventListener("message", async (msg) => {
-                const Storage = await createSecureStorage("user-storage");
-
-                let message;
                 try {
-                    message = JSON.parse(msg?.data);
-                } catch (error) {
-                    console.log(error);
-                    return;
-                }
+                    const Storage = await createSecureStorage("user-storage");
 
-                if (message?.type === "keys_added") {
-                    await setChatKeysToStorage(message?.chat_id, {
-                        kyberPublicKey: message?.kyberPublicKey,
-                        ecdhPublicKey: message?.ecdhPublicKey,
-                        edPublicKey: message?.edPublicKey
-                    });
-                } else if (message?.chat) {
-                    let _chats;
+                    let message;
                     try {
-                        _chats = JSON.parse(Storage.getString("chats"));
-                    } catch {
-                        _chats = [];
+                        message = JSON.parse(msg?.data);
+                    } catch (error) {
+                        console.log(error);
+                        return;
                     }
 
-                    const myKeys = generateKeys();
-
-                    ws.send(JSON.stringify({
-                        type: "add_keys",
-                        chat_id: message?.chat?.id,
-                        kyberPublicKey: myKeys.kyberPublicKey,
-                        ecdhPublicKey: myKeys.ecdhPublicKey,
-                        edPublicKey: myKeys.edPublicKey
-                    }));
-
-                    _chats = [..._chats, {
-                        id: message?.chat?.id,
-                        keys: {
-                            my: { ...myKeys },
-                            recipient: {}
+                    if (message?.type === "keys_added") {
+                        await setChatKeysToStorage(message?.chat_id, {
+                            kyberPublicKey: message?.kyberPublicKey,
+                            ecdhPublicKey: message?.ecdhPublicKey,
+                            edPublicKey: message?.edPublicKey
+                        });
+                    } else if (message?.chat) {
+                        let _chats;
+                        try {
+                            _chats = JSON.parse(Storage.getString("chats"));
+                        } catch {
+                            _chats = [];
                         }
-                    }];
 
-                    Storage.set("chats", JSON.stringify(_chats));
+                        const myKeys = generateKeys();
 
-                    setChats(async prev => await sort([...prev, message?.chat]));
+                        ws.send(JSON.stringify({
+                            type: "add_keys",
+                            chat_id: message?.chat?.id,
+                            kyberPublicKey: myKeys.kyberPublicKey,
+                            ecdhPublicKey: myKeys.ecdhPublicKey,
+                            edPublicKey: myKeys.edPublicKey
+                        }));
+
+                        _chats = [..._chats, {
+                            id: message?.chat?.id,
+                            keys: {
+                                my: { ...myKeys },
+                                recipient: {}
+                            }
+                        }];
+
+                        Storage.set("chats", JSON.stringify(_chats));
+
+                        setChats(prev => {
+                            const next = [...prev, message.chat];
+                            sort(next).then(sorted => setChats(sorted));
+                            return next;
+                        });
+                    }
+                } catch (error) {
+                    console.log(error)
                 }
             });
         }
@@ -107,19 +115,26 @@ export default function ChatsProvider({ children }) {
 
             chats.forEach(chat => {
                 const messages = realm.objects("Message").filtered("chat_id == $0", chat.id);
+
                 const listener = (collection, changes) => {
                     if (changes.insertions.length > 0) {
-                        setChats(async prev => {
+                        setChats(prev => {
                             const updated = prev.map(c =>
                                 c.id === chat.id
                                     ? { ...c, last_message: safeObject(messages.sorted("date", true)[0]) }
                                     : c
                             );
-                            const sorted = await sort(updated);
-                            setChats(sorted);
+
+                            // сортировку запускаем отдельно, результат опять сетим
+                            sort(updated).then(sorted => {
+                                setChats(sorted);
+                            });
+
+                            return updated; // возвращаем массив сразу, без await
                         });
                     }
                 };
+
                 messages.addListener(listener);
                 listeners.push({ messages, listener });
             });
