@@ -8,6 +8,7 @@ import { View } from "react-native";
 import { Text } from "react-native";
 import { Icon } from "@components/ui";
 import ChatItem from "@components/chatsScreen/ChatItem";
+import useUsersSearch from "@hooks/api/useUsersSearch";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
@@ -25,6 +26,8 @@ const opacityAnimation = {
 export default function SearchView() {
   const { headerHeight, focused, query } = useChatsScreenStore();
   const { theme } = useUnistyles();
+
+  const { users, loading, error, addPage } = useUsersSearch(query);
 
   return focused ? (
     <Animated.View
@@ -51,8 +54,8 @@ export default function SearchView() {
           maxToRenderPerBatch={10}
           initialNumToRender={10}
           updateCellsBatchingPeriod={30}
-          data={[1, 2, 3, 4]}
-          renderItem={(item, index) => <ChatItem isSearch index={index} />}
+          data={users}
+          renderItem={({item, index}) => <ChatItem isSearch item={item} index={index} />}
         />
       )}
     </Animated.View>

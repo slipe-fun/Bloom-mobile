@@ -2,9 +2,11 @@ import Chat from "@components/chatsScreen/chat";
 import formatSentTime from "@lib/formatSentTime";
 
 export default function ChatItem({ item, userId, isSearch, index }) {
-  const recipient = item?.members.find(
+  const recipient = isSearch ? item : item?.members.find(
     (member) => member?.id !== parseInt(userId)
   );
+
+  console.log(isSearch ? recipient : null)
 
   return (
     <Chat
