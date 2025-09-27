@@ -8,14 +8,26 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
+import { useEffect, useState } from "react";
+import getChatFromStorage from "@lib/getChatFromStorage";
 
-export default function EmptyModal({ visible }) {
+export default function EmptyModal({ chat, visible }) {
   const { theme } = useUnistyles();
   const keyboard = useReanimatedKeyboardAnimation();
+
+  const [isAllKeys, setIsAllKeys] = useState();
 
   const animatedStyles = useAnimatedStyle(() => {
     return { transform: [{ translateY: keyboard.height.value / 2 }] };
   });
+
+  useEffect(() => {
+    (async () => {
+      const _chat = await getChatFromStorage(chat?.id);
+      console.log(124, _chat)
+      setIsAllKeys(!!_chat?.keys?.recipient?.ecdhPublicKey)
+    })()
+  }, [])
 
   return visible ? (
     <Animated.View
@@ -26,9 +38,9 @@ export default function EmptyModal({ visible }) {
       <View style={styles.modal}>
         <Icon icon="message" size={80} color={theme.colors.cyan} />
         <View style={styles.content}>
-          <Text style={styles.title}>Пока нет сообщений...</Text>
+          <Text style={styles.title}>{isAllKeys ? "Пока нет сообщений..." : "Собеседник не добавил ключи"}</Text>
           <Text style={styles.description}>
-            Отправьте свое первое сообщение!
+            {isAllKeys ? "Отправьте свое первое сообщение!" : "Дождитесь, когда собесседник зайдёт в сеть"}
           </Text>
         </View>
       </View>
