@@ -1,1 +1,1 @@
-export const API_URL = "https://swiftly.slipe.fun";
+export const API_URL = "https://bloom.slipe.space";
