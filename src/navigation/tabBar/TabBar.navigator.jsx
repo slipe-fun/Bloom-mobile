@@ -29,7 +29,7 @@ export default function MainTabNavigator() {
 				sceneStyle: {
 					backgroundColor: theme.colors.background,
 				},
-				animation: "shift",
+				animation: "fade",
 			}}
 		>
 			<Tab.Screen options={options} name={ROUTES.TAB_CHATS} component={CardScreen} />
