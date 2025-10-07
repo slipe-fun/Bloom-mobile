@@ -8,7 +8,7 @@ import { StyleSheet } from "react-native-unistyles";
 import { useSnapScroll } from "@hooks/useSnapScroll";
 import { useChatList } from "@providers/ChatsContext";
 import useChatsScreenStore from "@stores/ChatsScreen";
-import ChatItem from "@components/chatsScreen/ChatItem";
+import ChatItem from "@components/chatsScreen/chat/ChatItem";
 import { createSecureStorage } from "@lib/Storage";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);

@@ -1,6 +1,5 @@
 import { View, Text, Pressable } from "react-native";
 import { styles } from "./Chat.styles";
-import FastImage from "@d11/react-native-fast-image";
 import Animated from "react-native-reanimated";
 import Icon from "@components/ui/Icon";
 import { useUnistyles } from "react-native-unistyles";
@@ -10,6 +9,7 @@ import { ROUTES } from "@constants/Routes";
 import { getFadeOut, getFadeIn } from "@constants/animations";
 import { useChatList } from "@providers/ChatsContext";
 import { useWebSocket } from "@providers/WebSocketContext";
+import { Avatar } from "@components/ui";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -39,13 +39,7 @@ export default function Chat({ chat, isSearch, index }) {
       style={styles.chat}
     >
       <View style={styles.avatarWrapper}>
-        <FastImage
-          style={[
-            styles.avatar,
-            { width: isSearch ? 44 : 56, height: isSearch ? 44 : 56 },
-          ]}
-          source={{ uri: chat?.avatar }}
-        />
+        <Avatar size="lg" username="t"/>
       </View>
       <View style={styles.content}>
         <View style={styles.headerRow}>

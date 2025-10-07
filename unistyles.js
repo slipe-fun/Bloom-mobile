@@ -49,7 +49,8 @@ const base = {
 		sm: 12,
 		md: 20,
 		lg: 24,
-		xl: 32,
+		xl: 28,
+		'2xl': 32, 
 		full: 9999,
 	},
 	fontFamily: {
