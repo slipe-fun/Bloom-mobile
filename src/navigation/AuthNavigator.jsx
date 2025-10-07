@@ -12,7 +12,8 @@ const AuthNavigator = () => {
         screenOptions={{
           headerShown: false,
           animation: "simple_push",
-          presentation: "card"
+          presentation: "card",
+          contentStyle: { backgroundColor: '#000000' }
         }}
       >
         <Stack.Screen name={ROUTES.WELCOME} component={WelcomeScreen} />

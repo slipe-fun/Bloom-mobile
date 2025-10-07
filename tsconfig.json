@@ -1,4 +1,21 @@
 {
-  "compilerOptions": {},
-  "extends": "expo/tsconfig.base"
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"jsx": "react-native",
+		"strict": false,
+		"allowJs": true,
+		"checkJs": false,
+		"baseUrl": ".",
+		"paths": {
+			"@components/*": ["src/components/*"],
+			"@constants/*": ["src/constants/*"],
+			"@assets/*": ["assets/*"],
+			"@hooks/*": ["src/hooks/*"],
+			"@screens/*": ["src/screens/*"],
+			"@lib/*": ["src/lib/*"],
+			"@providers/*": ["src/providers/*"]
+		}
+	},
+	"include": ["src", "App.ts", "App.tsx", "App.js", "App.jsx"],
+	"exclude": ["node_modules", "babel.config.js"]
 }

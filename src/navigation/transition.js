@@ -8,9 +8,7 @@ export const chatTransition = (insets) => ({
   gestureDirection: ["horizontal"],
   screenStyleInterpolator: ({ layouts: { screen }, progress, focused }) => {
     "worklet";
-    const countedBorderRadius = Platform.OS === "ios" ? insets.top : insets.top - 6
-
-    const borderRadius = interpolate(progress, [0, 1, 2], [0, countedBorderRadius, 0]);
+    
     const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width], "clamp");
 
     return {
@@ -20,7 +18,6 @@ export const chatTransition = (insets) => ({
       },
       contentStyle: {
         transform: [{ translateX }],
-        borderRadius,
         overflow: "hidden",
       },
     };

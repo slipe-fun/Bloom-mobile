@@ -141,13 +141,6 @@ export default function ChatsProvider({ children }) {
                 listeners.push({ messages, listener });
             });
         })();
-
-        return () => {
-            listeners.forEach(({ messages, listener }) => {
-                messages.removeListener(listener);
-            });
-            if (realm && !realm.isClosed) realm.close();
-        };
     }, [chats]);
 
     return (

@@ -1,5 +1,23 @@
 import { StyleSheet } from "react-native-unistyles";
 
+const staticColor = {
+	white: "#ffffff",
+	black: "#000000",
+	primary: "#0A84FF",
+	orange: "#FF531B",
+	green: "#00E560",
+	pink: "#FF66F5",
+	yellow: "#FFB566",
+	cyan: "#28A8E9",
+
+	// Backdrops
+	cyanBackdrop: "#28A8E959",
+	orangeBackdrop: "#FF531B33",
+	orangePlaceholder: "#FF531B80",
+	primaryBackdrop: "#0A84FF33",
+	primaryPlaceholder: "#0A84FF80",
+};
+
 const base = {
 	spacing: {
 		xxs: 2,
@@ -50,33 +68,31 @@ export const lightTheme = {
 	colors: {
 		background: "#ffffffff",
 		text: "#000000",
-		white: "#ffffff",
-		black: "#000000",
 		secondaryText: "#00000059",
 		foreground: "#E0E0E0",
-		primary: "#0A84FF",
-		orange: "#FF531B",
-		green: "#00E560",
-		pink: "#FF66F5",
-		yellow: "#FFB566",
-		cyan: "#28A8E9",
+		...staticColor
+	},
+	...base,
+};
 
-		// Backdrops
-		cyanBackdrop: "#28A8E959",
-		orangeBackdrop: "#FF531B33",
-		orangePlaceholder: "#FF531B80",
-		primaryBackdrop: "#0A84FF33",
-		primaryPlaceholder: "#0A84FF80",
+export const darkTheme = {	
+	colors: {
+		background: "#000000",
+		text: "#ffffff",	
+		secondaryText: "#ffffff59",	
+		foreground: "#1A1A1A",
+		...staticColor
 	},
 	...base,
 };
 
 StyleSheet.configure({
 	settings: {
-		initialTheme: "light",
+		initialTheme: "dark",
 	},
 	themes: {
 		light: lightTheme,
+		dark: darkTheme,
 	},
 });
 

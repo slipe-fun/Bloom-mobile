@@ -22,7 +22,7 @@ const SIZE_MAP: Record<Size, number> = {
 	lg: 44,
 };
 
-export default function Button({ ref, variant = "text", size = "md", children, icon, disabled = false, style, ...props }: ButtonProps) {
+export default function Button({ ref, variant = "text", size = "md", children, icon, disabled = false, style, ...props }: ButtonProps): React.ReactNode {
 	const { theme } = useUnistyles() as { theme: any };
 
 	let paddingHorizontal = 0;

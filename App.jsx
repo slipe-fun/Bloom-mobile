@@ -29,7 +29,7 @@ export default function App() {
     <SafeAreaProvider>
       <KeyboardProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <StatusBar style="dark" />
+          <StatusBar style="light" />
           <WebSocketProvider>
             <ChatsProvider>
               <MessagesProvider>
