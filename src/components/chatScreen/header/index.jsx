@@ -4,6 +4,7 @@ import Icon from "@components/ui/Icon";
 import FastImage from "@d11/react-native-fast-image";
 import { useNavigation } from "@react-navigation/native";
 import useInsets from "@hooks/useInsets";
+import { Avatar } from "@components/ui";
 
 export default function Header({ chat }) {
   const navigation = useNavigation();
@@ -18,9 +19,7 @@ export default function Header({ chat }) {
         <Text style={styles.title}>{chat?.recipient?.username}</Text>
         <Text style={styles.time}>Last seen recently</Text>
       </View>
-      <Pressable>
-        <FastImage style={styles.avatar} source={{ uri: chat.avatar }} />
-      </Pressable>
+      <Avatar size="md" username={chat?.recipient?.username} />
     </View>
   );
 }
