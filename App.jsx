@@ -10,6 +10,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { WebSocketProvider } from "@providers/WebSocketContext";
 import ChatsProvider from "@providers/ChatsContext";
 import MessagesProvider from "@providers/MessagesContext";
+import { PortalProvider } from "@gorhom/portal";
 
 enableScreens();
 
@@ -29,6 +30,7 @@ export default function App() {
     <SafeAreaProvider>
       <KeyboardProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
+        <PortalProvider>
           <StatusBar style="light" />
           <WebSocketProvider>
             <ChatsProvider>
@@ -37,6 +39,7 @@ export default function App() {
               </MessagesProvider>
             </ChatsProvider>
           </WebSocketProvider>
+          </PortalProvider>
         </GestureHandlerRootView>
       </KeyboardProvider>
     </SafeAreaProvider>

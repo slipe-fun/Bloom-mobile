@@ -11,6 +11,7 @@
   "dependencies": {
     "@craftzdog/react-native-buffer": "^6.1.0",
     "@d11/react-native-fast-image": "^8.11.1",
+    "@gorhom/portal": "^1.0.14",
     "@legendapp/list": "^1.1.4",
     "@noble/ciphers": "^2.0.0",
     "@noble/ed25519": "^3.0.0",
@@ -43,6 +44,7 @@
     "react-native-keyboard-controller": "^1.18.5",
     "react-native-keychain": "^10.0.0",
     "react-native-mmkv": "^3.3.0",
+    "react-native-nitro-haptics": "^0.1.0",
     "react-native-nitro-modules": "^0.28.1",
     "react-native-pager-view": "^6.9.1",
     "react-native-quick-base64": "^2.2.2",

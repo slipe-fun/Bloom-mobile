@@ -15,9 +15,10 @@ type AvatarProps = {
 	imageStyle?: StyleProp<FastImageStyle>;
 	image?: string | undefined;
 	username?: string;
+	ref?: React.Ref<any>
 };
 
-export default function Avatar({ size = "md", square = false, style, image, imageStyle, username = "" }: AvatarProps): React.ReactNode {
+export default function Avatar({ size = "md", square = false, style, image, imageStyle, username = "", ref = null }: AvatarProps): React.ReactNode {
 	const { theme } = useUnistyles() as { theme: any };
 
 	const SIZE_MAP: Record<Size, number> = {
@@ -35,9 +36,11 @@ export default function Avatar({ size = "md", square = false, style, image, imag
 	);
 
 	return image ? (
-		<FastImage source={{ uri: CDN_URL + image }} style={[avatarStyle, imageStyle]} />
+		<View ref={ref}>
+			<FastImage source={{ uri: CDN_URL + image }} style={[avatarStyle, imageStyle]} />
+		</View>
 	) : (
-		<View style={[avatarStyle, style]}>
+		<View ref={ref} style={[avatarStyle, style]}>
 			<Image source={EMOJI_AVATARS[username?.slice(0, 1)].emoji} style={styles.emoji} />
 		</View>
 	);
