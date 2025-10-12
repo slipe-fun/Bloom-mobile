@@ -27,9 +27,9 @@ function mergeAndSort(prev, next) {
 export default function useChatMessages(chat_id) {
     const [messages, setMessages] = useState([]);
     const { messages: newMessages, clear: clearNewMessages } = useMessagesList();
-    const { seenMessages: newSeenMessages, clear: clearNewSeenMessages} = useSeenMessagesList();
+    const { seenMessages: newSeenMessages, clear: clearNewSeenMessages } = useSeenMessagesList();
     const ws = useWebSocket();
- 
+
     const addMessage = async (content) => {
         try {
             const storage = await createSecureStorage("user-storage");
@@ -161,7 +161,7 @@ export default function useChatMessages(chat_id) {
         if (filtered?.length > 0) {
             setMessages(prev => prev.map(m => {
                 if (filtered?.find(_m => _m?.id === m?.id)) {
-                    return {...m, seen: m?.date}
+                    return { ...m, seen: m?.date }
                 }
                 return m;
             }))
@@ -169,6 +169,54 @@ export default function useChatMessages(chat_id) {
 
         clearNewSeenMessages()
     }, [newSeenMessages, chat_id]);
+
+    useEffect(() => {
+        (async function () {
+            try {
+            const realm = await initRealm();
+
+            const lastMessage = messages[messages?.length - 1];
+
+            if (!lastMessage?.seen) {
+                ws.send(JSON.stringify({
+                    chat_id, messages: [lastMessage?.id]
+                }))
+
+                realm.write(() => {
+                    const msg = realm.objectForPrimaryKey("Message", lastMessage?.id);
+                    if (msg) msg.seen = new Date();
+                })
+
+                setMessages(prev => prev?.map(message => {
+                    if (message?.id === lastMessage?.id) {
+                        return { ...message, seen: new Date() }
+                    }
+                    return message;
+                }))
+            }
+
+            const lastUnseenMessage = [...messages].reverse().find(m => !m.seen && !m.isMe);
+            console.log(lastUnseenMessage)
+            if (!lastUnseenMessage) return;
+
+            ws.send(JSON.stringify({
+                chat_id, messages: [lastUnseenMessage?.id]
+            }))
+
+            realm.write(() => {
+                const msg = realm.objectForPrimaryKey("Message", lastUnseenMessage?.id);
+                if (msg) msg.seen = new Date();
+            })
+
+            setMessages(prev => prev?.map(message => {
+                if (message?.id === lastUnseenMessage?.id) {
+                    return { ...message, seen: new Date() }
+                }
+                return message;
+            }))
+        } catch {}
+        }())
+    }, [messages]);
 
     return { messages: messages, addMessage };
 }
