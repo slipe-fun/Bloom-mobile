@@ -16,6 +16,7 @@ module.exports = function (api) {
 						"@screens": "./src/screens",
 						"@providers": "./src/providers",
 						"@lib": "./src/lib",
+						"@interfaces": "./src/interfaces/index",
 					},
 				},
 			],

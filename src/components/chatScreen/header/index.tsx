@@ -11,12 +11,7 @@ import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated"
 import { quickSpring } from "@constants/Easings";
 import { Option } from "@components/ui/menu";
 import { staticColor } from "unistyles";
-
-interface Chat {
-  recipient: {
-    username: string;
-  };
-}
+import { Chat } from "@interfaces";
 
 type HeaderProps = {
   chat?: Chat | null;

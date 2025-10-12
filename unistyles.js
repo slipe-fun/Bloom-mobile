@@ -50,7 +50,7 @@ const base = {
 		md: 20,
 		lg: 24,
 		xl: 28,
-		'2xl': 32, 
+		xxl: 32, 
 		full: 9999,
 	},
 	fontFamily: {

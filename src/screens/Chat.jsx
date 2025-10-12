@@ -45,7 +45,7 @@ export default function ChatScreen({ route }) {
   return (
     <View style={styles.container}>
       <Header chat={chat} />
-      <EmptyModal isAllKeys={isAllKeys} visible={messages.length === 0} />
+      <EmptyModal chat={chat} visible={messages.length === 0} />
       <KeyboardAvoidingView
         behavior="translate-with-padding"
         style={styles.list}
