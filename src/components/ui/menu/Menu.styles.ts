@@ -22,8 +22,6 @@ export const styles = StyleSheet.create((theme: any) => ({
   }),
   menu: {
     paddingVertical: theme.spacing.sm,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
     transformOrigin: 'top right',
     borderCurve: 'continuous',
     overflow: 'hidden',

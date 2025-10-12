@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native-unistyles";
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme: any) => ({
   footer: {
     width: "100%",
     paddingHorizontal: theme.spacing.lg,
@@ -14,14 +14,18 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: 10,
     height: 40,
-    zIndex: 1,
-    textAlignVertical: "center",
-    borderCurve: 'continuous',
     color: theme.colors.text,
-    borderRadius: theme.radius.full,
     fontSize: theme.fontSize.md,
     fontFamily: theme.fontFamily.medium,
-    backgroundColor: theme.colors.foreground,
     borderWidth: 0,
+  },
+  inputWrapper: {
+    backgroundColor: theme.colors.foreground,
+    borderRadius: theme.radius.md,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    flex: 1,
+    borderCurve: "continuous",
+    zIndex: 1,
   },
 }));

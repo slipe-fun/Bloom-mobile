@@ -1,10 +1,4 @@
-import {
-  FadeIn,
-  FadeOut,
-  FadeInDown,
-  FadeOutUp,
-  withSpring,
-} from "react-native-reanimated";
+import { FadeIn, FadeOut, FadeInDown, FadeOutUp, withSpring, LinearTransition } from "react-native-reanimated";
 import { fastSpring, normalSpring, quickSpring } from "./Easings";
 
 export const getFadeOut = (i = 0) => {
@@ -33,8 +27,10 @@ export const getCharExit = (i = 0) =>
     .mass(quickSpring.mass + i * 0.2)
     .stiffness(quickSpring.stiffness);
 
+export const layoutAnimation = LinearTransition.springify().mass(quickSpring.mass).damping(quickSpring.damping).stiffness(quickSpring.stiffness);
+
 export const zoomAnimationOut = () => {
-  'worklet';
+  "worklet";
   const animations = {
     opacity: withSpring(0, quickSpring),
     transform: [{ scale: withSpring(0.5, quickSpring) }],
@@ -50,7 +46,7 @@ export const zoomAnimationOut = () => {
 };
 
 export const zoomAnimationIn = () => {
-  'worklet';
+  "worklet";
   const animations = {
     opacity: withSpring(1, quickSpring),
     transform: [{ scale: withSpring(1, quickSpring) }],
