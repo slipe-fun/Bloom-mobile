@@ -9,6 +9,9 @@ export default async function (content, chat_id, count, ws) {
     const realm = await initRealm();
     const storage = await createSecureStorage("user-storage");
     const chatData = await getChatFromStorage(chat_id);
+
+    console.log(chat_id)
+
     const encrypted = encrypt(content, { ...chatData?.keys?.my, id: parseInt(storage.getString("user_id")) }, chatData?.keys?.recipient, count);
 
     ws.send(JSON.stringify({

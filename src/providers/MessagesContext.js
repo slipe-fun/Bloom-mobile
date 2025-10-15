@@ -23,7 +23,7 @@ export default function MessagesProvider({ children }) {
                     console.log(error);
                     return;
                 }
-                console.log(message)
+                
                 if (message?.type === "message") {
                     try {
                         const chat = await getChatFromStorage(message?.chat_id);

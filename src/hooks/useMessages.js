@@ -196,7 +196,6 @@ export default function useChatMessages(chat_id) {
             }
 
             const lastUnseenMessage = [...messages].reverse().find(m => !m.seen && !m.isMe);
-            console.log(lastUnseenMessage)
             if (!lastUnseenMessage) return;
 
             ws.send(JSON.stringify({
@@ -217,6 +216,10 @@ export default function useChatMessages(chat_id) {
         } catch {}
         }())
     }, [messages]);
+
+    useEffect(() => {
+        setMessages([]);
+    }, [chat_id])
 
     return { messages: messages, addMessage };
 }

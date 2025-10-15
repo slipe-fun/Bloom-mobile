@@ -20,15 +20,16 @@ interface ChatItemData {
 }
 
 interface ChatItemProps {
+	isSearch: boolean, 
 	item: ChatItemData;
 	userId: string | number;
 	index: number;
 }
 
-export default function ChatItem({ item, userId, index }: ChatItemProps) {
+export default function ChatItem({ isSearch, item, userId, index }: ChatItemProps) {
 	const numericUserId = typeof userId === "string" ? parseInt(userId) : userId;
 
-	const recipient = useMemo(() => item.members.find(member => member.id !== numericUserId), [item.members, numericUserId]);
+	const recipient = useMemo(() => isSearch ? item : item.members?.find(member => member.id !== numericUserId), [isSearch, item, item.members, numericUserId]);
 
 	const { lastMessage, lastMessageTime } = useMemo(() => {
 		if (!item.last_message) {

@@ -9,6 +9,6 @@ export default async function (chat_id) {
     } catch {
         return null;
     }
-
+    
     return chats?.find(chat => chat?.id === chat_id);
 }

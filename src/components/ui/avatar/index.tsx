@@ -31,7 +31,7 @@ export default function Avatar({ size = "md", square = false, style, image, imag
 	};
 
 	const avatarStyle = useMemo(
-		() => styles.avatar({ height: SIZE_MAP[size], square, image, padding: SIZE_MAP[size] / 4.5, backgroundColor: EMOJI_AVATARS[username?.slice(0, 1)].color }),
+		() => styles.avatar({ height: SIZE_MAP[size], square, image, padding: SIZE_MAP[size] / 4.5, backgroundColor: EMOJI_AVATARS[username?.slice(0, 1)]?.color }),
 		[size, square, theme, username, image]
 	);
 
@@ -41,7 +41,7 @@ export default function Avatar({ size = "md", square = false, style, image, imag
 		</View>
 	) : (
 		<View ref={ref} style={[avatarStyle, style]}>
-			<Image source={EMOJI_AVATARS[username?.slice(0, 1)].emoji} style={styles.emoji} />
+			<Image source={EMOJI_AVATARS[username?.slice(0, 1)]?.emoji} style={styles.emoji} />
 		</View>
 	);
 }

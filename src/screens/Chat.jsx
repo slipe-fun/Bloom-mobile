@@ -64,7 +64,7 @@ export default function ChatScreen({ route }) {
             .damping(quickSpring.damping)
             .stiffness(quickSpring.stiffness)}
         />
-        <Footer isAllKeys={isAllKeys} onSend={addMessage} />
+        <Footer isAllKeys={true} onSend={addMessage} />
       </KeyboardAvoidingView>
     </View>
   );
