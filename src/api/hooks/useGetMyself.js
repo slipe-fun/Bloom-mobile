@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_URL } from "@constants/Api";
 import { createSecureStorage } from "@lib/Storage";
 
-export default function useUser() {
+export default function () {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);

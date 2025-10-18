@@ -7,11 +7,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { enableScreens } from "react-native-screens";
 import AppNavigator from "src/navigation/AppNavigator";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import { WebSocketProvider } from "@providers/WebSocketContext";
-import ChatsProvider from "@providers/ChatsContext";
-import MessagesProvider from "@providers/MessagesContext";
+import { WebSocketProvider } from "@api/providers/WebSocketContext";
+import ChatsProvider from "@api/providers/ChatsContext";
+import MessagesProvider from "@api/providers/MessagesContext";
 import { PortalProvider } from "@gorhom/portal";
-import SeenMessagesProvider from "@providers/SeenMessagesContext";
+import SeenMessagesProvider from "@api/providers/SeenMessagesContext";
 
 enableScreens();
 
@@ -31,17 +31,17 @@ export default function App() {
     <SafeAreaProvider>
       <KeyboardProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-        <PortalProvider>
-          <StatusBar style="light" />
-          <WebSocketProvider>
-            <ChatsProvider>
-              <MessagesProvider>
-                <SeenMessagesProvider>
-                  <AppNavigator />
-                </SeenMessagesProvider>
-              </MessagesProvider>
-            </ChatsProvider>
-          </WebSocketProvider>
+          <PortalProvider>
+            <StatusBar style="light" />
+            <WebSocketProvider>
+              <ChatsProvider>
+                <MessagesProvider>
+                  <SeenMessagesProvider>
+                    <AppNavigator />
+                  </SeenMessagesProvider>
+                </MessagesProvider>
+              </ChatsProvider>
+            </WebSocketProvider>
           </PortalProvider>
         </GestureHandlerRootView>
       </KeyboardProvider>

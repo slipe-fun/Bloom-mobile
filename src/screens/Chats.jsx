@@ -6,7 +6,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import { useSnapScroll } from "@hooks/useSnapScroll";
-import { useChatList } from "@providers/ChatsContext";
+import { useChatList } from "@api/providers/ChatsContext";
 import useChatsScreenStore from "@stores/ChatsScreen";
 import ChatItem from "@components/chatsScreen/chat/ChatItem";
 import { createSecureStorage } from "@lib/Storage";

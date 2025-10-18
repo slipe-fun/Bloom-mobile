@@ -1,1 +1,0 @@
-export { default as getChats } from "./chats/getChats";

@@ -1,10 +1,10 @@
-import getChatFromStorage from "./getChatFromStorage";
-import initRealm from "./initRealm";
+import getChatFromStorage from "../../lib/getChatFromStorage";
+import initRealm from "../../lib/initRealm";
 import Realm from "realm";
-import decrypt from "./skid/decrypt";
-import encrypt from "./skid/encrypt";
-import { encrypt as sskEncrypt, decrypt as sskDecrypt } from "./skid/serversideKeyEncryption";
-import { createSecureStorage } from "./Storage";
+import decrypt from "../../lib/skid/decrypt";
+import encrypt from "../../lib/skid/encrypt";
+import { encrypt as sskEncrypt, decrypt as sskDecrypt } from "../../lib/skid/serversideKeyEncryption";
+import { createSecureStorage } from "../../lib/Storage";
 
 export default async function (content, chat_id, count, ws) {
     const realm = await initRealm();

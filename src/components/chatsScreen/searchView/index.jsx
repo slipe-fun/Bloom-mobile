@@ -8,7 +8,7 @@ import { View } from "react-native";
 import { Text } from "react-native";
 import { Icon } from "@components/ui";
 import ChatItem from "@components/chatsScreen/chat/ChatItem";
-import useUsersSearch from "@hooks/api/useUsersSearch";
+import useUsersSearch from "@api/hooks/useUsersSearch";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 

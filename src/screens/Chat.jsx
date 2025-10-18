@@ -9,7 +9,7 @@ import { quickSpring } from "@constants/Easings";
 import Transition from "react-native-screen-transitions";
 import EmptyModal from "@components/chatScreen/emptyModal";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
-import useMessages from "@hooks/useMessages";
+import useMessages from "@api/hooks/encryption/useMessages";
 import getChatFromStorage from "@lib/getChatFromStorage";
 
 const TransitionList = Transition.createTransitionAwareComponent(

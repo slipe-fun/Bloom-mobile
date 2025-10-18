@@ -11,7 +11,7 @@ import Animated, {
 import useChatsScreenStore from "@stores/ChatsScreen";
 import Title from "./title";
 import SearchBar from "./searchBar";
-import { useWebSocket } from "@providers/WebSocketContext";
+import { useWebSocket } from "@api/providers/WebSocketContext";
 
 export default function Header({ scrollY }) {
   const ws = useWebSocket();

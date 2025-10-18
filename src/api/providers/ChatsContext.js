@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { useWebSocket } from "./WebSocketContext";
-import { getChats } from "@lib/api";
+import getChats from "../lib/chats/getChats";
 import setChatKeysToStorage from "@lib/setChatKeysToStorage";
 import generateKeys from "@lib/skid/generateKeys";
 import { createSecureStorage } from "@lib/Storage";

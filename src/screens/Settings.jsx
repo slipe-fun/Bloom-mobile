@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated";
 import useSettingsScreenStore from "src/stores/settingsScreen";
 import { useEffect } from "react";
 import useInsets from "@hooks/useInsets";
-import useGetMyself from "@hooks/api/useGetMyself";
+import useGetMyself from "@api/hooks/useGetMyself";
 
 export default function SettingsScreen() {
   const { headerHeight, setSnapEndPosition, snapEndPosition } = useSettingsScreenStore();

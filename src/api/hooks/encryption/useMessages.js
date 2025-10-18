@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { useWebSocket } from "@providers/WebSocketContext";
-import { useMessagesList } from "@providers/MessagesContext";
-import sendMessage from "@lib/sendMessage";
+import { useWebSocket } from "@api/providers/WebSocketContext";
+import { useMessagesList } from "@api/providers/MessagesContext";
+import sendMessage from "@api/lib/sendMessage";
 import { createSecureStorage } from "@lib/Storage";
 import initRealm from "@lib/initRealm";
 import Realm from "realm";
-import getChatMessages from "@lib/api/messages/getChatMessages";
+import getChatMessages from "src/api/lib/messages/getChatMessages";
 import decrypt from "@lib/skid/decrypt";
 import { decrypt as sskDecrypt } from "@lib/skid/serversideKeyEncryption";
 import getChatFromStorage from "@lib/getChatFromStorage";
-import { useSeenMessagesList } from "@providers/SeenMessagesContext";
+import { useSeenMessagesList } from "@api/providers/SeenMessagesContext";
 
 function uniqueById(arr) {
     const seen = new Set();
@@ -26,7 +26,7 @@ function mergeAndSort(prev, next) {
         .sort((a, b) => new Date(a.date) - new Date(b.date))
 }
 
-export default function useChatMessages(chat_id) {
+export default function (chat_id) {
     const [messages, setMessages] = useState([]);
 
     // socket variables

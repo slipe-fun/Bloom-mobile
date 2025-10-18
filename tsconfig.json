@@ -13,8 +13,9 @@
 			"@hooks/*": ["src/hooks/*"],
 			"@screens/*": ["src/screens/*"],
 			"@lib/*": ["src/lib/*"],
-			"@providers/*": ["src/providers/*"],
-			"@interfaces": ["src/interfaces/index"]
+			"@providers/*": ["src/api/providers/*"],
+			"@interfaces": ["src/interfaces/index"],
+			"@api/*": ["src/api/*"]
 		}
 	},
 	"include": ["src", "App.ts", "App.tsx", "App.js", "App.jsx"],
