@@ -44,6 +44,7 @@ export default async function getChats(ws) {
         if (chatIndex !== -1) {
           chats[chatIndex] = {
             id: chat?.id,
+            key: chat?.encryption_key,
             keys: {
               my: { ...(myKeys || chatInStorage?.keys?.my || me) },
               recipient: { ...recipient }
@@ -54,6 +55,7 @@ export default async function getChats(ws) {
       } else {
         chats.push({
           id: chat?.id,
+          key: chat?.encryption_key,
           keys: {
             my: { ...(myKeys || chatInStorage?.keys?.my || me) },
             recipient: { ...recipient }

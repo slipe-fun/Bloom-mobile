@@ -7,6 +7,7 @@ import initRealm from "@lib/initRealm";
 import Realm from "realm";
 import getChatMessages from "@lib/api/messages/getChatMessages";
 import decrypt from "@lib/skid/decrypt";
+import { decrypt as sskDecrypt } from "@lib/skid/serversideKeyEncryption";
 import getChatFromStorage from "@lib/getChatFromStorage";
 import { useSeenMessagesList } from "@providers/SeenMessagesContext";
 
@@ -72,7 +73,9 @@ export default function useChatMessages(chat_id) {
             const decryptedMessages = messages.map(message => {
                 try {
                     return {
-                        ...decrypt(message, myKeys, recipientKeys, false),
+                        ...message?.encapsulated_key ?
+                            decrypt(message, myKeys, recipientKeys, false) :
+                            sskDecrypt(message?.ciphertext, message?.nonce, chat?.key),
                         chat_id: message?.chat_id,
                         id: message?.id,
                     };
@@ -173,47 +176,47 @@ export default function useChatMessages(chat_id) {
     useEffect(() => {
         (async function () {
             try {
-            const realm = await initRealm();
+                const realm = await initRealm();
 
-            const lastMessage = messages[messages?.length - 1];
+                const lastMessage = messages[messages?.length - 1];
 
-            if (!lastMessage?.seen && !lastMessage?.isMe) {
+                if (!lastMessage?.seen && !lastMessage?.isMe) {
+                    ws.send(JSON.stringify({
+                        chat_id, messages: [lastMessage?.id]
+                    }))
+
+                    realm.write(() => {
+                        const msg = realm.objectForPrimaryKey("Message", lastMessage?.id);
+                        if (msg) msg.seen = new Date();
+                    })
+
+                    setMessages(prev => prev?.map(message => {
+                        if (message?.id === lastMessage?.id) {
+                            return { ...message, seen: new Date() }
+                        }
+                        return message;
+                    }))
+                }
+
+                const lastUnseenMessage = [...messages].reverse().find(m => !m.seen && !m.isMe);
+                if (!lastUnseenMessage) return;
+
                 ws.send(JSON.stringify({
-                    chat_id, messages: [lastMessage?.id]
+                    chat_id, messages: [lastUnseenMessage?.id]
                 }))
 
                 realm.write(() => {
-                    const msg = realm.objectForPrimaryKey("Message", lastMessage?.id);
+                    const msg = realm.objectForPrimaryKey("Message", lastUnseenMessage?.id);
                     if (msg) msg.seen = new Date();
                 })
 
                 setMessages(prev => prev?.map(message => {
-                    if (message?.id === lastMessage?.id) {
+                    if (message?.id === lastUnseenMessage?.id) {
                         return { ...message, seen: new Date() }
                     }
                     return message;
                 }))
-            }
-
-            const lastUnseenMessage = [...messages].reverse().find(m => !m.seen && !m.isMe);
-            if (!lastUnseenMessage) return;
-
-            ws.send(JSON.stringify({
-                chat_id, messages: [lastUnseenMessage?.id]
-            }))
-
-            realm.write(() => {
-                const msg = realm.objectForPrimaryKey("Message", lastUnseenMessage?.id);
-                if (msg) msg.seen = new Date();
-            })
-
-            setMessages(prev => prev?.map(message => {
-                if (message?.id === lastUnseenMessage?.id) {
-                    return { ...message, seen: new Date() }
-                }
-                return message;
-            }))
-        } catch {}
+            } catch { }
         }())
     }, [messages]);
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useContext, createContext } from "react";
 import { useWebSocket } from "./WebSocketContext";
 import getChatFromStorage from "@lib/getChatFromStorage";
 import decrypt from "@lib/skid/decrypt";
+import { decrypt as sskDecrypt } from "@lib/skid/serversideKeyEncryption";
 
 const MessagesContext = createContext(null);
 
@@ -23,12 +24,33 @@ export default function MessagesProvider({ children }) {
                     console.log(error);
                     return;
                 }
-                
+
                 if (message?.type === "message") {
                     try {
                         const chat = await getChatFromStorage(message?.chat_id);
 
                         if (!chat) return
+
+                        if (message?.encryption_type === "server") {
+                            const key = chat?.key;
+
+                            const decrypted = sskDecrypt(message?.ciphertext, message?.nonce, key);
+
+                            setMessages(prev => [...prev, { ...decrypted, chat_id: message?.chat_id, id: message?.id }]);
+
+                            realm.write(() => {
+                                realm.create("Message", {
+                                    id: message?.id,
+                                    chat_id: message?.chat_id,
+                                    content: decrypted?.content,
+                                    author_id: decrypted?.from_id,
+                                    date: new Date(),
+                                    seen: null,
+                                }, Realm.UpdateMode.Modified);
+                            });
+
+                            return
+                        }
 
                         const myKeys = chat?.keys?.my;
                         const recipientKeys = chat?.keys?.recipient;
