@@ -8,14 +8,19 @@ import decrypt from "@lib/skid/decrypt";
 const SeenMessagesContext = createContext(null);
 
 export default function SeenMessagesProvider({ children }) {
+    // seen messages var
     const [seenMessages, setSeenMessages] = useState([]);
+    // websocket context
     const ws = useWebSocket();
 
     useEffect(() => {
         if (ws) {
+            // websocket socket listener
             ws.addEventListener("message", async (msg) => {
+                // local storage init
                 const realm = await initRealm();
 
+                // parse socket
                 let message;
                 try {
                     message = JSON.parse(msg?.data);
@@ -24,9 +29,12 @@ export default function SeenMessagesProvider({ children }) {
                     return;
                 }
 
+                // if socket type is message_seen
                 if (message?.type === "message_seen") {
+                    // get seen messages from socket message
                     const messages = message?.messages;
 
+                    // change seen messages status in local storage
                     realm.write(() => {
                         messages?.forEach(message_id => {
                             const msg = realm.objectForPrimaryKey("Message", message_id);
@@ -34,6 +42,7 @@ export default function SeenMessagesProvider({ children }) {
                         });
                     });
 
+                    // add seen messages to seen messages var
                     setSeenMessages(messages?.map(_message => ({
                         id: _message, date: message?.seen_at, chat_id: message?.chat_id
                     })));
@@ -42,6 +51,7 @@ export default function SeenMessagesProvider({ children }) {
         }
     }, [ws]);
 
+    // clear seen messages
     function clear() {
         setSeenMessages([]);
     }

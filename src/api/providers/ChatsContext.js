@@ -9,7 +9,9 @@ import initRealm from "@lib/initRealm";
 const ChatsContext = createContext(null);
 
 export default function ChatsProvider({ children }) {
+    // chats variable
     const [chats, setChats] = useState([]);
+    // websocket context
     const ws = useWebSocket();
 
     function safeObject(obj) {
@@ -43,14 +45,18 @@ export default function ChatsProvider({ children }) {
     useEffect(() => {
         if (ws) {
             (async () => {
+                // get chats from api
                 const _chats = await getChats(ws);
                 if (_chats) setChats(await sort(_chats));
             })();
 
+            // websocket message listener
             ws.addEventListener("message", async (msg) => {
                 try {
+                    // mmkv storage
                     const Storage = await createSecureStorage("user-storage");
 
+                    // parse socket message
                     let message;
                     try {
                         message = JSON.parse(msg?.data);
@@ -59,13 +65,15 @@ export default function ChatsProvider({ children }) {
                         return;
                     }
 
+                    // if someone from chat changed keys change them in mmkv storage
                     if (message?.type === "keys_added") {
                         await setChatKeysToStorage(message?.chat_id, {
                             kyberPublicKey: message?.kyberPublicKey,
                             ecdhPublicKey: message?.ecdhPublicKey,
                             edPublicKey: message?.edPublicKey
                         });
-                    } else if (message?.chat) {
+                    } else if (message?.chat) { // chat created socket
+                        // parse chats from mmkv storage
                         let _chats;
                         try {
                             _chats = JSON.parse(Storage.getString("chats"));
@@ -73,8 +81,10 @@ export default function ChatsProvider({ children }) {
                             _chats = [];
                         }
 
+                        // generate current user encryption keys
                         const myKeys = generateKeys();
 
+                        // send current user public keys
                         ws.send(JSON.stringify({
                             type: "add_keys",
                             chat_id: message?.chat?.id,
@@ -83,6 +93,7 @@ export default function ChatsProvider({ children }) {
                             edPublicKey: myKeys.edPublicKey
                         }));
 
+                        // add chat to mmkv storage
                         _chats = [..._chats, {
                             id: message?.chat?.id,
                             keys: {
@@ -91,8 +102,10 @@ export default function ChatsProvider({ children }) {
                             }
                         }];
 
+                        // save changes
                         Storage.set("chats", JSON.stringify(_chats));
 
+                        // add new chat to chats var
                         setChats(prev => {
                             const next = [...prev, message.chat];
                             sort(next).then(sorted => setChats(sorted));
@@ -114,10 +127,13 @@ export default function ChatsProvider({ children }) {
             realm = await initRealm();
 
             chats.forEach(chat => {
+                // get all chat messages
                 const messages = realm.objects("Message").filtered("chat_id == $0", chat.id);
 
+                // realm listener
                 const listener = (collection, changes) => {
                     if (changes.insertions.length > 0) {
+                        // change chat last message if last message changed in local realm storage
                         setChats(prev => {
                             const updated = prev.map(c =>
                                 c.id === chat.id
@@ -134,6 +150,7 @@ export default function ChatsProvider({ children }) {
                     }
                 };
 
+                // init listener
                 messages.addListener(listener);
                 listeners.push({ messages, listener });
             });

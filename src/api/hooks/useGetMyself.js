@@ -4,6 +4,7 @@ import { API_URL } from "@constants/Api";
 import { createSecureStorage } from "@lib/Storage";
 
 export default function () {
+    // variables
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
@@ -11,9 +12,12 @@ export default function () {
     useEffect(() => {
         const fetchUser = async () => {
             try {
+                // mmkv storage
                 const Storage = await createSecureStorage("user-storage");
+                // get user token from mmkv storage
                 const token = Storage.getString("token");
 
+                // send get user info request
                 const response = await axios.get(`${API_URL}/user/me`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
