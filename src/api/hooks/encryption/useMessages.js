@@ -235,7 +235,7 @@ export default function (chat_id) {
                 if (!lastMessage?.seen && !lastMessage?.isMe) {
                     // send seen socket
                     ws.send(JSON.stringify({
-                        chat_id, messages: [lastMessage?.id]
+                        type: "message_seen", chat_id, messages: [lastMessage?.id]
                     }))
 
                     // change seen status in local storage
@@ -259,7 +259,7 @@ export default function (chat_id) {
 
                 // send seen socket for last unseen message
                 ws.send(JSON.stringify({
-                    chat_id, messages: [lastUnseenMessage?.id]
+                    type: "message_seen", chat_id, messages: [lastUnseenMessage?.id]
                 }))
 
                 // change last unseen message status in local storage
