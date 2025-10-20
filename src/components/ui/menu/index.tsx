@@ -18,7 +18,6 @@ export interface Option {
 
 type Position = { top: number; left: number; width: number };
 
-
 type MenuProps = {
   trigger: React.ReactNode;
   options: Option[];
@@ -53,7 +52,7 @@ export default function Menu({ trigger, options, onSelect, onOpen, onClose }: Me
   const onSelectPressed = (value: string) => {
     onSelect?.(value);
     close();
-  }
+  };
 
   const animatedViewStyles = useAnimatedStyle(() => ({
     opacity: withSpring(open ? 1 : 0, quickSpring),
@@ -68,7 +67,12 @@ export default function Menu({ trigger, options, onSelect, onOpen, onClose }: Me
 
   return (
     <>
-      <AnimatedPressable delayLongPress={400} onLongPress={toggle} style={animatedPressableStyles} ref={triggerRef}>
+      <AnimatedPressable
+        delayLongPress={400}
+        onLongPress={toggle}
+        style={animatedPressableStyles}
+        ref={triggerRef}
+      >
         {trigger}
       </AnimatedPressable>
 
@@ -77,9 +81,13 @@ export default function Menu({ trigger, options, onSelect, onOpen, onClose }: Me
 
         <View style={styles.menuWrapper({ top: position.top, open })}>
           <Animated.View style={[styles.menu, animatedViewStyles]}>
-            <BlurView tint="dark" style={styles.backdrop} intensity={128} />
-            {options.map((option, index) => 
-            <Pressable onPress={() => onSelectPressed(option.action)} style={styles.option} key={index}><Icon size={28} color={option.color} icon={option.icon}/><Text style={styles.optionText(option.color)}>{option.label}</Text></Pressable>)}
+            <BlurView tint='dark' style={styles.backdrop} intensity={128} />
+            {options.map((option, index) => (
+              <Pressable onPress={() => onSelectPressed(option.action)} style={styles.option} key={index}>
+                <Icon size={28} color={option.color} icon={option.icon} />
+                <Text style={styles.optionText(option.color)}>{option.label}</Text>
+              </Pressable>
+            ))}
           </Animated.View>
         </View>
       </Portal>

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native-unistyles";
 
-export const styles = StyleSheet.create((theme: any) => ({
-  message: (isMe: boolean) => ({
+export const styles = StyleSheet.create(theme => ({
+  message: (isMe: Boolean) => ({
     padding: theme.spacing.md,
     maxWidth: "82%",
     minWidth: 56,
@@ -11,14 +11,14 @@ export const styles = StyleSheet.create((theme: any) => ({
     backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
     alignItems: 'center',
   }),
-  messageWrapper: (isMe: boolean) => ({
+  messageWrapper: (isMe: Boolean) => ({
     gap: theme.spacing.md,
     position: "relative",
     transformOrigin: isMe ? "bottom-right" : "bottom-left",
     paddingBottom: theme.spacing.lg,
     alignItems: isMe ? "flex-end" : "flex-start",
   }),
-  text: (isMe: boolean) => ({
+  text: (isMe: Boolean) => ({
     fontSize: theme.fontSize.md,
     fontFamily: theme.fontFamily.medium,
     color: isMe ? theme.colors.white : theme.colors.text,
@@ -42,7 +42,7 @@ export const styles = StyleSheet.create((theme: any) => ({
     borderRadius: theme.radius.full,
     backgroundColor: theme.colors.secondaryText,
   },
-  tail: (isMe: boolean) => ({
+  tail: (isMe: Boolean) => ({
     position: "absolute",
     right: isMe ? 0 : undefined,
     left: isMe ? undefined : 0,

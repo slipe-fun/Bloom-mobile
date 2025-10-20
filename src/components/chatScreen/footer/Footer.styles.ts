@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native-unistyles";
 
-export const styles = StyleSheet.create((theme: any) => ({
+export const styles = StyleSheet.create(theme => ({
   footer: {
     width: "100%",
     paddingHorizontal: theme.spacing.lg,

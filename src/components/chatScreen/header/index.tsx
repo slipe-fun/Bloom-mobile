@@ -25,7 +25,7 @@ const options: Option[] = [
 ];
 
 export default function Header({ chat }: HeaderProps): React.ReactNode {
-  const { theme } = useUnistyles() as { theme: any };
+  const { theme } = useUnistyles();
   const [open, setOpen] = useState<boolean>(false);
 
   const navigation = useNavigation();

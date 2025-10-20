@@ -1,6 +1,6 @@
 export { default as CardScreen } from './Chats'
 export { default as SettingsScreen } from './Settings'
-export { default as ChatScreen } from './Chat'
+export { default as ChatScreen } from './chat'
 export { default as WelcomeScreen } from './Auth/Welcome'
 export { default as RegisterScreen } from './Auth/Register'
 export { default as LoginScreen } from './Auth/Login'

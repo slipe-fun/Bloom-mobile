@@ -8,7 +8,7 @@ type AvatarStyleProps = {
 	backgroundColor: string;
 };
 
-export const styles = StyleSheet.create((theme: any) => ({
+export const styles = StyleSheet.create(theme => ({
 	avatar: ({ height, square, image, padding, backgroundColor }: AvatarStyleProps) => ({
 		aspectRatio: 1,
 		height,

@@ -1,10 +1,17 @@
+export interface MessageInterface {
+	isMe: Boolean;
+	content: String;
+	date: Date;
+  id: Number,
+}
+
 export interface Chat {
-  unreadCount: number;
-  lastMessage: string;
-  lastMessageTime: string;
-  id: number;
+  unreadCount: Number;
+  lastMessage: String;
+  lastMessageTime: String;
+  id: Number;
   recipient: {
-    username: string;
-    avatar: string
+    username: String;
+    avatar: String
   };
 }

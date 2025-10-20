@@ -18,7 +18,7 @@ const AnimatedButton = Animated.createAnimatedComponent(Button);
 
 export default function Footer({ onSend }: FooterProps) {
   const insets = useInsets();
-  const { theme } = useUnistyles() as { theme: any };
+  const { theme } = useUnistyles();
   const { progress } = useReanimatedKeyboardAnimation();
   const [value, setValue] = useState<string>("");
 

@@ -5,7 +5,7 @@ type MenuWrapperStyleProps = {
   open?: boolean;
 };
 
-export const styles = StyleSheet.create((theme: any) => ({
+export const styles = StyleSheet.create(theme => ({
   backdrop: {
     position: "absolute",
     right: 0,

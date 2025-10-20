@@ -7,7 +7,7 @@ type ButtonStyleProps = {
 	disabled: boolean;
 };	
 
-export const styles = StyleSheet.create((theme: any) => ({
+export const styles = StyleSheet.create(theme => ({
 	button: ({height, isIcon, paddingHorizontal, disabled}:ButtonStyleProps) => ({
 		alignItems: "center",
 		justifyContent: "center",
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create((theme: any) => ({
 		aspectRatio: isIcon ? 1 : undefined,
 		paddingHorizontal,	
 		opacity: disabled ? theme.opacity.secondaryText : 1,
-		borderRadius: theme.radius.full,
+		borderRadius: theme.radius.lg,
         backgroundColor: theme.colors.foreground,
 		minWidth: 36,
 	}),

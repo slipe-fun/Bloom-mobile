@@ -1,7 +1,7 @@
 import { useSharedValue, useAnimatedScrollHandler, runOnJS } from "react-native-reanimated";
 import { useRef } from "react";
 
-export function useSnapScroll(snapTo = 56, velocityThreshold = 50) {
+export default function useSnapScroll(snapTo = 56, velocityThreshold = 50) {
   const scrollY = useSharedValue(0);
   const listRef = useRef(null);
 

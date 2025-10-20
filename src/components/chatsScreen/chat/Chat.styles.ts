@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native-unistyles";
 
-export const styles = StyleSheet.create((theme: any) => ({
+export const styles = StyleSheet.create(theme => ({
   chat: {
     flexDirection: "row",
     paddingRight: theme.spacing.lg,

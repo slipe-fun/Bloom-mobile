@@ -14,12 +14,12 @@ type AvatarProps = {
 	style?: StyleProp<ImageStyle>;
 	imageStyle?: StyleProp<FastImageStyle>;
 	image?: string | undefined;
-	username?: string;
+	username?: String;
 	ref?: React.Ref<any>
 };
 
 export default function Avatar({ size = "md", square = false, style, image, imageStyle, username = "", ref = null }: AvatarProps): React.ReactNode {
-	const { theme } = useUnistyles() as { theme: any };
+	const { theme } = useUnistyles();
 
 	const SIZE_MAP: Record<Size, number> = {
 		sm: 36,

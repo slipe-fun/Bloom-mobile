@@ -23,7 +23,7 @@ const SIZE_MAP: Record<Size, number> = {
 };
 
 export default function Button({ ref, variant = "text", size = "md", children, icon, disabled = false, style, ...props }: ButtonProps): React.ReactNode {
-	const { theme } = useUnistyles() as { theme: any };
+	const { theme } = useUnistyles();
 
 	let paddingHorizontal = 0;
 	if (variant !== "icon") {
