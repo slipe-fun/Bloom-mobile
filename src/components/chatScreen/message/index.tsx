@@ -3,10 +3,13 @@ import { styles } from "./Message.styles";
 import { useUnistyles } from "react-native-unistyles";
 import Svg, { Path } from "react-native-svg";
 import Animated, {
+  Easing,
   LayoutAnimationConfig,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import formatSentTime from "@lib/formatSentTime";
 import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
@@ -16,6 +19,7 @@ import physicsSpring from "@lib/physicSpring";
 import { useRef, useState } from "react";
 import Menu from "@components/ui/menu";
 import { Haptics } from "react-native-nitro-haptics";
+import useContextMenuStore from "src/stores/contextMenu";
 
 type MessageProps = {
   message: MessageInterface | null;
@@ -30,29 +34,27 @@ export default function Message({ message, seen, isLast }: MessageProps): React.
   const scale = useSharedValue(1);
   const ref = useRef<View>(null);
   const [messageMenu, setMessageMenu] = useState(false);
+  const {setFocused} = useContextMenuStore();
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
 
   const isMe: boolean = message?.isMe;
 
   const onPress = (out: boolean = false) => {
-    scale.value = withSpring(out ? 1 : 0.95, quickSpring);
-    ref.current?.measure((fx: number, fy: number, width: number, height: number, px: number, py: number) => {
-      console.log('1', py)
-    })
+    scale.value = withTiming(out ? 1 : 0.95, {easing: Easing.inOut(Easing.ease), duration: 350});
   };
 
   const onLongPress = () => {
+    setFocused(true);
     scale.value = 1
     ref.current?.measure((fx: number, fy: number, width: number, height: number, px: number, py: number) => {
       setPosition({ top: py, left: px, width });
       setMessageMenu(true);
-       console.log(py)
       Haptics.impact("medium");
     });
   };
 
   const animatedBubbleStyles = useAnimatedStyle(() => {
-    return { transform: [{ scale: withSpring(messageMenu ? 1.1 : scale.value, quickSpring) }], opacity: messageMenu ? 0 : 1 };
+    return { transform: [{ scale: withSpring(messageMenu ? 1.1 : scale.value, quickSpring) }], opacity: messageMenu ? 0 : 1};
   });
 
   return (
@@ -62,7 +64,7 @@ export default function Message({ message, seen, isLast }: MessageProps): React.
       onPressIn={() => onPress()}
       onPressOut={() => onPress(true)}
       entering={zoomAnimationIn}
-      delayLongPress={450}
+      delayLongPress={350}
       style={styles.messageWrapper(isMe)}
     >
       <MessageBubble style={animatedBubbleStyles} message={message}/>
@@ -103,7 +105,7 @@ export default function Message({ message, seen, isLast }: MessageProps): React.
         bluredBackdrop
         options={[{ icon: "compass", label: "swag", action: "sex", color: "#fff" }]}
         open={messageMenu}
-        onClose={() => setMessageMenu(false)}
+        onClose={() => {setMessageMenu(false); setFocused(false)}}
       />
     </AnimatedPressable>
   );

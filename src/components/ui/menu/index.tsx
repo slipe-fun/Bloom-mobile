@@ -8,7 +8,15 @@ import { BlurView } from "expo-blur";
 import { styles } from "./Menu.styles";
 import { styles as messageStyles } from "@components/chatScreen/message/Message.styles";
 import Icon from "../Icon";
-import { getFadeIn, getFadeOut, layoutAnimationSpringy, messageFocusAnimationIn, messageFocusAnimationOut } from "@constants/animations";
+import {
+  getFadeIn,
+  getFadeOut,
+  layoutAnimationSpringy,
+  menuFocusAnimationIn,
+  menuFocusAnimationOut,
+  messageFocusAnimationIn,
+  messageFocusAnimationOut,
+} from "@constants/animations";
 import { Position, Option, MessageInterface } from "@interfaces";
 import { MessageBubble } from "@components/chatScreen/message";
 
@@ -68,12 +76,6 @@ export default function Menu({
     close();
   };
 
-  const animatedViewStyles = useAnimatedStyle(() => ({
-    opacity: withSpring(isOpen ? 1 : 0, quickSpring),
-    borderRadius: withSpring(isOpen ? 28 : 20, normalSpring),
-    transform: [{ scale: withSpring(isOpen ? 1 : 0.25, quickSpring) }],
-  }));
-
   const animatedPressableStyles = useAnimatedStyle(() => ({
     transform: [{ scale: withSpring(isOpen ? 0.8 : 1, quickSpring) }],
     opacity: withSpring(isOpen ? 0 : 1, quickSpring),
@@ -104,22 +106,32 @@ export default function Menu({
           </AnimatedPressable>
         )}
 
-        <View style={styles.menuWrapper({ top: triggerPosition.top, open: isOpen })}>
-          {message && isOpen && (
-            <Animated.View entering={messageFocusAnimationIn} exiting={messageFocusAnimationOut} layout={layoutAnimationSpringy} style={messageStyles.messageWrapper(message.isMe)}>
-              <MessageBubble message={message} />
+        {isOpen && (
+          <View style={styles.menuWrapper({ top: triggerPosition.top, open: isOpen })}>
+            {message && (
+              <Animated.View
+                entering={messageFocusAnimationIn}
+                exiting={messageFocusAnimationOut}
+                style={messageStyles.messageWrapper(message.isMe)}
+              >
+                <MessageBubble message={message} />
+              </Animated.View>
+            )}
+            <Animated.View
+              entering={menuFocusAnimationIn}
+              exiting={menuFocusAnimationOut}
+              style={styles.menu(bluredBackdrop)}
+            >
+              {!bluredBackdrop && <BlurView tint='dark' style={styles.backdrop} intensity={128} />}
+              {options.map((option, index) => (
+                <Pressable onPress={() => onSelectPressed(option.action)} style={styles.option} key={index}>
+                  <Icon size={28} color={option.color} icon={option.icon} />
+                  <Text style={styles.optionText(option.color)}>{option.label}</Text>
+                </Pressable>
+              ))}
             </Animated.View>
-          )}
-          <Animated.View layout={layoutAnimationSpringy} style={[styles.menu(bluredBackdrop), animatedViewStyles]}>
-            {!bluredBackdrop && <BlurView tint='dark' style={styles.backdrop} intensity={128} />}
-            {options.map((option, index) => (
-              <Pressable onPress={() => onSelectPressed(option.action)} style={styles.option} key={index}>
-                <Icon size={28} color={option.color} icon={option.icon} />
-                <Text style={styles.optionText(option.color)}>{option.label}</Text>
-              </Pressable>
-            ))}
-          </Animated.View>
-        </View>
+          </View>
+        )}
       </Portal>
     </>
   );

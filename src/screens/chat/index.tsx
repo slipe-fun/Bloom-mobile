@@ -11,6 +11,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import useMessages from "@api/hooks/encryption/useMessages";
 import { Chat, MessageInterface } from "@interfaces";
 import { layoutAnimationSpringy } from "@constants/animations";
+import useScreenScale from "@hooks/useScreenScale";
 
 interface ChatScreenProps {
   route: {
@@ -26,6 +27,7 @@ export default function ChatScreen({ route }: ChatScreenProps) {
   const { messages, addMessage } = useMessages(chat?.id);
   const [seenId, setSeenId] = useState<number>(0);
   const [lastMessageId, setLastMessageId] = useState<number>(0);
+  const { animatedScreenStyle } = useScreenScale();
 
   const renderItem = useCallback(
     ({ item }) => {
@@ -42,7 +44,7 @@ export default function ChatScreen({ route }: ChatScreenProps) {
   }, [messages]);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, animatedScreenStyle]}>
       <Header chat={chat} />
       <EmptyModal chat={chat} visible={messages.length === 0} />
       <KeyboardAvoidingView behavior='translate-with-padding' style={styles.list}>
@@ -59,6 +61,6 @@ export default function ChatScreen({ route }: ChatScreenProps) {
         />
         <Footer onSend={addMessage} />
       </KeyboardAvoidingView>
-    </View>
+    </Animated.View>
   );
 }
