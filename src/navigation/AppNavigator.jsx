@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ROUTES } from "@constants/Routes";
 import AuthNavigator from "./AuthNavigator";
 import MainNavigator from "./MainNavigator";
-import useTokenCheck from "@hooks/useTokenCheck";
+import { useTokenCheck } from "@hooks";
 
 const RootStack = createNativeStackNavigator();
 

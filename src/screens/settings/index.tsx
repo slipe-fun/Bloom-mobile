@@ -1,7 +1,7 @@
 import Header from "@components/settingsScreen/header";
 import { View } from "react-native";
 import { styles } from "./Settings.styles";
-import { useSnapScroll } from "@hooks/index";
+import { useSnapScroll } from "@hooks";
 import Animated from "react-native-reanimated";
 import useSettingsScreenStore from "src/stores/settingsScreen";
 import { useEffect } from "react";

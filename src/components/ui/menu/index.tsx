@@ -66,7 +66,7 @@ export default function Menu({
     triggerRef.current?.measureInWindow((x: number, y: number, width: number) => {
       _setPosition({ top: y, left: x + width, width });
       _setOpen(true);
-      Haptics.impact("medium");
+      Haptics.impact("soft");
       onOpen?.();
     });
   }, [isControlled, isOpen, close, onOpen]);

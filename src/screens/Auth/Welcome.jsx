@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native-unistyles";
 import Button from "@components/auth/button";
 import { useState } from "react";
 import { useUnistyles } from "react-native-unistyles";
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import Slider from "@components/auth/welcomeScreen/slider";
 import { useSharedValue, useAnimatedStyle, interpolateColor } from "react-native-reanimated";
 import Gradient from "@components/auth/gradient";

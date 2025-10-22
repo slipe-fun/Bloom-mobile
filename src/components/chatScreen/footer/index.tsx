@@ -1,6 +1,6 @@
 import { TextInput } from "react-native";
 import { styles } from "./Footer.styles";
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import Icon from "@components/ui/Icon";
 import { useUnistyles } from "react-native-unistyles";
 import { useState } from "react";

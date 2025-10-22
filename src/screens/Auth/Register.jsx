@@ -2,7 +2,7 @@ import { View, TextInput, Pressable, Text } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import Button from "@components/auth/button";
 import Gradient from "@components/auth/gradient";
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import useAuth from "@api/hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";

@@ -1,7 +1,7 @@
 import Svg, { Defs, RadialGradient, Stop, Rect } from "react-native-svg";
 import { styles } from "./Header.styles";
 import HeaderAvatar from "./avatar";
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import useSettingsScreenStore from "@stores/settingsScreen";
 import Animated, { interpolate, useAnimatedStyle } from "react-native-reanimated";
 import UserInformation from "./userInformation";

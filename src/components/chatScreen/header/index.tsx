@@ -2,7 +2,7 @@ import { styles } from "./Header.styles";
 import { View, Text, Pressable } from "react-native";
 import Icon from "@components/ui/Icon";
 import { useNavigation } from "@react-navigation/native";
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import { Avatar, Button } from "@components/ui";
 import { useUnistyles } from "react-native-unistyles";
 import Menu from "@components/ui/menu";

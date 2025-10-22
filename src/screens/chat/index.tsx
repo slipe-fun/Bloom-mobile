@@ -1,4 +1,3 @@
-import { View } from "react-native";
 import Header from "@components/chatScreen/header";
 import Footer from "@components/chatScreen/footer";
 import Message from "@components/chatScreen/message";
@@ -11,7 +10,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import useMessages from "@api/hooks/encryption/useMessages";
 import { Chat, MessageInterface } from "@interfaces";
 import { layoutAnimationSpringy } from "@constants/animations";
-import useScreenScale from "@hooks/useScreenScale";
+import { useScreenScale } from "@hooks";
 
 interface ChatScreenProps {
   route: {

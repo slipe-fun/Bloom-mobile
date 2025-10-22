@@ -1,4 +1,4 @@
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import TabBarItem from "./TabBar.item";
 import { View } from "react-native";
 import { styles } from "./TabBar.styles";

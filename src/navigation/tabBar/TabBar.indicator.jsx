@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useWindowDimensions, View } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, interpolateColor } from "react-native-reanimated";
 import { fastSpring } from "@constants/easings";
-import useInsets from "@hooks/useInsets";
+import { useInsets } from "@hooks";
 import { useUnistyles } from "react-native-unistyles";
 import { styles } from "./TabBar.indicator.styles";
 import physicsSpring from "@lib/physicSpring";

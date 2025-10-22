@@ -49,7 +49,7 @@ export default function Message({ message, seen, isLast }: MessageProps): React.
     ref.current?.measure((fx: number, fy: number, width: number, height: number, px: number, py: number) => {
       setPosition({ top: py, left: px, width });
       setMessageMenu(true);
-      Haptics.impact("medium");
+      Haptics.impact("soft");
     });
   };
 
