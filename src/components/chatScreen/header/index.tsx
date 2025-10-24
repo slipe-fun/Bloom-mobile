@@ -5,12 +5,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useInsets } from "@hooks";
 import { Avatar, Button } from "@components/ui";
 import { useUnistyles } from "react-native-unistyles";
-import Menu from "@components/ui/menu";
-import { useState } from "react";
+import { Menu } from "@components/ui";
 import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
 import { quickSpring } from "@constants/easings";
 import { staticColor } from "unistyles";
 import { Chat, Option } from "@interfaces";
+import useContextMenu from "@hooks/useContextMenu";
 
 type HeaderProps = {
   chat?: Chat | null;
@@ -23,15 +23,16 @@ const options: Option[] = [
   { label: "Удалить чат", icon: "lock", color: staticColor.orange, action: "swag" },
 ];
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 export default function Header({ chat }: HeaderProps): React.ReactNode {
   const { theme } = useUnistyles();
-  const [open, setOpen] = useState<boolean>(false);
-
+  const {isOpen, triggerProps, closeMenu, menuPosition, triggerAnimatedStyle} = useContextMenu();
   const navigation = useNavigation();
   const insets = useInsets();
 
   const animatedViewStyles = useAnimatedStyle(() => {
-    return { opacity: withSpring(open ? 0.5 : 1, quickSpring) };
+    return { opacity: withSpring(isOpen ? 0.5 : 1, quickSpring) };
   });
 
   return (
@@ -44,7 +45,10 @@ export default function Header({ chat }: HeaderProps): React.ReactNode {
         <Text style={styles.time}>Была(а) недавно</Text>
       </View>
 
-      <Menu options={options} onClose={() => setOpen(false)} onOpen={() => setOpen(true)} onSelect={() => console.log(1)} trigger={<Avatar size="md" username={chat?.recipient?.username} />} />
+      <AnimatedPressable style={triggerAnimatedStyle} {...triggerProps}>
+        <Avatar size="md" username={chat?.recipient?.username} />
+      </AnimatedPressable>
+      <Menu isOpen={isOpen} options={options} closeMenu={closeMenu} onSelect={() => console.log(1)} position={menuPosition} />
     </Animated.View>
   );
 }
