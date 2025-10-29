@@ -39,7 +39,8 @@ export default async function getChats(ws) {
       var myKeys;
 
       // generate keys if current user dont have its
-      if (!chatInStorage?.keys?.my?.kyberSecretKey) {
+      if (!chatInStorage?.keys?.my?.kyberSecretKey || 
+          chatInStorage?.keys?.my?.kyberPublicKey !== me?.kyberPublicKey) {
         myKeys = generateKeys();
 
         // send new public keys to recipient
