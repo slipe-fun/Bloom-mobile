@@ -77,11 +77,32 @@ export default function MessagesProvider({ children }) {
                         const recipientKeys = chat?.keys?.recipient;
 
                         // decrypt message by current user and recipient keys
-                        const decrypted = decrypt(message, myKeys, recipientKeys, false);
+                        let decrypted;
+
+                        try {
+                            // if kyber message sent by recipient then decrypt using both key pairs
+                            // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
+                            decrypted = {
+                                ...decrypt(message, myKeys, recipientKeys, false),
+                                chat_id: message?.chat_id,
+                                id: message?.id,
+                            };
+                        } catch (error) {
+                            // if kyber message sent by user (current session user) decrypt using only his keys
+                            if (error.message === "invalid polyval tag") {
+                                try {
+                                    decrypted = {
+                                        ...decrypt(message, myKeys, myKeys, true),
+                                        chat_id: message?.chat_id,
+                                        id: message?.id,
+                                    };
+                                } catch { }
+                            }
+                        }
 
                         // add decrypted message to messages var
-                        setMessages(prev => [...prev, { ...decrypted, chat_id: message?.chat_id, id: message?.id }]);
-                        
+                        setMessages(prev => [...prev, decrypted]);
+
                         // add decrypted message to local storage
                         realm.write(() => {
                             realm.create("Message", {
