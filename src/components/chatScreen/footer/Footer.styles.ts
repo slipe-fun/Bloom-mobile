@@ -13,7 +13,7 @@ export const styles = StyleSheet.create(theme => ({
   },
   input: {
     flex: 1,
-    paddingHorizontal: theme.spacing.lg,
+    paddingLeft: theme.spacing.lg,
     paddingVertical: 10,
     height: 'auto',
     color: theme.colors.text,
