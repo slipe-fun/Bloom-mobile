@@ -91,6 +91,9 @@ export default function (chat_id) {
             const myKeys = chat?.keys?.my;
             const recipientKeys = chat?.keys?.recipient;
 
+            // user id
+            const userId = parseInt(storage.getString("user_id"))
+
             const decryptedMessages = messages.map(message => {
                 try {
                     // if kyber message sent by recipient then decrypt using both key pairs
@@ -119,7 +122,7 @@ export default function (chat_id) {
             })
                 .map(message => ({
                     ...message,
-                    isMe: message.from_id === parseInt(storage.getString("user_id"))
+                    isMe: message?.from_id === userId
                 }))
                 .filter(Boolean);
 
