@@ -22,14 +22,17 @@ export const styles = StyleSheet.create(theme => ({
     borderWidth: 0,
   },
   inputWrapper: {
-    backgroundColor: 'rgba(255, 255, 255, 0.07)',
+    backgroundColor: theme.colors.foregroundBlur,
     borderRadius: theme.radius.md,
     overflow: 'hidden',
-    alignItems: 'flex-end',
-    flexDirection: 'row',
     flex: 1,
     borderCurve: "continuous",
     zIndex: 1,
+  },
+  inputWrapperChild: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    flex: 1,
   },
   blur: {
     top: 0,
@@ -39,6 +42,6 @@ export const styles = StyleSheet.create(theme => ({
     position: 'absolute',
   },
   button: (input: boolean) => ({
-    backgroundColor: input ? "transparent" : 'rgba(255, 255, 255, 0.07)'
+    backgroundColor: input ? "transparent" : theme.colors.foregroundBlur
   })
 }));

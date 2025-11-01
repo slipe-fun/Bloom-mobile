@@ -9,7 +9,7 @@ import { Button } from "@components/ui";
 import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { BlurView } from "expo-blur";
-import GradientBlur from "./GradientBlur";
+import { GradientBlur } from "@components/ui";
 import MessageInput from "./MessageInput";
 
 type FooterProps = {
