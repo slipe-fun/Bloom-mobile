@@ -11,6 +11,7 @@
 			"@constants/*": ["src/constants/*"],
 			"@assets/*": ["assets/*"],
 			"@hooks/*": ["src/hooks/*"],
+			"@stores/*": ["src/stores/*"],
 			"@screens/*": ["src/screens/*"],
 			"@lib/*": ["src/lib/*"],
 			"@providers/*": ["src/api/providers/*"],

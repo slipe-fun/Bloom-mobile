@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { styles } from "./Footer.styles";
 import { layoutAnimationSpringy, zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
 import { Button, Icon } from "@components/ui";
@@ -8,6 +8,7 @@ import Animated from "react-native-reanimated";
 import { TextInput } from "react-native-gesture-handler";
 import { View } from "react-native";
 import ReplyBlock from "../replyBlock";
+import useChatScreenStore from "@stores/chatScreen";
 
 type MessageInputProps = {
   setValue: (value: string) => void;
@@ -20,7 +21,7 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
 export default function MessageInput({ setValue, hasValue, value }: MessageInputProps): React.JSX.Element {
   const { theme } = useUnistyles();
-  const [swag, setSwag] = useState(['Yo', 'Hello my boy!']);
+  const { replyMessage, setReplyMessage } = useChatScreenStore();
 
   return (
     <Animated.View style={styles.inputWrapper} layout={layoutAnimationSpringy}>
@@ -30,7 +31,7 @@ export default function MessageInput({ setValue, hasValue, value }: MessageInput
         intensity={40}
         tint='systemChromeMaterialDark'
       />
-      <ReplyBlock onCancel={() => setSwag(['', ''])} message={swag[1]} user={swag[0]}/>
+      <ReplyBlock onCancel={() => setReplyMessage(null)} message={replyMessage.content} user={replyMessage.content}/>
       <View style={styles.inputWrapperChild}>
         <TextInput
           style={styles.input}

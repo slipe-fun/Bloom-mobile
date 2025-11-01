@@ -7,7 +7,7 @@ import Icon from "../Icon";
 import { styles } from "./Menu.styles";
 import { getFadeIn, getFadeOut, getMenuOptionEnter, getMenuOptionExit, menuFocusAnimationIn, menuFocusAnimationOut, messageFocusAnimationIn, messageFocusAnimationOut } from "@constants/animations";
 import type { MessageInterface, Option } from "@interfaces";
-import { MessageBubble } from "@components/chatScreen/message";
+import MessageBubble from "@components/chatScreen/message/MessageBubble";
 import { styles as messageStyles } from "@components/chatScreen/message/Message.styles";
 
 type MenuProps = {
@@ -17,12 +17,11 @@ type MenuProps = {
   options: Option[];
   message?: MessageInterface;
   bluredBackdrop?: boolean;
-  onSelect?: (value: string) => void;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export default function Menu({ isOpen, position, closeMenu, options, message, bluredBackdrop, onSelect }: MenuProps) {
+export default function Menu({ isOpen, position, closeMenu, options, message, bluredBackdrop }: MenuProps) {
   if (!isOpen) return null;
 
   return (
@@ -52,7 +51,7 @@ export default function Menu({ isOpen, position, closeMenu, options, message, bl
               exiting={getMenuOptionExit(index)}
               entering={getMenuOptionEnter(index)}
               onPress={() => {
-                onSelect?.(option.action);
+                option.action?.();
                 closeMenu();
               }}
               style={styles.option}

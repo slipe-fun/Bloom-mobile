@@ -23,7 +23,7 @@ export interface Chat {
 export interface Option {
   icon?: keyof typeof ICONS;
   label?: string;
-  action?: string;
+  action?: any;
   color?: string;
   separator?: boolean
 }
