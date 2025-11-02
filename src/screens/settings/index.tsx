@@ -29,7 +29,6 @@ export default function SettingsScreen() {
             key={item}
             style={{
               height: 100,
-              backgroundColor: "red",
               marginBottom: 10,
               width: "100%",
             }}

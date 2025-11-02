@@ -28,7 +28,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function TabBarItem({ route, focused, onPress }: TabBarItemProps): React.JSX.Element {
   const { theme } = useUnistyles();
-  const opacity = useSharedValue(focused ? 1 : 0.35);
+  const opacity = useSharedValue(0.35);
   const scale = useSharedValue(1);
 
   const tabColor = {
