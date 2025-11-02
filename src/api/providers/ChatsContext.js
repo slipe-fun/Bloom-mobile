@@ -121,6 +121,7 @@ export default function ChatsProvider({ children }) {
     }, [ws]);
 
     useEffect(() => {
+
         let realm;
         let listeners = [];
 

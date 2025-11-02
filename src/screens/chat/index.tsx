@@ -44,8 +44,6 @@ export default function ChatScreen({ route }: ChatScreenProps) {
     setLastMessageId(messages[messages.length - 1]?.id);
   }, [messages]);
 
-  console.log(headerHeight)
-
   const animatedListStyles = useAnimatedStyle(() => ({
     paddingTop: withSpring(footerHeight - 16, springy),
   }))

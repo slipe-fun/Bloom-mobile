@@ -40,21 +40,47 @@ export default function (chat_id) {
 
     const addMessage = async (content, reply_to) => {
         try {
+            //realm storage
+            const realm = await initRealm();
             // mmkv storage
             const storage = await createSecureStorage("user-storage");
 
             // send message socket
             await sendMessage(content, reply_to, chat_id, messages?.length, ws).catch(console.log);
 
+            let _reply_to;
+            if (reply_to) {
+                try {
+                    const reply_to_message = realm
+                        .objects("Message")
+                        .filtered("id == $0", reply_to)[0]
+
+                    if (reply_to_message) {
+                        _reply_to = reply_to_message
+                    }
+                } catch { }
+            }
+
+            const reply_to_json = reply_to ? {
+                id: _reply_to?.id,
+                chat_id,
+                content: _reply_to?.content,
+                author_id: _reply_to?.author_id || _reply_to?.from_id,
+                date: _reply_to?.date,
+                seen: _reply_to?.seen
+            } : null
+
             // payload
             const newMsg = {
                 id: messages[messages.length - 1]?.id + 1,
                 isMe: true,
+                isFake: true,
                 chat_id,
                 content,
                 author_id: parseInt(storage?.getString("user_id")),
                 date: new Date(),
-                seen: false
+                seen: false,
+                reply_to: reply_to_json
             };
 
             setMessages(prev => mergeAndSort(prev, [newMsg]));
@@ -95,6 +121,23 @@ export default function (chat_id) {
             const userId = parseInt(storage.getString("user_id"))
 
             const decryptedMessages = messages.map(message => {
+                let reply_to;
+                if (message?.reply_to) {
+                    try {
+                        const reply_to_message = realm
+                            .objects("Message")
+                            .filtered("id == $0", message?.reply_to?.id)[0]
+
+                        if (reply_to_message) {
+                            reply_to = reply_to_message
+                        }
+
+                        reply_to = message?.encapsulated_key ?
+                            decrypt(message?.reply_to, myKeys, recipientKeys, false) :
+                            sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key);
+                    } catch { }
+                }
+
                 try {
                     // if kyber message sent by recipient then decrypt using both key pairs
                     // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
@@ -104,7 +147,15 @@ export default function (chat_id) {
                             sskDecrypt(message?.ciphertext, message?.nonce, chat?.key),
                         chat_id: message?.chat_id,
                         id: message?.id,
-                        seen: message?.seen
+                        seen: message?.seen,
+                        reply_to: reply_to ? {
+                            id: message?.reply_to?.id,
+                            chat_id: message?.chat_id,
+                            content: reply_to?.content,
+                            author_id: reply_to?.author_id || reply_to?.from_id,
+                            date: reply_to?.date,
+                            seen: message?.reply_to?.seen
+                        } : null
                     };
                 } catch (error) {
                     // if kyber message sent by user (current session user) decrypt using only his keys
@@ -114,17 +165,25 @@ export default function (chat_id) {
                                 ...decrypt(message, myKeys, myKeys, true),
                                 chat_id: message?.chat_id,
                                 id: message?.id,
-                                seen: message?.seen
+                                seen: message?.seen,
+                                reply_to: reply_to ? {
+                                    id: message?.reply_to?.id,
+                                    chat_id: message?.chat_id,
+                                    content: reply_to?.content,
+                                    author_id: reply_to?.from_id,
+                                    date: reply_to?.date,
+                                    seen: message?.reply_to?.seen
+                                } : null
                             };
                         } catch { }
                     }
                 }
             })
+                .filter(Boolean)
                 .map(message => ({
                     ...message,
                     isMe: message?.from_id === userId
-                }))
-                .filter(Boolean);
+                }));
 
             setMessages(prev => mergeAndSort(prev, decryptedMessages));
 
@@ -140,6 +199,7 @@ export default function (chat_id) {
                             author_id: message?.from_id,
                             date: new Date(message?.date),
                             seen: null,
+                            reply_to: message?.reply_to
                         },
                         Realm.UpdateMode.Modified
                     );
@@ -186,7 +246,9 @@ export default function (chat_id) {
 
             // filter messages by current chat_id
             const filtered = newMessages
-                .filter(m => m.chat_id === chat_id)
+                .filter(m =>
+                    m.chat_id === chat_id
+                    && !(messages?.find(_message => _message?.content === m?.content && _message?.isFake)))
                 .map(m => ({
                     ...m,
                     isMe: m.from_id === parseInt(storage.getString("user_id")),

@@ -30,27 +30,62 @@ export default function MessagesProvider({ children }) {
                     return;
                 }
 
+                // get chat from mmkv storage
+                const chat = await getChatFromStorage(message?.chat_id);
+
+                if (!chat) return
+
+                // get current user chat keys
+                const myKeys = chat?.keys?.my;
+                // get recipient chat keys
+                const recipientKeys = chat?.keys?.recipient;
+                // get general chat key
+                const key = chat?.key;
+
+                let reply_to;
+                if (message?.reply_to) {
+                    try {
+                        const reply_to_message = realm
+                            .objects("Message")
+                            .filtered("id == $0", message?.reply_to?.id)[0]
+
+                        if (reply_to_message) {
+                            reply_to = reply_to_message
+                        }
+
+                        reply_to = message?.encapsulated_key ?
+                            decrypt(message?.reply_to, myKeys, recipientKeys, false) :
+                            sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key);
+                    } catch { }
+                }
+
+                const reply_to_json = reply_to ? {
+                    id: message?.reply_to?.id,
+                    chat_id: message?.chat_id,
+                    content: reply_to?.content,
+                    author_id: reply_to?.author_id || reply_to?.from_id,
+                    date: reply_to?.date,
+                    seen: message?.reply_to?.seen
+                } : null
+
                 // if socket type is message
                 if (message?.type === "message") {
                     try {
-                        // get chat from mmkv storage
-                        const chat = await getChatFromStorage(message?.chat_id);
-
-                        if (!chat) return
-
                         //
                         // IF SOFT SKID ENCRYPTION TYPE
                         //
 
                         if (message?.encryption_type === "server") {
-                            // get general chat key
-                            const key = chat?.key;
-
                             // decrypt message by general chat key
                             const decrypted = sskDecrypt(message?.ciphertext, message?.nonce, key);
 
                             // add decrypted message to messages var
-                            setMessages(prev => [...prev, { ...decrypted, chat_id: message?.chat_id, id: message?.id }]);
+                            setMessages(prev => [...prev, {
+                                ...decrypted,
+                                chat_id: message?.chat_id,
+                                id: message?.id,
+                                reply_to: reply_to_json
+                            }]);
 
                             // add decrypted message to local storage
                             realm.write(() => {
@@ -61,6 +96,7 @@ export default function MessagesProvider({ children }) {
                                     author_id: decrypted?.from_id,
                                     date: new Date(),
                                     seen: null,
+                                    reply_to: reply_to_json
                                 }, Realm.UpdateMode.Modified);
                             });
 
@@ -70,11 +106,6 @@ export default function MessagesProvider({ children }) {
                         //
                         // IF HEAVY SKID ENCRYPTION TYPE
                         // 
-
-                        // get current user chat keys
-                        const myKeys = chat?.keys?.my;
-                        // get recipient chat keys
-                        const recipientKeys = chat?.keys?.recipient;
 
                         // decrypt message by current user and recipient keys
                         let decrypted;
@@ -86,6 +117,7 @@ export default function MessagesProvider({ children }) {
                                 ...decrypt(message, myKeys, recipientKeys, false),
                                 chat_id: message?.chat_id,
                                 id: message?.id,
+                                reply_to: reply_to_json
                             };
                         } catch (error) {
                             // if kyber message sent by user (current session user) decrypt using only his keys
@@ -95,6 +127,7 @@ export default function MessagesProvider({ children }) {
                                         ...decrypt(message, myKeys, myKeys, true),
                                         chat_id: message?.chat_id,
                                         id: message?.id,
+                                        reply_to: reply_to_json
                                     };
                                 } catch { }
                             }
@@ -112,6 +145,7 @@ export default function MessagesProvider({ children }) {
                                 author_id: decrypted?.from_id,
                                 date: new Date(),
                                 seen: null,
+                                reply_to: reply_to_json
                             }, Realm.UpdateMode.Modified);
                         });
                     } catch (error) {

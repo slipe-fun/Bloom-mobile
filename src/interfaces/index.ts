@@ -1,10 +1,14 @@
 import { ICONS } from "@constants/icons";
 
 export interface MessageInterface {
-	isMe: boolean;
-	content: string;
-	date: Date;
   id: number,
+  date: Date;
+  isMe: boolean;
+  content: string;
+  author_id: number,
+  chat_id: number,
+  seen?: Date,
+  reply_to?: MessageInterface,
 }
 
 export interface Position { top: number; left: number; width: number };
