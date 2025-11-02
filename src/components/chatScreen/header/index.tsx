@@ -4,13 +4,14 @@ import Icon from "@components/ui/Icon";
 import { useNavigation } from "@react-navigation/native";
 import { useInsets } from "@hooks";
 import { Avatar, Button, GradientBlur } from "@components/ui";
-import { useUnistyles } from "react-native-unistyles";
+import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { Menu } from "@components/ui";
 import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
 import { quickSpring } from "@constants/easings";
 import { staticColor } from "unistyles";
 import { Chat, Option } from "@interfaces";
-import useContextMenu from "@hooks/useContextMenu";
+import { useContextMenu } from "@hooks";
+import { BlurView } from "expo-blur";
 
 type HeaderProps = {
   chat?: Chat | null;
@@ -39,7 +40,8 @@ export default function Header({ chat, onLayout }: HeaderProps): React.ReactNode
   return (
     <Animated.View onLayout={(e) => onLayout(e.nativeEvent.layout.height)} style={[styles.header, { paddingTop: insets.top }, animatedViewStyles]}>
       <GradientBlur direction="top-to-bottom"/>
-      <Button variant="icon" onPress={() => navigation.goBack()}>
+      <Button style={styles.button} variant="icon" onPress={() => navigation.goBack()}>
+        <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
         <Icon icon="chevron.left" size={24} color={theme.colors.text} />
       </Button>
       <View style={styles.titleWrapper}>
@@ -50,7 +52,7 @@ export default function Header({ chat, onLayout }: HeaderProps): React.ReactNode
       <AnimatedPressable style={triggerAnimatedStyle} {...triggerProps}>
         <Avatar size="md" username={chat?.recipient?.username} />
       </AnimatedPressable>
-      <Menu isOpen={isOpen} options={options} closeMenu={closeMenu} onSelect={() => console.log(1)} position={menuPosition} />
+      <Menu isOpen={isOpen} options={options} closeMenu={closeMenu} position={menuPosition} />
     </Animated.View>
   );
 }
