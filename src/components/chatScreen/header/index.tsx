@@ -42,7 +42,7 @@ export default function Header({ chat, onLayout }: HeaderProps): React.ReactNode
       <GradientBlur direction="top-to-bottom"/>
       <Button style={styles.button} variant="icon" onPress={() => navigation.goBack()}>
         <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
-        <Icon icon="chevron.left" size={24} color={theme.colors.text} />
+        <Icon icon="chevron.left" color={theme.colors.text} />
       </Button>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>{chat?.recipient?.username}</Text>

@@ -7,10 +7,8 @@ import { quickSpring } from "@constants/easings";
 import { useUnistyles } from "react-native-unistyles";
 import { styles } from "./title.styles";
 
-const AnimatedText = Animated.createAnimatedComponent(Text);
-const AnimatedView = Animated.createAnimatedComponent(View);
 
-export default function Title({ state, scrollY }) {
+export default function Title({ state }) {
   const [title, setTitle] = useState("Bloom");
   const stateValue = useSharedValue(0);
   const { theme } = useUnistyles();
@@ -23,23 +21,17 @@ export default function Title({ state, scrollY }) {
     color: interpolateColor(stateValue.value, [0, 1], [theme.colors.primary, theme.colors.yellow]),
   }));
 
-  const animatedContainerStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [0, 56], [1, 0], 'clamp'),
-    transform: [{scale: interpolate(scrollY.value, [0, 56], [1, 0.8], 'clamp')}],
-  }));
-
-
   useEffect(() => {
     setTitle(state === "connecting" ? "Подключение..." : "Bloom");
     stateValue.value = withSpring(state === "connecting" ? 1 : 0, quickSpring);
   }, [state]);
 
   return (
-    <AnimatedView style={[styles.container, animatedContainerStyle]}>
+    <Animated.View style={[styles.container]}>
       <Icon icon="lightbolt" size={24} animatedProps={animatedIconProps} />
       <View style={styles.charStack}>
         {title.split("").map((char, i) => (
-          <AnimatedText
+          <Animated.Text
             key={`${char}-${i}`}
             style={[styles.char, animatedCharStyle]}
             entering={getCharEnter(i)}
@@ -50,9 +42,9 @@ export default function Title({ state, scrollY }) {
               .stiffness(quickSpring.stiffness)}
           >
             {char}
-          </AnimatedText>
+          </Animated.Text>
         ))}
       </View>
-    </AnimatedView>
+    </Animated.View>
   );
 }

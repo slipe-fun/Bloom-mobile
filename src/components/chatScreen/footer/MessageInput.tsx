@@ -56,7 +56,7 @@ export default function MessageInput({ setValue, hasValue, value }: MessageInput
             entering={zoomAnimationIn}
             variant='icon'
           >
-            <Icon icon='face.smile' size={24} color={theme.colors.text} />
+            <Icon icon='face.smile' color={theme.colors.text} />
           </AnimatedButton>
         ) : (
           <AnimatedButton
@@ -67,7 +67,7 @@ export default function MessageInput({ setValue, hasValue, value }: MessageInput
             entering={zoomAnimationIn}
             variant='icon'
           >
-            <Icon icon='waveform' size={24} color={theme.colors.text} />
+            <Icon icon='waveform' color={theme.colors.text} />
           </AnimatedButton>
         )}
       </View>

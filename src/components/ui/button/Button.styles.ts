@@ -5,10 +5,11 @@ type ButtonStyleProps = {
 	isIcon: boolean;
 	paddingHorizontal: number;
 	disabled: boolean;
+	blur: boolean
 };	
 
 export const styles = StyleSheet.create(theme => ({
-	button: ({height, isIcon, paddingHorizontal, disabled}:ButtonStyleProps) => ({
+	button: ({height, isIcon, paddingHorizontal, disabled, blur}:ButtonStyleProps) => ({
 		alignItems: "center",
 		justifyContent: "center",
 		flexDirection: "row",
@@ -18,7 +19,7 @@ export const styles = StyleSheet.create(theme => ({
 		paddingHorizontal,	
 		opacity: disabled ? theme.opacity.secondaryText : 1,
 		borderRadius: theme.radius.lg,
-        backgroundColor: theme.colors.foreground,
+        backgroundColor: blur ? theme.colors.foregroundBlur : theme.colors.foreground,
 		minWidth: 36,
 	}),
 }));

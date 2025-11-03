@@ -7,7 +7,6 @@ export const styles = StyleSheet.create(theme => ({
 		zIndex: 2,
 		width: "100%",
 		paddingHorizontal: theme.spacing.lg,
-		backgroundColor: theme.colors.background,
 		paddingBottom: theme.spacing.lg,
         alignItems: "center",
 		gap: theme.spacing.lg,
@@ -19,11 +18,20 @@ export const styles = StyleSheet.create(theme => ({
 		justifyContent: "space-between",
 	},
 	button: {
+		backgroundColor: 'transparent'
+	},
+	inView: {
 		height: 40,
 		width: 40,
-		alignItems: "center",
-		justifyContent: "center",
+	},
+	buttonsWrapper: {
+		backgroundColor: theme.colors.foregroundBlur,
 		borderRadius: theme.radius.full,
-		backgroundColor: theme.colors.foreground,
+		borderCurve: 'continuous',
+		position: 'absolute',
+		right: 0,
+		overflow: 'hidden',
+		flexDirection: 'row',
+		paddingHorizontal: theme.spacing.xs,
 	}
 }));

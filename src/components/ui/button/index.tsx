@@ -14,6 +14,7 @@ type ButtonProps = {
 	style?: StyleProp<ViewStyle>;
 	icon?: React.ReactNode;
 	children?: React.ReactNode;
+	blur?: boolean
 } & React.ComponentProps<typeof Pressable>;
 
 const SIZE_MAP: Record<Size, number> = {
@@ -22,7 +23,7 @@ const SIZE_MAP: Record<Size, number> = {
 	lg: 44,
 };
 
-export default function Button({ ref, variant = "text", size = "md", children, icon, disabled = false, style, ...props }: ButtonProps): React.ReactNode {
+export default function Button({ ref, variant = "text", size = "md", children, icon, disabled = false, style, blur = false, ...props }: ButtonProps): React.ReactNode {
 	const { theme } = useUnistyles();
 
 	let paddingHorizontal = 0;
@@ -43,8 +44,8 @@ export default function Button({ ref, variant = "text", size = "md", children, i
 	}
 	
 	const buttonStyle = useMemo(
-		() => styles.button({ height: SIZE_MAP[size], isIcon: variant === "icon", paddingHorizontal, disabled }),
-		[size, variant, paddingHorizontal, disabled]
+		() => styles.button({ height: SIZE_MAP[size], isIcon: variant === "icon", paddingHorizontal, disabled, blur }),
+		[size, variant, paddingHorizontal, disabled, blur]
 	);
 
 	return (

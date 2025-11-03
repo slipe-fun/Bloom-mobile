@@ -50,11 +50,11 @@ export default function Footer({ onSend, onLayout }: FooterProps) {
         <>
           <AnimatedButton style={styles.button(false)} exiting={zoomAnimationOut} entering={zoomAnimationIn} variant='icon'>
             <BlurView style={styles.blur} intensity={40} tint='systemChromeMaterialDark' />
-            <Icon icon='image' size={24} color={theme.colors.text} />
+            <Icon icon='image' color={theme.colors.text} />
           </AnimatedButton>
           <AnimatedButton style={styles.button(false)} exiting={zoomAnimationOut} entering={zoomAnimationIn} variant='icon'>
             <BlurView style={styles.blur} intensity={40} tint='systemChromeMaterialDark' />
-            <Icon icon='face.smile' size={24} color={theme.colors.text} />
+            <Icon icon='face.smile' color={theme.colors.text} />
           </AnimatedButton>
         </>
       )}
@@ -70,7 +70,7 @@ export default function Footer({ onSend, onLayout }: FooterProps) {
           style={{ backgroundColor: theme.colors.primary }}
           variant='icon'
         >
-          <Icon icon='paperplane' size={24} color={theme.colors.white} />
+          <Icon icon='paperplane'  color={theme.colors.white} />
         </AnimatedButton>
       )}
     </Animated.View>
