@@ -22,8 +22,6 @@ export default function TabBar({ state, navigation }) {
 				const focused = state.index === index;
 
 				const onPress = () => {
-					Haptics.impact("light");
-
 					const event = navigation.emit({
 						type: "tabPress",
 						target: route.key,
@@ -31,6 +29,7 @@ export default function TabBar({ state, navigation }) {
 					});
 
 					if (!focused && !event.defaultPrevented) {
+						Haptics.impact("light");
 						navigation.navigate(route.name);
 					}
 				};
