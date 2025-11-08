@@ -75,7 +75,7 @@ export default function ChatScreen({ route }: ChatScreenProps) {
 						startRenderingFromBottom: true,
 						animateAutoScrollToBottom: false,
 					}}
-					contentContainerStyle={[styles.listContent, { paddingTop: headerHeight }]}
+					contentContainerStyle={[styles.listContent, { paddingTop: headerHeight + (footerHeight - 16) }]}
 					style={styles.list}
 					showsVerticalScrollIndicator={false}
 				/>

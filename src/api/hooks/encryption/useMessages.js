@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { useWebSocket } from "@api/providers/WebSocketContext";
 import { useMessagesList } from "@api/providers/MessagesContext";
 import sendMessage from "@api/lib/sendMessage";
-import { createSecureStorage } from "@lib/storage";
-import initRealm from "@lib/initRealm";
 import Realm from "realm";
 import getChatMessages from "src/api/lib/messages/getChatMessages";
 import decrypt from "@lib/skid/decrypt";
 import { decrypt as sskDecrypt } from "@lib/skid/serversideKeyEncryption";
 import getChatFromStorage from "@lib/getChatFromStorage";
 import { useSeenMessagesList } from "@api/providers/SeenMessagesContext";
+import useStorageStore from "@stores/storage";
 
 function uniqueById(arr) {
     const seen = new Set();
@@ -34,17 +33,16 @@ export default function (chat_id) {
     const { seenMessages: newSeenMessages, clear: clearNewSeenMessages } = useSeenMessagesList();
     const ws = useWebSocket();
 
+    // storages
+
+    const { mmkv, realm } = useStorageStore();
+
     //
     // ENCRYPT AND SEND MESSAGE
     //
 
     const addMessage = async (content, reply_to) => {
         try {
-            //realm storage
-            const realm = await initRealm();
-            // mmkv storage
-            const storage = await createSecureStorage("user-storage");
-
             // send message socket
             sendMessage(content, reply_to, chat_id, messages?.length, ws).catch(console.log);
 
@@ -77,7 +75,7 @@ export default function (chat_id) {
                 isFake: true,
                 chat_id,
                 content,
-                author_id: parseInt(storage?.getString("user_id")),
+                author_id: parseInt(mmkv?.getString("user_id")),
                 date: new Date(),
                 seen: false,
                 reply_to: reply_to_json
@@ -95,11 +93,6 @@ export default function (chat_id) {
 
     useEffect(() => {
         (async () => {
-            //mmkv storage
-            const storage = await createSecureStorage("user-storage");
-            //realm storage
-            const realm = await initRealm();
-
             // last saved message
             const lastMessage = realm
                 .objects("Message")
@@ -118,7 +111,7 @@ export default function (chat_id) {
             const recipientKeys = chat?.keys?.recipient;
 
             // user id
-            const userId = parseInt(storage.getString("user_id"))
+            const userId = parseInt(mmkv.getString("user_id"))
 
             const decryptedMessages = messages.map(message => {
                 let reply_to;
@@ -215,18 +208,14 @@ export default function (chat_id) {
 
     useEffect(() => {
         (async () => {
-            // mmkv storage
-            const storage = await createSecureStorage("user-storage");
-            // local storage
-            const realm = await initRealm();
-
             // get all chat messages
             const realmMessages = realm.objects("Message").filtered("chat_id == $0", chat_id);
-
+            // user id
+            const userId = parseInt(mmkv.getString("user_id"));
             // add isMe param to message object
             const newMsgs = realmMessages.map(message => ({
                 ...message,
-                isMe: message.author_id === parseInt(storage.getString("user_id"))
+                isMe: message.author_id === userId
             }));
 
             setMessages(prev => mergeAndSort(prev, newMsgs));
@@ -241,8 +230,8 @@ export default function (chat_id) {
         if (!newMessages?.length) return;
 
         (async () => {
-            // mmkv storage
-            const storage = await createSecureStorage("user-storage");
+            // user id
+            const userId = parseInt(mmkv.getString("user_id"));
 
             // filter messages by current chat_id
             const filtered = newMessages
@@ -251,7 +240,7 @@ export default function (chat_id) {
                     && !(messages?.find(_message => _message?.content === m?.content && _message?.isFake)))
                 .map(m => ({
                     ...m,
-                    isMe: m.from_id === parseInt(storage.getString("user_id")),
+                    isMe: m.from_id === userId,
                 }));
 
             if (filtered.length > 0) {
@@ -293,9 +282,6 @@ export default function (chat_id) {
     useEffect(() => {
         (async function () {
             try {
-                // local storage
-                const realm = await initRealm();
-
                 const lastMessage = messages[messages?.length - 1];
 
                 // if message not seen and message sent by recipient
@@ -345,11 +331,6 @@ export default function (chat_id) {
             } catch { }
         }())
     }, [messages]);
-
-    useEffect(() => {
-        // clear messages list if chat_id prop changed
-        setMessages([]);
-    }, [chat_id])
 
     return { messages: messages, addMessage };
 }

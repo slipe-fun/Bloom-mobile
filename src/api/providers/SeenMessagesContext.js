@@ -4,6 +4,7 @@ import { useState, useEffect, useContext, createContext } from "react";
 import { useWebSocket } from "./WebSocketContext";
 import getChatFromStorage from "@lib/getChatFromStorage";
 import decrypt from "@lib/skid/decrypt";
+import useStorageStore from "@stores/storage";
 
 const SeenMessagesContext = createContext(null);
 
@@ -12,14 +13,13 @@ export default function SeenMessagesProvider({ children }) {
     const [seenMessages, setSeenMessages] = useState([]);
     // websocket context
     const ws = useWebSocket();
+    // local realm storage
+    const { realm } = useStorageStore();
 
     useEffect(() => {
         if (ws) {
             // websocket socket listener
             ws.addEventListener("message", async (msg) => {
-                // local storage init
-                const realm = await initRealm();
-
                 // parse socket
                 let message;
                 try {

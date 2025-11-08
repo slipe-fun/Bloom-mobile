@@ -3,8 +3,7 @@ import { useWebSocket } from "./WebSocketContext";
 import getChats from "../lib/chats/getChats";
 import setChatKeysToStorage from "@lib/setChatKeysToStorage";
 import generateKeys from "@lib/skid/generateKeys";
-import { createSecureStorage } from "@lib/storage";
-import initRealm from "@lib/initRealm";
+import useStorageStore from "@stores/storage";
 
 const ChatsContext = createContext(null);
 
@@ -13,6 +12,8 @@ export default function ChatsProvider({ children }) {
     const [chats, setChats] = useState([]);
     // websocket context
     const ws = useWebSocket();
+    // storages
+    const { mmkv, realm } = useStorageStore();
 
     function safeObject(obj) {
         if (!obj) return;
@@ -22,7 +23,6 @@ export default function ChatsProvider({ children }) {
     async function sort(chats) {
         const enrichedChats = await Promise.all(
             chats?.map(async chat => {
-                const realm = await initRealm();
                 const lastMessage = realm
                     .objects("Message")
                     .filtered("chat_id == $0", chat?.id)
@@ -53,9 +53,6 @@ export default function ChatsProvider({ children }) {
             // websocket message listener
             ws.addEventListener("message", async (msg) => {
                 try {
-                    // mmkv storage
-                    const Storage = await createSecureStorage("user-storage");
-
                     // parse socket message
                     let message;
                     try {
@@ -76,7 +73,7 @@ export default function ChatsProvider({ children }) {
                         // parse chats from mmkv storage
                         let _chats;
                         try {
-                            _chats = JSON.parse(Storage.getString("chats"));
+                            _chats = JSON.parse(mmkv.getString("chats"));
                         } catch {
                             _chats = [];
                         }
@@ -104,7 +101,7 @@ export default function ChatsProvider({ children }) {
                         }];
 
                         // save changes
-                        Storage.set("chats", JSON.stringify(_chats));
+                        mmkv.set("chats", JSON.stringify(_chats));
 
                         // add new chat to chats var
                         setChats(prev => {
@@ -121,13 +118,9 @@ export default function ChatsProvider({ children }) {
     }, [ws]);
 
     useEffect(() => {
-
-        let realm;
         let listeners = [];
 
         (async () => {
-            realm = await initRealm();
-
             chats.forEach(chat => {
                 // get all chat messages
                 const messages = realm.objects("Message").filtered("chat_id == $0", chat.id);

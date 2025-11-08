@@ -5,6 +5,7 @@ import { useWebSocket } from "./WebSocketContext";
 import getChatFromStorage from "@lib/getChatFromStorage";
 import decrypt from "@lib/skid/decrypt";
 import { decrypt as sskDecrypt } from "@lib/skid/serversideKeyEncryption";
+import useStorageStore from "@stores/storage";
 
 const MessagesContext = createContext(null);
 
@@ -13,14 +14,13 @@ export default function MessagesProvider({ children }) {
     const [messages, setMessages] = useState([]);
     // websocket context
     const ws = useWebSocket();
+    // local realm storage
+    const { realm } = useStorageStore();
 
     useEffect(() => {
         if (ws) {
             // websocket socket listener
             ws.addEventListener("message", async (msg) => {
-                // local storage init
-                const realm = await initRealm();
-
                 // parse socket
                 let message;
                 try {

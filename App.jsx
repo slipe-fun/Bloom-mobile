@@ -12,6 +12,10 @@ import ChatsProvider from "@api/providers/ChatsContext";
 import MessagesProvider from "@api/providers/MessagesContext";
 import { PortalProvider } from "@gorhom/portal";
 import SeenMessagesProvider from "@api/providers/SeenMessagesContext";
+import useStorageStore from "@stores/storage";
+import { useEffect } from "react";
+import { createSecureStorage } from "@lib/storage";
+import initRealm from "@lib/initRealm";
 
 enableScreens();
 
@@ -26,6 +30,18 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts(fontsToLoad);
+
+  const { setMMKV, setRealm } = useStorageStore();
+
+  useEffect(() => {
+    (async function () {
+      const storage = await createSecureStorage("user-storage");
+      const realm = await initRealm()
+
+      setMMKV(storage);
+      setRealm(realm);
+    })()
+  }, [])
 
   return (
     <SafeAreaProvider>
