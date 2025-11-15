@@ -37,8 +37,8 @@ export const layoutAnimation: ComplexAnimationBuilder = LinearTransition.springi
 
 
 const makeSpringEntry =
-  (Anim: { springify: () => ComplexAnimationBuilder }, massStep = 0.4, easing = quickSpring) =>
-  (i = 0): ComplexAnimationBuilder =>
+  (Anim: { springify: () => ComplexAnimationBuilder }, massStep = 0.4) =>
+  (i = 0, easing = quickSpring): ComplexAnimationBuilder =>
     Anim.springify()
       .damping(easing.damping)
       .mass(easing.mass + i * massStep)
@@ -46,10 +46,8 @@ const makeSpringEntry =
 
 export const getFadeOut = makeSpringEntry(FadeOut, 0.4);
 export const getFadeIn = makeSpringEntry(FadeIn, 0.4);
-export const getCharEnter = makeSpringEntry(FadeInDown, 0.2);
-export const getCharExit = makeSpringEntry(FadeOutUp, 0.2);
-export const getMenuOptionEnter = makeSpringEntry(FadeInDown, 0.8, springyMenu);
-export const getMenuOptionExit = makeSpringEntry(FadeOutUp, 0.8, springyMenu)
+export const getCharEnter = makeSpringEntry(FadeInDown, 0.1);
+export const getCharExit = makeSpringEntry(FadeOutUp, 0.1);
 
 
 export const zoomAnimationOut = (): LayoutAnimResult => {
@@ -90,44 +88,6 @@ export const messageFocusAnimationIn = (): LayoutAnimResult => {
     initialValues: { transform: [{ scale: 0.95 }]},
     animations: {
       transform: [{ scale: withSpring(1.1, springyMessage ) }],
-    },
-  };
-};
-
-export const menuFocusAnimationOut = (): LayoutAnimResult => {
-  "worklet";
-  return {
-    initialValues: {
-      transform: [{ scale: 1 }, { translateY: 0 }],
-      opacity: 1,
-      borderRadius: 28,
-    },
-    animations: {
-      transform: [
-        { scale: withSpring(0.25, springyMenu) },
-        { translateY: withSpring(-64, springy) },
-      ],
-      opacity: withSpring(0, springyMenu),
-      borderRadius: withSpring(20, springyMenu),
-    },
-  };
-};
-
-export const menuFocusAnimationIn = (): LayoutAnimResult => {
-  "worklet";
-  return {
-    initialValues: {
-      transform: [{ scale: 0.25 }, { translateY: -64 }],
-      opacity: 0,
-      borderRadius: 20,
-    },
-    animations: {
-      transform: [
-        { scale: withSpring(1, springyMenu) },
-        { translateY: withSpring(0, springy) },
-      ],
-      opacity: withSpring(1, springyMenu),
-      borderRadius: withSpring(28, springyMenu),
     },
   };
 };

@@ -45,6 +45,7 @@ const base = {
 		/** 20px */ xl: 20,
 		/** 28px */ xxl: 28,
 		/** 32px */ xxxl: 32,
+		/** 52px */ super: 56,
 	},
 	radius: {
 		/** 12px */ xs: 12,
