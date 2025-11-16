@@ -1,8 +1,7 @@
-import { interpolate, withSpring } from "react-native-reanimated";
-import { fastSpring, slowSpring } from "@constants/easings";
-import { Platform } from "react-native";
+import { interpolate } from "react-native-reanimated";
+import { fastSpring } from "@constants/easings";
 
-export const chatTransition = (insets) => ({
+export const screenTransition = () => ({
   enableTransitions: true,
   gestureEnabled: true,
   gestureDirection: ["horizontal"],
@@ -24,4 +23,4 @@ export const chatTransition = (insets) => ({
     open: fastSpring,
     close: fastSpring,
   },
-});
+} as any);

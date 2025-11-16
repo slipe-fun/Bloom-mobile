@@ -5,7 +5,7 @@ import Icon from "@components/ui/Icon";
 import { useUnistyles } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
 import { quickSpring } from "@constants/easings";
-import { ROUTES } from "@constants/Routes";
+import { ROUTES } from "@constants/routes";
 import { getFadeOut, getFadeIn, getCharEnter, getCharExit, layoutAnimation } from "@constants/animations";
 import { useChatList } from "@api/providers/ChatsContext";
 import { useWebSocket } from "@api/providers/WebSocketContext";

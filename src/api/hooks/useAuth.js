@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { API_URL } from "@constants/Api";
 import { createSecureStorage } from "@lib/storage";
-import { ROUTES } from "@constants/Routes";
+import { ROUTES } from "@constants/routes";
 import { useNavigation } from "@react-navigation/native";
 
 export default function useAuth() { 

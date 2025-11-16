@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 
-import { ROUTES } from "@constants/Routes";
+import { ROUTES } from "@constants/routes";
 import AuthNavigator from "./AuthNavigator";
 import MainNavigator from "./MainNavigator";
 import { useTokenCheck } from "@hooks";
@@ -24,11 +24,11 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer onReady={() => setIsNavReady(true)}>
-      <RootStack.Navigator screenOptions={{ headerShown: false, presentation: "card", contentStyle: {backgroundColor: "black"} }}>
+      <RootStack.Navigator  {...({ id: "appNavigator"} as any)} screenOptions={{ headerShown: false, presentation: "card", contentStyle: {backgroundColor: "black"} }}>
         {isAuthenticated ? (
-          <RootStack.Screen name={ROUTES.MAIN} component={MainNavigator} />
+          <RootStack.Screen name={ROUTES.main} component={MainNavigator} />
         ) : (
-          <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
+          <RootStack.Screen name={ROUTES.auth.main} component={AuthNavigator} />
         )}
       </RootStack.Navigator>
     </NavigationContainer>

@@ -6,7 +6,7 @@ import useAuth from "@api/hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { useUnistyles } from "react-native-unistyles";
-import { ROUTES } from "@constants/Routes";
+import { ROUTES } from "@constants/routes";
 
 export default function SignUpScreen() {
   const insets = useInsets();

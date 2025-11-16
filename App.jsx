@@ -20,10 +20,10 @@ import initRealm from "@lib/initRealm";
 enableScreens();
 
 const fontsToLoad = {
-  "OpenRunde-Regular": require("./assets/fonts/OpenRunde-Regular.ttf"),
-  "OpenRunde-Medium": require("./assets/fonts/OpenRunde-Medium.ttf"),
-  "OpenRunde-Semibold": require("./assets/fonts/OpenRunde-Semibold.ttf"),
-  "OpenRunde-Bold": require("./assets/fonts/OpenRunde-Bold.ttf"),
+  "OpenRunde-Regular": require("@assets/fonts/OpenRunde-Regular.ttf"),
+  "OpenRunde-Medium": require("@assets/fonts/OpenRunde-Medium.ttf"),
+  "OpenRunde-Semibold": require("@assets/fonts/OpenRunde-Semibold.ttf"),
+  "OpenRunde-Bold": require("@assets/fonts/OpenRunde-Bold.ttf"),
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -41,6 +41,7 @@ export default function App() {
       setMMKV(storage);
       setRealm(realm);
     })()
+    console.log(fontError)
   }, [])
 
   return (

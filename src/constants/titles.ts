@@ -1,6 +1,6 @@
 import { staticColor } from "unistyles";
 
-export const AuthTitles = [
+export const AUTH_TITLES = [
 	{ title: "Привет!", color: staticColor.pink },
 	{ title: "Hello!", color: staticColor.orange },
 	{ title: "Salut!", color: staticColor.yellow },

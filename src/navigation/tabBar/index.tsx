@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator, BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
-import { ROUTES } from "@constants/Routes";
-import { CardScreen, SettingsScreen } from "@screens";
+import { ROUTES } from "@constants/routes";
+import { ChatsScreen, SettingsScreen } from "@screens";
 import TabBar from "./TabBar";
 import { quickSpring } from "@constants/easings";
 
@@ -29,17 +29,17 @@ export default function MainTabNavigator(): React.JSX.Element {
       }}
     >
       <Tab.Screen
-        name={ROUTES.TAB_CHATS}
-        component={CardScreen}
+        name={ROUTES.tabs.chats}
+        component={ChatsScreen}
         options={springOptions}
       />
       <Tab.Screen
-        name={ROUTES.TAB_SEARCH}
+        name={ROUTES.tabs.search}
         component={SettingsScreen}
         options={springOptions}
       />
       <Tab.Screen
-        name={ROUTES.TAB_SETTINGS}
+        name={ROUTES.tabs.settings}
         component={SettingsScreen}
         options={springOptions}
       />

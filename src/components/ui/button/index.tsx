@@ -62,7 +62,7 @@ export default function Button({
 	}
 
 	const handlePress = (inn: boolean = true) => {
-		opacity.value = withTiming(inn ? 0.75 : 1, { duration: 0.2, easing: Easing.inOut(Easing.ease) });
+		opacity.value = withTiming(inn ? 0.85 : 1, { duration: 0.25, easing: Easing.inOut(Easing.ease) });
 	};
 
 	const animatedPressabelStyle = useAnimatedStyle(() => ({

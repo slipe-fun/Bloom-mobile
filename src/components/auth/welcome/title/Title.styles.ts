@@ -12,6 +12,6 @@ export const styles = StyleSheet.create((theme) => ({
         fontSize: theme.fontSize.super,
         fontFamily: theme.fontFamily.bold,
         transformOrigin: 'bottom-center',
-        color: theme.colors.text,
+        color: theme.colors.primary,
     }
 }))
