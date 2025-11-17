@@ -38,8 +38,9 @@ export default function Input({ size, setValue, value, ref, viewStyle, style, ic
 				selectionColor={theme.colors.secondaryText}
 				keyboardAppearance='dark'
 				value={value}
+				placeholderTextColor={theme.colors.secondaryText}
 				onChangeText={setValue}
-				style={[styles.input, style]}
+				style={[styles.input(!!icon), style]}
 				{...props}
 			/>
 			{button}

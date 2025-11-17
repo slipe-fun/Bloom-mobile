@@ -16,16 +16,16 @@ export const styles = StyleSheet.create(theme => ({
     pointerEvents: disabled ? 'none' : 'auto',
 		alignItems: "center",
 	}),
-	input: {
+	input: (icon: boolean) => ({
 		flex: 1,
-		paddingLeft: theme.spacing.lg,
+		paddingLeft: icon ? theme.spacing.xs : theme.spacing.lg,
 		paddingVertical: 10,
 		height: "auto",
 		color: theme.colors.text,
 		fontSize: theme.fontSize.md,
 		fontFamily: theme.fontFamily.medium,
 		borderWidth: 0,
-	},
+	}),
   iconWrapper: {
     height: '100%',
     aspectRatio: 1/1,

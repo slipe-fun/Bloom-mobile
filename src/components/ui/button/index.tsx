@@ -14,7 +14,6 @@ type ButtonProps = {
 	variant?: Variant;
 	label?: string;
 	size?: Size;
-	disabled?: boolean;
 	style?: StyleProp<ViewStyle>;
 	labelStyle?: StyleProp<TextStyle>;
 	icon?: React.JSX.Element;
@@ -38,7 +37,6 @@ export default function Button({
 	size = "md",
 	children,
 	icon,
-	disabled = false,
 	style,
 	labelStyle,
 	blur = false,
@@ -72,8 +70,8 @@ export default function Button({
 	}));
 
 	const buttonStyle = useMemo(
-		() => styles.button({ size: SIZE_MAP[size], isIcon: variant === "icon", paddingHorizontal, disabled, blur, isTextIcon: variant === "textIcon" }),
-		[size, variant, paddingHorizontal, disabled, blur]
+		() => styles.button({ size: SIZE_MAP[size], isIcon: variant === "icon", paddingHorizontal, blur, isTextIcon: variant === "textIcon" }),
+		[size, variant, paddingHorizontal, blur]
 	);
 	return (
 		<AnimatedPressable
@@ -81,7 +79,6 @@ export default function Button({
 			onPressOut={() => handlePress(false)}
 			style={[buttonStyle, style, animatedPressabelStyle]}
 			ref={ref}
-			disabled={disabled}
 			{...props}
 		>
 			{icon}

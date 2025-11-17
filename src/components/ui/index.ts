@@ -6,3 +6,4 @@ export { default as GradientBlur } from "./GradientBlur";
 export { default as Input } from "./input/index";
 export { default as Loader } from "./loader/index";
 export { default as Separator} from "./separator/index";
+export { default as ActionText } from "./actionText/index";

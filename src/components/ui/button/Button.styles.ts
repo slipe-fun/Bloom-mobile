@@ -5,13 +5,12 @@ type ButtonStyleProps = {
 	size: number;
 	isIcon: boolean;
 	paddingHorizontal: number;
-	disabled: boolean;
 	blur: boolean;
 	isTextIcon: boolean;
 };
 
 export const styles = StyleSheet.create(theme => ({
-	button: ({ size, isIcon, paddingHorizontal, disabled, blur, isTextIcon }: ButtonStyleProps) => ({
+	button: ({ size, isIcon, paddingHorizontal, blur, isTextIcon }: ButtonStyleProps) => ({
 		alignItems: "center",
 		justifyContent: "center",
 		flexDirection: "row",
@@ -21,7 +20,6 @@ export const styles = StyleSheet.create(theme => ({
 		aspectRatio: isIcon ? 1 : undefined,
 		paddingHorizontal,
 		borderCurve: 'continuous',
-		opacity: disabled ? theme.opacity.secondaryText : 1,
 		borderRadius: size >= SIZE_MAP['lg'] ? theme.radius.sm : theme.radius.full,
 		backgroundColor: blur ? theme.colors.foregroundBlur : theme.colors.foreground,
 		gap: isTextIcon ? theme.spacing.md : 0,
