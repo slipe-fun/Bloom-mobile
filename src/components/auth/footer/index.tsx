@@ -11,7 +11,7 @@ import { getFadeIn, getFadeOut, layoutAnimationSpringy } from "@constants/animat
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import axios from "axios";
 import { API_URL } from "@constants/Api";
-import { createSecureStorage } from "@lib/storage";
+import useStorageStore from "@stores/storage";
 
 const AnimatedButton = Animated.createAnimatedComponent(Button);
 
@@ -22,6 +22,7 @@ export default function AuthFooter({ navigation }): React.JSX.Element {
 	const progress = useSharedValue(0);
 	const { progress: progressKeyboard, height } = useReanimatedKeyboardAnimation();
 	const labelProgress = useSharedValue(1);
+	const { mmkv } = useStorageStore();
 
 	const firstScreen = index === 0;
 	const label = firstScreen ? "Продолжить с Почтой" : "Продолжить";
@@ -51,12 +52,9 @@ export default function AuthFooter({ navigation }): React.JSX.Element {
 			const sendVerifyCode = await axios.post(API_URL + "/auth/verify-code", { email, code: otp }).then(res => res?.data).catch(error => error?.response?.data || null)
 
 			if (sendVerifyCode?.token) {
-				const storage = await createSecureStorage("user-storage");
-				// final code
-				
-				storage.set("token", sendVerifyCode?.token)
-				storage.set("user_id", sendVerifyCode?.user?.id)
-				storage.set("user", JSON.stringify(sendVerifyCode?.user))
+				mmkv.set("token", sendVerifyCode?.token)
+				mmkv.set("user_id", sendVerifyCode?.user?.id)
+				mmkv.set("user", JSON.stringify(sendVerifyCode?.user))
 			}
 			else setError("Wrong code")
 		}
