@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
-import { Pressable } from "react-native";
+import { Pressable, ViewStyle } from "react-native";
 import Animated, { interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
 import { quickSpring } from "@constants/easings";
 import Icon from "@components/ui/Icon";
 import { styles } from "./TabBar.styles";
+import useTabBarStore from "@stores/tabBar";
+import { springyTabBar } from "@constants/animations";
 
-interface TabBarItemProps {
+type TabBarItemProps = {
 	route: { name: "tab_chats" | "tab_search" | "tab_settings" };
 	focused: boolean;
 	onPress: () => void;
-}
+};
 
 const TAB_ICONS = {
 	tab_chats: "message",
@@ -24,6 +26,7 @@ export default function TabBarItem({ route, focused, onPress }: TabBarItemProps)
 	const { theme } = useUnistyles();
 	const color = useSharedValue(0.35);
 	const scale = useSharedValue(1);
+	const { isSearch, setIsSearch } = useTabBarStore();
 
 	const tabColor = {
 		tab_chats: theme.colors.primary,
@@ -35,20 +38,35 @@ export default function TabBarItem({ route, focused, onPress }: TabBarItemProps)
 		scale.value = withSpring(out ? 1 : 1.1, quickSpring);
 	};
 
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-	}));
+	const animatedStyle = useAnimatedStyle(
+		(): ViewStyle => ({
+			transform: [
+				{
+					scale: withSpring(focused ? scale.value : isSearch ? 0.5 : scale.value, quickSpring),
+				},
+				{
+					translateX: route.name === "tab_search" ? 0 : withSpring(isSearch ? (route.name === "tab_chats" ? 13 : -13) : 0, springyTabBar),
+				},
+			],
+			opacity: withSpring(focused ? 1 : isSearch ? 0 : 1, quickSpring),
+		})
+	);
 
 	const animatedProps = useAnimatedProps(() => ({
 		fill: interpolateColor(color.value, [1, 2], [theme.colors.text, tabColor]),
 	}));
 
 	useEffect(() => {
-		color.value = withSpring(focused ? 2 : 1, quickSpring);
-	}, [focused]);
+		color.value = withSpring(isSearch ? 1 : focused ? 2 : 1, quickSpring);
+	}, [focused, isSearch]);
 
 	return (
-		<AnimatedPressable style={[styles.tabBarItem, animatedStyle]} onPress={onPress} onPressIn={() => iconScale()} onPressOut={() => iconScale(true)}>
+		<AnimatedPressable
+			style={[styles.tabBarItem, animatedStyle]}
+			onPress={isSearch ? () => setIsSearch(false) : onPress}
+			onPressIn={() => iconScale()}
+			onPressOut={() => iconScale(true)}
+		>
 			<Icon animatedProps={animatedProps} size={30} icon={TAB_ICONS[route.name]} />
 		</AnimatedPressable>
 	);
