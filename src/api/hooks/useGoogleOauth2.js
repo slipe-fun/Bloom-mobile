@@ -2,7 +2,7 @@ import { getAuthUrl, REDIRECT_URL_WITH_SCHEME } from "@constants/googleOauth2Par
 import useStorageStore from "@stores/storage";
 import axios from "axios";
 import { useState } from "react";
-import InAppBrowser from "react-native-inappbrowser-reborn";
+import { InAppBrowser } from "react-native-inappbrowser-nitro";
 import { API_URL } from "@constants/Api";
 import useTokenTriggerStore from "@stores/tokenTriggerStore";
 

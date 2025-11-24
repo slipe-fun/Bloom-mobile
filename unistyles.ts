@@ -16,7 +16,7 @@ export const staticColor = {
 	orangePlaceholder: "#FF531B80",
 	primaryBackdrop: "#0A84FF33",
 	primaryPlaceholder: "#0A84FF80",
-	whiteBackdrop: '#ffffff33',
+	whiteBackdrop: "#ffffff33",
 };
 
 const base = {
@@ -28,6 +28,7 @@ const base = {
 		/** 16px */ lg: 16,
 		/** 20px */ xl: 20,
 		/** 24px */ xxl: 24,
+		/** 28px */ xxxl: 28,
 	},
 	lineHeight: {
 		/** 15px */ xs: 15,
@@ -74,9 +75,9 @@ export const lightTheme = {
 		text: "#000000",
 		secondaryText: "#00000059",
 		foreground: "#e6e6e6ff",
-		foregroundTransparent: '#00000019',
-		foregroundBlur: '#00000012',
-		border: '#0000000c',
+		foregroundTransparent: "#00000019",
+		foregroundBlur: "#00000012",
+		border: "#0000000c",
 		...staticColor,
 	},
 	...base,
@@ -88,9 +89,9 @@ export const darkTheme = {
 		text: "#ffffff",
 		secondaryText: "#ffffff59",
 		foreground: "#1A1A1A",
-		foregroundTransparent: '#ffffff19',
-		foregroundBlur: '#ffffff12',
-		border: '#ffffff0c',
+		foregroundTransparent: "#ffffff19",
+		foregroundBlur: "#ffffff12",
+		border: "#ffffff0c",
 		...staticColor,
 	},
 	...base,

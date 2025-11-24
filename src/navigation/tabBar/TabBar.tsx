@@ -12,11 +12,8 @@ export default function TabBar({ state, navigation }) {
 	const { setTabBarHeight } = useTabBarStore();
 
 	return (
-		<View
-			onLayout={(e) => setTabBarHeight(e.nativeEvent.layout.height)}
-			style={[styles.tabBar, { paddingBottom: insets.bottom }]}
-		>
-			<GradientBlur/>
+		<View onLayout={e => setTabBarHeight(e.nativeEvent.layout.height)} style={[styles.tabBar, { paddingBottom: insets.bottom }]}>
+			<GradientBlur />
 			<TabBarIndicator index={state.index} count={state.routes.length} />
 			{state.routes.map((route, index) => {
 				const focused = state.index === index;
