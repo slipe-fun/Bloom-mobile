@@ -1,26 +1,29 @@
 import { randomBytes } from "@noble/hashes/utils";
 import { gcmsiv } from "@noble/ciphers/aes";
-import RNSimpleCrypto from "react-native-simple-crypto";
 import { Buffer } from '@craftzdog/react-native-buffer';
-
-const toHex = RNSimpleCrypto.utils.convertArrayBufferToHex
+import QuickCrypto from 'react-native-quick-crypto';
 
 export async function hashPassword(password, salt) {
   const _salt = salt ? salt : randomBytes(16);
-  const hash = await RNSimpleCrypto.PBKDF2.hash(
-      RNSimpleCrypto.utils.convertUtf8ToArrayBuffer(password),
+
+  return new Promise((resolve, reject) => {
+    QuickCrypto.pbkdf2(
+      password,
       _salt,
       600000,
       32,
-      "SHA256"
-    )
+      "sha256",
+      (err, hash) => {
+        if (err) return reject(err);
 
-  return {
-    hash: hash, 
-    salt: _salt
-  };
+        resolve({
+          hash: hash,
+          salt: _salt,
+        });
+      }
+    );
+  });
 }
-
 
 export function encryptKeys(key, content) {
   const nonce = randomBytes(12);
