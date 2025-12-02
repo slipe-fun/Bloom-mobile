@@ -14,7 +14,7 @@ export default function AuthActions(): React.JSX.Element {
 
   const focusedIcon = (value: boolean, light?: boolean) =>
     value ? (
-      <Icon size={28} icon='apple.logo' color={light ? theme.colors.text : theme.colors.background} />
+      <Icon size={26} icon='apple.logo' color={light ? theme.colors.text : theme.colors.background} />
     ) : (
       <Image style={styles.imageIcon} source={require("@assets/logos/google.webp")} />
     );

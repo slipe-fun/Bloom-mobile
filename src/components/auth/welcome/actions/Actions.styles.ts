@@ -19,7 +19,7 @@ export const styles = StyleSheet.create(theme => ({
         color: focus ? theme.colors.background : theme.colors.text,
     }),
     imageIcon: {
-        width: 28, 
-        height: 28,
+        width: 26, 
+        height: 26,
     } 
 }));

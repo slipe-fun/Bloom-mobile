@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Icon } from "@components/ui";
 import { ROUTES } from "@constants/routes";
 import { styles } from "./Footer.styles";
@@ -108,7 +108,7 @@ export default function AuthFooter({ navigation }): React.JSX.Element {
 				icon={
 					firstScreen && (
 						<Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
-							<Icon key='footerIcon' size={28} color={theme.colors.text} icon='at' />
+							<Icon key='footerIcon' size={26} color={theme.colors.text} icon='at' />
 						</Animated.View>
 					)
 				}

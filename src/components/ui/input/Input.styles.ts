@@ -18,7 +18,7 @@ export const styles = StyleSheet.create(theme => ({
 	}),
 	input: (icon: boolean) => ({
 		flex: 1,
-		paddingLeft: icon ? theme.spacing.xs : theme.spacing.lg,
+		paddingLeft: icon ? 0 : theme.spacing.lg,
 		paddingVertical: 10,
 		height: "auto",
 		color: theme.colors.text,

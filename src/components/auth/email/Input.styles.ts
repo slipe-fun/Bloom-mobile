@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native-unistyles";
 
 export const styles = StyleSheet.create(theme => ({
 	logoIcon: {
-		width: 28,
-		height: 28,
+		width: 26,
+		height: 26,
 	},
 }));

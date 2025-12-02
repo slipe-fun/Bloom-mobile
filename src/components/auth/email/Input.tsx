@@ -19,7 +19,7 @@ export default function AuthEmailInput(): React.JSX.Element {
 		if (provider === "unknown") {
 			return (
 				<Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut}>
-				<Icon size={28} icon='at' key='icon-at' color={theme.colors.secondaryText} />
+				<Icon size={26} icon='at' key='icon-at' color={theme.colors.secondaryText} />
 				</Animated.View>
 			);
 		} else {

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create(theme => ({
         width: "100%", 
         position: 'absolute',
         bottom: 0,
-        paddingHorizontal: 20,
+        paddingHorizontal: theme.spacing.xxxl,
      },
      buttonLabel: {
         fontSize: theme.fontSize.lg,
