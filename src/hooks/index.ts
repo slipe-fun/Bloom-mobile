@@ -3,3 +3,4 @@ export { default as useSnapScroll } from "./useSnapScroll";
 export { default as useTokenCheck } from "./useTokenCheck";
 export { default as useScreenScale } from "./useScreenScale";
 export { default as useContextMenu } from "./useContextMenu";
+export { default as useAuthFooter } from "./useAuthFooter"
