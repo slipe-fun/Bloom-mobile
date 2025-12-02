@@ -1,35 +1,39 @@
 import { create } from "zustand";
 
 type AuthStore = {
-  index: number | null,
-  setIndex: (newIndex: number) => void,
-  email: string,
-  setEmail: (newEmail: string) => void,
-  emailValid: boolean,
-  setEmailValid: (newEmailValid: boolean) => void,
-  otp: string,
-  setOtp: (newOtp: string) => void,
-  error: string,
-  setError: (newError: string) => void,
-  footerHeight: number,
-  password: string,
-  setPasssword: (newPassword: string) => void
-}
+  index: number | null;
+  setIndex: (index: number) => void;
+  email: string;
+  setEmail: (email: string) => void;
+  emailValid: boolean;
+  setEmailValid: (emailValid: boolean) => void;
+  otp: string;
+  setOtp: (otp: string) => void;
+  error: string;
+  setError: (error: string) => void;
+  footerHeight: number;
+  password: string;
+  setPasssword: (password: string) => void;
+  username: string;
+  setUsername: (username: string) => void;
+};
 
 const useAuthStore = create<AuthStore>((set) => ({
   index: 3,
-  setIndex: (newIndex) => set({ index: newIndex }),
-  email: '',
-  setEmail: (newEmail) => set({ email: newEmail }),
+  setIndex: (index) => set({ index }),
+  email: "",
+  setEmail: (email) => set({ email }),
   emailValid: false,
-  setEmailValid: (newEmailValid) => set({ emailValid: newEmailValid }),
-  otp: '',
-  setOtp: (newOtp) => set({ otp: newOtp }),
-  error: '',
-  setError: (newError) => set({ error: newError }),
+  setEmailValid: (emailValid) => set({ emailValid }),
+  otp: "",
+  setOtp: (otp) => set({ otp }),
+  error: "",
+  setError: (error) => set({ error }),
   footerHeight: 68,
-  password: '',
-  setPasssword: (newPassword) => set({ password: newPassword }),
+  password: "",
+  setPasssword: (password) => set({ password }),
+  username: "",
+  setUsername: (username) => set({ username }),
 }));
 
 export default useAuthStore;
