@@ -17,7 +17,7 @@ export default function SignupPassword(): React.JSX.Element {
 	});
 
 	return (
-		<Animated.View style={[styles.container(84 + insets.bottom), animatedStyles]}>
+		<Animated.View style={[styles.container(116 + insets.bottom), animatedStyles]}>
 			<AuthTitleTemplate icon="lock" title='Пароль и ник' />	
 			<AuthNickInput/>
             <AuthPasswordInput/>

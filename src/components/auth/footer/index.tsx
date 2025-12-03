@@ -36,6 +36,7 @@ export default function AuthFooter({ navigation }): React.JSX.Element {
   const animatedViewStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: keyboardHeight.value }],
     paddingBottom: interpolate(keyboardProgress.value, [0, 1], [insets.bottom, theme.spacing.lg], "clamp"),
+    paddingHorizontal: interpolate(keyboardProgress.value, [0, 1], [theme.spacing.xxxl, theme.spacing.lg], "clamp")
   }));
 
   const animatedLabelStyle = useAnimatedStyle(() => ({

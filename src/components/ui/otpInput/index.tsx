@@ -67,7 +67,7 @@ export default function OTPInput({ length = 6, value, onChange }: OTPInputProps)
 					return (
 						<>
 							{showSeparator &&
-								<View style={styles.separator} />
+								<View key={`${i}-separator`} style={styles.separator} />
 							}
 							<View key={i} style={styles.cell} onLayout={e => onLayoutCell(e, i)}>
 								{char ? (
