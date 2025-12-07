@@ -39,9 +39,9 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: "center",
     gap: theme.spacing.sm,
   },
-  text: (connecting: boolean) => ({
-    color: connecting ? theme.colors.yellow : theme.colors.primary,
-    fontSize: theme.fontSize.md,
+  text: {
+    color: theme.colors.text,
+    fontSize: theme.fontSize.lg,
     fontFamily: theme.fontFamily.bold,
-  }),
+  },
 }));

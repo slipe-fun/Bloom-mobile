@@ -24,7 +24,14 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer onReady={() => setIsNavReady(true)}>
-      <RootStack.Navigator  {...({ id: "appNavigator"} as any)} screenOptions={{ headerShown: false, presentation: "card", contentStyle: {backgroundColor: "black"} }}>
+      <RootStack.Navigator
+        {...({ id: "appNavigator" } as any)}
+        screenOptions={{
+          headerShown: false,
+          presentation: "card",
+          contentStyle: { backgroundColor: "#00000000" },
+        }}
+      >
         {isAuthenticated ? (
           <RootStack.Screen name={ROUTES.main} component={MainNavigator} />
         ) : (

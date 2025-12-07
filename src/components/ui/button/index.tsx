@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
-import { Pressable, StyleProp, Text, TextStyle, ViewStyle } from "react-native";
-import { useUnistyles } from "react-native-unistyles";
+import { Pressable, StyleProp, TextStyle, ViewStyle } from "react-native";
+import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { styles } from "./Button.styles";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { quickSpring } from "@constants/easings";
 import { layoutAnimation } from "@constants/animations";
+import { BlurView } from "expo-blur";
 
 export type Size = "sm" | "md" | "lg" | "xl";
 type Variant = "icon" | "text" | "textIcon";
@@ -81,6 +82,7 @@ export default function Button({
 			ref={ref}
 			{...props}
 		>
+			{blur && <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />}
 			{icon}
 			{label && <Animated.Text layout={layoutAnimation} style={[styles.label(SIZE_MAP[size]), labelStyle]}>{label}</Animated.Text>}
 			{children}

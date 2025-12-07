@@ -9,35 +9,28 @@ import { Text } from "react-native";
 import { Icon } from "@components/ui";
 import ChatItem from "@components/chatsScreen/chat/ChatItem";
 import useUsersSearch from "@api/hooks/useUsersSearch";
+import useTabBarStore from "@stores/tabBar";
+import { getFadeIn, getFadeOut } from "@constants/animations";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
-const opacityAnimation = {
-  entering: FadeIn.springify()
-    .mass(fastSpring.mass)
-    .damping(fastSpring.damping)
-    .stiffness(fastSpring.stiffness),
-  exiting: FadeOut.springify()
-    .mass(fastSpring.mass)
-    .damping(fastSpring.damping)
-    .stiffness(fastSpring.stiffness),
-};
-
 export default function SearchView() {
-  const { headerHeight, focused, query } = useChatsScreenStore();
+  const { headerHeight, query } = useChatsScreenStore();
   const { theme } = useUnistyles();
+  const { isSearch } = useTabBarStore();
 
   const { users, loading, error, addPage } = useUsersSearch(query);
 
-  return focused || query ? (
+  return isSearch  ? (
     <Animated.View
-      {...opacityAnimation}
+    entering={getFadeIn()}
+    exiting={getFadeOut()}
       style={[styles.container, { paddingTop: headerHeight - 56 }]}
     >
       {query.length === 0 ? (
         <Animated.View
           key="empty"
-          {...opacityAnimation}
+          
           style={styles.textWrapper}
         >
           <Icon icon="magnifyingglass" size={92} color={theme.colors.primary} />

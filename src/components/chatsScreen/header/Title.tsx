@@ -11,16 +11,16 @@ export default function Title({ state }) {
 
   return state !== "connecting" ? (
     <Animated.View key="connected" style={styles.container} entering={getCharEnter()} exiting={getCharExit()}>
-      <Icon icon='lightbolt' color={theme.colors.primary} size={24} />
-      <Text style={styles.text(false)}>
+      <Icon icon='logo' color={theme.colors.primary} size={28} />
+      <Text style={styles.text}>
         Bloom
       </Text>
     </Animated.View>
   ) : (
     <Animated.View key="connecting" style={styles.container} entering={getCharEnter()} exiting={getCharExit()}>
-      <Loader size={24} color={theme.colors.yellow} />
-      <Text style={styles.text(true)}>
-        Подкл.
+      <Loader size={22} color={theme.colors.yellow} />
+      <Text style={styles.text}>
+        Подключение
       </Text>
     </Animated.View>
   );

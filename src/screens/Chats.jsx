@@ -9,12 +9,20 @@ import useChatsScreenStore from "@stores/ChatsScreen";
 import ChatItem from "@components/chatsScreen/chat/ChatItem";
 import { createSecureStorage } from "@lib/storage";
 import useTabBarStore from "@stores/tabBar";
+import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
+import { fastSpring } from "@constants/easings";
 
 export default function ChatsScreen() {
   const { headerHeight } = useChatsScreenStore();
   const { tabBarHeight } = useTabBarStore();
+  const { isSearch } = useTabBarStore();
   const [userId, setUserId] = useState();
   const chats = useChatList();
+
+  const animatedViewStyle = useAnimatedStyle(() => ({
+    opacity: withSpring(isSearch ? 0 : 1, fastSpring),
+    transform: [{ scale: withSpring(isSearch ? 0.95 : 1, fastSpring)}]
+  }))
 
   useEffect(() => {
     (async () => {
@@ -24,9 +32,10 @@ export default function ChatsScreen() {
   }, [])
   
   return (
-    <View style={styles.container}>
+    <>
+    <SearchView />
+    <Animated.View style={[styles.container, animatedViewStyle]}>
       <Header />
-      <SearchView />
       <FlashList
         data={chats}
         renderItem={({ item, index }) => <ChatItem item={item} index={index} userId={parseInt(userId)} />}
@@ -38,7 +47,8 @@ export default function ChatsScreen() {
         initialNumToRender={10}
         updateCellsBatchingPeriod={30}
       />
-    </View>
+    </Animated.View>
+    </>
   );
 }
 

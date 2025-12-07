@@ -26,6 +26,7 @@ export default function MainTabNavigator(): React.JSX.Element {
       screenOptions={{
         headerShown: false,
         animation: "fade",
+        sceneStyle: {backgroundColor: 'black'}
       }}
     >
       <Tab.Screen
