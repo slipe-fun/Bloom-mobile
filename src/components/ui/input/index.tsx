@@ -7,14 +7,13 @@ type Size = "sm" | "md" | "lg";
 
 type InputProps = {
 	size?: Size;
-	setValue?: (value: string) => void;
-	value?: string;
 	ref?: React.Ref<any>;
 	viewStyle?: StyleProp<ViewStyle>;
 	style?: StyleProp<ViewStyle>;
 	icon?: React.ReactNode;
 	button?: React.ReactNode;
 	disabled?: boolean;
+	basic?: boolean;
 } & React.ComponentProps<typeof TextInput>;
 
 const SIZE_MAP: Record<Size, number> = {
@@ -23,27 +22,26 @@ const SIZE_MAP: Record<Size, number> = {
 	lg: 48,
 };
 
-export default function Input({ size, setValue, value, ref, viewStyle, style, icon, button, disabled, ...props }: InputProps): React.JSX.Element {
+export default function Input({ size, ref, viewStyle, style, icon, button, disabled, basic, ...props }: InputProps): React.JSX.Element {
 	const { theme } = useUnistyles();
 
 	const viewStyleMemo = useMemo(() => styles.inputWrapper({ height: SIZE_MAP[size], disabled }), [size]);
 
-	return (
-		<View style={[viewStyle, viewStyleMemo]}>
-			{icon && <View style={styles.iconWrapper}>{icon}</View>}
-
-			<TextInput
+	const inputComponent = <TextInput
 				ref={ref}
 				cursorColor={theme.colors.secondaryText}
 				selectionColor={theme.colors.secondaryText}
 				keyboardAppearance='dark'
-				value={value}
 				placeholderTextColor={theme.colors.secondaryText}
-				onChangeText={setValue}
 				style={[styles.input(!!icon), style]}
 				{...props}
 			/>
+
+	return !basic ? (
+		<View style={[viewStyle, viewStyleMemo]}>
+			{icon && <View style={styles.iconWrapper}>{icon}</View>}
+			{inputComponent}
 			{button}
 		</View>
-	);
+	) : inputComponent;
 }

@@ -1,40 +1,85 @@
-import React from "react";
-import { Pressable, useWindowDimensions } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Pressable, useWindowDimensions, TextInput } from "react-native";
 import { styles } from "./TabBar.styles";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import { Icon } from "@components/ui";
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import { Button, Icon, Input } from "@components/ui";
 import useTabBarStore from "@stores/tabBar";
-import { useUnistyles } from "react-native-unistyles";
-import { springyTabBar } from "@constants/animations";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { BlurView } from "expo-blur";
+import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
+import { getFadeIn, getFadeOut, springyTabBar } from "@constants/animations";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedInput = Animated.createAnimatedComponent(Input);
 
 export default function TabBarSearchButton(): React.JSX.Element {
-	const opacity = useSharedValue(1);
-	const { isSearch, setIsSearch } = useTabBarStore();
-	const { width } = useWindowDimensions();
-	const { theme } = useUnistyles();
+  const opacity = useSharedValue(1);
+  const ref = useRef<TextInput>(null);
+  const { isSearch, setIsSearch, searchValue, setSearchValue, setIsSearchFocused, isSearchFocused } =
+    useTabBarStore();
+  const { width } = useWindowDimensions();
+  const { theme } = useUnistyles();
+  const defaultRichWidth = useSharedValue(0);
+  const { progress: keyboardProgress } = useReanimatedKeyboardAnimation();
 
-	const searchReachWidth = width - 48 - theme.spacing.md - theme.spacing.xxxl * 2;
+  const searchReachWidth = width - 48 - theme.spacing.md;
 
-	const AnimatedPressableStyle = useAnimatedStyle(() => ({
-		opacity: opacity.value,
-		width: withSpring(isSearch ? searchReachWidth : 54, springyTabBar),
-		height: withSpring(isSearch ? 48 : 54, springyTabBar),
-	}));
+  const animatedPressableStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+      width: interpolate(keyboardProgress.value, [0, 1], [defaultRichWidth.value, searchReachWidth - theme.spacing.lg * 2]),
+      height: withSpring(isSearch ? 48 : 54, springyTabBar),
+    };
+  });
 
-	const pressableOpacity = (out: boolean = false) => {
-		opacity.value = withSpring(out ? 1 : 0.5, springyTabBar);
-	};
+  const animatedViewStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: withSpring(isSearch ? 24 / 30 : 1, springyTabBar) }],
+  }));
 
-	return (
-		<AnimatedPressable
-			onPress={() => setIsSearch(!isSearch)}
-			style={[styles.searchButton, AnimatedPressableStyle]}
-			onTouchStart={() => pressableOpacity()}
-			onTouchEnd={() => pressableOpacity(true)}
-		>
-			<Icon icon='magnifyingglass' size={30} />
-		</AnimatedPressable>
-	);
+  const pressableOpacity = (out: boolean = false) => {
+    opacity.value = withSpring(out ? 1 : 0.5, springyTabBar);
+  };
+
+  useEffect(() => {
+    defaultRichWidth.value = withSpring(isSearch ? searchReachWidth - theme.spacing.xxxl * 2 : 54, springyTabBar);
+  }, [isSearch]);
+
+  return (
+    <>
+      <AnimatedPressable
+        onPress={() => setIsSearch(!isSearch)}
+        style={[styles.searchButton, animatedPressableStyle]}
+        onTouchStart={() => pressableOpacity()}
+        onTouchEnd={() => pressableOpacity(true)}
+      >
+        <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
+        <Animated.View style={animatedViewStyle}>
+          <Icon icon='magnifyingglass' size={30} />
+        </Animated.View>
+        {isSearch && (
+          <AnimatedInput
+            value={searchValue}
+            onChangeText={setSearchValue}
+			ref={ref}
+            style={styles.searchInput}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+            placeholder='Поиск по чатам'
+			submitBehavior="blurAndSubmit"
+			returnKeyType="search"
+            entering={getFadeIn(springyTabBar)}
+            basic
+          />
+        )}
+      </AnimatedPressable>
+      {isSearchFocused && (
+        <Animated.View exiting={getFadeOut(springyTabBar)} entering={getFadeIn(springyTabBar)}>
+          <Button onPress={() => {ref.current?.blur(); setSearchValue("")}} size='lg' variant='icon' style={styles.cancelButton}>
+            <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
+            <Icon icon='x' size={26} color={theme.colors.text} />
+          </Button>
+        </Animated.View>
+      )}
+    </>
+  );
 }

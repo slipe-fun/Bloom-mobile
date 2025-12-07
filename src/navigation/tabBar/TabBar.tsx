@@ -1,20 +1,26 @@
 import { useInsets } from "@hooks";
 import TabBarItem from "./Item";
-import { LayoutChangeEvent, View } from "react-native";
+import { LayoutChangeEvent } from "react-native";
 import { styles } from "./TabBar.styles";
 import TabBarIndicator from "./Indicator";
 import { GradientBlur } from "@components/ui";
 import { Haptics } from "react-native-nitro-haptics";
 import useTabBarStore from "@stores/tabBar";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolate } from "react-native-reanimated";
 import TabBarSearchButton from "./SearchButton";
 import { springyTabBar } from "@constants/animations";
+import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
 import { useCallback } from "react";
+import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
+import { useUnistyles, StyleSheet } from "react-native-unistyles";
+import { BlurView } from "expo-blur";
 
 export default function TabBar({ state, navigation }) {
   const insets = useInsets();
-  const { setTabBarHeight, isSearch, tabBarHeight } = useTabBarStore();
+  const { theme } = useUnistyles();
+  const { setTabBarHeight, isSearch, tabBarHeight, isSearchFocused } = useTabBarStore();
   const tabBarWidth = useSharedValue(0);
+  const { progress: keyboardProgress, height: keyboardHeight } = useReanimatedKeyboardAnimation();
 
   const animatedViewStyle = useAnimatedStyle(() => {
     return tabBarWidth.value > 0
@@ -23,12 +29,17 @@ export default function TabBar({ state, navigation }) {
           width: withSpring(isSearch ? 48 : tabBarWidth.value, springyTabBar),
         }
       : {};
-  });
+  }, [isSearch, tabBarWidth, isSearchFocused]);
+
+  const animatedContainerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: keyboardHeight.value }],
+    paddingBottom: interpolate(keyboardProgress.value, [0, 1], [insets.bottom, theme.spacing.lg], "clamp"),
+  }));
 
   const onLayoutTabBar = useCallback((event: LayoutChangeEvent, isContainer: boolean = false) => {
     const { layout } = event.nativeEvent;
 
-    if (tabBarWidth.value === 0) tabBarWidth.value = layout.width;
+    if (tabBarWidth.value <= 1 && !isContainer) tabBarWidth.value = layout.width;
 
     if (tabBarHeight === 0 && isContainer) setTabBarHeight(layout.height);
   }, []);
@@ -47,27 +58,35 @@ export default function TabBar({ state, navigation }) {
   }, []);
 
   return (
-    <View
+    <Animated.View
       onLayout={(event) => onLayoutTabBar(event, true)}
-      style={[styles.tabBarContainer, { paddingBottom: insets.bottom }]}
+      style={[styles.tabBarContainer, animatedContainerStyle]}
     >
       <GradientBlur />
-      <Animated.View onLayout={(event) => onLayoutTabBar(event)} style={[styles.tabBar, animatedViewStyle]}>
-        <TabBarIndicator index={state.index} count={state.routes.length} />
-        {state.routes.map((route, index) => {
-          const focused = state.index === index;
+      {!isSearchFocused && (
+        <Animated.View
+          exiting={zoomAnimationOut}
+          entering={zoomAnimationIn}
+          onLayout={(event) => onLayoutTabBar(event)}
+          style={[styles.tabBar, animatedViewStyle]}
+        >
+          <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
+          <TabBarIndicator index={state.index} count={state.routes.length} />
+          {state.routes.map((route, index) => {
+            const focused = state.index === index;
 
-          return (
-            <TabBarItem
-              key={route.key}
-              route={route}
-              focused={focused}
-              onPress={() => onPress(route, focused)}
-            />
-          );
-        })}
-      </Animated.View>
+            return (
+              <TabBarItem
+                key={route.key}
+                route={route}
+                focused={focused}
+                onPress={() => onPress(route, focused)}
+              />
+            );
+          })}
+        </Animated.View>
+      )}
       <TabBarSearchButton />
-    </View>
+    </Animated.View>
   );
 }

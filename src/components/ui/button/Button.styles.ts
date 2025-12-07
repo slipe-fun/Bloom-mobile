@@ -15,7 +15,7 @@ export const styles = StyleSheet.create(theme => ({
 		justifyContent: "center",
 		flexDirection: "row",
 		height: size,
-		width: size >= SIZE_MAP['lg'] ? "100%" : "auto",
+		width: size > SIZE_MAP['lg'] ? "100%" : "auto",
 		overflow: "hidden",
 		aspectRatio: isIcon ? 1 : undefined,
 		paddingHorizontal,

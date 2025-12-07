@@ -21,7 +21,7 @@ export default function AuthPasswordInput(): React.JSX.Element {
     <Input
       ref={ref}
       value={password}
-      setValue={setPasssword}
+      onChangeText={setPasssword}
       maxLength={64}
       secureTextEntry={secure}
       keyboardType={Platform.OS === "ios" ? "numbers-and-punctuation" : "visible-password"}

@@ -17,7 +17,7 @@ export default function AuthNickInput(): React.JSX.Element {
     <Input
       ref={ref}
       value={username}
-      setValue={setUsername}
+      onChangeText={setUsername}
       maxLength={20}
       icon={<Icon size={24} icon='person' color={theme.colors.secondaryText} />}
       placeholder='a-Z . _ - 2-20 длина'
