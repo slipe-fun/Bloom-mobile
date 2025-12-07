@@ -1,5 +1,4 @@
 import { styles } from "./SearchView.styles";
-import useChatsScreenStore from "@stores/ChatsScreen";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { fastSpring } from "@constants/easings";
 import { useUnistyles } from "react-native-unistyles";
@@ -15,19 +14,18 @@ import { getFadeIn, getFadeOut } from "@constants/animations";
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
 export default function SearchView() {
-  const { headerHeight, query } = useChatsScreenStore();
   const { theme } = useUnistyles();
-  const { isSearch } = useTabBarStore();
+  const { isSearch, searchValue } = useTabBarStore();
 
-  const { users, loading, error, addPage } = useUsersSearch(query);
+  const { users, loading, error, addPage } = useUsersSearch(searchValue);
 
   return isSearch  ? (
     <Animated.View
     entering={getFadeIn()}
     exiting={getFadeOut()}
-      style={[styles.container, { paddingTop: headerHeight - 56 }]}
+      style={[styles.container, { paddingTop: 32 }]}
     >
-      {query.length === 0 ? (
+      {searchValue.length === 0 ? (
         <Animated.View
           key="empty"
           
