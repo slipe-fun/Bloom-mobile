@@ -4,7 +4,6 @@ import Animated, { LayoutAnimationConfig } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
 import { createSecureStorage } from "@lib/storage";
-
 import Icon from "@components/ui/Icon";
 import { Avatar } from "@components/ui";
 import { useChatList } from "@api/providers/ChatsContext";
@@ -38,14 +37,13 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
     });
   }, []);
 
-  const handlePress = useCallback(() => {
-    const existingChat = chats?.find((c) =>
-      c?.members?.some((m) => m?.id === userId) &&
-      c?.members?.some((m) => m?.id === targetId)
+  const navigateToChatScreen = useCallback(() => {
+    const existingChat = chats?.find(
+      (c) => c?.members?.some((m) => m?.id === userId) && c?.members?.some((m) => m?.id === targetId)
     );
 
     if (existingChat) {
-	  // @ts-ignore
+      // @ts-ignore
       return navigation.navigate(ROUTES.chat, { chat: { ...chat, id: existingChat.id } });
     }
 
@@ -56,7 +54,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
         const message = JSON.parse(event.data);
         if (message?.chat) {
           ws.removeEventListener("message", handleMessage);
-		  // @ts-ignore
+          // @ts-ignore
           navigation.navigate(ROUTES.chat, { chat: { ...chat, id: message.chat.id } });
         }
       } catch {}
@@ -67,9 +65,9 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
 
   return (
     <LayoutAnimationConfig skipEntering skipExiting>
-      <Pressable onPress={handlePress} style={styles.chat}>
+      <Pressable onPress={navigateToChatScreen} style={styles.chat}>
         <View style={styles.avatarWrapper}>
-          <Avatar size="lg" username={recipient?.username} />
+          <Avatar size={!isSearch ? "lg" : "md"} username={recipient?.username} />
         </View>
 
         <View style={styles.content}>
@@ -77,7 +75,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
             <View style={styles.nameWrapper}>
               <Text style={styles.name}>{recipient?.username}</Text>
             </View>
-            
+
             <View style={styles.metaRow}>
               {!isSearch && (
                 <View style={styles.charStack}>
@@ -94,7 +92,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
                   ))}
                 </View>
               )}
-              <Icon icon="chevron.right" size={16} color={theme.colors.secondaryText} />
+              <Icon icon='chevron.right' size={16} color={theme.colors.secondaryText} />
             </View>
           </View>
 
