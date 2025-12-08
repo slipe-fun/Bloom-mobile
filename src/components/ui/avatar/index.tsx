@@ -24,7 +24,7 @@ export default function Avatar({ size = "md", square = false, style, image, imag
 	const SIZE_MAP: Record<Size, number> = {
 		sm: 40,
 		md: 44,
-		lg: 56,
+		lg: 52,
 		xl: 68,
 		"2xl": 120,
 		"3xl": 128,

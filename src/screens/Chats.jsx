@@ -1,5 +1,5 @@
 import Header from "@components/chatsScreen/header";
-import SearchView from "@components/chatsScreen/searchView";
+import Search from "@components/chatsScreen/search";
 import { View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ export default function ChatsScreen() {
   
   return (
     <>
-    <SearchView />
+    <Search />
     <Animated.View style={[styles.container, animatedViewStyle]}>
       <Header />
       <FlashList

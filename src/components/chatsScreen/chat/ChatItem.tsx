@@ -1,35 +1,17 @@
 import React, { useMemo } from "react";
 import Chat from "@components/chatsScreen/chat";
 import formatSentTime from "@lib/formatSentTime";
-
-interface Member {
-	id: number;
-	username: string;
-}
-
-interface LastMessage {
-	author_id: number;
-	content: string;
-	date: string;
-}
-
-interface ChatItemData {
-	id: number;
-	members: Member[];
-	last_message?: LastMessage | null;
-}
+import type { Chat as ChatType } from "@interfaces";
 
 interface ChatItemProps {
-	isSearch: boolean, 
-	item: ChatItemData;
+	item: ChatType;
 	userId: string | number;
-	index: number;
 }
 
-export default function ChatItem({ isSearch, item, userId, index }: ChatItemProps) {
+export default function ChatItem({ item, userId }: ChatItemProps) {
 	const numericUserId = typeof userId === "string" ? parseInt(userId) : userId;
 
-	const recipient = useMemo(() => isSearch ? item : item.members?.find(member => member.id !== numericUserId), [isSearch, item, item.members, numericUserId]);
+	const recipient = useMemo(() => item.members?.find(member => member.id !== numericUserId), [item, item.members, numericUserId]);
 
 	const { lastMessage, lastMessageTime } = useMemo(() => {
 		if (!item.last_message) {
@@ -57,5 +39,5 @@ export default function ChatItem({ isSearch, item, userId, index }: ChatItemProp
 		[item.id, lastMessage, lastMessageTime, recipient]
 	);
 
-	return <Chat chat={chatData} index={index} />;
+	return <Chat chat={chatData} />;
 }

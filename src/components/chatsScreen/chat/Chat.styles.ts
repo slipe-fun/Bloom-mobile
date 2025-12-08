@@ -14,10 +14,10 @@ export const styles = StyleSheet.create(theme => ({
   },
   content: {
     flex: 1,
-    gap: theme.spacing.xs,
+    gap: theme.spacing.sm,
     borderBottomColor: theme.colors.foreground,
     borderBottomWidth: 1,
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
   },
   headerRow: {
     flexDirection: "row",
@@ -38,17 +38,11 @@ export const styles = StyleSheet.create(theme => ({
   metaRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: theme.spacing.sm,
+    gap: theme.spacing.xs,
   },
   secondary: {
     fontSize: theme.fontSize.sm,
     color: theme.colors.secondaryText,
     fontFamily: theme.fontFamily.medium,
-  },
-  unreadMark: {
-    width: 8,
-    height: 8,
-    borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.primary,
   },
 }));

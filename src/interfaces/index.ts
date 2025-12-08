@@ -14,14 +14,13 @@ export interface MessageInterface {
 export interface Position { top: number; left: number; width: number };
 
 export interface Chat {
-  unreadCount: number;
-  lastMessage: string;
-  lastMessageTime: string;
-  id: number;
-  recipient: {
-    username: string;
-    avatar: string
-  };
+  unreadCount?: number;
+  lastMessage?: string;
+  last_message?: { content: string, date: Date };
+  lastMessageTime?: string;
+  members?: Member[];
+  id?: number;
+  recipient?: Member;
 }
 
 export interface Option {
@@ -30,4 +29,19 @@ export interface Option {
   action?: any;
   color?: string;
   separator?: boolean
+}
+
+export interface SearchUser {
+  date: Date;
+  display_name: string | null;
+  email: null;
+  id: number;
+  username: string | null;
+  avatar: URL;
+}
+
+export interface Member {
+	id: number;
+	username: string;
+  avatar: URL;
 }
