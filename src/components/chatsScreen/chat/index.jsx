@@ -41,7 +41,7 @@ export default function Chat({ chat, index }) {
 					_chat?.members?.some(m2 => m2?.id === (chat?.recipient?.id || chat?.id))
 				);
 
-				if (getChat()) return navigation.navigate(ROUTES.CHAT, { chat: { ...chat, id: getChat()?.id } });;
+				if (getChat()) return navigation.navigate(ROUTES.chat, { chat: { ...chat, id: getChat()?.id } });;
 
 				ws.send(JSON.stringify({
 					type: "create_chat",
@@ -58,7 +58,7 @@ export default function Chat({ chat, index }) {
 
 					if (message?.chat) {
 						ws.removeEventListener("message", handleMessage);
-						navigation.navigate(ROUTES.CHAT, { chat: { ...chat, id: message.chat.id } });
+						navigation.navigate(ROUTES.chat, { chat: { ...chat, id: message.chat.id } });
 					}
 				};
 
