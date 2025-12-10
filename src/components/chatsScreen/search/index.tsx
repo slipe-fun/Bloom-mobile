@@ -10,7 +10,7 @@ import Chat from "../chat";
 import { useInsets } from "@hooks";
 import SearchHeader from "./header";
 
-export default function Search() {
+export default function Search(): React.JSX.Element {
   const { isSearch, searchValue, tabBarHeight, isSearchFocused } = useTabBarStore();
   const insets = useInsets();
   const scrollY = useSharedValue<number>(0);

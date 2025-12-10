@@ -15,7 +15,7 @@ type SearchHeaderProps = {
   setHeaderHeight: (height: number) => void;
 };
 
-export default function SearchHeader({ scrollY, setHeaderHeight }: SearchHeaderProps) {
+export default function SearchHeader({ scrollY, setHeaderHeight }: SearchHeaderProps): React.JSX.Element {
   const headerHeightValue = useSharedValue<number>(0);
   const insets = useInsets();
 

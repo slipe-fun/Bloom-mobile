@@ -17,7 +17,7 @@ interface ChatScreenProps {
 	};
 }
 
-export default function ChatScreen({ route }: ChatScreenProps) {
+export default function ChatScreen({ route }: ChatScreenProps): React.JSX.Element {
 	const { chat } = route.params as { chat: Chat };
 
 	const { messages, addMessage } = useMessages(chat?.id);

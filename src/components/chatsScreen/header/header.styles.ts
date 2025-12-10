@@ -17,23 +17,6 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  button: {
-    backgroundColor: "transparent",
-  },
-  inView: {
-    height: 44,
-    width: 44,
-  },
-  buttonsWrapper: {
-    borderRadius: theme.radius.full,
-    borderCurve: "continuous",
-    position: "absolute",
-    right: 0,
-    gap: theme.spacing.xs,
-    overflow: "hidden",
-    flexDirection: "row",
-    paddingHorizontal: theme.spacing.xs,
-  },
   container: {
     flexDirection: "row",
     alignItems: "center",
