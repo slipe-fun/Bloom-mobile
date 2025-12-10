@@ -6,6 +6,8 @@ import { useUnistyles } from "react-native-unistyles";
 type Insets = {
   top: number;
   bottom: number;
+  realBottom: number;
+  realTop: number
 };
 
 export default function useInsets(): Insets {
@@ -24,6 +26,8 @@ export default function useInsets(): Insets {
     return {
       top,
       bottom,
+      realBottom: insets.bottom,
+      realTop: insets.top
     };
   }, [insets, theme]);
 }
