@@ -77,7 +77,7 @@ export default function Footer({ onSend, onLayout }: FooterProps) {
     >
       <GradientBlur />
       {!hasValue && (
-        <AnimatedButton blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant='icon'>
+        <AnimatedButton layout={layoutAnimationSpringy} blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant='icon'>
           <Icon icon='plus' size={26} color={theme.colors.text} />
         </AnimatedButton>
       )}

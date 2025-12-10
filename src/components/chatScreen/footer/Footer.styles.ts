@@ -4,12 +4,12 @@ export const styles = StyleSheet.create(theme => ({
   footer: {
     width: "100%",
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
     flexDirection: "row",
     position: 'absolute',
     alignItems: 'flex-end',
     bottom: 0,
-    gap: theme.spacing.lg,
+    gap: theme.spacing.md,
   },
   inputWrapper: {
     backgroundColor: theme.colors.foregroundBlur,
