@@ -36,14 +36,16 @@ export default function TabBarSearchButton(): React.JSX.Element {
 
   const searchReachWidth = width - 48 - theme.spacing.md;
   let layoutTimer: ReturnType<typeof setTimeout>;
+  const isDismiss = isSearchFocused || searchValue.trim().length > 0
 
   const animatedPressableStyle = useAnimatedStyle((): ViewStyle => {
+    const defaultDismissRichWidth = isDismiss ? defaultRichWidth.value - 48 - theme.spacing.md : defaultRichWidth.value
     return {
       opacity: opacity.value,
       width: interpolate(
         keyboardProgress.value,
         [0, 1],
-        [defaultRichWidth.value, searchReachWidth - theme.spacing.lg * 2]
+        [defaultDismissRichWidth, searchReachWidth - theme.spacing.lg * 2]
       ),
       height: withSpring(isSearch ? 48 : 54, springyTabBar),
     };
@@ -56,7 +58,7 @@ export default function TabBarSearchButton(): React.JSX.Element {
   );
 
   const pressableOpacity = (out: boolean = false) => {
-    opacity.value = withSpring(out ? 1 : 0.5, springyTabBar);
+    opacity.value = withSpring(out ? 1 : 0.8, springyTabBar);
   };
 
   useEffect(() => {
@@ -104,7 +106,7 @@ export default function TabBarSearchButton(): React.JSX.Element {
           />
         )}
       </AnimatedPressable>
-      {isSearchFocused && (
+      {isDismiss && (
         <Animated.View exiting={getFadeOut(springyTabBar)} entering={getFadeIn(springyTabBar)}>
           <Button
             onPress={() => {

@@ -41,7 +41,7 @@ export default function ChatsScreen() {
         renderItem={({ item, index }) => <ChatItem item={item} index={index} userId={parseInt(userId)} />}
         keyExtractor={(item) => item?.id.toString()}
         estimatedItemSize={100}
-        contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: tabBarHeight }}
+        contentInset={{ top: headerHeight, bottom: tabBarHeight}}
         removeClippedSubviews
         maxToRenderPerBatch={10}
         initialNumToRender={10}
