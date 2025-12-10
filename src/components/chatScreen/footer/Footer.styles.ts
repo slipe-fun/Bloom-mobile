@@ -11,28 +11,13 @@ export const styles = StyleSheet.create(theme => ({
     bottom: 0,
     gap: theme.spacing.lg,
   },
-  input: {
-    flex: 1,
-    paddingLeft: theme.spacing.lg,
-    paddingVertical: 10,
-    height: 'auto',
-    color: theme.colors.text,
-    fontSize: theme.fontSize.md,
-    fontFamily: theme.fontFamily.medium,
-    borderWidth: 0,
-  },
   inputWrapper: {
     backgroundColor: theme.colors.foregroundBlur,
-    borderRadius: theme.radius.md,
+    borderRadius: 22,
     overflow: 'hidden',
     flex: 1,
     borderCurve: "continuous",
     zIndex: 1,
-  },
-  inputWrapperChild: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    flex: 1,
   },
   blur: {
     top: 0,
@@ -41,7 +26,4 @@ export const styles = StyleSheet.create(theme => ({
     right: 0,
     position: 'absolute',
   },
-  button: (input: boolean) => ({
-    backgroundColor: input ? "transparent" : theme.colors.foregroundBlur
-  })
 }));
