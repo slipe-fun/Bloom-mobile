@@ -13,7 +13,7 @@ type AvatarProps = {
 	square?: boolean;
 	style?: StyleProp<ImageStyle>;
 	imageStyle?: StyleProp<FastImageStyle>;
-	image?: string | undefined;
+	image?: URL | undefined;
 	username?: string;
 	ref?: React.Ref<any>
 };

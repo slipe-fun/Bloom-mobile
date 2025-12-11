@@ -9,6 +9,7 @@ import type { SearchUser } from "@interfaces";
 import Chat from "../chat";
 import { useInsets } from "@hooks";
 import SearchHeader from "./header";
+import { EmptyModal } from "@components/ui";
 
 export default function Search(): React.JSX.Element {
   const { isSearch, searchValue, tabBarHeight, isSearchFocused } = useTabBarStore();
@@ -47,7 +48,7 @@ export default function Search(): React.JSX.Element {
   return isSearch ? (
     <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.container}>
       <SearchHeader scrollY={scrollY} setHeaderHeight={setHeaderHeight} />
-      <AnimatedLegendList
+       <AnimatedLegendList
         key='search'
         onScroll={scrollHandler}
         onEndReached={() => addPage()}
@@ -60,6 +61,7 @@ export default function Search(): React.JSX.Element {
         data={users}
         renderItem={renderItem}
       />
+      <EmptyModal text="В истории поиска пусто... Введите свой первый запрос!" icon="magnifyingglass" color="primary" visible={!isSearchValue}/>
     </Animated.View>
   ) : null;
 }

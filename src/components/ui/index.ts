@@ -8,3 +8,4 @@ export { default as Loader } from "./loader/index";
 export { default as Separator } from "./separator/index";
 export { default as ActionText } from "./actionText/index";
 export { default as OTPInput } from "./otpInput/index";
+export { default as EmptyModal } from "./emplyModal/index"
