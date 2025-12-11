@@ -53,6 +53,7 @@ export default function ChatsScreen(): React.JSX.Element {
           style={styles.list}
           renderItem={({item}) => renderItem({item, id: userId})}
           keyExtractor={keyExtractor}
+          showsVerticalScrollIndicator
           contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: tabBarHeight }}
           scrollIndicatorInsets={{ top: headerHeight - insets.realTop, bottom: tabBarHeight - insets.realBottom }}
         />
