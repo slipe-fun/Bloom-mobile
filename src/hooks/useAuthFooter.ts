@@ -4,6 +4,8 @@ import useAuthStore from "@stores/auth";
 import useStorageStore from "@stores/storage";
 import { API_URL } from "@constants/Api";
 import { ROUTES } from "@constants/routes";
+import { decryptKeys, encryptKeys, hashPassword } from "@lib/skid/encryptKeys";
+import { Buffer } from '@craftzdog/react-native-buffer';
 
 export default function useAuthFooter(navigation: any) {
   const { index, email, emailValid, otp, password, setError, error } = useAuthStore();
@@ -64,9 +66,38 @@ export default function useAuthFooter(navigation: any) {
           }
           break;
         }
+
+        case 3: {
+          const token = mmkv.getString("token")
+          const privateKeys = await axios.get(`${API_URL}/chats/keys/private`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }).then(res => res?.data).catch(console.error);
+
+          if (!privateKeys) {
+            const { hash, salt } = await hashPassword(password);
+            const { ciphertext, nonce } = encryptKeys(hash, new TextEncoder().encode("[]"));
+
+            await axios.post(`${API_URL}/chats/keys/private`, { ciphertext, nonce, salt: Buffer.from(salt).toString("base64") }, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+
+            mmkv.set("password", Buffer.from(hash).toString("base64"));
+          } else {
+            const { hash } = await hashPassword(password, Buffer.from(privateKeys?.salt, "base64"));
+
+            try {
+              const keys = decryptKeys(hash, privateKeys?.ciphertext, privateKeys?.nonce)
+
+              console.log(keys)
+            } catch {
+              console.log("FAILED TO DECRYPT KEYS");
+            }
+          }
+        }
       }
     } catch (e: any) {
-      setError(e.message || "Something went wrong");
+      console.log(e)
+      setError(e.response.data || e.message || "Something went wrong");
     }
   }, [index, email, otp, navigation, setError, mmkv]);
 

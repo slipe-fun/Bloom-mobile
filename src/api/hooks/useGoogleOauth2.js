@@ -38,7 +38,6 @@ export default function () {
                                     mmkv.set("user", JSON.stringify(exchangeCode?.user));
 
                                     setResult(exchangeCode);
-                                    setCounter(counter + 1);
                                 } catch {
                                     setError("Failed to save session data")
                                 }
