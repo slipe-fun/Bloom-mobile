@@ -117,7 +117,6 @@ export default function useAuthFooter(navigation: any) {
         }
       }
     } catch (e: any) {
-      console.log(e)
       setError(e.response.data || e.message || "Something went wrong");
     }
   }, [index, email, otp, navigation, setError, mmkv]);

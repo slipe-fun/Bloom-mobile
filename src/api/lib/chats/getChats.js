@@ -36,8 +36,6 @@ export default async function getChats(ws) {
       // get chat from mmkv storage
       const chatInStorage = await getChatFromStorage(chat?.id);
 
-      console.log(chatInStorage, chatInStorage?.keys?.my?.kyberSecretKey)
-
       // current user keys variable
       var myKeys;
 
@@ -63,14 +61,6 @@ export default async function getChats(ws) {
         // find chat index
         const chatIndex = chats?.findIndex(_chat => _chat?.id === chat?.id);
         if (chatIndex !== -1) {
-          console.log({
-            id: chat?.id,
-            key: chat?.encryption_key,
-            keys: {
-              my: { ...(myKeys || chatInStorage?.keys?.my || me) },
-              recipient: { ...recipient }
-            }
-          })
           // add or change chat keys and data in mmkv storage
           // PS: if recipient keys changed in api they will be changed in mmkv storage too because this code
           chats[chatIndex] = {
@@ -101,8 +91,6 @@ export default async function getChats(ws) {
         addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my || me) })
       }
     }))
-
-    // console.log(chats[0])
 
     // set new chats
     Storage.set("chats", JSON.stringify(chats))
