@@ -3,12 +3,13 @@ import { createSecureStorage } from "@lib/storage";
 import { API_URL } from "@constants/Api";
 import generateKeys from "@lib/skid/generateKeys";
 import getChatFromStorage from "@lib/getChatFromStorage";
+import addKeysToDump from "../keys/addKeysToDump.js";
 
 export default async function getChats(ws) {
   try {
     // mmkv storage
     const Storage = await createSecureStorage("user-storage");
-
+ 
     // get user token from mmkv storage
     const token = Storage.getString("token");
 
@@ -18,7 +19,7 @@ export default async function getChats(ws) {
     });
 
     // parse chats from mmkv storage
-    let chats;
+    let chats; 
     try {
       chats = JSON.parse(Storage.getString("chats"))
     } catch {
@@ -31,16 +32,17 @@ export default async function getChats(ws) {
       const recipient = chat?.members?.find(member => member?.id !== parseInt(Storage.getString("user_id")));
       // get current user from chat api object
       const me = chat?.members?.find(member => member?.id === parseInt(Storage.getString("user_id")))
-      
+
       // get chat from mmkv storage
       const chatInStorage = await getChatFromStorage(chat?.id);
+
+      console.log(chatInStorage, chatInStorage?.keys?.my?.kyberSecretKey)
 
       // current user keys variable
       var myKeys;
 
       // generate keys if current user dont have its
-      if (!chatInStorage?.keys?.my?.kyberSecretKey || 
-          chatInStorage?.keys?.my?.kyberPublicKey !== me?.kyberPublicKey) {
+      if (!chatInStorage?.keys?.my?.kyberSecretKey) {
         myKeys = generateKeys();
 
         // send new public keys to recipient
@@ -61,6 +63,14 @@ export default async function getChats(ws) {
         // find chat index
         const chatIndex = chats?.findIndex(_chat => _chat?.id === chat?.id);
         if (chatIndex !== -1) {
+          console.log({
+            id: chat?.id,
+            key: chat?.encryption_key,
+            keys: {
+              my: { ...(myKeys || chatInStorage?.keys?.my || me) },
+              recipient: { ...recipient }
+            }
+          })
           // add or change chat keys and data in mmkv storage
           // PS: if recipient keys changed in api they will be changed in mmkv storage too because this code
           chats[chatIndex] = {
@@ -71,6 +81,9 @@ export default async function getChats(ws) {
               recipient: { ...recipient }
             }
           }
+
+          // send dump
+          addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my || me) })
         }
       } else {
         // IF CHAT IS NOT EXISTS IN MMKV STORAGE
@@ -83,13 +96,19 @@ export default async function getChats(ws) {
             recipient: { ...recipient }
           }
         });
+
+        //send dump
+        addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my || me) })
       }
     }))
+
+    // console.log(chats[0])
 
     // set new chats
     Storage.set("chats", JSON.stringify(chats))
 
     // return api response
     return response.data;
-  } catch (err) { }
+  } catch (err) {}
 }
+ 

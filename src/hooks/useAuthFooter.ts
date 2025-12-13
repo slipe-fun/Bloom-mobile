@@ -82,14 +82,35 @@ export default function useAuthFooter(navigation: any) {
             })
 
             mmkv.set("password", Buffer.from(hash).toString("base64"));
+            mmkv.set("salt", Buffer.from(salt).toString("base64"));
           } else {
             const { hash } = await hashPassword(password, Buffer.from(privateKeys?.salt, "base64"));
+
+            mmkv.set("password", Buffer.from(hash).toString("base64"));
+            mmkv.set("salt", privateKeys?.salt);
 
             try {
               const keys = decryptKeys(hash, privateKeys?.ciphertext, privateKeys?.nonce)
 
-              console.log(keys)
-            } catch {
+              const dump = keys.map(_keys => {
+                return {
+                  id: _keys?.chat_id,
+                  keys: {
+                    my: {
+                      kyberPublicKey: _keys.kyberPublicKey,
+                      ecdhPublicKey: _keys.ecdhPublicKey,
+                      edPublicKey: _keys.edPublicKey,
+                      kyberSecretKey: _keys.kyberSecretKey,
+                      ecdhSecretKey: _keys.ecdhSecretKey,
+                      edSecretKey: _keys.edSecretKey
+                    },
+                    recipient: {}
+                  } 
+                } 
+              })
+
+              mmkv.set("chats", JSON.stringify(dump.filter(_keys => _keys.id)));
+            } catch { 
               console.log("FAILED TO DECRYPT KEYS");
             }
           }

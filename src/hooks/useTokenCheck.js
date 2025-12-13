@@ -12,7 +12,6 @@ export default function useTokenCheck() {
 
   const init = async () => {
     try {
-      console.log(123);
       storageInstance = await createSecureStorage("user-storage");
       const token = storageInstance.getString("token");
       setIsAuthenticated(!!token);
@@ -27,7 +26,6 @@ export default function useTokenCheck() {
 
   useEffect(() => {
     init();
-    console.log(1233435);
   }, [counter]);
 
   return { isAuthenticated, isLoading };

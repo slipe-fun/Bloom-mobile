@@ -99,6 +99,9 @@ export default function ChatsProvider({ children }) {
                             }
                         }];
 
+                        // send dump
+                        await addKeysToDump(Storage, { chat_id: chat?.id, ...myKeys })
+
                         // save changes
                         mmkv.set("chats", JSON.stringify(_chats));
 
@@ -109,7 +112,7 @@ export default function ChatsProvider({ children }) {
                             return next;
                         });
                     }
-                } catch {}
+                } catch { }
             });
         }
     }, [ws]);
