@@ -4,6 +4,7 @@ import getChats from "../lib/chats/getChats";
 import setChatKeysToStorage from "@lib/setChatKeysToStorage";
 import generateKeys from "@lib/skid/generateKeys";
 import useStorageStore from "@stores/storage";
+import addKeysToDump from "@api/lib/keys/addKeysToDump";
 
 const ChatsContext = createContext(null);
 
@@ -100,7 +101,7 @@ export default function ChatsProvider({ children }) {
                         }];
 
                         // send dump
-                        await addKeysToDump(Storage, { chat_id: chat?.id, ...myKeys })
+                        addKeysToDump(mmkv, { chat_id: message?.chat?.id, ...myKeys })
 
                         // save changes
                         mmkv.set("chats", JSON.stringify(_chats));
