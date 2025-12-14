@@ -1,48 +1,54 @@
 import { ICONS } from "@constants/icons";
 
-export interface MessageInterface {
-  id: number,
-  date: Date;
-  isMe: boolean;
-  content: string;
-  author_id: number,
-  chat_id: number,
-  seen?: Date,
-  nonce?: string,
-  reply_to?: MessageInterface,
+interface ChatLastMessage {
+  content?: string;
+  date?: Date;
 }
 
-export interface Position { top: number; left: number; width: number };
+interface ChatLastMessageView extends ChatLastMessage {
+  time?: string;
+}
+
+export interface Message {
+  id: number;
+  date: Date;
+  isMe?: boolean;
+  content: string;
+  author_id: number;
+  chat_id: number;
+  seen?: Date;
+  nonce?: string;
+  reply_to?: Message;
+}
 
 export interface Chat {
   unreadCount?: number;
-  lastMessage?: string;
-  last_message?: { content: string, date: Date };
-  lastMessageTime?: string;
+  last_message?: ChatLastMessage;
   members?: Member[];
+  avatar?: string;
   id?: number;
   recipient?: Member;
 }
 
+export interface ChatView extends Chat {
+  lastMessage?: ChatLastMessageView;
+}
+
+export interface Position { top: number; left: number; width: number };
+
 export interface Option {
   icon?: keyof typeof ICONS;
   label?: string;
-  action?: any;
+  action?: (payload?: string) => void;
   color?: string;
   separator?: boolean
 }
 
-export interface SearchUser {
-  date: Date;
-  display_name: string | null;
-  email: null;
+export interface Member {
+  display_name?: string | null;
   id: number;
-  username: string | null;
-  avatar: URL;
+  username: string;
+  avatar: string;
 }
 
-export interface Member {
-	id: number;
-	username: string;
-  avatar: URL;
-}
+export interface SearchUser { date: Date; display_name: string | null; id: number; username: string | null; avatar: string; }

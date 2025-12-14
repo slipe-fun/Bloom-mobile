@@ -2,7 +2,7 @@ import Header from "@components/chatsScreen/header";
 import Search from "@components/chatsScreen/search";
 import React, { useCallback, useEffect, useState } from "react";
 import { useChatList } from "@api/providers/ChatsContext";
-import useChatsScreenStore from "@stores/ChatsScreen";
+import useChatsScreenStore from "@stores/chats";
 import ChatItem from "@components/chatsScreen/chat/ChatItem";
 import { createSecureStorage } from "@lib/storage";
 import useTabBarStore from "@stores/tabBar";

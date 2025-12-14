@@ -1,9 +1,9 @@
-import { MessageInterface } from "@interfaces";
+import type { Message } from "@interfaces";
 import { create } from "zustand";
 
 type ChatScreenStore= {
-    replyMessage: MessageInterface | null;
-    setReplyMessage: (newFocused: MessageInterface) => void
+    replyMessage: Message | null;
+    setReplyMessage: (newFocused: Message) => void
 }
 
 const useChatScreenStore = create<ChatScreenStore>((set) => ({

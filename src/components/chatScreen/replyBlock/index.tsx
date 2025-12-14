@@ -7,10 +7,10 @@ import { getFadeIn, getFadeOut, layoutAnimationSpringy } from "@constants/animat
 import { useUnistyles } from "react-native-unistyles";
 import getChatFromStorage from "@lib/getChatFromStorage";
 import { createSecureStorage } from "@lib/storage";
-import { MessageInterface } from "@interfaces";
+import type { Message } from "@interfaces";
 
 type ReplyBlockProps = {
-  message: MessageInterface;
+  message: Message;
   onCancel?: () => void;
   isMe?: boolean
 };

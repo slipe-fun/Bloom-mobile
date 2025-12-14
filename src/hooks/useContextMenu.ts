@@ -5,7 +5,7 @@ import type { Position } from "@interfaces";
 import { quickSpring } from "@constants/easings";
 import useContextMenuStore from "src/stores/contextMenu";
 
-interface UseContextMenuConfig {
+interface UseContextMenuProps {
   onOpen?: () => void;
   onClose?: () => void;
   hapticFeedback?: boolean;
@@ -17,7 +17,7 @@ export default function useContextMenu({
   onClose,
   hapticFeedback = true,
   scaleBackground = false,
-}: UseContextMenuConfig = {}) {
+}: UseContextMenuProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState<Position>({ top: 0, left: 0, width: 0 });
   const triggerRef = useRef<any>(null);

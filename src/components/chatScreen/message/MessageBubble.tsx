@@ -1,14 +1,14 @@
 import React from "react";
 import { useUnistyles } from "react-native-unistyles";
 import Svg, { Path } from "react-native-svg";
-import { MessageInterface } from "@interfaces";
+import type { Message } from "@interfaces";
 import { ViewStyle, StyleProp, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styles } from "./Message.styles";
 import ReplyBlock from "../replyBlock";
 
 type MessageBubbleProps = {
-  message: MessageInterface | null;
+  message: Message | null;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -16,6 +16,7 @@ export default function MessageBubble({ message, style }: MessageBubbleProps): R
   const { theme } = useUnistyles();
 
   const isMe: boolean = message?.isMe;
+  
   return (
     <Animated.View style={[styles.message(isMe), style]}>
       <ReplyBlock isMe={isMe} message={message.reply_to} />

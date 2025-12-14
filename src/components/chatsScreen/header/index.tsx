@@ -3,7 +3,7 @@ import { styles } from "./header.styles";
 import { useInsets } from "@hooks";
 import { useState, useEffect } from "react";
 import { Icon, Button } from "@components/ui";
-import useChatsScreenStore from "@stores/ChatsScreen";
+import useChatsScreenStore from "@stores/chats";
 import Title from "./Title";
 import { useWebSocket } from "@api/providers/WebSocketContext";
 import { GradientBlur } from "@components/ui";
@@ -13,7 +13,7 @@ export default function Header() {
   const ws = useWebSocket();
   const insets = useInsets();
   const { theme } = useUnistyles();
-  const [status, setStatus] = useState("connecting");
+  const [ status, setStatus ] = useState("connecting");
 
   const { setHeaderHeight } = useChatsScreenStore();
 

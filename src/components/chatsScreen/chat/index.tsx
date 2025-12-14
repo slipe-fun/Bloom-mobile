@@ -11,10 +11,10 @@ import { useWebSocket } from "@api/providers/WebSocketContext";
 import { ROUTES } from "@constants/routes";
 import { getCharEnter, getCharExit, layoutAnimationSpringy, springyChar } from "@constants/animations";
 import { styles } from "./Chat.styles";
-import type { Chat as ChatType } from "@interfaces";
+import type { ChatView } from "@interfaces";
 
 type ChatProps = {
-  chat: ChatType;
+  chat: ChatView;
   isSearch?: boolean;
 };
 
@@ -28,7 +28,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
   const recipient = chat?.recipient;
   const targetId = recipient?.id || chat?.id;
 
-  const timeChars = useMemo(() => chat?.lastMessageTime?.split("") || [], [chat?.lastMessageTime]);
+  const timeChars = useMemo(() => chat?.lastMessage.time?.split("") || [], [chat?.lastMessage.time]);
 
   useEffect(() => {
     createSecureStorage("user-storage").then(async (storage) => {
@@ -67,7 +67,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
     <LayoutAnimationConfig skipEntering skipExiting>
       <Pressable onPress={navigateToChatScreen} style={styles.chat}>
         <View style={styles.avatarWrapper}>
-          <Avatar size={!isSearch ? "lg" : "md"} username={recipient?.username} />
+          <Avatar size={!isSearch ? "lg" : "md"} image={chat?.avatar} username={recipient?.username} />
         </View>
 
         <View style={styles.content}>
@@ -100,11 +100,11 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
             <Animated.Text
               entering={getCharEnter()}
               exiting={getCharExit()}
-              key={chat?.lastMessage}
+              key={chat?.lastMessage.content}
               style={styles.secondary}
               numberOfLines={2}
             >
-              {chat?.lastMessage}
+              {chat?.lastMessage.content}
             </Animated.Text>
           ) : (
             <Text style={styles.secondary}>@{recipient?.username}</Text>

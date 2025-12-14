@@ -7,7 +7,7 @@ import { View } from "react-native";
 import EmptyModal from "@components/chatScreen/emptyModal";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import useMessages from "@api/hooks/encryption/useMessages";
-import { Chat, MessageInterface } from "@interfaces";
+import type { Chat, Message as MessageType } from "@interfaces";
 import { useScreenScale } from "@hooks";
 import { FlashList } from "@shopify/flash-list";
 
@@ -41,7 +41,7 @@ export default function ChatScreen({ route }: ChatScreenProps): React.JSX.Elemen
 	}, [messages.length, messages]);
 
 	const renderItem = useCallback(
-		({ item }: { item: MessageInterface }) => {
+		({ item }: { item: MessageType }) => {
 			return (
 				<Message
 					key={item?.nonce}
@@ -56,7 +56,7 @@ export default function ChatScreen({ route }: ChatScreenProps): React.JSX.Elemen
 		[seenId, lastMessageId, messages.length, footerHeight]
 	);
 
-	const keyExtractor = useCallback((item: MessageInterface) => {
+	const keyExtractor = useCallback((item: MessageType) => {
 		return String(item.nonce);
 	}, []);
 

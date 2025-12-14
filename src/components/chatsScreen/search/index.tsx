@@ -21,7 +21,7 @@ export default function Search(): React.JSX.Element {
   const isSearchValue = searchValue.trim().length > 0;
   const blockHandler = isSearchFocused || isSearchValue;
 
-  const keyExtractor = useCallback((item: SearchUser, index: Number) => {
+  const keyExtractor = useCallback((item: SearchUser) => {
     return String(item.id);
   }, []);
 

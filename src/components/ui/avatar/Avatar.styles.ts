@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native-unistyles";
 type AvatarStyleProps = {
 	height: number;
 	square: boolean;
-	image: URL | undefined;
+	image: boolean;
 	padding: number;
 	backgroundColor: string;
 };

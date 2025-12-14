@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
 import { Avatar } from "@components/ui";
-import { Chat } from "@interfaces";
+import type { Chat } from "@interfaces";
 
 type EmptyModalProps = {
   chat: Chat | null;

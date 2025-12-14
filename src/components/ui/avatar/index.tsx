@@ -13,7 +13,7 @@ type AvatarProps = {
 	square?: boolean;
 	style?: StyleProp<ImageStyle>;
 	imageStyle?: StyleProp<FastImageStyle>;
-	image?: URL | undefined;
+	image?: string | undefined;
 	username?: string;
 	ref?: React.Ref<any>
 };
@@ -31,7 +31,7 @@ export default function Avatar({ size = "md", square = false, style, image, imag
 	};
 
 	const avatarStyle = useMemo(
-		() => styles.avatar({ height: SIZE_MAP[size], square, image, padding: SIZE_MAP[size] / 4.5, backgroundColor: EMOJI_AVATARS[username?.slice(0, 1)]?.color }),
+		() => styles.avatar({ height: SIZE_MAP[size], square, image: !!image, padding: SIZE_MAP[size] / 4.5, backgroundColor: EMOJI_AVATARS[username?.slice(0, 1)]?.color }),
 		[size, square, theme, username, image]
 	);
 

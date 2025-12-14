@@ -4,24 +4,22 @@ import { View, Text } from "react-native";
 import { styles } from "./Message.styles";
 import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
 import formatSentTime from "@lib/formatSentTime";
-import { MessageInterface } from "@interfaces";
+import type { Message } from "@interfaces";
 
 type MessageStatusProps = {
-  message: MessageInterface;
-  isMe: boolean;
+  message: Message;
   isLast: boolean;
   seen: boolean;
 };
 
 export default function MessageStatus({
   message,
-  isMe,
   isLast,
   seen,
 }: MessageStatusProps): React.JSX.Element {
   return (
     <View style={styles.metaRow}>
-      {isMe && isLast && !seen ? (
+      {message?.isMe && isLast && !seen ? (
         <>
           <Animated.Text
             exiting={zoomAnimationOut}
@@ -34,7 +32,7 @@ export default function MessageStatus({
           <View style={styles.metaRowSeparator} />
         </>
       ) : null}
-      {isMe && seen ? (
+      {message?.isMe && seen ? (
         <>
           <Animated.Text
             exiting={zoomAnimationOut}
