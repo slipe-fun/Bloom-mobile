@@ -14,7 +14,7 @@ export const styles = StyleSheet.create(theme => ({
   },
   content: {
     flex: 1,
-    gap: theme.spacing.sm,
+    gap: theme.spacing.xs + 2,
     borderBottomColor: theme.colors.foreground,
     borderBottomWidth: 1,
     paddingVertical: theme.spacing.lg,
