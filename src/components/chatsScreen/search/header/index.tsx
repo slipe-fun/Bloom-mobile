@@ -1,4 +1,4 @@
-import { LayoutChangeEvent, Text, ViewStyle } from "react-native";
+import { LayoutChangeEvent, Text, TextStyle, ViewStyle } from "react-native";
 import Animated, {
   interpolate,
   SharedValue,
@@ -18,6 +18,7 @@ type SearchHeaderProps = {
 export default function SearchHeader({ scrollY, setHeaderHeight }: SearchHeaderProps): React.JSX.Element {
   const headerHeightValue = useSharedValue<number>(0);
   const insets = useInsets();
+  const scrollTarget = useSharedValue<number>(0);
 
   const onLayout = useCallback((event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout;
@@ -27,29 +28,33 @@ export default function SearchHeader({ scrollY, setHeaderHeight }: SearchHeaderP
 
   const animatedViewStyle = (large: boolean = false) =>
     useAnimatedStyle((): ViewStyle => {
+      scrollTarget.set(headerHeightValue.get() - insets.top)
       return large
         ? {
-            opacity: interpolate(scrollY.get(), [0, headerHeightValue.get()], [1, 0], "clamp"),
+            opacity: interpolate(scrollY.get(), [0, scrollTarget.get()], [1, 0], "clamp"),
             transform: [
               {
                 translateY: interpolate(
                   scrollY.get(),
-                  [0, headerHeightValue.get()],
-                  [0, -headerHeightValue.get() / 2],
+                  [0, scrollTarget.get()],
+                  [0, -scrollTarget.get()],
                   "clamp"
                 ),
               },
             ],
           }
         : {
-            opacity: interpolate(scrollY.get(), [0, headerHeightValue.get()], [0, 1], "clamp"),
-            transform: [
-              {
-                translateY: interpolate(scrollY.get(), [0, headerHeightValue.get()], [30, 0], "clamp"),
-              },
-            ],
+            opacity: interpolate(scrollY.get(), [0, scrollTarget.get()], [0, 1], "clamp"),
           };
     }, [headerHeightValue]);
+
+  const animatedTextStyle = useAnimatedStyle((): TextStyle => ({
+    transform: [
+      {
+        translateY: interpolate(scrollY.get(), [0, scrollTarget.get()], [24, 0], "clamp")
+      }
+    ]
+  }))
 
   return (
     <>
@@ -60,8 +65,8 @@ export default function SearchHeader({ scrollY, setHeaderHeight }: SearchHeaderP
         <Text style={styles.title(true)}>Поиск</Text>
       </Animated.View>
       <Animated.View style={[animatedViewStyle(false), styles.header(false, insets.top)]}>
-        <GradientBlur />
-        <Text style={styles.title(false)}>Поиск</Text>
+        <GradientBlur direction="top-to-bottom" />
+        <Animated.Text style={[styles.title(false), animatedTextStyle]}>Поиск</Animated.Text>
       </Animated.View>
     </>
   );

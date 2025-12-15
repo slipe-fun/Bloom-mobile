@@ -6,6 +6,7 @@ export const styles = StyleSheet.create(theme => ({
         left: 0,
         right: 0,
         paddingTop,
+        zIndex: 1,
         top: 0,
         paddingHorizontal: theme.spacing.lg,
         paddingBottom: large ? theme.spacing.lg : theme.spacing.md,

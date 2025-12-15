@@ -28,11 +28,11 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
   const recipient = chat?.recipient;
   const targetId = recipient?.id || chat?.id;
 
-  const timeChars = useMemo(() => chat?.lastMessage.time?.split("") || [], [chat?.lastMessage.time]);
+  const timeChars = !isSearch ? useMemo(() => chat?.lastMessage?.time?.split("") || [], [chat?.lastMessage?.time]) : null;
 
   useEffect(() => {
     createSecureStorage("user-storage").then(async (storage) => {
-      const id = await storage.getString("user_id");
+      const id = storage.getString("user_id");
       if (id) setUserId(parseInt(id));
     });
   }, []);

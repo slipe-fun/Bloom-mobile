@@ -2,9 +2,9 @@ import { styles } from "./Search.styles";
 import Animated, { useAnimatedScrollHandler, useSharedValue, withSpring } from "react-native-reanimated";
 import useUsersSearch from "@api/hooks/useUsersSearch";
 import useTabBarStore from "@stores/tabBar";
-import { fastSpring, getFadeIn, getFadeOut } from "@constants/animations";
+import { getFadeIn, getFadeOut } from "@constants/animations";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type { SearchUser } from "@interfaces";
 import Chat from "../chat";
 import { useInsets } from "@hooks";
@@ -19,7 +19,6 @@ export default function Search(): React.JSX.Element {
   const { users, loading, error, addPage } = useUsersSearch(searchValue);
 
   const isSearchValue = searchValue.trim().length > 0;
-  const blockHandler = isSearchFocused || isSearchValue;
 
   const keyExtractor = useCallback((item: SearchUser) => {
     return String(item.id);
@@ -31,19 +30,9 @@ export default function Search(): React.JSX.Element {
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollY.value = !blockHandler ? event.contentOffset.y : headerHeight;
+      scrollY.value = event.contentOffset.y;
     },
   });
-
-  useEffect(() => {
-    if (isSearchFocused) {
-      scrollY.value = withSpring(headerHeight, fastSpring);
-    } else if (isSearchValue) {
-      scrollY.value = withSpring(headerHeight, fastSpring);
-    } else {
-      scrollY.value = withSpring(0, fastSpring);
-    }
-  }, [isSearchFocused]);
 
   return isSearch ? (
     <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.container}>
