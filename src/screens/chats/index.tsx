@@ -13,11 +13,12 @@ import { styles } from "./Chats.styles";
 import type { Chat } from "@interfaces";
 import { LegendList } from "@legendapp/list";
 import { useInsets } from "@hooks";
+import { EmptyModal } from "@components/ui";
 
 export default function ChatsScreen(): React.JSX.Element {
   const { headerHeight } = useChatsScreenStore();
   const { tabBarHeight, isSearch } = useTabBarStore();
-  const [ userId, setUserId ] = useState<number>(0);
+  const [userId, setUserId] = useState<number>(0);
   const insets = useInsets();
   const chats = useChatList();
 
@@ -32,7 +33,7 @@ export default function ChatsScreen(): React.JSX.Element {
     return String(item.id);
   }, []);
 
-  const renderItem = useCallback(({ item, id }: { item: Chat, id: number }) => {
+  const renderItem = useCallback(({ item, id }: { item: Chat; id: number }) => {
     return <ChatItem item={item} userId={id} />;
   }, []);
 
@@ -51,12 +52,22 @@ export default function ChatsScreen(): React.JSX.Element {
         <LegendList
           data={chats}
           style={styles.list}
-          renderItem={({item}) => renderItem({item, id: userId})}
+          renderItem={({ item }) => renderItem({ item, id: userId })}
           keyExtractor={keyExtractor}
           showsVerticalScrollIndicator
           contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: tabBarHeight }}
-          scrollIndicatorInsets={{ top: headerHeight - insets.realTop, bottom: tabBarHeight - insets.realBottom }}
+          scrollIndicatorInsets={{
+            top: headerHeight - insets.realTop,
+            bottom: tabBarHeight - insets.realBottom,
+          }}
         />
+        {chats?.length === 0 ? (
+          <EmptyModal
+            text='У вас еще нет ни одного чата! Создайте свой первый чат!'
+            icon='message'
+            color='primary'
+          />
+        ) : null}
       </Animated.View>
     </>
   );
