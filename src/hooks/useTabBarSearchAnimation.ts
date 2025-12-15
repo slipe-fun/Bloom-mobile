@@ -22,7 +22,7 @@ type SearchButtonAnimation = {
   isLayoutAnimation: boolean;
 };
 
-export default function useSearchButtonAnimation(): SearchButtonAnimation {
+export default function useTabBarSearchAnimation(): SearchButtonAnimation {
   const opacity = useSharedValue(1);
   const defaultWidth = useSharedValue(54);
   const { width } = useWindowDimensions();

@@ -12,7 +12,7 @@ type useUserSearch = {
     loadMore: () => void;
 }
 
-export default function useUserSearch(query: string = ""): useUserSearch {
+export default function useUsersSearch(query: string = ""): useUserSearch {
     const [status, setStatus] = useState<SearchStatus>("idle");
     const [users, setUsers] = useState<SearchUser[]>([]);
     const [page, setPage] = useState(1);
@@ -40,8 +40,6 @@ export default function useUserSearch(query: string = ""): useUserSearch {
                     `${API_URL}/user/search?q=${query}&offset=${(page - 1) * 12}&limit=12`
                 );
 
-                if (ignore) return;
-
                 const data = response?.data ?? [];
 
                 setUsers(page === 1 ? data : prev => [...prev, ...data]);
@@ -55,10 +53,13 @@ export default function useUserSearch(query: string = ""): useUserSearch {
             }
         }
 
-        fetchUsers();
+        const timeOut = setTimeout(() => {
+            fetchUsers();
+        }, 600);
 
         return () => {
             ignore = true;
+            clearTimeout(timeOut)
         };
     }, [query, page]);
 

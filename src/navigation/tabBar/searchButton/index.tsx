@@ -8,7 +8,7 @@ import useTabBarStore from "@stores/tabBar";
 import { useUnistyles } from "react-native-unistyles";
 import { getFadeIn, getFadeOut, makeLayoutAnimation } from "@constants/animations";
 import { springyTabBar } from "@constants/animations";
-import useSearchButtonAnimation from "src/hooks/useTabBarSearchAnimation";
+import { useTabBarSearchAnimation } from "@hooks";
 import TabBarSearchInput from "./SearchInput";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -28,7 +28,7 @@ export default function TabBarSearchButton(): React.JSX.Element {
     pressableOpacity,
     isDismiss,
     isLayoutAnimation
-  } = useSearchButtonAnimation();
+  } = useTabBarSearchAnimation();
 
   return (
     <>

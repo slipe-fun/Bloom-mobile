@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useMemo, useCallback } from "react";
 import { View, Text, Pressable as Pressable } from "react-native";
 import Animated, { LayoutAnimationConfig } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
-import { createSecureStorage } from "@lib/storage";
 import Icon from "@components/ui/Icon";
 import { Avatar } from "@components/ui";
 import { useChatList } from "@api/providers/ChatsContext";
@@ -18,6 +17,7 @@ import {
 } from "@constants/animations";
 import { styles } from "./Chat.styles";
 import type { ChatView } from "@interfaces";
+import useTokenTriggerStore from "@stores/tokenTriggerStore";
 
 type ChatProps = {
   chat: ChatView;
@@ -31,7 +31,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
   const navigation = useNavigation();
   const chats = useChatList();
   const ws = useWebSocket();
-  const [userId, setUserId] = useState<number>(0);
+  const {userID} = useTokenTriggerStore();
 
   const recipient = chat?.recipient;
   const targetId = recipient?.id || chat?.id;
@@ -41,16 +41,9 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
     [chat?.lastMessage?.time]
   );
 
-  useEffect(() => {
-    createSecureStorage("user-storage").then(async (storage) => {
-      const id = storage.getString("user_id");
-      if (id) setUserId(parseInt(id));
-    });
-  }, []);
-
   const navigateToChatScreen = useCallback(() => {
     const existingChat = chats?.find(
-      (c) => c?.members?.some((m) => m?.id === userId) && c?.members?.some((m) => m?.id === targetId)
+      (c) => c?.members?.some((m) => m?.id === userID) && c?.members?.some((m) => m?.id === targetId)
     );
 
     if (existingChat) {
@@ -72,7 +65,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
     };
 
     ws.addEventListener("message", handleMessage);
-  }, [chats, userId, targetId, chat, navigation, ws]);
+  }, [chats, userID, targetId, chat, navigation, ws]);
 
   return (
     <AnimatedPressable entering={getFadeIn()} onPress={navigateToChatScreen} style={styles.chat}>
@@ -119,7 +112,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
           ) : (
             <Text style={styles.secondary}>@{recipient?.username}</Text>
           )}
-        </View>{" "}
+        </View>
       </LayoutAnimationConfig>
     </AnimatedPressable>
   );

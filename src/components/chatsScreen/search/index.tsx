@@ -3,14 +3,13 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
-import useUsersSearch from "src/hooks/api/useUsersSearch";
 import useTabBarStore from "@stores/tabBar";
 import { getFadeIn, getFadeOut } from "@constants/animations";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import { useCallback, useState } from "react";
 import type { SearchUser } from "@interfaces";
 import Chat from "../chat";
-import { useInsets } from "@hooks";
+import { useInsets, useUsersSearch } from "@hooks";
 import SearchHeader from "./header";
 import { EmptyModal } from "@components/ui";
 
@@ -22,6 +21,8 @@ export default function Search(): React.JSX.Element {
   const { users, status, loadMore } = useUsersSearch(searchValue);
 
   const ss = ""
+
+  console.log(status)
 
   const isStoryEmpty: boolean = !!ss && isSearch;
   const isEmpty: boolean = status === "empty" || status === "error";
