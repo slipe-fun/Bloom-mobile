@@ -56,6 +56,6 @@ export const styles = StyleSheet.create((theme) => ({
     paddingLeft: 10,
   },
   cancelButton: {
-	backgroundColor: theme.colors.foregroundBlur,
-  }
+    backgroundColor: theme.colors.foregroundBlur,
+  },
 }));
