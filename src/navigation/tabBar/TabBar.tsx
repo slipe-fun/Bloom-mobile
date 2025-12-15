@@ -7,15 +7,15 @@ import { GradientBlur } from "@components/ui";
 import { Haptics } from "react-native-nitro-haptics";
 import useTabBarStore from "@stores/tabBar";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolate } from "react-native-reanimated";
-import TabBarSearchButton from "./SearchButton";
+import TabBarSearchButton from "./searchButton";
 import { springyTabBar } from "@constants/animations";
 import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { BlurView } from "expo-blur";
 
-export default function TabBar({ state, navigation }) {
+export default function TabBar({ state, navigation }): React.JSX.Element {
   const insets = useInsets();
   const { theme } = useUnistyles();
   const { setTabBarHeight, isSearch, tabBarHeight, isSearchFocused } = useTabBarStore();

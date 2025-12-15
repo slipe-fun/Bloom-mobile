@@ -10,6 +10,7 @@ import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller
 import { springyTabBar } from "@constants/animations";
 import useTabBarStore from "@stores/tabBar";
 import { useUnistyles } from "react-native-unistyles";
+import { useEffect } from "react";
 
 type SearchButtonAnimation = {
   animatedPressableStyle: AnimatedStyle;
@@ -28,9 +29,8 @@ export default function useSearchButtonAnimation(): SearchButtonAnimation {
   const { isSearch, isSearchFocused, searchValue } = useTabBarStore();
 
   const searchWidth = width - 48 - theme.spacing.md;
-  const isDismiss = isSearchFocused || searchValue.trim().length > 0;
 
-  defaultWidth.value = isSearch ? searchWidth - theme.spacing.xxxl * 2 : 54;
+  const isDismiss = isSearchFocused || searchValue.trim().length > 0;
 
   const animatedPressableStyle = useAnimatedStyle(() => {
     const baseWidth = isDismiss ? defaultWidth.value - 48 - theme.spacing.md : defaultWidth.value;
@@ -51,6 +51,10 @@ export default function useSearchButtonAnimation(): SearchButtonAnimation {
   const pressableOpacity = (toFull = true) => {
     opacity.value = withSpring(toFull ? 1 : 0.8, springyTabBar);
   };
+
+  useEffect(() => {
+      defaultWidth.value = withSpring(isSearch ? searchWidth - theme.spacing.xxxl * 2 : 54, springyTabBar);
+  }, [isSearch])
 
   return {
     animatedPressableStyle,

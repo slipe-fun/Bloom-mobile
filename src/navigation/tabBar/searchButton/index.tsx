@@ -36,7 +36,7 @@ export default function TabBarSearchButton(): React.JSX.Element {
         onPress={() => setIsSearch(!isSearch)}
         onTouchStart={() => pressableOpacity(false)}
         onTouchEnd={() => pressableOpacity(true)}
-        layout={customLayout}
+        // layout={customLayout}
       >
         <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
 
