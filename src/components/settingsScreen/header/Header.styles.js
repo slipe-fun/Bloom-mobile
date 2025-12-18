@@ -5,7 +5,6 @@ export const styles = StyleSheet.create((theme) => ({
         width: "100%",
         position: "absolute",
         zIndex: 1,
-        backgroundColor: theme.colors.background,
         overflow: 'hidden',
     },
     background: {

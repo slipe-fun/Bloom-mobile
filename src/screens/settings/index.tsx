@@ -31,6 +31,7 @@ export default function SettingsScreen() {
             style={{
               height: 100,
               marginBottom: 10,
+              backgroundColor: 'red',
               width: "100%",
             }}
           />
