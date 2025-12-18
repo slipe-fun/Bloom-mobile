@@ -77,7 +77,7 @@ export default function TabBar({ state, navigation }): React.JSX.Element {
 
             return (
               <TabBarItem
-                key={route.key}
+                key={index}
                 route={route}
                 focused={focused}
                 onPress={() => onPress(route, focused)}

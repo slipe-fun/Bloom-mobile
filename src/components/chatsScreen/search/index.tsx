@@ -22,7 +22,7 @@ export default function Search(): React.JSX.Element {
 
   const ss = ""
 
-  console.log(status)
+  // console.log(status)
 
   const isStoryEmpty: boolean = !!ss && isSearch;
   const isEmpty: boolean = status === "empty" || status === "error";
