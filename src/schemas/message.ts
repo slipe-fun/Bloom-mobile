@@ -2,16 +2,16 @@ import type { Message as MessageType } from "@interfaces";
 import Realm from "realm";
 
 export class Message extends Realm.Object<Message> implements MessageType {
-  id: number;
-  chat_id: number;
-  content: string;
-  author_id: number;
-  date: Date;
-  seen: Date;
-  nonce: string;
-  reply_top: Message;
+  id!: number;
+  chat_id!: number;
+  content!: string;
+  author_id!: number;
+  date!: Date;
+  seen?: Date;
+  nonce?: string;
+  reply_to?: Message;
 
-  static scheme: Realm.ObjectSchema = {
+  static schema: Realm.ObjectSchema = {
     name: "Message",
     primaryKey: "id",
     properties: {
