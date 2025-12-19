@@ -4,9 +4,14 @@ export const styles = StyleSheet.create(theme => ({
   chat: {
     flexDirection: "row",
     paddingRight: theme.spacing.lg,
+    alignItems: 'center',
+    paddingLeft: theme.spacing.lg,
+    gap: theme.spacing.md
   },
   avatarWrapper: {
     padding: theme.spacing.lg,
+    paddingLeft: 0,
+    paddingRight: theme.spacing.xs
   },
   charStack: {
     flexDirection: "row",

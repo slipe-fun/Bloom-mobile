@@ -58,17 +58,14 @@ export default function Footer({ onSend, onLayout }: FooterProps) {
     >
       <GradientBlur />
       {!hasValue && (
-        <AnimatedButton layout={layoutAnimationSpringy} blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant='icon'>
+        <AnimatedButton blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant='icon'>
           <Icon icon='plus' size={26} color={theme.colors.text} />
         </AnimatedButton>
       )}
 
       <MessageInput setValue={setValue} hasValue={hasValue} value={value} />
 
-      <AnimatedButton
-        exiting={zoomAnimationOut}
-        layout={layoutAnimationSpringy}
-        entering={zoomAnimationIn}
+      <Button
         onPress={handleSend}
         blur
         variant='icon'
@@ -84,7 +81,7 @@ export default function Footer({ onSend, onLayout }: FooterProps) {
             <Icon icon='waveform' size={26} color={theme.colors.white} />
           </Animated.View>
         )}
-      </AnimatedButton>
+      </Button>
     </Animated.View>
   );
 }

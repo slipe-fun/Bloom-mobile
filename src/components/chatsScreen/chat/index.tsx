@@ -3,11 +3,12 @@ import { View, Text, Pressable as Pressable } from "react-native";
 import Animated, { LayoutAnimationConfig } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
 import Icon from "@components/ui/Icon";
-import { Avatar } from "@components/ui";
+import { Avatar, Checkbox } from "@components/ui";
 import {
   getCharEnter,
   getCharExit,
   getFadeIn,
+  getFadeOut,
   layoutAnimationSpringy,
   springyChar,
 } from "@constants/animations";
@@ -21,6 +22,7 @@ type ChatProps = {
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedCheckbox = Animated.createAnimatedComponent(Checkbox);
 
 export default function Chat({ chat, isSearch = false }: ChatProps) {
   const { theme } = useUnistyles();
@@ -34,18 +36,21 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
   );
 
   return (
-    <AnimatedPressable entering={getFadeIn()} onPress={openChat} style={styles.chat}>
+    <AnimatedPressable entering={getFadeIn()} onPress={edit ? select : openChat} style={styles.chat}>
       <LayoutAnimationConfig skipEntering skipExiting>
-        <View style={styles.avatarWrapper}>
+        {edit && (
+          <AnimatedCheckbox entering={getFadeIn()} exiting={getFadeOut()} onTouch={select} value={selected} />
+        )}
+        <Animated.View layout={layoutAnimationSpringy} style={styles.avatarWrapper}>
           <Avatar size={!isSearch ? "lg" : "md"} image={chat?.avatar} username={recipient?.username} />
-        </View>
-        <View style={styles.content}>
+        </Animated.View>
+        <Animated.View layout={layoutAnimationSpringy} style={styles.content}>
           <View style={styles.headerRow}>
             <View style={styles.nameWrapper}>
               <Text style={styles.name}>{recipient?.username}</Text>
             </View>
 
-            <View style={styles.metaRow}>
+            <Animated.View layout={layoutAnimationSpringy} style={styles.metaRow}>
               {!isSearch && (
                 <View style={styles.charStack}>
                   {timeChars.map((char, i) => (
@@ -62,7 +67,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
                 </View>
               )}
               <Icon icon='chevron.right' size={16} color={theme.colors.secondaryText} />
-            </View>
+            </Animated.View>
           </View>
 
           {!isSearch ? (
@@ -78,7 +83,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
           ) : (
             <Text style={styles.secondary}>@{recipient?.username}</Text>
           )}
-        </View>
+        </Animated.View>
       </LayoutAnimationConfig>
     </AnimatedPressable>
   );
