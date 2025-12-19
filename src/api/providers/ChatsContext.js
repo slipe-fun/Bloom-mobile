@@ -70,9 +70,9 @@ export default function ChatsProvider({ children }) {
                     // if someone from chat changed keys change them in mmkv storage
                     if (message?.type === "keys_added") {
                         await setChatKeysToStorage(message?.chat_id, {
-                            kyberPublicKey: message?.kyberPublicKey,
-                            ecdhPublicKey: message?.ecdhPublicKey,
-                            edPublicKey: message?.edPublicKey
+                            kyberPublicKey: message?.kyber_public_key,
+                            ecdhPublicKey: message?.ecdh_public_key,
+                            edPublicKey: message?.ed_public_key
                         });
                     } else if (message?.chat) { // chat created socket
                         // parse chats from mmkv storage
@@ -90,9 +90,9 @@ export default function ChatsProvider({ children }) {
                         ws.send(JSON.stringify({
                             type: "add_keys",
                             chat_id: message?.chat?.id,
-                            kyberPublicKey: myKeys.kyberPublicKey,
-                            ecdhPublicKey: myKeys.ecdhPublicKey,
-                            edPublicKey: myKeys.edPublicKey
+                            kyber_public_key: myKeys.kyberPublicKey,
+                            ecdh_public_key: myKeys.ecdhPublicKey,
+                            ed_public_key: myKeys.edPublicKey
                         }));
 
                         // add chat to mmkv storage

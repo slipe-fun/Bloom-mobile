@@ -47,9 +47,9 @@ export default async function getChats(ws) {
         ws.send(JSON.stringify({
           type: "add_keys",
           chat_id: chat?.id,
-          kyberPublicKey: myKeys.kyberPublicKey,
-          ecdhPublicKey: myKeys.ecdhPublicKey,
-          edPublicKey: myKeys.edPublicKey
+          kyber_public_key: myKeys.kyberPublicKey,
+          ecdh_public_key: myKeys.ecdhPublicKey,
+          ed_public_key: myKeys.edPublicKey
         }))
       }
 
@@ -67,13 +67,13 @@ export default async function getChats(ws) {
             id: chat?.id,
             key: chat?.encryption_key,
             keys: {
-              my: { ...(myKeys || chatInStorage?.keys?.my || me) },
+              my: { ...(myKeys || chatInStorage?.keys?.my) },
               recipient: { ...recipient }
             }
           }
 
           // send dump
-          addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my || me) })
+          addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my) })
         }
       } else {
         // IF CHAT IS NOT EXISTS IN MMKV STORAGE
@@ -82,13 +82,13 @@ export default async function getChats(ws) {
           id: chat?.id,
           key: chat?.encryption_key,
           keys: {
-            my: { ...(myKeys || chatInStorage?.keys?.my || me) },
+            my: { ...(myKeys || chatInStorage?.keys?.my) },
             recipient: { ...recipient }
           }
         });
 
         //send dump
-        addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my || me) })
+        addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my) })
       }
     }))
 
