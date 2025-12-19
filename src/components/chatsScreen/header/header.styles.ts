@@ -27,4 +27,13 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.lg,
     fontFamily: theme.fontFamily.bold,
   },
+  buttonBackground: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.radius.full,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
 }));
