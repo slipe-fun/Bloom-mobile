@@ -1,15 +1,14 @@
 import React, { useMemo } from "react";
-import { View, Text, Pressable as Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Animated, { LayoutAnimationConfig } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
 import Icon from "@components/ui/Icon";
-import { Avatar, Checkbox } from "@components/ui";
+import { Avatar, Button, Checkbox } from "@components/ui";
 import {
   getCharEnter,
   getCharExit,
   getFadeIn,
   getFadeOut,
-  layoutAnimation,
   layoutAnimationSpringy,
   springyChar,
 } from "@constants/animations";
@@ -27,47 +26,69 @@ const AnimatedCheckbox = Animated.createAnimatedComponent(Checkbox);
 
 export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.Element {
   const { theme } = useUnistyles();
-  const { selected, edit, pinned, animatedIconStyle, animatedTextStyle, openChat, pin, select } = useChatItem(chat);
+  const { selected, edit, pinned, animatedMetaRowStyle, animatedShiftStyle, openChat, pin, select } = useChatItem(chat);
 
   const recipient = chat?.recipient;
+  const lastMessage = chat?.lastMessage
 
   const timeChars = useMemo(
-    () => (!isSearch ? chat?.lastMessage?.time?.split("") || [] : null),
-    [chat?.lastMessage?.time]
+    () => (!isSearch ? lastMessage?.time?.split("") || [] : null),
+    [lastMessage?.time, isSearch]
   );
 
   return (
     <AnimatedPressable entering={getFadeIn()} onPress={edit ? select : openChat} style={styles.chat}>
       <LayoutAnimationConfig skipEntering skipExiting>
         {edit && (
-          <AnimatedCheckbox entering={getFadeIn()} exiting={getFadeOut()} onTouch={select} value={selected} />
+          <>
+            <Animated.View
+              style={styles.pinButtonWrapper}
+              key='pinButton'
+              exiting={getFadeOut()}
+              entering={getFadeIn()}
+            >
+              <Button
+                style={styles.pinButton(pinned)}
+                onPress={pin}
+                size="sm"
+                icon={<Icon size={24} icon='star' color={theme.colors[pinned ? "red" : "yellow"]} />}
+                variant='icon'
+              />
+            </Animated.View>
+            <AnimatedCheckbox
+              style={{ position: "absolute", left: 16 }}
+              entering={getFadeIn()}
+              exiting={getFadeOut()}
+              onTouch={select}
+              value={selected}
+            />
+          </>
         )}
-        <Animated.View layout={layoutAnimation} style={styles.avatarWrapper}>
+        <Animated.View style={[styles.avatarWrapper, animatedShiftStyle]}>
           <Avatar size={!isSearch ? "lg" : "md"} image={chat?.avatar} username={recipient?.username} />
         </Animated.View>
-        <Animated.View layout={layoutAnimation} style={styles.content}>
+        <Animated.View style={[styles.content, animatedShiftStyle]}>
           <View style={styles.headerRow}>
             <Text style={styles.name}>{recipient?.username}</Text>
 
-            <Animated.View layout={layoutAnimation} style={styles.metaRow}>
+            <Animated.View style={[styles.metaRow, animatedMetaRowStyle]}>
               {!isSearch && (
-                <Animated.View style={[styles.charStack, animatedTextStyle]}>
+                <Animated.View style={styles.charStack}>
                   {timeChars.map((char, i) => (
                     <Animated.Text
                       key={`${char}-${i}`}
-                      style={styles.secondary}
+                      style={styles.secondary(false)}
                       entering={getCharEnter(springyChar(i))}
                       exiting={getCharExit(springyChar(i))}
                       layout={layoutAnimationSpringy}
+                      numberOfLines={1}
                     >
                       {char}
                     </Animated.Text>
                   ))}
                 </Animated.View>
               )}
-              <Animated.View style={animatedIconStyle}>
-                <Icon icon='chevron.right' size={16} color={theme.colors.secondaryText} />
-              </Animated.View>
+              <Icon icon='chevron.right' size={16} color={theme.colors.secondaryText} />
             </Animated.View>
           </View>
 
@@ -75,14 +96,14 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
             <Animated.Text
               entering={getCharEnter()}
               exiting={getCharExit()}
-              key={chat?.lastMessage.content}
-              style={styles.secondary}
+              key={lastMessage.content}
+              style={styles.secondary(edit)}
               numberOfLines={2}
             >
-              {chat?.lastMessage.content}
+              {lastMessage.content}
             </Animated.Text>
           ) : (
-            <Text style={styles.secondary}>@{recipient?.username}</Text>
+            <Text numberOfLines={1} style={styles.secondary(edit)}>@{recipient?.username}</Text>
           )}
         </Animated.View>
       </LayoutAnimationConfig>

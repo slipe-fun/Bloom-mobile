@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useChatList } from "@api/providers/ChatsContext";
 import { useWebSocket } from "@api/providers/WebSocketContext";
@@ -7,8 +7,8 @@ import useTokenTriggerStore from "@stores/tokenTriggerStore";
 import type { ChatView } from "@interfaces";
 import useChatsStore from "@stores/chats";
 import { Haptics } from "react-native-nitro-haptics";
-import { AnimatedStyle, useAnimatedStyle, withSpring } from "react-native-reanimated";
-import { ViewStyle } from "react-native";
+import { AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import { TextStyle, ViewStyle } from "react-native";
 import { quickSpring } from "@constants/easings";
 
 type CreateChatResponse = {
@@ -21,8 +21,8 @@ type useChatItem = {
   selected: boolean;
   edit: boolean;
   pinned: boolean;
-  animatedIconStyle: AnimatedStyle<ViewStyle>;
-  animatedTextStyle: AnimatedStyle<ViewStyle>;
+  animatedMetaRowStyle: AnimatedStyle<ViewStyle>;
+  animatedShiftStyle: AnimatedStyle<ViewStyle>;
   openChat: () => void;
   pin: () => void;
   select: () => void;
@@ -34,6 +34,7 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
   const ws = useWebSocket();
   const { userID } = useTokenTriggerStore();
   const { edit, selectedChats, toggleChat } = useChatsStore();
+  const animationFinished = useSharedValue<boolean>(true)
 
   const recipient = chat?.recipient;
   const targetId = recipient?.id || chat?.id;
@@ -42,14 +43,18 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
 
   const selected = useMemo(() => selectedChats.includes(chat.id), [selectedChats]);
 
-  const animatedIconStyle = useAnimatedStyle((): ViewStyle => ({
-    opacity: withSpring(edit ? 0 : 1, quickSpring),
-    transform: [{ translateX: withSpring(edit ? "-100%" : "0%", quickSpring)}]
-  }))
+  const animatedMetaRowStyle = useAnimatedStyle(
+    (): ViewStyle => ({
+      opacity: withSpring(edit ? 0 : 1, quickSpring),
+      transform: [{ translateX: withSpring(edit ? -24 : 0, quickSpring) }],
+    })
+  );
 
-  const animatedTextStyle = useAnimatedStyle((): ViewStyle => ({
-    transform: [{ translateX: withSpring(edit ? 20 : 0, quickSpring)}]
-  }))
+  const animatedShiftStyle = useAnimatedStyle(
+    (): ViewStyle => ({
+      transform: [{ translateX: withSpring(edit ? 44 : 0, quickSpring, (finished) => animationFinished.set(finished)) }],
+    })
+  );
 
   const openChat = useCallback(() => {
     const existingChat = chats?.find(
@@ -80,12 +85,25 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
     ws.addEventListener("message", handleMessage);
   }, [chats, userID, targetId, chat, navigation, ws]);
 
-  const pin = useCallback(() => {}, []);
+  const pin = useCallback(() => {console.log(1)}, []);
 
-  const select = () => {
+  const select = useCallback(() => {
     Haptics.impact("light");
     toggleChat(chat.id);
-  };
+  }, [chat.id, toggleChat]);
 
-  return { selected, edit, pinned, animatedIconStyle, animatedTextStyle, openChat, pin, select };
+  useEffect(() => {
+    animationFinished.set(false)
+  }, [edit])
+
+  return {
+    selected,
+    edit,
+    pinned,
+    animatedMetaRowStyle,
+    animatedShiftStyle,
+    openChat,
+    pin,
+    select,
+  };
 }

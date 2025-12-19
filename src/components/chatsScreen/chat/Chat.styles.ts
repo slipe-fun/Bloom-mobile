@@ -1,17 +1,17 @@
 import { StyleSheet } from "react-native-unistyles";
 
-export const styles = StyleSheet.create(theme => ({
+export const styles = StyleSheet.create((theme) => ({
   chat: {
     flexDirection: "row",
     paddingRight: theme.spacing.lg,
-    alignItems: 'center',
+    alignItems: "center",
     paddingLeft: theme.spacing.lg,
-    gap: theme.spacing.lg
+    gap: theme.spacing.lg,
   },
   avatarWrapper: {
     padding: theme.spacing.lg,
     paddingLeft: 0,
-    paddingRight: theme.spacing.xs
+    paddingRight: theme.spacing.xs,
   },
   charStack: {
     flexDirection: "row",
@@ -38,11 +38,12 @@ export const styles = StyleSheet.create(theme => ({
     alignItems: "center",
     gap: theme.spacing.xs,
   },
-  secondary: {
+  secondary: (edit: boolean) => ({
     fontSize: theme.fontSize.sm,
     color: theme.colors.secondaryText,
     fontFamily: theme.fontFamily.medium,
-  },
+    marginRight: edit ? 100 : 0,
+  }),
   separator: {
     left: 0,
     right: 0,
@@ -50,7 +51,15 @@ export const styles = StyleSheet.create(theme => ({
     height: 1,
     bottom: 0,
     marginRight: theme.spacing.lg,
-    position: 'absolute',
-    backgroundColor: theme.colors.foreground
-  }
+    position: "absolute",
+    backgroundColor: theme.colors.foreground,
+  },
+  pinButton: (pinned: boolean) => ({
+    backgroundColor: pinned ? theme.colors.redBackdrop : theme.colors.yellowBackdrop,
+  }),
+  pinButtonWrapper: {
+    position: "absolute",
+    right: 16,
+    zIndex: 1,
+  },
 }));
