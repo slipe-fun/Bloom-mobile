@@ -1,4 +1,4 @@
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, ViewStyle } from "react-native";
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -12,10 +12,11 @@ import { springyTabBar } from "@constants/animations";
 import useTabBarStore from "@stores/tabBar";
 import { useUnistyles } from "react-native-unistyles";
 import { useEffect, useState } from "react";
+import useChatsStore from "@stores/chats";
 
 type SearchButtonAnimation = {
-  animatedPressableStyle: AnimatedStyle;
-  animatedIconStyle: AnimatedStyle;
+  animatedPressableStyle: AnimatedStyle<ViewStyle>;
+  animatedIconStyle: AnimatedStyle<ViewStyle>;
   pressableOpacity: (toFull: boolean) => void;
   searchWidth: number;
   isDismiss: boolean;
@@ -29,6 +30,7 @@ export default function useTabBarSearchAnimation(): SearchButtonAnimation {
   const { theme } = useUnistyles();
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation();
   const { isSearch, isSearchFocused, searchValue } = useTabBarStore();
+  const { edit } = useChatsStore();
   const [isLayoutAnimation, setIsLayoutAnimation] = useState<boolean>(false);
 
   const searchWidth = width - 48 - theme.spacing.md;

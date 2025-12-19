@@ -1,34 +1,33 @@
 import React, { useRef } from "react";
 import { Pressable, TextInput, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import { styles } from "../TabBar.styles";
+import { styles } from "./ActionButton.styles";
 import { BlurView } from "expo-blur";
 import { Button, Icon } from "@components/ui";
 import useTabBarStore from "@stores/tabBar";
 import { useUnistyles } from "react-native-unistyles";
-import { getFadeIn, getFadeOut, makeLayoutAnimation } from "@constants/animations";
+import {
+  getFadeIn,
+  getFadeOut,
+  makeLayoutAnimation,
+  zoomAnimationIn,
+  zoomAnimationOut,
+} from "@constants/animations";
 import { springyTabBar } from "@constants/animations";
 import { useTabBarSearchAnimation } from "@hooks";
 import TabBarSearchInput from "./SearchInput";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const customLayout = makeLayoutAnimation(
-  springyTabBar
-);
+const customLayout = makeLayoutAnimation(springyTabBar);
 
-export default function TabBarSearchButton(): React.JSX.Element {
+export default function TabBarActionButton(): React.JSX.Element {
   const ref = useRef<TextInput>(null);
   const { theme } = useUnistyles();
   const { isSearch, setIsSearch, setSearchValue } = useTabBarStore();
 
-  const {
-    animatedPressableStyle,
-    animatedIconStyle,
-    pressableOpacity,
-    isDismiss,
-    isLayoutAnimation
-  } = useTabBarSearchAnimation();
+  const { animatedPressableStyle, animatedIconStyle, pressableOpacity, isDismiss, isLayoutAnimation } =
+    useTabBarSearchAnimation();
 
   return (
     <>
@@ -39,10 +38,10 @@ export default function TabBarSearchButton(): React.JSX.Element {
         onTouchEnd={() => pressableOpacity(true)}
         layout={isLayoutAnimation ? customLayout : null}
       >
-        <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
+        <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
 
-        <Animated.View style={animatedIconStyle}>
-          <Icon icon="magnifyingglass" size={30} />
+        <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut} style={animatedIconStyle}>
+          <Icon icon='magnifyingglass' size={30} />
         </Animated.View>
 
         {isSearch && <TabBarSearchInput ref={ref} />}
@@ -51,15 +50,15 @@ export default function TabBarSearchButton(): React.JSX.Element {
       {isDismiss && (
         <Animated.View exiting={getFadeOut(springyTabBar)} entering={getFadeIn(springyTabBar)}>
           <Button
-            size="lg"
-            variant="icon"
+            size='lg'
+            variant='icon'
             blur
             onPress={() => {
               ref.current?.blur();
               setSearchValue("");
             }}
           >
-            <Icon icon="x" size={26} color={theme.colors.text} />
+            <Icon icon='x' size={26} color={theme.colors.text} />
           </Button>
         </Animated.View>
       )}

@@ -7,7 +7,7 @@ import { GradientBlur } from "@components/ui";
 import { Haptics } from "react-native-nitro-haptics";
 import useTabBarStore from "@stores/tabBar";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolate } from "react-native-reanimated";
-import TabBarSearchButton from "./searchButton";
+import TabBarActionButton from "./actionButton";
 import { springyTabBar } from "@constants/animations";
 import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
 import React, { useCallback } from "react";
@@ -61,7 +61,7 @@ export default function TabBar({ state, navigation }): React.JSX.Element {
     <Animated.View
       onLayout={(event) => onLayoutTabBar(event, true)}
       style={[styles.tabBarContainer, animatedContainerStyle]}
-    >
+    > 
       <GradientBlur />
       {!isSearchFocused && (
         <Animated.View
@@ -86,7 +86,8 @@ export default function TabBar({ state, navigation }): React.JSX.Element {
           })}
         </Animated.View>
       )}
-      <TabBarSearchButton />
+<TabBarActionButton />
+      
     </Animated.View>
   );
 }

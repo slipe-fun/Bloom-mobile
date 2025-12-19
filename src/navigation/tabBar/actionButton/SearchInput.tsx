@@ -3,7 +3,7 @@ import Animated from "react-native-reanimated";
 import { Input } from "@components/ui";
 import { getFadeIn } from "@constants/animations";
 import { springyTabBar } from "@constants/animations";
-import { styles } from "../TabBar.styles";
+import { styles } from "./ActionButton.styles";
 import useTabBarStore from "@stores/tabBar";
 import { TextInput } from "react-native";
 
