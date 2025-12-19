@@ -1,13 +1,9 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import { View, Text, Pressable as Pressable } from "react-native";
 import Animated, { LayoutAnimationConfig } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
-import { useNavigation } from "@react-navigation/native";
 import Icon from "@components/ui/Icon";
 import { Avatar } from "@components/ui";
-import { useChatList } from "@api/providers/ChatsContext";
-import { useWebSocket } from "@api/providers/WebSocketContext";
-import { ROUTES } from "@constants/routes";
 import {
   getCharEnter,
   getCharExit,
@@ -17,7 +13,7 @@ import {
 } from "@constants/animations";
 import { styles } from "./Chat.styles";
 import type { ChatView } from "@interfaces";
-import useTokenTriggerStore from "@stores/tokenTriggerStore";
+import { useChatItem } from "@hooks";
 
 type ChatProps = {
   chat: ChatView;
@@ -28,47 +24,17 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function Chat({ chat, isSearch = false }: ChatProps) {
   const { theme } = useUnistyles();
-  const navigation = useNavigation();
-  const chats = useChatList();
-  const ws = useWebSocket();
-  const {userID} = useTokenTriggerStore();
+  const { selected, edit, pinned, openChat, pin, select } = useChatItem(chat);
 
   const recipient = chat?.recipient;
-  const targetId = recipient?.id || chat?.id;
 
   const timeChars = useMemo(
     () => (!isSearch ? chat?.lastMessage?.time?.split("") || [] : null),
     [chat?.lastMessage?.time]
   );
 
-  const navigateToChatScreen = useCallback(() => {
-    const existingChat = chats?.find(
-      (c) => c?.members?.some((m) => m?.id === userID) && c?.members?.some((m) => m?.id === targetId)
-    );
-
-    if (existingChat) {
-      // @ts-ignore
-      return navigation.navigate(ROUTES.chat, { chat: { ...chat, id: existingChat.id } });
-    }
-
-    ws.send(JSON.stringify({ type: "create_chat", recipient: targetId }));
-
-    const handleMessage = (event: MessageEvent) => {
-      try {
-        const message = JSON.parse(event.data);
-        if (message?.chat) {
-          ws.removeEventListener("message", handleMessage);
-          // @ts-ignore
-          navigation.navigate(ROUTES.chat, { chat: { ...chat, id: message.chat.id } });
-        }
-      } catch {}
-    };
-
-    ws.addEventListener("message", handleMessage);
-  }, [chats, userID, targetId, chat, navigation, ws]);
-
   return (
-    <AnimatedPressable entering={getFadeIn()} onPress={navigateToChatScreen} style={styles.chat}>
+    <AnimatedPressable entering={getFadeIn()} onPress={openChat} style={styles.chat}>
       <LayoutAnimationConfig skipEntering skipExiting>
         <View style={styles.avatarWrapper}>
           <Avatar size={!isSearch ? "lg" : "md"} image={chat?.avatar} username={recipient?.username} />

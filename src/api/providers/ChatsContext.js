@@ -46,9 +46,14 @@ export default function ChatsProvider({ children }) {
     useEffect(() => {
         if (ws) {
             (async () => {
-                // get chats from api
+                try {
+                     // get chats from api
                 const _chats = await getChats(ws);
                 if (_chats) setChats(await sort(_chats));
+                } catch (error) {
+                    console.log(error)
+                }
+               
             })();
 
             // websocket message listener

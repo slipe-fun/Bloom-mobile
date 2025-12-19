@@ -37,7 +37,7 @@ export default function Avatar({ size = "md", square = false, style, image, imag
 
 	return image ? (
 		<View ref={ref}>
-			<FastImage source={{ uri: CDN_URL + image }} style={[avatarStyle, imageStyle]} />
+			<FastImage source={{ uri: image }} style={[avatarStyle, imageStyle]} />
 		</View>
 	) : (
 		<View ref={ref} style={[avatarStyle, style]}>

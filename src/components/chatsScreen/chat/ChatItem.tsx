@@ -16,8 +16,8 @@ export default function ChatItem({ item, userId }: ChatItemProps) {
 	const lastMessage = useMemo(() => {
 		if (!item.last_message) {
 			return {
-				lastMessage: "Чат создан",
-				lastMessageTime: "",
+				content: "Чат создан",
+				time: "",
 			};
 		}
 
