@@ -9,7 +9,11 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: "row",
     left: 0,
     right: 0,
+  },
+  tabBarWrapper: {
+    flexDirection: "row",
     gap: theme.spacing.md,
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },

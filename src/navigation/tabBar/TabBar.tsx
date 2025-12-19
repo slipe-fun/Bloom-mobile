@@ -7,19 +7,24 @@ import { GradientBlur } from "@components/ui";
 import { Haptics } from "react-native-nitro-haptics";
 import useTabBarStore from "@stores/tabBar";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolate } from "react-native-reanimated";
-import TabBarActionButton from "./actionButton";
-import { springyTabBar } from "@constants/animations";
-import { zoomAnimationIn, zoomAnimationOut } from "@constants/animations";
+import TabBarSearchButton from "./searchButton";
+import {
+  springyTabBar,
+  zoomAnimationIn,
+  zoomAnimationOut,
+} from "@constants/animations";
 import React, { useCallback } from "react";
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { BlurView } from "expo-blur";
+import useChatsStore from "@stores/chats";
 
 export default function TabBar({ state, navigation }): React.JSX.Element {
   const insets = useInsets();
   const { theme } = useUnistyles();
   const { setTabBarHeight, isSearch, tabBarHeight, isSearchFocused } = useTabBarStore();
   const tabBarWidth = useSharedValue(0);
+  const { edit } = useChatsStore();
   const { progress: keyboardProgress, height: keyboardHeight } = useReanimatedKeyboardAnimation();
 
   const animatedViewStyle = useAnimatedStyle(() => {
@@ -61,33 +66,34 @@ export default function TabBar({ state, navigation }): React.JSX.Element {
     <Animated.View
       onLayout={(event) => onLayoutTabBar(event, true)}
       style={[styles.tabBarContainer, animatedContainerStyle]}
-    > 
+    >
       <GradientBlur />
-      {!isSearchFocused && (
-        <Animated.View
-          exiting={zoomAnimationOut}
-          entering={zoomAnimationIn}
-          onLayout={(event) => onLayoutTabBar(event)}
-          style={[styles.tabBar, animatedViewStyle]}
-        >
-          <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
-          <TabBarIndicator index={state.index} count={state.routes.length} />
-          {state.routes.map((route, index) => {
-            const focused = state.index === index;
+      <Animated.View style={styles.tabBarWrapper}>
+        {!isSearchFocused && (
+          <Animated.View
+            exiting={zoomAnimationOut}
+            entering={zoomAnimationIn}
+            onLayout={(event) => onLayoutTabBar(event)}
+            style={[styles.tabBar, animatedViewStyle]}
+          >
+            <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
+            <TabBarIndicator index={state.index} count={state.routes.length} />
+            {state.routes.map((route, index) => {
+              const focused = state.index === index;
 
-            return (
-              <TabBarItem
-                key={index}
-                route={route}
-                focused={focused}
-                onPress={() => onPress(route, focused)}
-              />
-            );
-          })}
-        </Animated.View>
-      )}
-<TabBarActionButton />
-      
+              return (
+                <TabBarItem
+                  key={index}
+                  route={route}
+                  focused={focused}
+                  onPress={() => onPress(route, focused)}
+                />
+              );
+            })}
+          </Animated.View>
+        )}
+        <TabBarSearchButton />
+      </Animated.View>
     </Animated.View>
   );
 }

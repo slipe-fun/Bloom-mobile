@@ -73,14 +73,13 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
 
             <Animated.View style={[styles.metaRow, animatedMetaRowStyle]}>
               {!isSearch && (
-                <Animated.View style={styles.charStack}>
+                <Animated.View layout={layoutAnimationSpringy} style={styles.charStack}>
                   {timeChars.map((char, i) => (
                     <Animated.Text
                       key={`${char}-${i}`}
                       style={styles.secondary(false)}
                       entering={getCharEnter(springyChar(i))}
                       exiting={getCharExit(springyChar(i))}
-                      layout={layoutAnimationSpringy}
                       numberOfLines={1}
                     >
                       {char}

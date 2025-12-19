@@ -21,7 +21,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const customLayout = makeLayoutAnimation(springyTabBar);
 
-export default function TabBarActionButton(): React.JSX.Element {
+export default function TabBarSearchButton(): React.JSX.Element {
   const ref = useRef<TextInput>(null);
   const { theme } = useUnistyles();
   const { isSearch, setIsSearch, setSearchValue } = useTabBarStore();
