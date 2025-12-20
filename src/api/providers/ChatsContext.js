@@ -76,11 +76,19 @@ export default function ChatsProvider({ children }) {
                 const localLastMessage = realmResult ? safeObject(realmResult) : null;
 
                 let decryptedLastMessage = null;
-                if (chat?.last_message) {
-                    try {
-                        decryptedLastMessage = await decryptMessage(chat, chat.last_message);
-                    } catch (e) {
-                        console.warn("Decryption failed", e);
+                const msg = chat?.last_message;
+
+                const isEncrypted = msg && (msg.ciphertext || msg.encapsulated_key);
+
+                if (msg) {
+                    if (isEncrypted) {
+                        try {
+                            decryptedLastMessage = await decryptMessage(chat, msg);
+                        } catch (e) {
+                            console.warn("Decryption failed", e);
+                        }
+                    } else {
+                        decryptedLastMessage = msg;
                     }
                 }
 
@@ -210,8 +218,10 @@ export default function ChatsProvider({ children }) {
                                     : c
                             );
 
-                            sort(updated).then(sorted => {
-                                setChats(sorted);
+                            updated.sort((a, b) => {
+                                const dateA = a.last_message?.date ? new Date(a.last_message.date).getTime() : 0;
+                                const dateB = b.last_message?.date ? new Date(b.last_message.date).getTime() : 0;
+                                return dateB - dateA;
                             });
 
                             return updated;
