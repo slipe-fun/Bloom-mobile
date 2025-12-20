@@ -3,7 +3,7 @@ import { ViewStyle } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, interpolateColor } from "react-native-reanimated";
 import { useInsets } from "@hooks";
 import { useUnistyles } from "react-native-unistyles";
-import { styles } from "./TabBar.styles";
+import { styles } from "./TabBarContainer.styles";
 import { springyTabBar } from "@constants/animations";
 import useTabBarStore from "@stores/tabBar";
 
@@ -43,7 +43,7 @@ export default function TabBarIndicator({ index = 0, count = 3 }: TabBarIndicato
 		});
 
 		colorProgress.value = withSpring(index, springyTabBar)
-	}, [index, count, tabWidth]);
+	}, [index, count]);
 
 	const animatedStyle = useAnimatedStyle(
 		(): ViewStyle => ({

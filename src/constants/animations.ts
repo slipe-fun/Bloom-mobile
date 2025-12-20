@@ -169,3 +169,25 @@ export const charAnimationIn = (): LayoutAnimResult => {
     },
   };
 };
+
+export const vSlideAnimationOut = (): LayoutAnimResult => {
+  "worklet";
+  return {
+    initialValues: { opacity: 1, transform: [{ translateY: "0%" }] },
+    animations: {
+      opacity: withSpring(0, quickSpring),
+      transform: [{translateY: withSpring("100%", quickSpring)}],
+    },
+  };
+};
+
+export const vSlideAnimationIn = (): LayoutAnimResult => {
+  "worklet";
+  return {
+    initialValues: { opacity: 0, transform: [{ translateY: "-100%" }] },
+    animations: {
+      opacity: withSpring(1, quickSpring),
+      transform: [{translateY: withSpring("0%", quickSpring)}],
+    },
+  };
+};

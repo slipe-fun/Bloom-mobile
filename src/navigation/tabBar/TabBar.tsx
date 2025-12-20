@@ -1,40 +1,27 @@
 import { useInsets } from "@hooks";
-import TabBarItem from "./Item";
 import { LayoutChangeEvent } from "react-native";
 import { styles } from "./TabBar.styles";
-import TabBarIndicator from "./Indicator";
 import { GradientBlur } from "@components/ui";
-import { Haptics } from "react-native-nitro-haptics";
 import useTabBarStore from "@stores/tabBar";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, interpolate } from "react-native-reanimated";
-import TabBarSearchButton from "./searchButton";
-import {
-  springyTabBar,
-  zoomAnimationIn,
-  zoomAnimationOut,
-} from "@constants/animations";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  interpolate,
+} from "react-native-reanimated";
 import React, { useCallback } from "react";
 import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
-import { useUnistyles, StyleSheet } from "react-native-unistyles";
-import { BlurView } from "expo-blur";
+import { useUnistyles } from "react-native-unistyles";
 import useChatsStore from "@stores/chats";
+import TabBarActionButtonDelete from "./deleteButton";
+import TabBarContainer from "./tabBarContainer";
 
 export default function TabBar({ state, navigation }): React.JSX.Element {
   const insets = useInsets();
   const { theme } = useUnistyles();
-  const { setTabBarHeight, isSearch, tabBarHeight, isSearchFocused } = useTabBarStore();
+  const { setTabBarHeight, tabBarHeight, } = useTabBarStore();
   const tabBarWidth = useSharedValue(0);
   const { edit } = useChatsStore();
   const { progress: keyboardProgress, height: keyboardHeight } = useReanimatedKeyboardAnimation();
-
-  const animatedViewStyle = useAnimatedStyle(() => {
-    return tabBarWidth.value > 0
-      ? {
-          height: withSpring(isSearch ? 48 : 54, springyTabBar),
-          width: withSpring(isSearch ? 48 : tabBarWidth.value, springyTabBar),
-        }
-      : {};
-  }, [isSearch, tabBarWidth, isSearchFocused]);
 
   const animatedContainerStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: keyboardHeight.value }],
@@ -49,51 +36,17 @@ export default function TabBar({ state, navigation }): React.JSX.Element {
     if (tabBarHeight <= 1 && isContainer) setTabBarHeight(layout.height);
   }, []);
 
-  const onPress = useCallback((route, focused: boolean) => {
-    const event = navigation.emit({
-      type: "tabPress",
-      target: route.key,
-      canPreventDefault: true,
-    });
-
-    if (!focused && !event.defaultPrevented) {
-      Haptics.impact("light");
-      navigation.navigate(route.name);
-    }
-  }, []);
-
   return (
     <Animated.View
       onLayout={(event) => onLayoutTabBar(event, true)}
       style={[styles.tabBarContainer, animatedContainerStyle]}
     >
       <GradientBlur />
-      <Animated.View style={styles.tabBarWrapper}>
-        {!isSearchFocused && (
-          <Animated.View
-            exiting={zoomAnimationOut}
-            entering={zoomAnimationIn}
-            onLayout={(event) => onLayoutTabBar(event)}
-            style={[styles.tabBar, animatedViewStyle]}
-          >
-            <BlurView style={StyleSheet.absoluteFill} intensity={40} tint='systemChromeMaterialDark' />
-            <TabBarIndicator index={state.index} count={state.routes.length} />
-            {state.routes.map((route, index) => {
-              const focused = state.index === index;
-
-              return (
-                <TabBarItem
-                  key={index}
-                  route={route}
-                  focused={focused}
-                  onPress={() => onPress(route, focused)}
-                />
-              );
-            })}
-          </Animated.View>
-        )}
-        <TabBarSearchButton />
-      </Animated.View>
+      {!edit ? (
+        <TabBarContainer state={state} navigation={navigation}/>
+      ) : (
+        <TabBarActionButtonDelete />
+      )}
     </Animated.View>
   );
 }

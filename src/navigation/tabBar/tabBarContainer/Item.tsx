@@ -4,7 +4,7 @@ import Animated, { interpolateColor, useAnimatedProps, useAnimatedStyle, useShar
 import { useUnistyles } from "react-native-unistyles";
 import { quickSpring } from "@constants/easings";
 import Icon from "@components/ui/Icon";
-import { styles } from "./TabBar.styles";
+import { styles } from "./TabBarContainer.styles";
 import useTabBarStore from "@stores/tabBar";
 import { springyTabBar } from "@constants/animations";
 
