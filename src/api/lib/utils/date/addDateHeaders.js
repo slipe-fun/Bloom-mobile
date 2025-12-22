@@ -1,3 +1,6 @@
+import isSameDay from "./isSameDay";
+import getDayLabel from "./getDayLabel";
+
 export default function (rawMessages) {
     if (!rawMessages || !rawMessages.length) return [];
 
