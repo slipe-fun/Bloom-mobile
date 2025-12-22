@@ -13,11 +13,13 @@ type MessageProps = {
 	isLast?: boolean;
 	shift?: number;
 	messagesLenght?: number;
+	isGroupStart?: boolean,
+	isGroupEnd?: boolean;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export default function Message({ message, seen, isLast }: MessageProps): React.JSX.Element {
+export default function Message({ message, seen, isLast, isGroupStart, isGroupEnd }: MessageProps): React.JSX.Element {
 	const scale = useSharedValue(1);
 
 	const onPress = (out: boolean = false) => {

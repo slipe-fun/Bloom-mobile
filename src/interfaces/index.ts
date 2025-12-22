@@ -19,6 +19,7 @@ export interface Message {
   seen?: Date;
   nonce?: string;
   reply_to?: Message;
+  type?: string;
 }
 
 export interface Chat {

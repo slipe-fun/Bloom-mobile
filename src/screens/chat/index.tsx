@@ -19,6 +19,8 @@ interface ChatScreenProps {
 	};
 }
 
+const CHAT_TIME_WINDOW = 5 * 60 * 1000;
+
 export default function ChatScreen({ route }: ChatScreenProps): React.JSX.Element {
 	const { chat } = route.params as { chat: Chat };
 
@@ -44,21 +46,41 @@ export default function ChatScreen({ route }: ChatScreenProps): React.JSX.Elemen
 	}, [messages.length, messages]);
 
 	const renderItem = useCallback(
-		({ item }: { item: MessageType }) => {
-			return (
-				<Message
-					key={item?.nonce}
-					seen={seenId === item?.id}
-					isLast={lastMessageId === item?.id}
-					message={item}
-				/>
-			);
-		},
-		[seenId, lastMessageId, footerHeight]
-	);
+        ({ item, index }: { item: MessageType; index: number }) => {
+			if (item?.type === "date_header") {
+				// бейдж даты
+				// жсон выглядbт так
+				// {"text": "13 декабря", "type": "date_header"}
+				return;
+			}
+
+            const prevItem = messages[index - 1];
+            const nextItem = messages[index + 1];
+
+            const isGroupStart = !prevItem 
+                || prevItem.author_id !== item.author_id 
+                || (new Date(item.date).getTime() - new Date(prevItem.date).getTime() > CHAT_TIME_WINDOW);
+
+            const isGroupEnd = !nextItem 
+                || nextItem.author_id !== item.author_id 
+                || (new Date(nextItem.date).getTime() - new Date(item.date).getTime() > CHAT_TIME_WINDOW);
+
+            return (
+                <Message
+                    key={item?.nonce}
+                    seen={seenId === item?.id}
+                    isLast={lastMessageId === item?.id}
+                    message={item}
+                    isGroupStart={isGroupStart}
+                    isGroupEnd={isGroupEnd}
+                />
+            );
+        },
+        [seenId, lastMessageId, footerHeight, messages] 
+    );
 
 	const keyExtractor = useCallback((item: MessageType) => {
-		return String(item.nonce);
+		return String(item?.nonce);
 	}, []);
 
 	const a = useAnimatedProps((): ScrollViewProps => ({
