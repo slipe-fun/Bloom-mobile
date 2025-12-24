@@ -2,7 +2,6 @@ import FastImage from "@d11/react-native-fast-image";
 import Animated, { interpolate, useAnimatedProps, useAnimatedStyle } from "react-native-reanimated";
 import useSettingsScreenStore from "@stores/settingsScreen";
 import { BlurView, BlurViewProps } from "expo-blur";
-import { StyleSheet } from "react-native-unistyles";
 import { ViewStyle } from "react-native";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
