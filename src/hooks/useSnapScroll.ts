@@ -4,7 +4,7 @@ import {
   useAnimatedScrollHandler,
   useSharedValue,
   scrollTo,
-  SharedValue
+  SharedValue,
 } from "react-native-reanimated";
 
 type Result<T> = {
@@ -12,7 +12,7 @@ type Result<T> = {
   scrollHandler: ReturnType<typeof useAnimatedScrollHandler>;
   scrollY: SharedValue<number>;
 };
-
+ 
 export default function useSnapScroll<T extends Component>(snapTo: number = 56): Result<T> {
   const animatedRef = useAnimatedRef<T>();
   const scrollY = useSharedValue(0);
@@ -24,7 +24,7 @@ export default function useSnapScroll<T extends Component>(snapTo: number = 56):
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (e) => {
-      scrollY.value = e.contentOffset.y;
+      scrollY.set(e.contentOffset.y);
     },
     onEndDrag: (e) => {
       const y = e.contentOffset.y;

@@ -1,8 +1,6 @@
 import { styles } from "./Header.styles";
-import HeaderAvatar from "./user/Avatar";
 import { useInsets } from "@hooks";
 import useSettingsScreenStore from "@stores/settingsScreen";
-import UserInformation from "./user";
 import React from "react";
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated";
 import { GradientBlur } from "@components/ui";

@@ -20,7 +20,7 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
 export default function HeaderAvatar({ scrollY }: { scrollY: SharedValue<number> }): React.JSX.Element {
   const { snapEndPosition } = useSettingsScreenStore();
-  const isAvatarExpanded = useSharedValue<boolean>(false);
+  const isAvatarExpanded = useSharedValue<boolean>(false);  
 
   const animatedStyle = useAnimatedStyle(
     (): ViewStyle => ({
@@ -41,17 +41,19 @@ export default function HeaderAvatar({ scrollY }: { scrollY: SharedValue<number>
 
   useAnimatedReaction(
     () => isAvatarExpanded.get(),
-    () => {
-      if (isAvatarExpanded.get()) {
+    (prepared, previous) => {
+      if (prepared) {
         runOnJS(avatarHapticsTrigger)();
       }
     }
   );
 
+  
+
   useAnimatedReaction(
     () => scrollY.get(),
-    () => {
-      if (scrollY.get() <= -25) {
+    (prepared, previous) => {
+      if (prepared <= -25) {
         isAvatarExpanded.set(true);
       }
     }

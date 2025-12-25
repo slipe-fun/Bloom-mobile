@@ -14,7 +14,7 @@ export default function User({ scrollY, user }: UserProps): React.JSX.Element {
   const { snapEndPosition } = useSettingsScreenStore();
 
   const animatedContainerStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [0, snapEndPosition], [1, 0]),
+    opacity: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0]),
   }));
 
   const animatedStyle = useAnimatedStyle(
@@ -22,7 +22,7 @@ export default function User({ scrollY, user }: UserProps): React.JSX.Element {
       transform: [
         {
           scale: interpolate(
-            scrollY.value,
+            scrollY.get(),
             [0, snapEndPosition],
             [1, theme.fontSize.lg / (theme.fontSize.xxl - 2)],
             "clamp"
@@ -37,13 +37,13 @@ export default function User({ scrollY, user }: UserProps): React.JSX.Element {
       transform: [
         {
           translateY: interpolate(
-            scrollY.value,
+            scrollY.get(),
             [0, snapEndPosition],
             [0, -(theme.fontSize.xxl - 2 - theme.fontSize.lg)],
             "clamp"
           ),
         },
-        { scale: interpolate(scrollY.value, [0, snapEndPosition], [1, 0.85], "clamp") },
+        { scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0.85], "clamp") },
       ],
     })
   );
