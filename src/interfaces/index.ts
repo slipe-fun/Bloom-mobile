@@ -1,4 +1,5 @@
 import { ICONS } from "@constants/icons";
+import React from "react";
 import { staticColor } from "unistyles";
 
 interface ChatLastMessage {
@@ -54,7 +55,10 @@ export interface MenuItem {
   label: string;
   badgeLabel?: string | number;
   color?: keyof typeof staticColor;
-  single: boolean;
+  first?: boolean;
+  single?: boolean;
+  last?: boolean;
+  badgeIcon?: keyof typeof ICONS;
 }
 
 export interface Member {
