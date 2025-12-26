@@ -24,7 +24,9 @@ export default function TabBarIndicator({ index = 0, count = 3 }: TabBarIndicato
 	const colorProgress = useSharedValue(0);
 
 	const tabWidth = 70;
-	const colors = [theme.colors.primaryBackdrop, theme.colors.yellowBackdrop, theme.colors.purpleBackdrop]
+	const colors = [theme.colors.primaryBackdrop, theme.colors.yellowBackdrop, theme.colors.pinkBackdrop
+		
+	]
 
 	useEffect(() => {
 		if (count <= 0) return;

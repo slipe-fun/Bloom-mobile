@@ -1,4 +1,5 @@
 import { ICONS } from "@constants/icons";
+import { staticColor } from "unistyles";
 
 interface ChatLastMessage {
   content?: string;
@@ -8,6 +9,8 @@ interface ChatLastMessage {
 interface ChatLastMessageView extends ChatLastMessage {
   time?: string;
 }
+
+type MenuItemIconType = "transparent" | "gradient"
 
 export interface Message {
   id: number;
@@ -43,6 +46,15 @@ export interface Option {
   action?: (payload?: string) => void;
   color?: string;
   separator?: boolean
+}
+
+export interface MenuItem {
+  iconType?: MenuItemIconType;
+  icon: keyof typeof ICONS;
+  label: string;
+  badgeLabel?: string | number;
+  color?: keyof typeof staticColor;
+  single: boolean;
 }
 
 export interface Member {

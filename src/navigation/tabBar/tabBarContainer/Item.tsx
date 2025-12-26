@@ -31,7 +31,7 @@ export default function TabBarItem({ route, focused, onPress }: TabBarItemProps)
 	const tabColor = {
 		tab_chats: theme.colors.primary,
 		tab_search: theme.colors.yellow,
-		tab_settings: theme.colors.purple,
+		tab_settings: theme.colors.pink,
 	}[route.name];
 
 	const iconScale = (out: boolean = false) => {
