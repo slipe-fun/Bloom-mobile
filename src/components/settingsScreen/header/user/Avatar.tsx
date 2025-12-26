@@ -41,18 +41,18 @@ export default function HeaderAvatar({ scrollY }: { scrollY: SharedValue<number>
     })
   );
 
-  const avatarHapticsTrigger = () => {
-    Haptics.impact("light");
-  };
+  // const avatarHapticsTrigger = () => {
+  //   Haptics.impact("light");
+  // };
 
-  useAnimatedReaction(
-    () => isAvatarExpanded.get(),
-    (prepared, previous) => {
-      if (prepared) {
-        runOnJS(avatarHapticsTrigger)();
-      }
-    }
-  );
+  // useAnimatedReaction(
+  //   () => isAvatarExpanded.get(),
+  //   (prepared, previous) => {
+  //     if (prepared) {
+  //       runOnJS(avatarHapticsTrigger)();
+  //     }
+  //   }
+  // );
 
   useAnimatedReaction(
     () => scrollY.get(),
