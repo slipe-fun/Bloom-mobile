@@ -18,24 +18,38 @@ export default function SettingsScreen(): React.JSX.Element {
   const { scrollY, animatedRef, scrollHandler } = useSnapScroll<any>(snapEndPosition);
   const { user, error, loading } = useGetMyself();
 
+  const data = useMemo(
+    () =>
+      SETTINGS_SECTIONS({
+        username: "dikiy",
+        description: "dikiy 56655",
+        friends: 30,
+        theme: "Светлое",
+        language: "Русский",
+      }),
+    [user, SETTINGS_SECTIONS]
+  );
+
   const keyExtractor = useCallback((item: SettingsSection) => {
-    return String(item.id); 
+    return String(item.id);
   }, []);
 
-  const data = useMemo(() => SETTINGS_SECTIONS({ username: "dikiy", description: "dikiy 56655", friends: 30, theme: "Светлое", language: "Русский"}), [user, SETTINGS_SECTIONS])
+  const renderItem = useCallback(({ item }: { item: SettingsSection }) => {
+    return <SettingsGroup section={item} />;
+  }, []);
 
   return (
     <View style={styles.container}>
       <FloatingHeader scrollY={scrollY} user={user} />
       <AnimatedLegendList
-        ref={animatedRef} 
+        ref={animatedRef}
         keyExtractor={keyExtractor}
         ListHeaderComponent={<Header scrollY={scrollY} user={user} />}
         onScroll={scrollHandler}
         contentContainerStyle={styles.list(tabBarHeight)}
         showsVerticalScrollIndicator={false}
         data={data}
-        renderItem={({ item: section }) => <SettingsGroup section={section} />}
+        renderItem={renderItem}
       />
     </View>
   );
