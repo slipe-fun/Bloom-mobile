@@ -5,4 +5,8 @@ export const styles = StyleSheet.create(theme => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  list: (paddingBottom: number) => ({
+    paddingBottom,
+    paddingHorizontal: theme.spacing.lg,
+  })
 }));

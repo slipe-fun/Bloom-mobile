@@ -1,130 +1,113 @@
-import { MenuItem } from "@interfaces";
+import type { SettingsSection } from "@interfaces";
 
-export const SETTINGS: MenuItem[] = [
-  /* First block */
-  {
-    icon: "at",
-    iconType: "transparent",
-    label: "username",
-    color: null,
-    first: true,
-    badgeIcon: "file",
-  },
-  {
-    icon: "person",
-    iconType: "transparent",
-    label: "username",
-    color: null,
-    last: true,
-    badgeIcon: "file",
-  },
-  /* */
+type SettingsSectionProps = {
+    username: string;
+    description: string;
+    friends: number;
+    theme: string;
+    language: string;
+}
 
-  /* Second block */
+export const SETTINGS_SECTIONS = ({username, description, friends, theme, language}: SettingsSectionProps): SettingsSection[] => ([
   {
-    icon: "person.circle",
-    iconType: "gradient",
-    label: "Мой профиль",
-    color: "orange",
-    single: true,
-  },
-  /* */
-
-  /* Third block */
-  {
-    icon: "person.circle",
-    iconType: "gradient",
-    label: "Аккаунт",
-    color: "primary",
-    first: true,
-  },
-  {
-    icon: "key",
-    iconType: "gradient",
-    label: "Ключи шифрования",
-    color: "purple",
+    id: "userInfo",
+    items: [
+      {
+        icon: "at",
+        iconType: "transparent",
+        label: username,
+        color: null,
+        badgeIcon: "file",
+      },
+      {
+        icon: "person",
+        iconType: "transparent",
+        label: description,
+        color: null,
+      },
+    ],
   },
   {
-    icon: "lock",
-    iconType: "gradient",
-    label: "Приватность",
-    color: "green",
-    last: true,
-  },
-  /* */
-
-  /* Fourth block */
-  {
-    icon: "person",
-    iconType: "gradient",
-    label: "Друзья",
-    color: "primary",
-    badgeLabel: "friendsCount",
-    single: true,
-  },
-  /* */
-
-  /* Fiveth block */
-  {
-    icon: "sun",
-    iconType: "gradient",
-    label: "Оформление",
-    color: "yellow",
-    badgeLabel: "currentTheme",
-    first: true,
+    id: "profileMain",
+    items: [
+      {
+        icon: "person.circle",
+        iconType: "gradient",
+        label: "Мой профиль",
+        color: "orange",
+      },
+    ],
   },
   {
-    icon: "globe",
-    iconType: "gradient",
-    label: "Язык",
-    color: "primary",
-    badgeLabel: "currentLanguage",
-    first: true,
+    id: "security",
+    items: [
+      {
+        icon: "person.circle",
+        iconType: "gradient",
+        label: "Аккаунт",
+        color: "primary",
+      },
+      {
+        icon: "key",
+        iconType: "gradient",
+        label: "Ключи шифрования",
+        color: "purple",
+      },
+      {
+        icon: "lock",
+        iconType: "gradient",
+        label: "Приватность",
+        color: "green",
+      },
+    ],
+  },
+   {
+    id: "activities",
+    items: [
+      {
+        icon: "person",
+        iconType: "gradient",
+        label: "Друзья",
+        badgeLabel: friends,
+        color: "primary",
+      },
+    ],
   },
   {
-    icon: "message",
-    iconType: "gradient",
-    label: "Чаты",
-    color: "green",
-    first: true,
+    id: "appSettings",
+    items: [
+      {
+        icon: "sun",
+        iconType: "gradient",
+        label: "Оформление",
+        badgeLabel: theme,
+        color: "yellow",
+      },
+      {
+        icon: "globe",
+        iconType: "gradient",
+        label: "Язык",
+        badgeLabel: language,
+        color: "primary",
+      },
+      {
+        icon: "message",
+        iconType: "gradient",
+        label: "Чаты",
+        color: "green",
+      },
+       {
+        icon: "bell",
+        iconType: "gradient",
+        label: "Уведомления и звуки",
+        color: "orange",
+      },
+       {
+        icon: "phone",
+        iconType: "gradient",
+        label: "Устройства",
+        color: "gray",
+      },
+    ],
   },
-  {
-    icon: "bell",
-    iconType: "gradient",
-    label: "Уведомления и звуки",
-    color: "orange",
-    first: true,
-  },
-  {
-    icon: "phone",
-    iconType: "gradient",
-    label: "Устройства",
-    color: "gray",
-    first: true,
-  },
-  /* */
-
-  /* Sixth block */
-  {
-    icon: "message",
-    iconType: "gradient",
-    label: "Поддержка",
-    color: "primary",
-    first: true,
-  },
-  {
-    icon: "compass",
-    iconType: "gradient",
-    label: "Спец. возможности",
-    color: "purple",
-    first: true,
-  },
-  {
-    icon: "questionmark.circle",
-    iconType: "gradient",
-    label: "О приложении",
-    color: "gray",
-    first: true,
-  },
-  /* */
-] as const;
+]);

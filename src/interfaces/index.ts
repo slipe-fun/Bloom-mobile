@@ -11,8 +11,6 @@ interface ChatLastMessageView extends ChatLastMessage {
   time?: string;
 }
 
-type MenuItemIconType = "transparent" | "gradient"
-
 export interface Message {
   id: number;
   date: Date;
@@ -49,17 +47,24 @@ export interface Option {
   separator?: boolean
 }
 
-export interface MenuItem {
-  iconType?: MenuItemIconType;
+export type IconType = "transparent" | "gradient";
+export type ColorKey = keyof typeof staticColor | null;
+
+export interface SettingsItem {
   icon: keyof typeof ICONS;
+  iconType: IconType;
   label: string;
+  color: ColorKey;
   badgeLabel?: string | number;
-  color?: keyof typeof staticColor;
-  first?: boolean;
-  single?: boolean;
-  last?: boolean;
   badgeIcon?: keyof typeof ICONS;
+  type?: "link" | "toggle";
 }
+
+export interface SettingsSection {
+  id: string;
+  items: SettingsItem[];
+}
+
 
 export interface Member {
   display_name?: string | null;
