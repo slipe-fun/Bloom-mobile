@@ -1,7 +1,7 @@
-import { randomBytes } from '@noble/hashes/utils'
+import { randomBytes } from '@noble/hashes/utils.js'
 import { Platform } from 'react-native'
 import * as Keychain from 'react-native-keychain'
-import { MMKV } from 'react-native-mmkv'
+import { createMMKV, type MMKV } from 'react-native-mmkv'
 
 type StorageOptions = { secure?: boolean }
 
@@ -26,9 +26,9 @@ const getOrCreateKey = async (service: string): Promise<string> => {
 }
 
 export const createSecureStorage = async (id: string, { secure = true }: StorageOptions = {}): Promise<MMKV> => {
-  if (!secure) return new MMKV({ id })
+  if (!secure) return createMMKV({ id })
 
   const service = `${SERVICE_PREFIX}.${id}.${Platform.OS}`
   const key = await getOrCreateKey(service)
-  return new MMKV({ id, encryptionKey: key })
+  return createMMKV({ id, encryptionKey: key })
 }

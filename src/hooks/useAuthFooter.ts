@@ -16,7 +16,7 @@ export default function useAuthFooter(navigation: any) {
     if (index === 2) return otp.length < 6
     if (index === 3) return password.length < 6
     return false
-  }, [index, emailValid, otp])
+  }, [index, emailValid, otp, password])
 
   const progressValue = useMemo(() => {
     if (index === 0) return 0
@@ -30,6 +30,7 @@ export default function useAuthFooter(navigation: any) {
   const label = index === 0 ? 'Продолжить с Почтой' : index === 3 ? 'Завершить' : 'Продолжить'
 
   const handlePress = useCallback(async () => {
+    console.log('swag')
     try {
       switch (index) {
         case 0:
@@ -53,17 +54,27 @@ export default function useAuthFooter(navigation: any) {
         }
 
         case 2: {
-          const verifyRes = await axios.post(`${API_URL}/auth/verify-code`, { email, code: otp })
-          const { token, user } = verifyRes.data || {}
+          try {
+            const verifyRes = await axios.post(`${API_URL}/auth/verify-code`, { email, code: otp })
+            const { token, user } = verifyRes.data || {}
 
-          if (token) {
-            mmkv.set('token', token)
-            mmkv.set('user_id', String(user?.id))
-            mmkv.set('user', JSON.stringify(user))
-            navigation.navigate(ROUTES.auth.signup.password)
-          } else {
-            setError('Неверный код подтверждения. Попробуйте ещë раз')
+            console.log(verifyRes.data)
+
+            if (token) {
+              console.log(token)
+              mmkv.set('token', token)
+              mmkv.set('user_id', String(user?.id))
+              mmkv.set('user', JSON.stringify(user))
+              navigation.navigate(ROUTES.auth.signup.password)
+            } else {
+              setError('Неверный код подтверждения. Попробуйте ещë раз')
+            }
+          } catch (error) {
+            console.log('swag error')
+            console.log(error, JSON.stringify(error))
+            console.error(error)
           }
+
           break
         }
 
@@ -126,7 +137,7 @@ export default function useAuthFooter(navigation: any) {
     } catch (e: any) {
       setError(e.response.data || e.message || 'Something went wrong')
     }
-  }, [index, email, otp, navigation, setError, mmkv])
+  }, [index, email, otp, navigation, setError, mmkv, password])
 
   return {
     index,

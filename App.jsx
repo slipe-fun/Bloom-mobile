@@ -34,12 +34,16 @@ export default function App() {
   const { setMMKV, setRealm } = useStorageStore()
 
   useEffect(() => {
-    ;(async () => {
-      const storage = await createSecureStorage('user-storage')
+    (async () => {
+      try {
+        const storage = await createSecureStorage('user-storage')
       const realm = await initRealm()
-
       setMMKV(storage)
       setRealm(realm)
+      } catch (error) {
+        console.error(error)
+      }
+      
     })()
   }, [])
 

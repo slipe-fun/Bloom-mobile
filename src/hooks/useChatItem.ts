@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import useChatsStore from '@stores/chats'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
 import { useCallback, useEffect, useMemo } from 'react'
-import { TextStyle, type ViewStyle } from 'react-native'
+import type { ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
 import { type AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 

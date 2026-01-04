@@ -10,6 +10,7 @@ export default function AuthNickInput(): React.JSX.Element {
   const { theme } = useUnistyles()
   const ref = useRef<TextInput>(null)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     ref.current?.blur()
   }, [index])
