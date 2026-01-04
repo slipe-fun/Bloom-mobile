@@ -1,10 +1,10 @@
-import { Button } from '@components/ui'
-import { Icon, Separator } from '@components/ui'
-import React, { useEffect } from 'react'
-import { Image, Platform, View } from 'react-native'
-import { styles } from './Actions.styles'
-import { useUnistyles } from 'react-native-unistyles'
 import useGoogleOauth2 from '@api/hooks/useGoogleOauth2'
+import { Button, Icon, Separator } from '@components/ui'
+import type React from 'react'
+import { useEffect } from 'react'
+import { Image, Platform, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './Actions.styles'
 
 export default function AuthActions(): React.JSX.Element {
   const { theme } = useUnistyles()

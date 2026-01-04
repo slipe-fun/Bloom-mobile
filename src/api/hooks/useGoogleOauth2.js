@@ -1,10 +1,10 @@
-import { getAuthUrl, REDIRECT_URL_WITH_SCHEME } from '@constants/googleOauth2Params'
-import useStorageStore from '@stores/storage'
-import axios from 'axios'
-import { useState } from 'react'
 // import { InAppBrowser } from 'react-native-inappbrowser-reborn'
 import { API_URL } from '@constants/api'
+import { getAuthUrl, REDIRECT_URL_WITH_SCHEME } from '@constants/googleOauth2Params'
+import useStorageStore from '@stores/storage'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
+import axios from 'axios'
+import { useState } from 'react'
 
 export default function () {
   const [result, setResult] = useState(null)

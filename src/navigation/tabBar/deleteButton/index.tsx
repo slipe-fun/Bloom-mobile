@@ -1,5 +1,4 @@
-import Animated, { LayoutAnimationConfig, useAnimatedStyle, withSpring } from 'react-native-reanimated'
-import { styles } from './DeleteButton.styles'
+import { Icon } from '@components/ui'
 import {
   charAnimationIn,
   charAnimationOut,
@@ -10,9 +9,10 @@ import {
 } from '@constants/animations'
 import useChatsStore from '@stores/chats'
 import { useMemo } from 'react'
-import { Icon } from '@components/ui'
+import type { ViewStyle } from 'react-native'
+import Animated, { LayoutAnimationConfig, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { ViewStyle } from 'react-native'
+import { styles } from './DeleteButton.styles'
 
 export default function TabBarActionButtonDelete(): React.JSX.Element {
   const { selectedChats } = useChatsStore()

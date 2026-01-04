@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import axios from 'axios'
 import { API_URL } from '@constants/api'
-import { createSecureStorage } from '@lib/storage'
 import { ROUTES } from '@constants/routes'
+import { createSecureStorage } from '@lib/storage'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export default function useAuth() {
   // variables

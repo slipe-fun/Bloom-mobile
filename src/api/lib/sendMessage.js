@@ -1,9 +1,9 @@
+import Realm from 'realm'
 import getChatFromStorage from '../../lib/getChatFromStorage'
 import initRealm from '../../lib/initRealm'
-import Realm from 'realm'
 import decrypt from '../../lib/skid/decrypt'
 import encrypt from '../../lib/skid/encrypt'
-import { encrypt as sskEncrypt, decrypt as sskDecrypt } from '../../lib/skid/serversideKeyEncryption'
+import { decrypt as sskDecrypt, encrypt as sskEncrypt } from '../../lib/skid/serversideKeyEncryption'
 import { createSecureStorage } from '../../lib/storage'
 
 export default async function (content, reply_to, chat_id, count, ws) {

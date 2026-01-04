@@ -1,16 +1,21 @@
-import { styles } from './Footer.styles'
-import { useInsets } from '@hooks'
-import Icon from '@components/ui/Icon'
-import { useUnistyles } from 'react-native-unistyles'
-import { useCallback, useState } from 'react'
-import Animated, { interpolate, useAnimatedStyle, withSpring } from 'react-native-reanimated'
-import { layoutAnimationSpringy, paperplaneAnimationIn, paperplaneAnimationOut, quickSpring } from '@constants/animations'
 import { Button, GradientBlur } from '@components/ui'
-import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import MessageInput from './MessageInput'
+import Icon from '@components/ui/Icon'
+import {
+  layoutAnimationSpringy,
+  paperplaneAnimationIn,
+  paperplaneAnimationOut,
+  zoomAnimationIn,
+  zoomAnimationOut,
+} from '@constants/animations'
+import { useInsets } from '@hooks'
 import useChatScreenStore from '@stores/chatScreen'
-import { LayoutChangeEvent, ViewStyle } from 'react-native'
+import { useCallback, useState } from 'react'
+import type { LayoutChangeEvent, ViewStyle } from 'react-native'
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './Footer.styles'
+import MessageInput from './MessageInput'
 
 type FooterProps = {
   onSend: (content: string, reply_to: number) => void
@@ -47,9 +52,12 @@ export default function Footer({ onSend, setFooterHeight, footerHeight }: Footer
     }
   })
 
-  const onFooterLayout = useCallback((event: LayoutChangeEvent) => {
-    if (footerHeight === 0 || keyboardProgress.get() === 1) setFooterHeight(event.nativeEvent.layout.height)
-  }, [])
+  const onFooterLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      if (footerHeight === 0 || keyboardProgress.get() === 1) setFooterHeight(event.nativeEvent.layout.height)
+    },
+    [footerHeight, setFooterHeight, keyboardProgress],
+  )
 
   return (
     <Animated.View onLayout={onFooterLayout} style={[styles.footer, animatedViewStyles]} layout={layoutAnimationSpringy}>

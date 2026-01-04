@@ -1,12 +1,12 @@
-import React from 'react'
-import { styles } from './Footer.styles'
-import { layoutAnimationSpringy } from '@constants/animations'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
-import { BlurView } from 'expo-blur'
-import Animated from 'react-native-reanimated'
-import ReplyBlock from '../replyBlock'
-import useChatScreenStore from '@stores/chatScreen'
 import { Input } from '@components/ui'
+import { layoutAnimationSpringy } from '@constants/animations'
+import useChatScreenStore from '@stores/chatScreen'
+import { BlurView } from 'expo-blur'
+import type React from 'react'
+import Animated from 'react-native-reanimated'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import ReplyBlock from '../replyBlock'
+import { styles } from './Footer.styles'
 
 type MessageInputProps = {
   setValue: (value: string) => void

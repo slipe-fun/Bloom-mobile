@@ -1,11 +1,11 @@
-import React from 'react'
-import { Image, ImageSourcePropType, Text, View, ViewStyle } from 'react-native'
-import { styles } from './TitleTemplate.styles'
-import Animated, { useAnimatedStyle, interpolate } from 'react-native-reanimated'
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import { Icon } from '@components/ui'
-import { ICONS } from '@constants/icons'
+import type { ICONS } from '@constants/icons'
+import type React from 'react'
+import { Image, ImageSourcePropType, Text, View, type ViewStyle } from 'react-native'
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './TitleTemplate.styles'
 
 type TitleTemplateProps = {
   icon: keyof typeof ICONS

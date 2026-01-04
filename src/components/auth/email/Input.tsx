@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { styles } from './Input.styles'
 import { Icon, Input } from '@components/ui'
-import useAuthStore from '@stores/auth'
-import parseEmail from '@lib/parseEmail'
-import Animated from 'react-native-reanimated'
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { PROVIDERS_LOGOS } from '@constants/providersLogos'
+import parseEmail from '@lib/parseEmail'
+import useAuthStore from '@stores/auth'
+import type React from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { TextInput } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { TextInput } from 'react-native'
+import { styles } from './Input.styles'
 
 export default function AuthEmailInput(): React.JSX.Element {
   const { email, setEmail, setEmailValid, index } = useAuthStore()

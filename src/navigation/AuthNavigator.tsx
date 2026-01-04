@@ -1,10 +1,10 @@
-import { createBlankStackNavigator } from 'react-native-screen-transitions/blank-stack'
+import AuthFooter from '@components/auth/footer'
+import AuthHeader from '@components/auth/header'
 import { ROUTES } from '@constants/routes'
+import { View } from 'react-native'
+import { createBlankStackNavigator } from 'react-native-screen-transitions/blank-stack'
 import { SignupEmailScreen, SignupOTP, SignupPassword, WelcomeScreen } from '../screens'
 import { screenTransition } from './transition'
-import { View } from 'react-native'
-import AuthHeader from '@components/auth/header'
-import AuthFooter from '@components/auth/footer'
 
 const Stack = createBlankStackNavigator()
 

@@ -1,13 +1,13 @@
-import { useState, useEffect, useContext, createContext } from 'react'
-import { useWebSocket } from './WebSocketContext'
-import getChats from '../lib/chats/getChats'
-import setChatKeysToStorage from '@lib/setChatKeysToStorage'
-import generateKeys from '@lib/skid/generateKeys'
-import useStorageStore from '@stores/storage'
 import addKeysToDump from '@api/lib/keys/addKeysToDump'
-import decrypt from '@lib/skid/decrypt'
-import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import getChatFromStorage from '@lib/getChatFromStorage'
+import setChatKeysToStorage from '@lib/setChatKeysToStorage'
+import decrypt from '@lib/skid/decrypt'
+import generateKeys from '@lib/skid/generateKeys'
+import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
+import useStorageStore from '@stores/storage'
+import { createContext, useContext, useEffect, useState } from 'react'
+import getChats from '../lib/chats/getChats'
+import { useWebSocket } from './WebSocketContext'
 
 const ChatsContext = createContext(null)
 
@@ -202,7 +202,7 @@ export default function ChatsProvider({ children }) {
   }, [ws])
 
   useEffect(() => {
-    let listeners = []
+    const listeners = []
 
     ;(async () => {
       chats.forEach((chat) => {

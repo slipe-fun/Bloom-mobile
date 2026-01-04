@@ -1,5 +1,5 @@
-import isValidDate from './isValidDate'
 import isSameDay from './isSameDay'
+import isValidDate from './isValidDate'
 
 export default function (date) {
   if (!isValidDate(date)) return ''

@@ -1,11 +1,11 @@
-import React from 'react'
-import { styles } from './Otp.styles'
 import AuthTitleTemplate from '@components/auth/titleTemplate'
 import { ActionText, OTPInput } from '@components/ui'
-import useAuthStore from '@stores/auth'
-import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { useInsets } from '@hooks'
+import useAuthStore from '@stores/auth'
+import type React from 'react'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import { styles } from './Otp.styles'
 
 export default function SignupOTP(): React.JSX.Element {
   const { email, otp, setOtp } = useAuthStore()

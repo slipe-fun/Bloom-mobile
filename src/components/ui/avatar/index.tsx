@@ -1,9 +1,8 @@
-import { CDN_URL } from '@constants/api'
 import { EMOJI_AVATARS } from '@constants/emojiAvatars'
-import FastImage, { ImageStyle as FastImageStyle } from '@d11/react-native-fast-image'
-import React, { useMemo } from 'react'
-import { View, StyleProp, Image, ImageStyle } from 'react-native'
-import { useUnistyles } from 'react-native-unistyles'
+import FastImage, { type ImageStyle as FastImageStyle } from '@d11/react-native-fast-image'
+import type React from 'react'
+import { useMemo } from 'react'
+import { Image, type ImageStyle, type StyleProp, View } from 'react-native'
 import { styles } from './Avatar.styles'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
@@ -27,8 +26,6 @@ export default function Avatar({
   username = '',
   ref = null,
 }: AvatarProps): React.ReactNode {
-  const { theme } = useUnistyles()
-
   const SIZE_MAP: Record<Size, number> = {
     sm: 40,
     md: 44,
@@ -43,7 +40,7 @@ export default function Avatar({
   const avatarStyle = useMemo(
     () =>
       styles.avatar({ height: SIZE_MAP[size], square, image: !!image, padding: SIZE_MAP[size] / 4.5, backgroundColor: emojiResult?.color }),
-    [size, square, theme, emojiResult, image],
+    [size, square, emojiResult, image],
   )
 
   return image ? (

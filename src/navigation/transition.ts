@@ -1,5 +1,5 @@
-import { interpolate } from 'react-native-reanimated'
 import { quickSpring } from '@constants/easings'
+import { interpolate } from 'react-native-reanimated'
 
 export const screenTransition = (gestures = true) =>
   ({

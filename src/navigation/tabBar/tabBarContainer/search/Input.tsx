@@ -1,9 +1,10 @@
-import React, { Ref } from 'react'
-import Animated from 'react-native-reanimated'
 import { Icon, Input } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimation } from '@constants/animations'
 import useTabBarStore from '@stores/tabBar'
-import { TextInput } from 'react-native'
+import type React from 'react'
+import type { Ref } from 'react'
+import type { TextInput } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 
 const AnimatedInput = Animated.createAnimatedComponent(Input)

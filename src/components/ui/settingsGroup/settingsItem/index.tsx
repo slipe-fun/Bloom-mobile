@@ -1,13 +1,13 @@
-import React from 'react'
-import { Text, View, Pressable, ViewStyle } from 'react-native'
-import { useUnistyles } from 'react-native-unistyles'
-import type { SettingsItem as SettingsItemType } from '@interfaces'
-import SettingsIcon from '../settingsIcon'
-import Icon from '../../Icon'
-import { styles } from './SettingsItem.styles'
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { quickSpring } from '@constants/easings'
+import type { SettingsItem as SettingsItemType } from '@interfaces'
 import { lightenColor } from '@lib/lightenColor'
+import type React from 'react'
+import { Pressable, Text, View, type ViewStyle } from 'react-native'
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import Icon from '../../Icon'
+import SettingsIcon from '../settingsIcon'
+import { styles } from './SettingsItem.styles'
 
 interface SettingsItemProps {
   item: SettingsItemType

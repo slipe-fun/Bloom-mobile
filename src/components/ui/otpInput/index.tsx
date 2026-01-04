@@ -1,8 +1,8 @@
 import { getCharEnter, getCharExit, getFadeIn, getFadeOut, springy } from '@constants/animations'
-import React, { useCallback, useRef, useEffect, act } from 'react'
-import { View, TextInput, Pressable } from 'react-native'
-import type { LayoutRectangle, LayoutChangeEvent } from 'react-native'
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
+import React, { act, useCallback, useEffect, useRef } from 'react'
+import type { LayoutChangeEvent, LayoutRectangle } from 'react-native'
+import { Pressable, TextInput, View } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { styles } from './OtpInput.styles'
 
 type OTPInputProps = {

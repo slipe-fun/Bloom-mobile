@@ -1,8 +1,8 @@
-import { LayoutChangeEvent, Text, ViewStyle } from 'react-native'
-import Animated, { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { styles } from './Header.styles'
 import { useInsets } from '@hooks'
 import { useCallback } from 'react'
+import { type LayoutChangeEvent, Text, type ViewStyle } from 'react-native'
+import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import { styles } from './Header.styles'
 
 type SearchHeaderProps = {
   scrollY: SharedValue<number>

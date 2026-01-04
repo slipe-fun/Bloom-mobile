@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, StyleProp, ViewStyle } from 'react-native'
+import type React from 'react'
+import { type StyleProp, Text, View, type ViewStyle } from 'react-native'
 import { styles } from './Separator.styles'
 
 type SeparatorProps = {

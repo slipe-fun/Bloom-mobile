@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { useNavigation } from '@react-navigation/native'
 import { useChatList } from '@api/providers/ChatsContext'
 import { useWebSocket } from '@api/providers/WebSocketContext'
-import { ROUTES } from '@constants/routes'
-import useTokenTriggerStore from '@stores/tokenTriggerStore'
-import type { ChatView } from '@interfaces'
-import useChatsStore from '@stores/chats'
-import { Haptics } from 'react-native-nitro-haptics'
-import { AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { TextStyle, ViewStyle } from 'react-native'
 import { quickSpring } from '@constants/easings'
+import { ROUTES } from '@constants/routes'
+import type { ChatView } from '@interfaces'
+import { useNavigation } from '@react-navigation/native'
+import useChatsStore from '@stores/chats'
+import useTokenTriggerStore from '@stores/tokenTriggerStore'
+import { useCallback, useEffect, useMemo } from 'react'
+import { TextStyle, type ViewStyle } from 'react-native'
+import { Haptics } from 'react-native-nitro-haptics'
+import { type AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
 type CreateChatResponse = {
   chat?: {
@@ -60,7 +60,7 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
     const existingChat = chats?.find((c) => c?.members?.some((m) => m?.id === userID) && c?.members?.some((m) => m?.id === targetId))
 
     if (existingChat) {
-      // @ts-ignore
+      // @ts-expect-error
       navigation.navigate(ROUTES.chat, {
         chat: { ...chat, id: existingChat.id },
       })
@@ -73,7 +73,7 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
       const message: CreateChatResponse = JSON.parse(event.data)
       if (message?.chat) {
         ws.removeEventListener('message', handleMessage)
-        // @ts-ignore
+        // @ts-expect-error
         navigation.navigate(ROUTES.chat, {
           chat: { ...chat, id: message.chat.id },
         })

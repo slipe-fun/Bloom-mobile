@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { API_URL } from '@constants/api'
 import type { SearchUser } from '@interfaces'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 type SearchStatus = 'idle' | 'loading' | 'success' | 'empty' | 'error'
 

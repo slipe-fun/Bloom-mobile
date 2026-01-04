@@ -1,21 +1,21 @@
+import { Avatar } from '@components/ui'
+import type { User } from '@interfaces'
+import useSettingsScreenStore from '@stores/settings'
+import { BlurView, type BlurViewProps } from 'expo-blur'
+import type React from 'react'
+import type { ViewStyle } from 'react-native'
+import { Haptics } from 'react-native-nitro-haptics'
 import Animated, {
   interpolate,
   runOnJS,
-  SharedValue,
+  type SharedValue,
   useAnimatedProps,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated'
-import useSettingsScreenStore from '@stores/settings'
-import { BlurView, BlurViewProps } from 'expo-blur'
-import { ViewStyle } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { styles } from './User.styles'
-import React from 'react'
-import { Avatar } from '@components/ui'
-import { Haptics } from 'react-native-nitro-haptics'
-import type { User } from '@interfaces'
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 

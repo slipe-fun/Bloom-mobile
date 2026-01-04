@@ -1,7 +1,7 @@
-import { ICONS } from '@constants/icons'
-import { ROUTES } from '@constants/routes'
+import type { ICONS } from '@constants/icons'
+import type { ROUTES } from '@constants/routes'
 import React from 'react'
-import { staticColor } from 'unistyles'
+import type { staticColor } from 'unistyles'
 
 interface ChatLastMessage {
   content?: string

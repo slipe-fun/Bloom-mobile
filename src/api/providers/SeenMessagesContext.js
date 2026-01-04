@@ -1,10 +1,10 @@
-import initRealm from '@lib/initRealm'
-import Realm from 'realm'
-import { useState, useEffect, useContext, createContext } from 'react'
-import { useWebSocket } from './WebSocketContext'
 import getChatFromStorage from '@lib/getChatFromStorage'
+import initRealm from '@lib/initRealm'
 import decrypt from '@lib/skid/decrypt'
 import useStorageStore from '@stores/storage'
+import { createContext, useContext, useEffect, useState } from 'react'
+import Realm from 'realm'
+import { useWebSocket } from './WebSocketContext'
 
 const SeenMessagesContext = createContext(null)
 

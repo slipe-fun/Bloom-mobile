@@ -1,6 +1,6 @@
 import React from 'react'
+import { type GestureResponderEvent, Text, type TextProps } from 'react-native'
 import { styles } from './ActionText.styles'
-import { Text, GestureResponderEvent, TextProps } from 'react-native'
 
 type ActionTextProps = Omit<TextProps, 'children'> & {
   children: string

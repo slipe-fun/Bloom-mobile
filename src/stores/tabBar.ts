@@ -1,5 +1,5 @@
 import { ROUTES } from '@constants/routes'
-import { TabValue } from '@interfaces'
+import type { TabValue } from '@interfaces'
 import { create } from 'zustand'
 
 type TabBarStore = {

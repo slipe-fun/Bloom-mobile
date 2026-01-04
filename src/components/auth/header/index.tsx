@@ -1,10 +1,11 @@
 import { Button, Icon } from '@components/ui'
+import { quickSpring } from '@constants/easings'
+import { useInsets } from '@hooks'
+import useAuthStore from '@stores/auth'
+import type React from 'react'
+import { useEffect } from 'react'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Header.styles'
-import React, { useEffect } from 'react'
-import { useInsets } from '@hooks'
-import { quickSpring } from '@constants/easings'
-import useAuthStore from '@stores/auth'
 
 export default function AuthHeader({ navigation }): React.JSX.Element {
   const { index, setIndex } = useAuthStore()

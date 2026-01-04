@@ -1,8 +1,8 @@
-import Svg, { Path } from 'react-native-svg'
 import { ICONS } from '@constants/icons'
-import Animated, { AnimatedProps } from 'react-native-reanimated'
-import React from 'react'
-import { StyleProp, ViewStyle } from 'react-native'
+import type React from 'react'
+import type { StyleProp, ViewStyle } from 'react-native'
+import Animated, { type AnimatedProps } from 'react-native-reanimated'
+import Svg, { Path } from 'react-native-svg'
 
 const AnimatedPath = Animated.createAnimatedComponent(Path)
 

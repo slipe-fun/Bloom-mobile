@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react'
 import { Icon, Input } from '@components/ui'
 import useAuthStore from '@stores/auth'
+import type React from 'react'
+import { useEffect, useRef } from 'react'
+import type { TextInput } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
-import { TextInput } from 'react-native'
 
 export default function AuthNickInput(): React.JSX.Element {
   const { username, setUsername, index } = useAuthStore()

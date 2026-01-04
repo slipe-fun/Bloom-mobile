@@ -1,9 +1,9 @@
-import Animated, { useAnimatedStyle, interpolate, SharedValue } from 'react-native-reanimated'
-import { styles } from './User.styles'
-import { useUnistyles } from 'react-native-unistyles'
-import useSettingsScreenStore from '@stores/settings'
-import { TextStyle, ViewStyle } from 'react-native'
 import type { User } from '@interfaces'
+import useSettingsScreenStore from '@stores/settings'
+import type { TextStyle, ViewStyle } from 'react-native'
+import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './User.styles'
 
 type UserProps = {
   scrollY: SharedValue<number>

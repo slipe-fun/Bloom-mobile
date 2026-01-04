@@ -1,14 +1,14 @@
-import React from 'react'
-import { Pressable, View } from 'react-native'
-import { styles } from './Message.styles'
-import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
+import { getFadeIn } from '@constants/animations'
+import { useMessageSwipe } from '@hooks'
 import type { Message } from '@interfaces'
+import type React from 'react'
+import { Pressable, View } from 'react-native'
+import { GestureDetector } from 'react-native-gesture-handler'
+import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
+import MessageActions from './actions'
+import { styles } from './Message.styles'
 import MessageBubble from './MessageBubble'
 import MessageStatus from './MessageStatus'
-import { getFadeIn } from '@constants/animations'
-import MessageActions from './actions'
-import { useMessageSwipe } from '@hooks'
-import { GestureDetector } from 'react-native-gesture-handler'
 
 type MessageProps = {
   message: Message | null

@@ -1,7 +1,6 @@
-import { FadeIn, FadeOut, FadeInDown, FadeOutUp, withSpring, LinearTransition, type ComplexAnimationBuilder } from 'react-native-reanimated'
-
-import { quickSpring } from './easings'
 import physicsSpring from '@lib/physicSpring'
+import { type ComplexAnimationBuilder, FadeIn, FadeInDown, FadeOut, FadeOutUp, LinearTransition, withSpring } from 'react-native-reanimated'
+import { quickSpring } from './easings'
 
 type SpringTriple = { mass: number; stiffness: number; damping: number }
 

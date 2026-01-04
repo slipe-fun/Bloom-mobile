@@ -1,10 +1,10 @@
-import React from 'react'
-import Animated from 'react-native-reanimated'
 import { Button, Icon } from '@components/ui'
-import useTabBarStore from '@stores/tabBar'
-import { useUnistyles } from 'react-native-unistyles'
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { TAB_ICONS } from '@constants/tabBar'
+import useTabBarStore from '@stores/tabBar'
+import type React from 'react'
+import Animated from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 
 const AnimatedButton = Animated.createAnimatedComponent(Button)
 

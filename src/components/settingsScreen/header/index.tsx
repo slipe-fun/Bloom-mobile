@@ -1,12 +1,12 @@
-import { styles } from './Header.styles'
-import HeaderAvatar from './user/Avatar'
 import { useInsets } from '@hooks'
-import useSettingsScreenStore from '@stores/settings'
-import User from './user'
-import { LayoutChangeEvent, View } from 'react-native'
-import React from 'react'
-import { SharedValue } from 'react-native-reanimated'
 import type { User as UserType } from '@interfaces'
+import useSettingsScreenStore from '@stores/settings'
+import type React from 'react'
+import { type LayoutChangeEvent, View } from 'react-native'
+import type { SharedValue } from 'react-native-reanimated'
+import { styles } from './Header.styles'
+import User from './user'
+import HeaderAvatar from './user/Avatar'
 
 type HeaderProps = {
   scrollY: SharedValue<number>

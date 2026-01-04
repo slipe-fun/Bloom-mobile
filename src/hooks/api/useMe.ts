@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { API_URL } from '@constants/api'
+import type { User } from '@interfaces'
 import { createSecureStorage } from '@lib/storage'
-import { User } from '@interfaces'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 type useMe = {
   loading: boolean

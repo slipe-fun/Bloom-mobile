@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
 import { createSecureStorage } from '@lib/storage'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
+import { useEffect, useState } from 'react'
 
 export default function useTokenCheck() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)

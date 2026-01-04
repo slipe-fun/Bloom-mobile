@@ -1,6 +1,6 @@
-import { randomBytes } from '@noble/hashes/utils'
-import { gcmsiv } from '@noble/ciphers/aes'
 import { Buffer } from '@craftzdog/react-native-buffer'
+import { gcmsiv } from '@noble/ciphers/aes'
+import { randomBytes } from '@noble/hashes/utils'
 import QuickCrypto from 'react-native-quick-crypto'
 
 export async function hashPassword(password, salt) {
@@ -32,7 +32,7 @@ export function encryptKeys(key, content) {
 export function decryptKeys(key, ct, nonce) {
   const aes = gcmsiv(Uint8Array.from(Buffer.from(key, 'base64')), Uint8Array.from(Buffer.from(nonce, 'base64')))
   const ciphertext = aes.decrypt(Uint8Array.from(Buffer.from(ct, 'base64')))
-  let decrypted = new TextDecoder().decode(ciphertext)
+  const decrypted = new TextDecoder().decode(ciphertext)
 
   try {
     return JSON.parse(decrypted)

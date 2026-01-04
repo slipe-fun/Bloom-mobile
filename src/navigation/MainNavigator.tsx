@@ -1,7 +1,7 @@
+import { ROUTES } from '@constants/routes'
+import { ChatScreen } from '@screens'
 import { createBlankStackNavigator } from 'react-native-screen-transitions/blank-stack'
 import MainTabNavigator from './tabBar'
-import { ChatScreen } from '@screens'
-import { ROUTES } from '@constants/routes'
 import { screenTransition } from './transition'
 
 const Stack = createBlankStackNavigator()

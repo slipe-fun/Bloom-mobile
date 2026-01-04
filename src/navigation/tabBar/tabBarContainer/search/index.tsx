@@ -1,12 +1,12 @@
-import React from 'react'
-import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
-import { styles } from './search.styles'
 import { Button, Icon } from '@components/ui'
-import { TextInput } from 'react-native'
-import useTabBarStore from '@stores/tabBar'
-import { useUnistyles } from 'react-native-unistyles'
 import { charAnimationIn, charAnimationOut, layoutAnimation, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { ROUTES } from '@constants/routes'
+import useTabBarStore from '@stores/tabBar'
+import type React from 'react'
+import { TextInput } from 'react-native'
+import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './search.styles'
 
 const AnimatedButton = Animated.createAnimatedComponent(Button)
 

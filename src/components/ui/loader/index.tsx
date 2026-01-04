@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { View, ViewStyle } from 'react-native'
 import { quickSpring } from '@constants/easings'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { View, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Loader.styles'
 

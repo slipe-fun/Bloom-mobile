@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react'
-import { View, TextInput, StyleProp, ViewStyle } from 'react-native'
+import type React from 'react'
+import { useMemo } from 'react'
+import { type StyleProp, TextInput, View, type ViewStyle } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
 

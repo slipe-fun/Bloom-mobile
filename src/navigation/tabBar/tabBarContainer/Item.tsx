@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect } from 'react'
-import { Pressable, ViewStyle } from 'react-native'
+import Icon from '@components/ui/Icon'
+import { quickSpring } from '@constants/easings'
+import { TAB_COLORS, TAB_ICONS } from '@constants/tabBar'
+import type { TabValue } from '@interfaces'
+import type React from 'react'
+import { useCallback, useEffect } from 'react'
+import { Pressable, type ViewStyle } from 'react-native'
+import { Haptics } from 'react-native-nitro-haptics'
 import Animated, { interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { quickSpring } from '@constants/easings'
-import Icon from '@components/ui/Icon'
 import { styles } from './TabBarContainer.styles'
-import type { TabValue } from '@interfaces'
-import { TAB_COLORS, TAB_ICONS } from '@constants/tabBar'
-import { Haptics } from 'react-native-nitro-haptics'
 
 type TabBarItemProps = {
   route: { name: TabValue; key: string }

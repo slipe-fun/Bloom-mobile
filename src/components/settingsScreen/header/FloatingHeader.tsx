@@ -1,11 +1,11 @@
-import { styles } from './Header.styles'
-import { useInsets } from '@hooks'
-import useSettingsScreenStore from '@stores/settings'
-import React from 'react'
-import Animated, { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { GradientBlur } from '@components/ui'
-import { TextStyle, ViewStyle } from 'react-native'
+import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
+import useSettingsScreenStore from '@stores/settings'
+import type React from 'react'
+import type { TextStyle, ViewStyle } from 'react-native'
+import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import { styles } from './Header.styles'
 
 type FloatingHeaderProps = {
   scrollY: SharedValue<number>

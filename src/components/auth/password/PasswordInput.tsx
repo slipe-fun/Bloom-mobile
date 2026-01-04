@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
 import { Icon, Input } from '@components/ui'
-import useAuthStore from '@stores/auth'
-import { useUnistyles } from 'react-native-unistyles'
-import { Platform, Pressable, TextInput } from 'react-native'
-import Animated from 'react-native-reanimated'
-import { styles } from './Input.styles'
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
+import useAuthStore from '@stores/auth'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Platform, Pressable, type TextInput } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './Input.styles'
 
 export default function AuthPasswordInput(): React.JSX.Element {
   const { password, setPasssword, index } = useAuthStore()

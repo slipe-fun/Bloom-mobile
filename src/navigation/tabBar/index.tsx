@@ -1,9 +1,9 @@
-import React from 'react'
-import { createBottomTabNavigator, BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
-import { ROUTES } from '@constants/routes'
-import { ChatsScreen, SettingsScreen } from '@screens'
-import TabBar from './TabBar'
 import { quickSpring } from '@constants/easings'
+import { ROUTES } from '@constants/routes'
+import { type BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { ChatsScreen, SettingsScreen } from '@screens'
+import type React from 'react'
+import TabBar from './TabBar'
 
 const Tab = createBottomTabNavigator()
 

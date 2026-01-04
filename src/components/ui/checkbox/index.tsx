@@ -1,11 +1,11 @@
-import React from 'react'
-import { Pressable, StyleProp, View, ViewStyle } from 'react-native'
-import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
-import Icon from '../Icon'
-import { useUnistyles } from 'react-native-unistyles'
 import { charAnimationIn, charAnimationOut, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
-import { styles } from './Checkbox.styles'
+import type React from 'react'
+import { Pressable, type StyleProp, type View, type ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
+import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import Icon from '../Icon'
+import { styles } from './Checkbox.styles'
 
 type CheckboxProps = {
   onValueChange?: (value: boolean) => void

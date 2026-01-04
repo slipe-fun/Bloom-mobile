@@ -1,5 +1,5 @@
-import isSameDay from './isSameDay'
 import getDayLabel from './getDayLabel'
+import isSameDay from './isSameDay'
 
 export default function (rawMessages) {
   if (!rawMessages || !rawMessages.length) return []

@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
-import { BlurView } from 'expo-blur'
 import MaskedView from '@react-native-masked-view/masked-view'
+import { BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
+import type React from 'react'
+import { useMemo } from 'react'
+import { Platform, type StyleProp, type ViewStyle } from 'react-native'
 import { easeGradient } from 'react-native-easing-gradient'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
-import { Platform, StyleProp, ViewStyle } from 'react-native'
 
 type GradientDirection = 'top-to-bottom' | 'bottom-to-top' | 'bottom-left-to-top-right'
 

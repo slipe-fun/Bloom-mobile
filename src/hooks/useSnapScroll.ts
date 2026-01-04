@@ -1,5 +1,5 @@
-import { Component } from 'react'
-import { useAnimatedRef, useAnimatedScrollHandler, useSharedValue, scrollTo, SharedValue } from 'react-native-reanimated'
+import type { Component } from 'react'
+import { type SharedValue, scrollTo, useAnimatedRef, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 
 type Result<T> = {
   animatedRef: React.Ref<T>

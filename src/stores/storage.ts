@@ -1,7 +1,6 @@
-import { create } from 'zustand'
-
 import type { MMKVInterface } from 'react-native-mmkv/lib/typescript/src/Types'
 import type { Realm } from 'realm'
+import { create } from 'zustand'
 
 type StorageState = {
   mmkv: MMKVInterface | null

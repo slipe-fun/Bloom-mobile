@@ -1,13 +1,14 @@
 import { Button, Icon } from '@components/ui'
-import React, { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
-import Animated from 'react-native-reanimated'
-import { styles } from './replyBlock.styles'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
-import { useUnistyles } from 'react-native-unistyles'
+import type { Message } from '@interfaces'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import { createSecureStorage } from '@lib/storage'
-import type { Message } from '@interfaces'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './replyBlock.styles'
 
 type ReplyBlockProps = {
   message: Message

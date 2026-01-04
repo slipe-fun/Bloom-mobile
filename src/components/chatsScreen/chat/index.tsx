@@ -1,13 +1,14 @@
-import React, { useMemo } from 'react'
-import { View, Text, Pressable } from 'react-native'
+import { Avatar, Button, Checkbox } from '@components/ui'
+import Icon from '@components/ui/Icon'
+import { getCharEnter, getCharExit, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
+import { useChatItem } from '@hooks'
+import type { ChatView } from '@interfaces'
+import type React from 'react'
+import { useMemo } from 'react'
+import { Pressable, Text, View } from 'react-native'
 import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import Icon from '@components/ui/Icon'
-import { Avatar, Button, Checkbox } from '@components/ui'
-import { getCharEnter, getCharExit, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { styles } from './Chat.styles'
-import type { ChatView } from '@interfaces'
-import { useChatItem } from '@hooks'
 
 type ChatProps = {
   chat: ChatView

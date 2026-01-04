@@ -1,9 +1,9 @@
-import React from 'react'
+import AuthActions from '@components/auth/welcome/actions'
+import AuthTitle from '@components/auth/welcome/title'
+import { useInsets } from '@hooks'
+import type React from 'react'
 import { View } from 'react-native'
 import { styles } from './Welcome.styles'
-import AuthTitle from '@components/auth/welcome/title'
-import AuthActions from '@components/auth/welcome/actions'
-import { useInsets } from '@hooks'
 
 export default function AuthWelcome(): React.JSX.Element {
   const insets = useInsets()

@@ -1,11 +1,9 @@
 import 'react-native-get-random-values'
-import { hmac } from '@noble/hashes/hmac.js'
-import { sha256 } from '@noble/hashes/sha2.js'
-import { sha512 } from '@noble/hashes/sha2.js'
-
-import { ml_kem768 } from '@noble/post-quantum/ml-kem'
 import { x448 } from '@noble/curves/ed448'
 import * as ed from '@noble/ed25519'
+import { hmac } from '@noble/hashes/hmac.js'
+import { sha256, sha512 } from '@noble/hashes/sha2.js'
+import { ml_kem768 } from '@noble/post-quantum/ml-kem'
 
 import bytesToBase64 from './modules/utils/bytesToBase64'
 

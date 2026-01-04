@@ -1,12 +1,12 @@
-import React from 'react'
-import { View, Pressable, Text } from 'react-native'
+import { getFadeIn, getFadeOut } from '@constants/animations'
 import { Portal } from '@gorhom/portal'
-import Animated from 'react-native-reanimated'
+import type { Option } from '@interfaces'
 import { BlurView } from 'expo-blur'
+import type React from 'react'
+import { Pressable, Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import Icon from '../Icon'
 import { styles } from './Menu.styles'
-import { getFadeIn, getFadeOut } from '@constants/animations'
-import type { Option } from '@interfaces'
 
 type MenuProps = {
   isOpen: boolean

@@ -1,11 +1,11 @@
-import React from 'react'
-import { useUnistyles } from 'react-native-unistyles'
 import type { Message } from '@interfaces'
-import { ViewStyle, Text, View } from 'react-native'
-import Animated, { AnimatedStyle } from 'react-native-reanimated'
-import { styles } from './Message.styles'
-import ReplyBlock from '../replyBlock'
 import formatSentTime from '@lib/formatSentTime'
+import type React from 'react'
+import { Text, View, type ViewStyle } from 'react-native'
+import Animated, { type AnimatedStyle } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import ReplyBlock from '../replyBlock'
+import { styles } from './Message.styles'
 
 type MessageBubbleProps = {
   message: Message | null

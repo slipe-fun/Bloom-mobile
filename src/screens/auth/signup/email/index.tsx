@@ -1,11 +1,11 @@
-import React from 'react'
-import { styles } from './Email.styles'
-import AuthTitleTemplate from '@components/auth/titleTemplate'
 import AuthEmailInput from '@components/auth/email/Input'
+import AuthTitleTemplate from '@components/auth/titleTemplate'
 import { ActionText } from '@components/ui'
+import { useInsets } from '@hooks'
+import type React from 'react'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
-import { useInsets } from '@hooks'
+import { styles } from './Email.styles'
 
 export default function SignupEmail(): React.JSX.Element {
   const keyboard = useReanimatedKeyboardAnimation()

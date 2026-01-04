@@ -1,10 +1,10 @@
 import mergeAndSort from '@api/lib/utils/mergeAndSort'
-import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
+import getChatFromStorage from '@lib/getChatFromStorage'
 import decrypt from '@lib/skid/decrypt'
 import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
-import getChatMessages from '../getChatMessages'
-import getChatFromStorage from '@lib/getChatFromStorage'
 import Realm from 'realm'
+import getChatMessages from '../getChatMessages'
+import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
 
 export default async function (realm, mmkv, setMessages, chat_id) {
   // last saved message

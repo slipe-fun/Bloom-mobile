@@ -1,14 +1,15 @@
-import Header from '@components/chatScreen/header'
-import Footer from '@components/chatScreen/footer'
-import Message from '@components/chatScreen/message'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { styles } from './Chat.styles'
-import { View } from 'react-native'
-import EmptyModal from '@components/chatScreen/emptyModal'
 import useMessages from '@api/hooks/encryption/useMessages'
+import EmptyModal from '@components/chatScreen/emptyModal'
+import Footer from '@components/chatScreen/footer'
+import Header from '@components/chatScreen/header'
+import Message from '@components/chatScreen/message'
 import type { Chat, Message as MessageType } from '@interfaces'
+import type { LegendListRef } from '@legendapp/list'
 import { KeyboardAvoidingLegendList } from '@legendapp/list/keyboard'
-import { LegendListRef } from '@legendapp/list'
+import type React from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { View } from 'react-native'
+import { styles } from './Chat.styles'
 
 interface ChatScreenProps {
   route: {

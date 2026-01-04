@@ -1,7 +1,7 @@
+import { WEBSOCKET_URL } from '@constants/api'
 import { createSecureStorage } from '@lib/storage'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { AppState } from 'react-native'
-import { WEBSOCKET_URL } from '@constants/api'
 
 const WebSocketContext = createContext(null)
 

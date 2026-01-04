@@ -1,8 +1,8 @@
+import { quickSpring } from '@constants/easings'
+import type { Position } from '@interfaces'
 import { useCallback, useRef, useState } from 'react'
 import { Haptics } from 'react-native-nitro-haptics'
 import { useAnimatedStyle, withSpring } from 'react-native-reanimated'
-import type { Position } from '@interfaces'
-import { quickSpring } from '@constants/easings'
 import useContextMenuStore from 'src/stores/contextMenu'
 
 interface UseContextMenuProps {

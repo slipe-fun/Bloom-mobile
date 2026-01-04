@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react'
-import { ViewStyle } from 'react-native'
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, interpolateColor, SharedValue } from 'react-native-reanimated'
-import { styles } from './TabBarContainer.styles'
 import { quickSpring } from '@constants/animations'
-import { TabValue } from '@interfaces'
 import { TAB_COLORS } from '@constants/tabBar'
+import type { TabValue } from '@interfaces'
+import type React from 'react'
+import { useEffect, useRef } from 'react'
+import type { ViewStyle } from 'react-native'
+import Animated, { interpolateColor, type SharedValue, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { styles } from './TabBarContainer.styles'
 
 type TabBarIndicatorProps = {
   index: number

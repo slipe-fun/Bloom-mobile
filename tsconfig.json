@@ -1,45 +1,45 @@
 {
-	"extends": "expo/tsconfig.base",
+  "extends": "expo/tsconfig.base",
 
-	"compilerOptions": {
-		/* React / RN */
-		"jsx": "react-native",
+  "compilerOptions": {
+    /* React / RN */
+    "jsx": "react-native",
 
-		/* Type safety */
-		"strict": false,
-		"noImplicitAny": false,
-		"useUnknownInCatchVariables": false,
+    /* Type safety */
+    "strict": false,
+    "noImplicitAny": false,
+    "useUnknownInCatchVariables": false,
 
-		/* JS compatibility */
-		"allowJs": true,
-		"checkJs": false,
+    /* JS compatibility */
+    "allowJs": true,
+    "checkJs": false,
 
-		/* Module resolution */
-		"baseUrl": ".",
-		"paths": {
-			"@components/*": ["src/components/*"],
-			"@constants/*": ["src/constants/*"],
-			"@assets/*": ["assets/*"],
-			"@hooks": ["src/hooks"],
-			"@stores/*": ["src/stores/*"],
-			"@screens": ["src/screens"],
-			"@lib/*": ["src/lib/*"],
-			"@providers/*": ["src/api/providers/*"],
-			"@interfaces": ["src/interfaces/index"],
-			"@api/*": ["src/api/*"]
-		},
+    /* Module resolution */
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
+      "@assets/*": ["assets/*"],
+      "@hooks": ["src/hooks"],
+      "@stores/*": ["src/stores/*"],
+      "@screens": ["src/screens"],
+      "@lib/*": ["src/lib/*"],
+      "@providers/*": ["src/api/providers/*"],
+      "@interfaces": ["src/interfaces/index"],
+      "@api/*": ["src/api/*"]
+    },
 
-		/* Build behavior */
-		"isolatedModules": true,
-		"noEmit": true,
+    /* Build behavior */
+    "isolatedModules": true,
+    "noEmit": true,
 
-		/* Interop / ergonomics */
-		"resolveJsonModule": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true
-	},
+    /* Interop / ergonomics */
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
 
-	"include": ["src", "App.ts", "App.tsx", "App.js", "App.jsx"],
+  "include": ["src", "App.ts", "App.tsx", "App.js", "App.jsx"],
 
-	"exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }

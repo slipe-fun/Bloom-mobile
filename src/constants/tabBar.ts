@@ -1,6 +1,6 @@
+import type { TabValue } from '@interfaces'
 import { staticColor } from 'unistyles'
-import { ICONS } from './icons'
-import { TabValue } from '@interfaces'
+import type { ICONS } from './icons'
 
 export const TAB_COLORS = (backdrop?: boolean): Record<TabValue, string> =>
   ({

@@ -1,13 +1,13 @@
-import React from 'react'
-import { StyleProp, Text, View, ViewStyle } from 'react-native'
-import { styles } from './EmptyModal.styles'
-import Animated, { useAnimatedStyle } from 'react-native-reanimated'
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import { getFadeOut, reversedZoomAnimationIn } from '@constants/animations'
-import Icon from '../Icon'
-import { ICONS } from '@constants/icons'
+import type { ICONS } from '@constants/icons'
+import type React from 'react'
+import { type StyleProp, Text, View, type ViewStyle } from 'react-native'
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { staticColor } from 'unistyles'
+import type { staticColor } from 'unistyles'
+import Icon from '../Icon'
+import { styles } from './EmptyModal.styles'
 
 type EmptyModalProps = {
   text: string | React.JSX.Element

@@ -17,7 +17,6 @@
   },
 
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "never",
-    "quickfix.biome": "explicit"
+    "source.fixAll.biome": "explicit"
   }
 }

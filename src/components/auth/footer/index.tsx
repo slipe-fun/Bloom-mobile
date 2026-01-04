@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
-import Animated, { useAnimatedStyle, interpolateColor, interpolate, withSpring, useSharedValue } from 'react-native-reanimated'
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import { useUnistyles } from 'react-native-unistyles'
 import { Button, Icon } from '@components/ui'
-import { styles } from './Footer.styles'
-import { useInsets, useAuthFooter } from '@hooks'
-import { quickSpring } from '@constants/easings'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
+import { quickSpring } from '@constants/easings'
+import { useAuthFooter, useInsets } from '@hooks'
+import type React from 'react'
+import { useEffect } from 'react'
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './Footer.styles'
 
 const AnimatedButton = Animated.createAnimatedComponent(Button)
 

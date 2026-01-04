@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { getCharEnter, getCharExit, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { AUTH_TITLES } from '@constants/titles'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { styles } from './Title.styles'
-import { getCharEnter, getCharExit, layoutAnimationSpringy, springyChar } from '@constants/animations'
 
 export default function AuthTitle(): React.JSX.Element {
   const [activeTitle, setActiveTitle] = useState(0)

@@ -1,8 +1,8 @@
+import { quickSpring } from '@constants/easings'
 import { useCallback } from 'react'
-import { useSharedValue, useAnimatedStyle, withSpring, runOnJS, useAnimatedReaction } from 'react-native-reanimated'
 import { Gesture } from 'react-native-gesture-handler'
 import { Haptics } from 'react-native-nitro-haptics'
-import { quickSpring } from '@constants/easings'
+import { runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
 type Config = {
   menuWidth: number

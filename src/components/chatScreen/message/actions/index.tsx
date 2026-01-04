@@ -1,9 +1,9 @@
 import { Button, Icon } from '@components/ui'
 import type { Message } from '@interfaces'
-import React from 'react'
-import Animated, { SharedValue } from 'react-native-reanimated'
-import { styles } from './Actions.styles'
+import type React from 'react'
+import Animated, { type SharedValue } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { styles } from './Actions.styles'
 
 type MessageActionsProps = {
   message?: Message
