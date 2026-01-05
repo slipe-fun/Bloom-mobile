@@ -1,8 +1,8 @@
+import TabBar from '@components/navigation/tabBar'
 import { quickSpring } from '@constants/animations'
 import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { Tabs } from 'expo-router'
 import { StyleSheet } from 'react-native-unistyles'
-import TabBar from 'src/navigation/tabBar'
 
 const springOptions: BottomTabNavigationOptions = {
   transitionSpec: {
