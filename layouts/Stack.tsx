@@ -2,16 +2,16 @@ import 'react-native-reanimated'
 import type { ParamListBase, StackNavigationState } from '@react-navigation/native'
 import { withLayoutContext } from 'expo-router'
 import {
-  createNativeStackNavigator,
-  type NativeStackNavigationEventMap,
-  type NativeStackNavigationOptions,
-} from 'react-native-screen-transitions/native-stack'
+  type BlankStackNavigationEventMap,
+  type BlankStackNavigationOptions,
+  createBlankStackNavigator,
+} from 'react-native-screen-transitions/blank-stack'
 
-const { Navigator } = createNativeStackNavigator()
+const { Navigator } = createBlankStackNavigator()
 
 export const Stack = withLayoutContext<
-  NativeStackNavigationOptions,
+  BlankStackNavigationOptions,
   typeof Navigator,
   StackNavigationState<ParamListBase>,
-  NativeStackNavigationEventMap
+  BlankStackNavigationEventMap
 >(Navigator)

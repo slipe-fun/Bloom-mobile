@@ -2,7 +2,6 @@ import { Button, Icon } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
 import { quickSpring } from '@constants/easings'
 import { useAuthFooter, useInsets } from '@hooks'
-import type React from 'react'
 import { useEffect } from 'react'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -11,10 +10,10 @@ import { styles } from './Footer.styles'
 
 const AnimatedButton = Animated.createAnimatedComponent(Button)
 
-export default function AuthFooter({ navigation }): React.JSX.Element {
+export default function AuthFooter() {
   const insets = useInsets()
   const { theme } = useUnistyles()
-  const { index, label, isDisabled, progressValue, handlePress } = useAuthFooter(navigation)
+  const { index, label, isDisabled, progressValue, handlePress } = useAuthFooter()
   const { progress: keyboardProgress, height: keyboardHeight } = useReanimatedKeyboardAnimation()
 
   const progress = useSharedValue(0)

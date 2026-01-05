@@ -19,7 +19,7 @@ type AuthStore = {
 }
 
 const useAuthStore = create<AuthStore>((set) => ({
-  index: 3,
+  index: 0,
   setIndex: (index) => set({ index }),
   email: '',
   setEmail: (email) => set({ email }),

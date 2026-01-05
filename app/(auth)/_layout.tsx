@@ -1,25 +1,33 @@
 import AuthFooter from '@components/auth/footer'
 import AuthHeader from '@components/auth/header'
-import { Stack } from '@layouts/stack'
+import { useTokenCheck } from '@hooks'
+import { Stack } from '@layouts/Stack'
+import { screenTransition } from '@layouts/transition'
+import { Redirect } from 'expo-router'
 import { View } from 'react-native'
 
 export default function AuthLayout() {
+  const { isAuthenticated, isLoading } = useTokenCheck()
+
+  if (isLoading) return null
+
+  if (isAuthenticated) return <Redirect href="/(app)/(tabs)/index" />
+
   return (
     <Stack
       id={undefined}
-      screenOptions={{ headerShown: false }}
-      layout={({ children, navigation }) => (
+      layout={({ children }) => (
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <AuthHeader navigation={navigation} />
+          <AuthHeader />
           {children}
-          <AuthFooter navigation={navigation} />
+          <AuthFooter />
         </View>
       )}
     >
-      <Stack.Screen name="welcome" options={{ headerShown: false }} />
-      <Stack.Screen name="signup/email" options={{ headerShown: false }} />
-      <Stack.Screen name="signup/otp" options={{ headerShown: false }} />
-      <Stack.Screen name="signup/password" options={{ headerShown: false }} />
+      <Stack.Screen name="Welcome" />
+      <Stack.Screen name="signup/Email" options={screenTransition(false)} />
+      <Stack.Screen name="signup/Otp" options={screenTransition(false)} />
+      <Stack.Screen name="signup/Password" options={screenTransition(false)} />
     </Stack>
   )
 }

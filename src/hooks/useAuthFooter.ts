@@ -1,14 +1,17 @@
 import { API_URL } from '@constants/api'
-import { ROUTES } from '@constants/routes'
 import { Buffer } from '@craftzdog/react-native-buffer'
 import { decryptKeys, encryptKeys, hashPassword } from '@lib/skid/encryptKeys'
+import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
 import axios from 'axios'
+import { useRouter } from 'expo-router'
 import { useCallback, useMemo } from 'react'
 
-export default function useAuthFooter(navigation) {
-  const { index, email, emailValid, otp, password, setError, error } = useAuthStore()
+export default function useAuthFooter() {
+  const router = useRouter()
+  const index = useNavigationState((state) => state.index)
+  const { email, emailValid, otp, password, setError, error } = useAuthStore()
   const { mmkv } = useStorageStore()
 
   const isDisabled = useMemo(() => {
@@ -34,7 +37,7 @@ export default function useAuthFooter(navigation) {
     try {
       switch (index) {
         case 0:
-          navigation.navigate(ROUTES.auth.signup.email)
+          router.navigate('/(auth)/signup/Email')
           break
 
         case 1: {
@@ -49,7 +52,8 @@ export default function useAuthFooter(navigation) {
             const regRes = await axios.post(`${API_URL}/auth/register`, { email })
             if (regRes.data?.error) throw new Error('Failed to register')
           }
-          navigation.navigate(ROUTES.auth.signup.otp)
+          router.navigate('/(auth)/signup/Otp')
+
           break
         }
 
@@ -65,7 +69,7 @@ export default function useAuthFooter(navigation) {
               mmkv.set('token', token)
               mmkv.set('user_id', String(user?.id))
               mmkv.set('user', JSON.stringify(user))
-              navigation.navigate(ROUTES.auth.signup.password)
+              router.navigate('/(auth)/signup/Password')
             } else {
               setError('Неверный код подтверждения. Попробуйте ещë раз')
             }
@@ -135,7 +139,7 @@ export default function useAuthFooter(navigation) {
     } catch (e: any) {
       setError(e.response.data || e.message || 'Something went wrong')
     }
-  }, [index, email, otp, navigation, setError, mmkv, password])
+  }, [index, email, otp, router, setError, mmkv, password])
 
   return {
     index,

@@ -1,10 +1,10 @@
 import { quickSpring } from '@constants/easings'
 import { interpolate } from 'react-native-reanimated'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
-import { useUnistyles } from 'react-native-unistyles'
+// import { UnistylesRuntime } from 'react-native-unistyles'
 
 export const screenTransition = (gestures: boolean = true): BlankStackNavigationOptions => {
-  const { theme } = useUnistyles()
+  //   const color = UnistylesRuntime.getTheme().colors.background
 
   return {
     experimental_enableHighRefreshRate: true,
@@ -13,7 +13,7 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
     screenStyleInterpolator: ({ layouts: { screen }, progress }) => {
       'worklet'
 
-      const translateX = interpolate(progress, [0, 1, 2], [screen.width / 2, 0, -screen.width / 2], 'clamp')
+      const translateX = interpolate(progress, [0, 1, 2], [screen.width / 4, 0, -screen.width / 4], 'clamp')
       const opacity = interpolate(progress, [0, 1, 2], [0, 1, 0], 'clamp')
 
       return {
@@ -24,7 +24,7 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
         },
         overlayStyle: {
           opacity: opacity,
-          backgroundColor: theme.colors.background,
+          backgroundColor: 'black',
         },
       }
     },

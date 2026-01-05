@@ -1,6 +1,7 @@
 import { quickSpring } from '@constants/animations'
 import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { Tabs } from 'expo-router'
+import { StyleSheet } from 'react-native-unistyles'
 import TabBar from 'src/navigation/tabBar'
 
 const springOptions: BottomTabNavigationOptions = {
@@ -12,11 +13,17 @@ const springOptions: BottomTabNavigationOptions = {
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false, animation: 'fade' }} tabBar={(props) => <TabBar {...props} />}>
+    <Tabs screenOptions={{ headerShown: false, animation: 'fade', sceneStyle: styles.scene }} tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen name="friends" options={springOptions} />
       <Tabs.Screen name="explore" options={springOptions} />
-      <Tabs.Screen name="chats" options={springOptions} />
+      <Tabs.Screen name="index" options={springOptions} />
       <Tabs.Screen name="settings" options={springOptions} />
     </Tabs>
   )
 }
+
+const styles = StyleSheet.create((theme) => ({
+  scene: {
+    backgroundColor: theme.colors.background,
+  },
+}))
