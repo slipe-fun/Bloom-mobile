@@ -1,6 +1,6 @@
 export default function (mmkv, chat_id, messages) {
   // user id
-  const userId = parseInt(mmkv.getString('user_id'))
+  const userId = parseInt(mmkv.getString('user_id'), 10)
 
   // filter messages by current chat_id
   return messages

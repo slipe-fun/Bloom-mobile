@@ -5,7 +5,7 @@ import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
 export default async function (realm, mmkv, ws, content, reply_to, messages, setMessages, chat_id) {
   try {
     // send message socket
-    const nonce = await sendMessage(content, reply_to, chat_id, messages?.length, ws).catch(console.log)
+    const nonce = await sendMessage(content, reply_to, chat_id, messages?.length, ws)
 
     let _reply_to
     if (reply_to) {
@@ -39,7 +39,7 @@ export default async function (realm, mmkv, ws, content, reply_to, messages, set
       nonce,
       chat_id,
       content,
-      author_id: parseInt(mmkv?.getString('user_id')),
+      author_id: parseInt(mmkv?.getString('user_id'), 10),
       date: new Date(),
       seen: false,
       reply_to: reply_to_json,

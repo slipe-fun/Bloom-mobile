@@ -1,9 +1,5 @@
-import getChatFromStorage from '@lib/getChatFromStorage'
-import initRealm from '@lib/initRealm'
-import decrypt from '@lib/skid/decrypt'
 import useStorageStore from '@stores/storage'
 import { createContext, useContext, useEffect, useState } from 'react'
-import Realm from 'realm'
 import { useWebSocket } from './WebSocketContext'
 
 const SeenMessagesContext = createContext(null)
@@ -24,7 +20,7 @@ export default function SeenMessagesProvider({ children }) {
         let message
         try {
           message = JSON.parse(msg?.data)
-        } catch (error) {
+        } catch {
           return
         }
 

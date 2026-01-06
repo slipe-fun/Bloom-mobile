@@ -24,7 +24,7 @@ export default async function (realm, mmkv, setMessages, chat_id) {
   const key = chat?.encryption_key
 
   // user id
-  const userId = parseInt(mmkv.getString('user_id'))
+  const userId = parseInt(mmkv.getString('user_id'), 10)
 
   const decryptedMessages = messages
     .map((message) => {
@@ -89,6 +89,8 @@ export default async function (realm, mmkv, setMessages, chat_id) {
           } catch {}
         }
       }
+
+      return null
     })
     .filter(Boolean)
     .map((message) => ({

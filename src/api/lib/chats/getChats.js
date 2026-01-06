@@ -30,9 +30,7 @@ export default async function getChats(ws) {
     await Promise.all(
       response?.data?.map(async (chat) => {
         // get recipient from chat api object
-        const recipient = chat?.members?.find((member) => member?.id !== parseInt(Storage.getString('user_id')))
-        // get current user from chat api object
-        const me = chat?.members?.find((member) => member?.id === parseInt(Storage.getString('user_id')))
+        const recipient = chat?.members?.find((member) => member?.id !== parseInt(Storage.getString('user_id'), 10))
 
         // get chat from mmkv storage
         const chatInStorage = await getChatFromStorage(chat?.id)
@@ -101,5 +99,5 @@ export default async function getChats(ws) {
 
     // return api response
     return response.data
-  } catch (err) {}
+  } catch {}
 }

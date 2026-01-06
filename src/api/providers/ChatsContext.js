@@ -135,7 +135,7 @@ export default function ChatsProvider({ children }) {
           let message
           try {
             message = JSON.parse(msg?.data)
-          } catch (error) {
+          } catch {
             return
           }
 

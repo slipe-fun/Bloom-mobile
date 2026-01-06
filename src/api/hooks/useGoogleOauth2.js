@@ -1,8 +1,7 @@
-import { API_URL } from '@constants/api'
+import googleOauth2ExchangeCode from '@api/lib/auth/googleOauth2ExchangeCode'
 import { getAuthUrl, REDIRECT_URL_WITH_SCHEME } from '@constants/googleOauth2Params'
 import useStorageStore from '@stores/storage'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
-import axios from 'axios'
 import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
 import { useState } from 'react'
@@ -14,8 +13,6 @@ export default function () {
 
   const { mmkv } = useStorageStore()
   const { counter, setCounter } = useTokenTriggerStore()
-
-  console.log(result, error)
 
   async function startGoogleAuth() {
     setError('')
@@ -39,15 +36,7 @@ export default function () {
         return
       }
 
-      const exchangeCode = await axios
-        .get(`${API_URL}/oauth2/google/exchange-code`, {
-          params: {
-            state: 'random-state',
-            code,
-          },
-        })
-        .then((res) => res.data)
-        .catch(() => null)
+      const exchangeCode = await googleOauth2ExchangeCode(code)
 
       if (!exchangeCode?.token) {
         setError('Failed to exchange code')

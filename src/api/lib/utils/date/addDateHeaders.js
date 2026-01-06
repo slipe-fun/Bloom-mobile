@@ -8,7 +8,7 @@ export default function (rawMessages) {
     const timestamp = new Date(m.date).getTime()
     return {
       ...m,
-      _sortTimestamp: isNaN(timestamp) ? 0 : timestamp,
+      _sortTimestamp: Number.isNaN(timestamp) ? 0 : timestamp,
     }
   })
 

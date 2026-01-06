@@ -1,4 +1,3 @@
-import { Buffer } from '@craftzdog/react-native-buffer'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { ml_kem768 } from '@noble/post-quantum/ml-kem'
 import deriveECDHSecret from './deriveECDHSecret.js'

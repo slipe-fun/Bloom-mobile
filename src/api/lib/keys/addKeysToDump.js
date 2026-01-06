@@ -24,7 +24,7 @@ export default async function (mmkv, keys) {
 
     const { ciphertext, nonce } = encryptKeys(password, new TextEncoder().encode(JSON.stringify(newDump)))
 
-    const sendKeys = await axios
+    return await axios
       .post(
         `${API_URL}/chats/keys/private`,
         { ciphertext, nonce, salt },
@@ -32,10 +32,9 @@ export default async function (mmkv, keys) {
           headers: { Authorization: `Bearer ${token}` },
         },
       )
-      .then((res) => res.data)
-
-    return true
-  } catch (error) {
+      .then(() => true)
+      .catch(() => false)
+  } catch {
     return false
   }
 }

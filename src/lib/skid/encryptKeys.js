@@ -36,7 +36,7 @@ export function decryptKeys(key, ct, nonce) {
 
   try {
     return JSON.parse(decrypted)
-  } catch (error) {
+  } catch {
     return null
   }
 }

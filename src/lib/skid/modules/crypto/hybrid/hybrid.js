@@ -1,6 +1,5 @@
 import 'react-native-get-random-values'
 import { x448 } from '@noble/curves/ed448'
-import { hmac } from '@noble/hashes/hmac.js'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { ml_kem768 } from '@noble/post-quantum/ml-kem'
 
