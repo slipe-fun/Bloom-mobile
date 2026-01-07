@@ -34,7 +34,7 @@ export default function TabBarActionButtonDelete(): React.JSX.Element {
 
           {selectedChats.length > 0 && (
             <Animated.View layout={layoutAnimationSpringy} style={styles.deleteCharStack}>
-              {countChars.map((char, i) => (
+              {countChars.map((char) => (
                 <Animated.Text
                   key={char}
                   style={styles.deleteChar}

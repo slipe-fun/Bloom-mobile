@@ -63,7 +63,7 @@ pnpm install
 ## Run
 
 ```bash
-npx expo run prebuild
+npx expo prebuild
 ```
 
 Then

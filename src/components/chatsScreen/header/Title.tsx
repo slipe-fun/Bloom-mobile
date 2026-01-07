@@ -1,7 +1,7 @@
 import { Icon, Loader } from '@components/ui'
 import { getCharEnter, getCharExit } from '@constants/animations'
 import { Text } from 'react-native'
-import Animated, {} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './header.styles'
 
