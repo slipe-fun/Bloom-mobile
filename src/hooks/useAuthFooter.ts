@@ -18,7 +18,7 @@ interface UseAuthFooter {
 export default function useAuthFooter(): UseAuthFooter {
   const router = useRouter()
   const index = useNavigationState((s) => s.index)
-  const { email, emailValid, otp, password, setError, error } = useAuthStore()
+  const { email, emailValid, otp, username, password, setError, error } = useAuthStore()
   const { mmkv } = useStorageStore()
   const progress = useSharedValue(0)
 
@@ -71,13 +71,13 @@ export default function useAuthFooter(): UseAuthFooter {
 
       if (index === 3) {
         const token = mmkv.getString('token')!
-        await authApi.handlePasswordStep(token, password, mmkv)
+        await authApi.handleUsernameAndPasswordStep(token, username, password, mmkv)
         router.navigate('/(app)/(tabs)')
       }
     } catch (e: any) {
       setError(e?.response?.data || e?.message || 'Something went wrong')
     }
-  }, [index, email, otp, password, router, setError, mmkv])
+  }, [index, email, otp, username, password, router, setError, mmkv])
 
   useEffect(() => {
     progress.value = withSpring(progressValue, quickSpring)

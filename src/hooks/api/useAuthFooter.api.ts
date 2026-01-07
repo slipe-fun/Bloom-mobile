@@ -9,6 +9,81 @@ interface PrivateKeysResponse {
   salt: string
 }
 
+interface User {
+  id: number
+  username: string
+  display_name: string
+  description: string
+  date: Date
+}
+
+async function usernameHandler(token: string, username: string): Promise<void> {
+  try {
+    const a = await axios.post(
+      `${API_URL}/user/edit`,
+      { username },
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    console.log(a?.data)
+  } catch { }
+}
+
+async function passwordHandler(token: string, password: string, mmkv: any): Promise<void> {
+  const privateKeys: PrivateKeysResponse | null = await axios
+    .get(`${API_URL}/chats/keys/private`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((r) => r?.data)
+    .catch(() => null)
+
+  if (!privateKeys) {
+    const { hash, salt } = await hashPassword(password)
+    const { ciphertext, nonce } = encryptKeys(hash, new TextEncoder().encode('[]'))
+
+    await axios.post(
+      `${API_URL}/chats/keys/private`,
+      { ciphertext, nonce, salt: Buffer.from(salt).toString('base64') },
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+
+    mmkv.set('password', Buffer.from(hash).toString('base64'))
+    mmkv.set('salt', Buffer.from(salt).toString('base64'))
+    return
+  }
+
+  const { hash } = await hashPassword(password, Buffer.from(privateKeys.salt, 'base64'))
+
+  mmkv.set('password', Buffer.from(hash).toString('base64'))
+  mmkv.set('salt', privateKeys.salt)
+
+  try {
+    const keys = decryptKeys(hash, privateKeys.ciphertext, privateKeys.nonce)
+    mmkv.set(
+      'chats',
+      JSON.stringify(
+        keys
+          .map((k) => ({
+            id: k.chat_id,
+            keys: {
+              my: {
+                kyberPublicKey: k.kyberPublicKey,
+                ecdhPublicKey: k.ecdhPublicKey,
+                edPublicKey: k.edPublicKey,
+                kyberSecretKey: k.kyberSecretKey,
+                ecdhSecretKey: k.ecdhSecretKey,
+                edSecretKey: k.edSecretKey,
+              },
+              recipient: {},
+            },
+          }))
+          .filter((k) => k.id),
+      ),
+    )
+  } catch {
+    console.log('FAILED TO DECRYPT KEYS')
+  }
+}
+
 export const authApi = {
   async handleEmailStep(email: string) {
     const res = await axios.get(`${API_URL}/user/exists`, { params: { email } })
@@ -28,59 +103,8 @@ export const authApi = {
     return data.data // { token, user }
   },
 
-  async handlePasswordStep(token: string, password: string, mmkv: any): Promise<void> {
-    const privateKeys: PrivateKeysResponse | null = await axios
-      .get(`${API_URL}/chats/keys/private`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((r) => r?.data)
-      .catch(() => null)
-
-    if (!privateKeys) {
-      const { hash, salt } = await hashPassword(password)
-      const { ciphertext, nonce } = encryptKeys(hash, new TextEncoder().encode('[]'))
-
-      await axios.post(
-        `${API_URL}/chats/keys/private`,
-        { ciphertext, nonce, salt: Buffer.from(salt).toString('base64') },
-        { headers: { Authorization: `Bearer ${token}` } },
-      )
-
-      mmkv.set('password', Buffer.from(hash).toString('base64'))
-      mmkv.set('salt', Buffer.from(salt).toString('base64'))
-      return
-    }
-
-    const { hash } = await hashPassword(password, Buffer.from(privateKeys.salt, 'base64'))
-
-    mmkv.set('password', Buffer.from(hash).toString('base64'))
-    mmkv.set('salt', privateKeys.salt)
-
-    try {
-      const keys = decryptKeys(hash, privateKeys.ciphertext, privateKeys.nonce)
-      mmkv.set(
-        'chats',
-        JSON.stringify(
-          keys
-            .map((k) => ({
-              id: k.chat_id,
-              keys: {
-                my: {
-                  kyberPublicKey: k.kyberPublicKey,
-                  ecdhPublicKey: k.ecdhPublicKey,
-                  edPublicKey: k.edPublicKey,
-                  kyberSecretKey: k.kyberSecretKey,
-                  ecdhSecretKey: k.ecdhSecretKey,
-                  edSecretKey: k.edSecretKey,
-                },
-                recipient: {},
-              },
-            }))
-            .filter((k) => k.id),
-        ),
-      )
-    } catch {
-      console.log('FAILED TO DECRYPT KEYS')
-    }
+  async handleUsernameAndPasswordStep(token: string, username: string, password: string, mmkv: any): Promise<void> {
+    await usernameHandler(token, username)
+    await passwordHandler(token, password, mmkv)
   },
 }

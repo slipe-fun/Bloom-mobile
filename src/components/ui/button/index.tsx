@@ -1,7 +1,7 @@
 import { quickSpring } from '@constants/easings'
 import { BlurView } from 'expo-blur'
 import React, { type ComponentProps, useMemo } from 'react'
-import { Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
+import { Platform, Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { styles } from './Button.styles'
@@ -74,7 +74,7 @@ export default function Button({
       ref={ref}
       {...props}
     >
-      {blur && (
+      {blur && Platform.OS === "ios" && (
         <BlurView style={StyleSheet.absoluteFill} experimentalBlurMethod="dimezisBlurView" intensity={40} tint="systemChromeMaterialDark" />
       )}
       {icon}
