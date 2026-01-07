@@ -1,30 +1,22 @@
 import { getFadeIn } from '@constants/animations'
-import { useMessageSwipe } from '@hooks'
-import type { Message } from '@interfaces'
+import type { Message as MessageType } from '@interfaces'
 import type React from 'react'
-import { Pressable, View } from 'react-native'
-import { GestureDetector } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
 import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
-import MessageActions from './actions'
 import { styles } from './Message.styles'
 import MessageBubble from './MessageBubble'
 import MessageStatus from './MessageStatus'
 
 type MessageProps = {
-  message: Message | null
+  message: MessageType | null
   seen?: boolean
-  prevItem?: Message
-  nextItem?: Message
+  prevItem?: MessageType
+  nextItem?: MessageType
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function Message({ message, seen, prevItem, nextItem }: MessageProps): React.JSX.Element {
-  const { gesture, animatedStyle, translateX } = useMessageSwipe({
-    menuWidth: 164,
-    replyThreshold: 500,
-    onReply: () => console.log('Reply'),
-  })
   const CHAT_TIME_WINDOW = 5 * 60 * 1000
 
   const isGroupStart =
@@ -39,12 +31,7 @@ export default function Message({ message, seen, prevItem, nextItem }: MessagePr
 
   return (
     <AnimatedPressable entering={getFadeIn()} style={[styles.messageWrapper(message?.isMe, !isGroupStart && !isGroupEnd)]}>
-      <GestureDetector gesture={gesture}>
-        <View style={styles.messageBubbleWrapper}>
-          <MessageBubble style={animatedStyle} message={message} />
-          <MessageActions progress={translateX} />
-        </View>
-      </GestureDetector>
+      <MessageBubble message={message} />
 
       <LayoutAnimationConfig skipEntering skipExiting>
         {isGroupEnd && <MessageStatus message={message} seen={seen} />}

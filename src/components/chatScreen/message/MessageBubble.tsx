@@ -3,7 +3,6 @@ import formatSentTime from '@lib/formatSentTime'
 import type React from 'react'
 import { Text, View, type ViewStyle } from 'react-native'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import ReplyBlock from '../replyBlock'
 import { styles } from './Message.styles'
 
@@ -13,8 +12,6 @@ type MessageBubbleProps = {
 }
 
 export default function MessageBubble({ message, style }: MessageBubbleProps): React.JSX.Element {
-  const { theme } = useUnistyles()
-
   const isMe: boolean = message?.isMe
 
   return (

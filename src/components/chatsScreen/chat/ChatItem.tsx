@@ -10,7 +10,7 @@ interface ChatItemProps {
 }
 
 export default function ChatItem({ item, userId }: ChatItemProps): React.JSX.Element {
-  const numericUserId = typeof userId === 'string' ? parseInt(userId) : userId
+  const numericUserId = typeof userId === 'string' ? parseInt(userId, 10) : userId
 
   const recipient = useMemo(() => item.members?.find((member) => member.id !== numericUserId), [item, item.members, numericUserId])
 

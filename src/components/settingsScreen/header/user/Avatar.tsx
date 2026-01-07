@@ -4,10 +4,8 @@ import useSettingsScreenStore from '@stores/settings'
 import { BlurView, type BlurViewProps } from 'expo-blur'
 import type React from 'react'
 import type { ViewStyle } from 'react-native'
-import { Haptics } from 'react-native-nitro-haptics'
 import Animated, {
   interpolate,
-  runOnJS,
   type SharedValue,
   useAnimatedProps,
   useAnimatedReaction,
@@ -62,7 +60,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps): Reac
 
   useAnimatedReaction(
     () => scrollY.get(),
-    (prepared, previous) => {
+    (prepared, _previous) => {
       if (prepared <= -25) {
         isAvatarExpanded.set(true)
       }
@@ -70,7 +68,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps): Reac
   )
 
   return (
-    <Animated.View style={[styles.avatarWrapper, animatedStyle]}>
+    <Animated.View renderToHardwareTextureAndroid shouldRasterizeIOS style={[styles.avatarWrapper, animatedStyle]}>
       <Avatar size="2xl" image={user?.avatar} username={user?.username || user?.display_name} style={styles.avatar} />
       <AnimatedBlurView
         tint="dark"

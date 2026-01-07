@@ -16,7 +16,7 @@ interface ButtonProps extends ComponentProps<typeof Pressable> {
   size?: Size
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>
-  icon?: React.JSX.Element
+  icon?: React.JSX.Element | null | boolean
   children?: React.ReactNode
   blur?: boolean
 }

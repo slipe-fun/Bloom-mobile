@@ -68,7 +68,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
                 <Animated.View layout={layoutAnimationSpringy} style={styles.charStack}>
                   {timeChars.map((char, i) => (
                     <Animated.Text
-                      key={`${char}-${i}`}
+                      key={char}
                       style={styles.secondary(false)}
                       entering={getCharEnter(springyChar(i))}
                       exiting={getCharExit(springyChar(i))}

@@ -32,7 +32,7 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
     }
 
     setStatus('loading')
-    setError(null)
+    setError('')
 
     async function fetchUsers() {
       try {

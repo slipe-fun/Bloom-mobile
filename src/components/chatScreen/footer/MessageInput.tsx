@@ -4,7 +4,7 @@ import useChatScreenStore from '@stores/chatScreen'
 import { BlurView } from 'expo-blur'
 import type React from 'react'
 import Animated from 'react-native-reanimated'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { StyleSheet } from 'react-native-unistyles'
 import ReplyBlock from '../replyBlock'
 import { styles } from './Footer.styles'
 
@@ -16,7 +16,7 @@ type MessageInputProps = {
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
-export default function MessageInput({ setValue, hasValue, value }: MessageInputProps): React.JSX.Element {
+export default function MessageInput({ setValue, value }: MessageInputProps): React.JSX.Element {
   const { replyMessage, setReplyMessage } = useChatScreenStore()
 
   return (

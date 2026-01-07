@@ -7,14 +7,14 @@ import { useEffect, useState } from 'react'
 interface useMe {
   loading: boolean
   error: string
-  user: User
+  user: User | undefined
 }
 
 export default function useMe(): useMe {
   // variables
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
-  const [user, setUser] = useState<User>(null)
+  const [user, setUser] = useState<User | undefined>()
 
   useEffect(() => {
     let canceled = false

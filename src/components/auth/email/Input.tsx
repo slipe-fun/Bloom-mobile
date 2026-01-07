@@ -3,20 +3,19 @@ import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { PROVIDERS_LOGOS } from '@constants/providersLogos'
 import parseEmail from '@lib/parseEmail'
 import useAuthStore from '@stores/auth'
-import type React from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TextInput } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
 
-export default function AuthEmailInput(): React.JSX.Element {
+export default function AuthEmailInput() {
   const { email, setEmail, setEmailValid, index } = useAuthStore()
   const { theme } = useUnistyles()
   const ref = useRef<TextInput>(null)
   const [provider, setProvider] = useState<keyof typeof PROVIDERS_LOGOS | 'unknown'>('unknown')
 
-  const icon = useMemo((): React.JSX.Element | null => {
+  const icon = useMemo(() => {
     if (provider === 'unknown') {
       return (
         <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut}>

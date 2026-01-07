@@ -210,7 +210,7 @@ export default function ChatsProvider({ children }) {
         const messages = realm.objects('Message').filtered('chat_id == $0', chat.id)
 
         // realm listener
-        const listener = (collection, changes) => {
+        const listener = (_collection, changes) => {
           if (changes.insertions.length > 0) {
             // change chat last message if last message changed in local realm storage
             setChats((prev) => {

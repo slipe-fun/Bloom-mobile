@@ -31,7 +31,7 @@ export default function Menu({ isOpen, position, closeMenu, options, bluredBackd
       <View style={styles.menuWrapper(position.top)}>
         <Animated.View style={styles.menu(bluredBackdrop, right)}>
           {!bluredBackdrop && <BlurView tint="dark" style={styles.backdrop} intensity={128} />}
-          {options.map((option, index) =>
+          {options.map((option) =>
             !option.separator ? (
               <AnimatedPressable
                 onPress={() => {
@@ -39,13 +39,13 @@ export default function Menu({ isOpen, position, closeMenu, options, bluredBackd
                   closeMenu()
                 }}
                 style={styles.option}
-                key={index}
+                key={option.label}
               >
                 <Icon size={28} color={option.color} icon={option.icon} />
                 <Text style={styles.optionText(option.color)}>{option.label}</Text>
               </AnimatedPressable>
             ) : (
-              <Animated.View style={styles.separator} key={index} />
+              <Animated.View style={styles.separator} key={option.label} />
             ),
           )}
         </Animated.View>

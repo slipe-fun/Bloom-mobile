@@ -5,7 +5,8 @@ export default async function (chat_id: number, keys: any) {
 
   let chats: Array<any>
   try {
-    chats = JSON.parse(Storage.getString('chats'))
+    const chatsString = Storage.getString('chats')
+    chats = JSON.parse(chatsString || '[]')
   } catch {
     return null
   }

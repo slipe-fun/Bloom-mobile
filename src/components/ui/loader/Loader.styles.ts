@@ -7,7 +7,7 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   }),
-  bar: (color: string) => ({
+  bar: (color?: string) => ({
     position: 'absolute',
     width: 2,
     height: 6,

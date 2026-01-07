@@ -1,7 +1,7 @@
 import { Avatar } from '@components/ui'
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import type { Chat } from '@interfaces'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { styles } from './EmptyModal.styles'

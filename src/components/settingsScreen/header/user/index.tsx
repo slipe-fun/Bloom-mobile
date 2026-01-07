@@ -1,13 +1,13 @@
-import type { User } from '@interfaces'
+import type { User as UserType } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
-import type { TextStyle, ViewStyle } from 'react-native'
+import type { TextStyle } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './User.styles'
 
 type UserProps = {
   scrollY: SharedValue<number>
-  user: User
+  user: UserType
 }
 
 export default function User({ scrollY, user }: UserProps): React.JSX.Element {
@@ -19,7 +19,7 @@ export default function User({ scrollY, user }: UserProps): React.JSX.Element {
   }))
 
   const animatedStyle = useAnimatedStyle(
-    (): ViewStyle => ({
+    (): TextStyle => ({
       transform: [
         {
           scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, theme.fontSize.lg / (theme.fontSize.xxl - 2)], 'clamp'),

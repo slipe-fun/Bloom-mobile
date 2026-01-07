@@ -25,10 +25,8 @@ export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }:
   }, [headerHeight])
 
   return (
-    <>
-      <Animated.View onLayout={onLayout} style={[animatedViewStyle, styles.header(true, insets.top + 12)]}>
-        <Text style={styles.title(true)}>Поиск</Text>
-      </Animated.View>
-    </>
+    <Animated.View onLayout={onLayout} style={[animatedViewStyle, styles.header(true, insets.top + 12)]}>
+      <Text style={styles.title(true)}>Поиск</Text>
+    </Animated.View>
   )
 }

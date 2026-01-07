@@ -38,6 +38,6 @@ for (const file of files) {
   exports.push(`export { ${name} } from './paths/${name}';`)
 }
 
-fs.writeFileSync(path.join(INPUT_DIR, 'index.ts'), exports.join('\n') + '\n', 'utf8')
+fs.writeFileSync(path.join(INPUT_DIR, 'index.ts'), `${exports.join('\n')}\n`, 'utf8')
 
 console.log(`✅ Generated ${exports.length} icons`)

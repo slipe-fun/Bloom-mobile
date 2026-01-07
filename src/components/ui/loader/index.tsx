@@ -10,7 +10,7 @@ type BarProps = {
   progress: number
   radius: number
   segments: number
-  color: string
+  color?: string
 }
 
 type LoaderProps = {

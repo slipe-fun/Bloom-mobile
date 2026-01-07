@@ -34,6 +34,6 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radius.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors[color + 'Backdrop'],
+    backgroundColor: theme.colors[`${color}Backdrop`],
   }),
 }))

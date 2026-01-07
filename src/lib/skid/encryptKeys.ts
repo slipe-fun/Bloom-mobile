@@ -25,6 +25,7 @@ export async function hashPassword(password: BinaryLike | Buffer, salt?: Uint8Ar
   return new Promise((resolve, reject) => {
     QuickCrypto.pbkdf2(password, _salt, 600000, 32, 'sha256', (err, hash) => {
       if (err) return reject(err)
+      if (!hash) return reject(new Error('Hash generation failed'))
 
       resolve({
         hash: hash,
@@ -45,7 +46,7 @@ export function encryptKeys(key: Uint8Array, content: Uint8Array): EncryptedKeys
   }
 }
 
-export function decryptKeys(key: Uint8Array, cipthertext: string, nonce: string): ChatKeys[] {
+export function decryptKeys(key: Uint8Array, cipthertext: string, nonce: string): ChatKeys[] | null {
   const aes: Cipher = gcmsiv(key, Uint8Array.from(Buffer.from(nonce, 'base64')))
   const ciphertext: Uint8Array = aes.decrypt(Uint8Array.from(Buffer.from(cipthertext, 'base64')))
   const decrypted: string = new TextDecoder().decode(ciphertext)
