@@ -4,9 +4,17 @@ import deriveAesKey from './modules/crypto/aes/deriveAesKey'
 import verifySignature from './modules/crypto/ed/verifySignature'
 import { hybridDecrypt } from './modules/crypto/hybrid/hybrid'
 import base64ToUint8Array from './modules/utils/base64ToUint8Array'
+import type { EncryptedMessage } from './types/encryptedMessage'
+import type { Message } from './types/message'
+import type { UserKeys } from './types/userKeys'
 
-export default function decrypt(payload, me, sender, isAuthor = false) {
-  let cek, iv, ciphertext
+export default function decrypt(
+  payload: EncryptedMessage,
+  me: UserKeys,
+  sender: UserKeys,
+  isAuthor: boolean = false,
+): Message | string | Error {
+  let cek: Uint8Array, iv: Uint8Array, ciphertext: Uint8Array
 
   if (isAuthor) {
     const { sessionKey: ssSender } = hybridDecrypt(
@@ -16,7 +24,7 @@ export default function decrypt(payload, me, sender, isAuthor = false) {
       base64ToUint8Array(payload.encapsulated_key_sender),
     )
 
-    const kekSender = deriveAesKey(ssSender, base64ToUint8Array(payload.cek_wrap_sender_salt))
+    const kekSender: Uint8Array = deriveAesKey(ssSender, base64ToUint8Array(payload.cek_wrap_sender_salt))
     cek = decryptCekWithKek(kekSender, base64ToUint8Array(payload.cek_wrap_sender_iv), base64ToUint8Array(payload.cek_wrap_sender))
   } else {
     const { sessionKey: ssReceiver } = hybridDecrypt(
@@ -26,11 +34,15 @@ export default function decrypt(payload, me, sender, isAuthor = false) {
       base64ToUint8Array(payload.encapsulated_key),
     )
 
-    const kekReceiver = deriveAesKey(ssReceiver, base64ToUint8Array(payload.cek_wrap_salt))
+    const kekReceiver: Uint8Array = deriveAesKey(ssReceiver, base64ToUint8Array(payload.cek_wrap_salt))
     cek = decryptCekWithKek(kekReceiver, base64ToUint8Array(payload.cek_wrap_iv), base64ToUint8Array(payload.cek_wrap))
   }
 
-  const signatureValid = verifySignature(base64ToUint8Array(sender.edPublicKey), JSON.parse(payload?.signed_payload), payload.signature)
+  const signatureValid: boolean = verifySignature(
+    base64ToUint8Array(sender.edPublicKey),
+    JSON.parse(payload?.signed_payload),
+    payload.signature,
+  )
 
   if (!signatureValid) {
     return new Error('Signature is not valid')

@@ -1,4 +1,4 @@
-import { randomBytes } from '@noble/hashes/utils'
+import { randomBytes } from '@noble/hashes/utils.js'
 import deriveAesKey from './modules/crypto/aes/deriveAesKey'
 import encryptCekWithKek from './modules/crypto/aes/encryptCekWithKek'
 import encryptMessage from './modules/crypto/aes/encryptMessage'
@@ -8,8 +8,11 @@ import generateIV from './modules/crypto/utils/generateIV'
 import generatePadding from './modules/crypto/utils/generatePadding'
 import base64ToUint8Array from './modules/utils/base64ToUint8Array'
 import bytesToBase64 from './modules/utils/bytesToBase64'
+import type { EncryptedMessage } from './types/encryptedMessage'
+import type { Message } from './types/message'
+import type { UserKeys } from './types/userKeys'
 
-export default function encrypt(content, sender, receiver, counter) {
+export default function encrypt(content: string, sender: UserKeys, receiver: UserKeys, counter: number): EncryptedMessage {
   try {
     const { sessionKey: ssReceiver, cipherText: ctReceiver } = hybridEncrypt(
       base64ToUint8Array(receiver.ecdhPublicKey),
@@ -17,12 +20,12 @@ export default function encrypt(content, sender, receiver, counter) {
       base64ToUint8Array(sender.ecdhSecretKey),
     )
 
-    const cekRaw = randomBytes(32)
+    const cekRaw: Uint8Array = randomBytes(32)
 
-    const wrapSaltReceiver = randomBytes(32)
-    const wrapIvReceiver = randomBytes(12)
-    const kekReceiver = deriveAesKey(ssReceiver, wrapSaltReceiver)
-    const wrappedCekReceiver = encryptCekWithKek(kekReceiver, wrapIvReceiver, cekRaw)
+    const wrapSaltReceiver: Uint8Array = randomBytes(32)
+    const wrapIvReceiver: Uint8Array = randomBytes(12)
+    const kekReceiver: Uint8Array = deriveAesKey(ssReceiver, wrapSaltReceiver)
+    const wrappedCekReceiver: Uint8Array = encryptCekWithKek(kekReceiver, wrapIvReceiver, cekRaw)
 
     const { sessionKey: ssSender, cipherText: ctSender } = hybridEncrypt(
       base64ToUint8Array(sender.ecdhPublicKey),
@@ -30,19 +33,19 @@ export default function encrypt(content, sender, receiver, counter) {
       base64ToUint8Array(sender.ecdhSecretKey),
     )
 
-    const wrapSaltSender = randomBytes(32)
-    const wrapIvSender = randomBytes(12)
-    const kekSender = deriveAesKey(ssSender, wrapSaltSender)
-    const wrappedCekSender = encryptCekWithKek(kekSender, wrapIvSender, cekRaw)
+    const wrapSaltSender: Uint8Array = randomBytes(32)
+    const wrapIvSender: Uint8Array = randomBytes(12)
+    const kekSender: Uint8Array = deriveAesKey(ssSender, wrapSaltSender)
+    const wrappedCekSender: Uint8Array = encryptCekWithKek(kekSender, wrapIvSender, cekRaw)
 
-    const iv = generateIV(counter)
-    const message = {
+    const iv: Uint8Array = generateIV(counter)
+    const message: Message = {
       content,
       from_id: sender?.id || 'unknown',
-      date: new Date().toISOString(),
+      date: new Date(),
       padding: generatePadding(),
     }
-    const ciphertext = encryptMessage(cekRaw, iv, message)
+    const ciphertext: Uint8Array = encryptMessage(cekRaw, iv, message)
 
     const toSign = {
       ciphertext: bytesToBase64(ciphertext),
@@ -57,7 +60,7 @@ export default function encrypt(content, sender, receiver, counter) {
       cek_wrap_sender_salt: bytesToBase64(wrapSaltSender),
     }
 
-    const signature = signPayload(base64ToUint8Array(sender.edSecretKey), toSign)
+    const signature: string = signPayload(base64ToUint8Array(sender.edSecretKey), toSign)
 
     return {
       ...toSign,
