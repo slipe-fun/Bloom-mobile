@@ -4,42 +4,43 @@ import { useInsets } from '@hooks'
 import useChatsStore from '@stores/chats'
 import useTabBarStore from '@stores/tabBar'
 import type React from 'react'
-import { useCallback } from 'react'
-import type { LayoutChangeEvent } from 'react-native'
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import { useEffect, useMemo } from 'react'
+import { useWindowDimensions } from 'react-native'
+import { KeyboardStickyView } from 'react-native-keyboard-controller'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import TabBarActionButtonDelete from './deleteButton'
 import { styles } from './TabBar.styles'
 import TabBarContainer from './tabBarContainer'
 
+export const TAB_BAR_HEIGHT = 54
+
+const AnimatedStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
+
 export default function TabBar(): React.JSX.Element {
-  const insets = useInsets()
+  const { setTabBarHeight, setTabBarWidth } = useTabBarStore()
   const { theme } = useUnistyles()
-  const { setTabBarHeight, tabBarHeight } = useTabBarStore()
+  const { width } = useWindowDimensions()
+  const insets = useInsets()
+  const { bottom } = useInsets()
   const { edit } = useChatsStore()
-  const { progress: keyboardProgress, height: keyboardHeight } = useReanimatedKeyboardAnimation()
 
-  const animatedContainerStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: interpolate(keyboardProgress.get(), [0, 1], [0, keyboardHeight.value + (insets.bottom - theme.spacing.lg)], 'clamp') },
-    ],
-    paddingBottom: insets.bottom,
-    paddingHorizontal: keyboardProgress.get() >= 0.1 ? theme.spacing.lg : theme.spacing.xxxl,
-  }))
+  const tabBarHeight = useMemo(() => TAB_BAR_HEIGHT + theme.spacing.lg + bottom, [theme, bottom])
+  const tabBarWidth = useMemo(() => width - theme.spacing.xxl * 2 - theme.spacing.md - TAB_BAR_HEIGHT, [width, theme])
 
-  const onLayoutTabBar = useCallback((event: LayoutChangeEvent) => {
-    if (tabBarHeight <= 1) setTabBarHeight(event.nativeEvent.layout.height)
-  }, [])
+  useEffect(() => {
+    setTabBarHeight(tabBarHeight)
+    setTabBarWidth(tabBarWidth)
+  }, [tabBarHeight, tabBarWidth])
 
   return (
-    <Animated.View
-      onLayout={(event) => onLayoutTabBar(event)}
+    <AnimatedStickyView
       layout={layoutAnimation}
-      style={[styles.tabBarContainer, animatedContainerStyle]}
+      offset={{ opened: -theme.spacing.lg, closed: -insets.bottom }}
+      style={styles.tabBarContainer}
     >
-      <GradientBlur />
+      <GradientBlur keyboard />
       {!edit ? <TabBarContainer /> : <TabBarActionButtonDelete />}
-    </Animated.View>
+    </AnimatedStickyView>
   )
 }

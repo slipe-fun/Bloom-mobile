@@ -3,7 +3,6 @@ import { quickSpring } from '@constants/easings'
 import { TAB_COLORS, TAB_ICONS } from '@constants/tabBar'
 import type { TabValue } from '@interfaces'
 import { useRouter } from 'expo-router'
-import type React from 'react'
 import { useCallback, useEffect } from 'react'
 import { Pressable, type ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
@@ -11,14 +10,14 @@ import Animated, { interpolateColor, useAnimatedProps, useAnimatedStyle, useShar
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './TabBarContainer.styles'
 
-type TabBarItemProps = {
+interface TabBarItemProps {
   route: { name: TabValue; key: string }
   focused: boolean
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export default function TabBarItem({ route, focused }: TabBarItemProps): React.JSX.Element {
+export default function TabBarItem({ route, focused }: TabBarItemProps) {
   const { theme } = useUnistyles()
   const color = useSharedValue(0)
   const scale = useSharedValue(1)
@@ -31,8 +30,8 @@ export default function TabBarItem({ route, focused }: TabBarItemProps): React.J
   }
 
   const onPress = useCallback(() => {
-    console.log(route.name)
     if (!focused) {
+      // @ts-expect-error
       router.push(`/(app)/(tabs)/${route.name === 'index' ? '' : route.name}`)
       Haptics.impact('light')
     }

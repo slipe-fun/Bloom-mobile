@@ -1,3 +1,4 @@
+import { useInsets } from '@hooks'
 import MaskedView from '@react-native-masked-view/masked-view'
 import { BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -13,10 +14,12 @@ type GradientBlurProps = {
   direction?: GradientDirection
   ref?: React.Ref<MaskedView>
   style?: StyleProp<ViewStyle>
+  keyboard?: boolean
 }
 
-export default function GradientBlur({ direction = 'bottom-to-top', ref, style }: GradientBlurProps) {
+export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard }: GradientBlurProps) {
   const { theme } = useUnistyles()
+  const insets = useInsets()
 
   const { start, end } = useMemo(() => {
     switch (direction) {
@@ -59,8 +62,14 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style }
         start={start}
         end={end}
         colors={['transparent', theme.colors.gradientBlur]}
-        style={[StyleSheet.absoluteFill, style]}
+        style={[StyleSheet.absoluteFill, keyboard ? styles.gradient(insets.bottom) : null, style]}
       />
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  gradient: (bottom: number) => ({
+    transform: [{ translateY: bottom }],
+  }),
+})
