@@ -74,7 +74,7 @@ export default function Button({
       ref={ref}
       {...props}
     >
-      {blur && Platform.OS === "ios" && (
+      {blur && Platform.OS === 'ios' && (
         <BlurView style={StyleSheet.absoluteFill} experimentalBlurMethod="dimezisBlurView" intensity={40} tint="systemChromeMaterialDark" />
       )}
       {icon}

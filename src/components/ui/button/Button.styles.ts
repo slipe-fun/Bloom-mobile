@@ -1,6 +1,6 @@
+import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { SIZE_MAP } from './constats'
-import { Platform } from 'react-native'
 
 type ButtonStyleProps = {
   size: number
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: size >= SIZE_MAP.xl ? 0 : paddingHorizontal,
     borderCurve: 'continuous',
     borderRadius: theme.radius.full,
-    backgroundColor: blur && Platform.OS === "ios" ? theme.colors.foregroundBlur : theme.colors.foreground,
+    backgroundColor: blur && Platform.OS === 'ios' ? theme.colors.foregroundBlur : theme.colors.foreground,
     gap: isTextIcon ? theme.spacing.md : 0,
   }),
   label: (size: number) => ({
