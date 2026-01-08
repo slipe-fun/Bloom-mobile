@@ -4,7 +4,7 @@ import useTabBarStore from '@stores/tabBar'
 import { BlurView } from 'expo-blur'
 import type React from 'react'
 import { useCallback, useRef } from 'react'
-import type { LayoutChangeEvent, TextInput } from 'react-native'
+import { Platform, type LayoutChangeEvent, type TextInput } from 'react-native'
 import Animated, { LayoutAnimationConfig, useSharedValue } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 import TabBarIndicator from './Indicator'
@@ -31,7 +31,7 @@ export default function TabBarContainer(): React.JSX.Element {
       <LayoutAnimationConfig skipEntering skipExiting>
         {isSearch && !isSearchFocused && <TabBarSearchBackButton />}
         <Animated.View layout={layoutAnimation} style={styles.tabBarWrapper}>
-          <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
+          {Platform.OS === "ios" && <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />}
           {isSearch ? (
             <TabBarSearchInput key="tabBarSearchInput" ref={inputRef} />
           ) : (
