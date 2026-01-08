@@ -9,22 +9,13 @@ interface PrivateKeysResponse {
   salt: string
 }
 
-interface User {
-  id: number
-  username: string
-  display_name: string
-  description: string
-  date: Date
-}
-
 async function usernameHandler(token: string, username: string): Promise<void> {
   try {
-    const a = await axios.post(
+    await axios.post(
       `${API_URL}/user/edit`,
       { username },
       { headers: { Authorization: `Bearer ${token}` } }
     )
-    console.log(a?.data)
   } catch { }
 }
 
