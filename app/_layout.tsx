@@ -28,7 +28,7 @@ export default function RootLayout() {
   const { setMMKV, setRealm } = useStorageStore()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       try {
         const storage = await createSecureStorage('user-storage')
         const realm = await initRealm()

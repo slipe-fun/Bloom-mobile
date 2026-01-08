@@ -1,51 +1,65 @@
 {
-  "expo": {
-    "jsEngine": "hermes",
-    "name": "Bloom",
-    "owner": "bloomMessenger",
-    "slug": "bloom",
-    "scheme": "bloom",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "pw.blooom.app",
-      "jsEngine": "jsc"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "monochromeImage": "./assets/adaptive.png",
-        "backgroundColor": "#000000"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": true,
-      "package": "pw.bloom.app",
-      "permissions": [
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.ACCESS_MEDIA_LOCATION"
-      ]
-    },
-    "plugins": ["expo-router"],
-    "experiments": {
-      "typedRoutes": true,
-      "tsconfigPaths": true,
-      "reactCompiler": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "de8aa595-7b9f-47c5-8320-cd27ca0540aa"
-      }
-    }
-  }
+	"expo": {
+		"jsEngine": "hermes",
+		"name": "Bloom",
+		"owner": "bloomMessenger",
+		"slug": "bloom",
+		"scheme": "bloom",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "automatic",
+		"newArchEnabled": true,
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#000000"
+		},
+		"ios": {
+			"supportsTablet": false,
+			"bundleIdentifier": "pw.blooom.app",
+			"jsEngine": "jsc"
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icon.png",
+				"monochromeImage": "./assets/adaptive.png",
+				"backgroundColor": "#000000"
+			},
+			"edgeToEdgeEnabled": true,
+			"predictiveBackGestureEnabled": true,
+			"package": "pw.bloom.app",
+			"permissions": [
+				"android.permission.READ_EXTERNAL_STORAGE",
+				"android.permission.WRITE_EXTERNAL_STORAGE",
+				"android.permission.ACCESS_MEDIA_LOCATION"
+			]
+		},
+		"plugins": [
+			"expo-router",
+			[
+				"expo-build-properties",
+				{
+					"android": {
+						"buildArchs": ["armeabi-v7a", "arm64-v8a"],
+						"useLegacyPackaging": true
+					},
+					"ios": {
+						"ccacheEnabled": true
+					}
+				}
+			]
+		],
+		"experiments": {
+			"typedRoutes": true,
+			"tsconfigPaths": true,
+			"reactCompiler": true
+		},
+		"extra": {
+			"router": {},
+			"eas": {
+				"projectId": "de8aa595-7b9f-47c5-8320-cd27ca0540aa"
+			}
+		}
+	}
 }
