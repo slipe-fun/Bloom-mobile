@@ -2,6 +2,7 @@ import { Icon, Input } from '@components/ui'
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { PROVIDERS_LOGOS } from '@constants/providersLogos'
 import parseEmail from '@lib/parseEmail'
+import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TextInput } from 'react-native'
@@ -10,8 +11,9 @@ import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
 
 export default function AuthEmailInput() {
-  const { email, setEmail, setEmailValid, index } = useAuthStore()
+  const { email, setEmail, setEmailValid } = useAuthStore()
   const { theme } = useUnistyles()
+  const index = useNavigationState((state) => state.index)
   const ref = useRef<TextInput>(null)
   const [provider, setProvider] = useState<keyof typeof PROVIDERS_LOGOS | 'unknown'>('unknown')
 

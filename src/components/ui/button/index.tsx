@@ -78,7 +78,11 @@ export default function Button({
         <BlurView style={StyleSheet.absoluteFill} experimentalBlurMethod="dimezisBlurView" intensity={40} tint="systemChromeMaterialDark" />
       )}
       {icon}
-      {label && <Text style={[styles.label(SIZE_MAP[size]), labelStyle]}>{label}</Text>}
+      {label && (
+        <Text numberOfLines={1} style={[styles.label(SIZE_MAP[size]), labelStyle]}>
+          {label}
+        </Text>
+      )}
       {children}
     </AnimatedPressable>
   )

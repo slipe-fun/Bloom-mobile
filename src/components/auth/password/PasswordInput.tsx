@@ -1,5 +1,6 @@
 import { Icon, Input } from '@components/ui'
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
+import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import { useEffect, useRef, useState } from 'react'
 import { Pressable, type TextInput } from 'react-native'
@@ -8,7 +9,8 @@ import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
 
 export default function AuthPasswordInput() {
-  const { password, setPasssword, index } = useAuthStore()
+  const { password, setPasssword } = useAuthStore()
+  const index = useNavigationState((state) => state.index)
   const [secure, setSecure] = useState<boolean>(true)
   const { theme } = useUnistyles()
   const ref = useRef<TextInput>(null)

@@ -1,8 +1,6 @@
 import { create } from 'zustand'
 
 type AuthStore = {
-  index: number | null
-  setIndex: (index: number) => void
   email: string
   setEmail: (email: string) => void
   emailValid: boolean
@@ -19,8 +17,6 @@ type AuthStore = {
 }
 
 const useAuthStore = create<AuthStore>((set) => ({
-  index: 0,
-  setIndex: (index) => set({ index }),
   email: '',
   setEmail: (email) => set({ email }),
   emailValid: false,

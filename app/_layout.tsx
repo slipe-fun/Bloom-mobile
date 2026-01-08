@@ -18,7 +18,7 @@ import { StyleSheet, UnistylesRuntime, useUnistyles } from 'react-native-unistyl
 
 export default function RootLayout() {
   const { theme } = useUnistyles()
-  const [_fontsLoaded, _fontError] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     'OpenRunde-Regular': require('@assets/fonts/OpenRunde-Regular.ttf'),
     'OpenRunde-Medium': require('@assets/fonts/OpenRunde-Medium.ttf'),
     'OpenRunde-Semibold': require('@assets/fonts/OpenRunde-Semibold.ttf'),
@@ -28,7 +28,7 @@ export default function RootLayout() {
   const { setMMKV, setRealm } = useStorageStore()
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         const storage = await createSecureStorage('user-storage')
         const realm = await initRealm()
@@ -45,29 +45,32 @@ export default function RootLayout() {
   }, [theme])
 
   return (
-    <SafeAreaProvider>
-      <KeyboardProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <PortalProvider>
-            <StatusBar style="auto" />
-            <SessionProvider>
-              <WebSocketProvider>
-                <ChatsProvider>
-                  <MessagesProvider>
-                    <SeenMessagesProvider>
-                      <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
-                        <Stack.Screen name="(app)" options={{ headerShown: false }} />
-                        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                      </Stack>
-                    </SeenMessagesProvider>
-                  </MessagesProvider>
-                </ChatsProvider>
-              </WebSocketProvider>
-            </SessionProvider>
-          </PortalProvider>
-        </GestureHandlerRootView>
-      </KeyboardProvider>
-    </SafeAreaProvider>
+    fontsLoaded &&
+    !fontError && (
+      <SafeAreaProvider>
+        <KeyboardProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <PortalProvider>
+              <StatusBar style="auto" />
+              <SessionProvider>
+                <WebSocketProvider>
+                  <ChatsProvider>
+                    <MessagesProvider>
+                      <SeenMessagesProvider>
+                        <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
+                          <Stack.Screen name="(app)" options={{ headerShown: false }} />
+                          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                        </Stack>
+                      </SeenMessagesProvider>
+                    </MessagesProvider>
+                  </ChatsProvider>
+                </WebSocketProvider>
+              </SessionProvider>
+            </PortalProvider>
+          </GestureHandlerRootView>
+        </KeyboardProvider>
+      </SafeAreaProvider>
+    )
   )
 }
 
