@@ -20,7 +20,7 @@ export default function Icon({ size = 26, color = 'white', icon, style, animated
 
   return (
     <Svg ref={ref} style={style} width={size} height={size} viewBox="0 0 24 24" fill="none">
-      {animatedProps ? <AnimatedPath animatedProps={animatedProps} fill={color} d={pathData} /> : <Path fill={color} d={pathData} />}
+      {animatedProps ? <AnimatedPath {...animatedProps} fill={color} d={pathData} /> : <Path fill={color} d={pathData} />}
     </Svg>
   )
 }
