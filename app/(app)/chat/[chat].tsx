@@ -3,26 +3,28 @@ import EmptyModal from '@components/chatScreen/emptyModal'
 import Footer from '@components/chatScreen/footer'
 import Header from '@components/chatScreen/header'
 import Message from '@components/chatScreen/message'
+import { useChatKeyboard, useInsets } from '@hooks'
 import type { Chat as ChatType, Message as MessageType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { KeyboardStickyView, useKeyboardState } from 'react-native-keyboard-controller'
-import { StyleSheet } from 'react-native-unistyles'
+import { KeyboardStickyView } from 'react-native-keyboard-controller'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 export default function Chat() {
   const { chat } = useLocalSearchParams<{ chat: string }>()
-
   const _chat = JSON.parse(chat) as ChatType
 
   const { messages, addMessage } = useMessages(_chat?.id)
   const [seenId, setSeenId] = useState<number>(0)
   const [footerHeight, setFooterHeight] = useState<number>(0)
-  const height = useKeyboardState((state) => state.height)
-  const [ss, sss] = useState(0)
-  const [headerHeight, setHeaderHeight] = useState<number>(0)
+  const insets = useInsets()
+  const { theme } = useUnistyles()
+  const { height } = useChatKeyboard()
   const [lastMessageId, setLastMessageId] = useState<number>(0)
+
+  const headerHeight = insets.top + 44 + theme.spacing.md
 
   const renderItem = useCallback(
     ({ item, index }: { item: MessageType; index: number }) => {
@@ -51,7 +53,7 @@ export default function Chat() {
   )
 
   const keyExtractor = useCallback((item: MessageType, index: number) => {
-    return String(index)
+    return String(item.nonce ?? index)
   }, [])
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export default function Chat() {
 
   return (
     <View style={styles.container}>
-      <Header onLayout={setHeaderHeight} chat={_chat} />
+      <Header chat={_chat} />
       <EmptyModal chat={_chat} visible={messages.length === 0} />
       <KeyboardStickyView style={styles.list}>
         <FlashList
@@ -82,7 +84,7 @@ export default function Chat() {
           }}
           keyExtractor={keyExtractor}
           contentContainerStyle={[styles.listContent, { paddingBottom: footerHeight + 12, paddingTop: headerHeight }]}
-          keyboardDismissMode="interactive"
+          keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}
         />
       </KeyboardStickyView>

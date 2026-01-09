@@ -1,11 +1,11 @@
-import type { MMKVInterface } from 'react-native-mmkv/lib/typescript/src/Types'
+import type { MMKV } from 'react-native-mmkv'
 import type { Realm } from 'realm'
 import { create } from 'zustand'
 
 type StorageState = {
-  mmkv: MMKVInterface | null
+  mmkv: MMKV | null
   realm: Realm | null
-  setMMKV: (newMMKV: MMKVInterface) => void
+  setMMKV: (newMMKV: MMKV) => void
   setRealm: (newRealm: Realm) => void
 }
 
