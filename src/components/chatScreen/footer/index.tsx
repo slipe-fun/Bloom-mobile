@@ -10,9 +10,9 @@ import {
 import { useInsets } from '@hooks'
 import useChatScreenStore from '@stores/chatScreen'
 import { useCallback, useState } from 'react'
-import type { LayoutChangeEvent, ViewStyle } from 'react-native'
-import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import type { LayoutChangeEvent } from 'react-native'
+import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 import MessageInput from './MessageInput'
@@ -23,12 +23,13 @@ type FooterProps = {
   footerHeight: number
 }
 
+const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 const AnimatedButton = Animated.createAnimatedComponent(Button)
 
 export default function Footer({ onSend, setFooterHeight, footerHeight }: FooterProps) {
   const insets = useInsets()
   const { theme } = useUnistyles()
-  const { progress: keyboardProgress, height: keyboardHeight } = useReanimatedKeyboardAnimation()
+  const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const [value, setValue] = useState<string>('')
   const { replyMessage, setReplyMessage } = useChatScreenStore()
 
@@ -42,35 +43,30 @@ export default function Footer({ onSend, setFooterHeight, footerHeight }: Footer
     }
   }
 
-  const animatedViewStyles = useAnimatedStyle((): ViewStyle => {
-    return {
-      // paddingBottom: withSpring(keyboardProgress.get() > 0.05 ? theme.spacing.lg : insets.bottom, quickSpring),
-      // paddingHorizontal: withSpring(keyboardProgress.get() > 0.05  ? theme.spacing.lg : theme.spacing.xxxl, quickSpring),
-      paddingBottom: interpolate(keyboardProgress.get(), [0, 1], [insets.bottom, theme.spacing.lg]),
-      paddingHorizontal: interpolate(keyboardProgress.get(), [0, 1], [theme.spacing.xxxl, theme.spacing.lg]),
-      transform: [{ translateY: keyboardHeight.get() }],
-    }
-  })
-
   const onFooterLayout = useCallback(
     (event: LayoutChangeEvent) => {
-      if (footerHeight === 0 || keyboardProgress.get() === 1) setFooterHeight(event.nativeEvent.layout.height)
+      setFooterHeight(event.nativeEvent.layout.height)
     },
-    [footerHeight, setFooterHeight, keyboardProgress],
+    [footerHeight, setFooterHeight],
   )
 
   return (
-    <Animated.View onLayout={onFooterLayout} style={[styles.footer, animatedViewStyles]} layout={layoutAnimationSpringy}>
-      <GradientBlur />
+    <AnimatedKeyboardStickyView
+      offset={{ opened: -theme.spacing.lg, closed: -insets.bottom }}
+      onLayout={onFooterLayout}
+      style={styles.footer}
+      layout={layoutAnimationSpringy}
+    >
+      <GradientBlur keyboard />
       {!hasValue && (
-        <AnimatedButton blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant="icon">
+        <AnimatedButton layout={layoutAnimationSpringy} blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant="icon">
           <Icon icon="plus" size={26} color={theme.colors.text} />
         </AnimatedButton>
       )}
 
       <MessageInput setValue={setValue} hasValue={hasValue} value={value} />
 
-      <Button onPress={handleSend} blur variant="icon">
+      <AnimatedButton layout={layoutAnimationSpringy} onPress={handleSend} blur variant="icon">
         {hasValue ? (
           <>
             <Animated.View entering={zoomAnimationIn} style={styles.buttonBackground} />
@@ -80,10 +76,10 @@ export default function Footer({ onSend, setFooterHeight, footerHeight }: Footer
           </>
         ) : (
           <Animated.View key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
-            <Icon icon="waveform" size={26} color={theme.colors.white} />
+            <Icon icon="waveform" size={26} color={theme.colors.text} />
           </Animated.View>
         )}
-      </Button>
-    </Animated.View>
+      </AnimatedButton>
+    </AnimatedKeyboardStickyView>
   )
 }

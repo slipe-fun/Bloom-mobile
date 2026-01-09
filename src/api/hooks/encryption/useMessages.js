@@ -26,7 +26,7 @@ export default function (chat_id) {
   const addMessage = async (content, reply_to) => encryptAndSendMessage(realm, mmkv, ws, content, reply_to, messages, setMessages, chat_id)
 
   const messagesWithDates = useMemo(() => {
-    return addDateHeaders(messages)
+    return messages
   }, [messages])
 
   // GET MESSAGES FROM API

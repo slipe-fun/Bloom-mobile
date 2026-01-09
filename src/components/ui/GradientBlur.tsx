@@ -28,7 +28,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       case 'bottom-left-to-top-right':
         return { start: { x: 0.5, y: 0.5 }, end: { x: 1, y: 1 } }
       default:
-        return { start: { x: 0.5, y: 0.5 }, end: { x: 0.5, y: 1 } }
+        return { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 0.5 } }
     }
   }, [direction])
 

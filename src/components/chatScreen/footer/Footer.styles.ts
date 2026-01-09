@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -12,8 +13,8 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing.md,
   },
   inputWrapper: {
-    backgroundColor: theme.colors.foregroundBlur,
-    borderRadius: 22,
+    backgroundColor: Platform.OS === 'ios' ? theme.colors.foregroundBlur : theme.colors.foreground,
+    borderRadius: theme.radius.lg,
     overflow: 'hidden',
     flex: 1,
     borderCurve: 'continuous',

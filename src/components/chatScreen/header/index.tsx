@@ -4,10 +4,9 @@ import { quickSpring } from '@constants/easings'
 import { useContextMenu, useInsets } from '@hooks'
 import type { Chat, Option } from '@interfaces'
 import { useNavigation } from '@react-navigation/native'
-import { BlurView } from 'expo-blur'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useUnistyles } from 'react-native-unistyles'
 import { staticColor } from 'unistyles'
 import { styles } from './Header.styles'
 
@@ -41,8 +40,7 @@ export default function Header({ chat, onLayout }: HeaderProps): React.ReactNode
       style={[styles.header, { paddingTop: insets.top }, animatedViewStyles]}
     >
       <GradientBlur direction="top-to-bottom" />
-      <Button style={styles.button} variant="icon" onPress={() => navigation.goBack()}>
-        <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
+      <Button blur variant="icon" onPress={() => navigation.goBack()}>
         <Icon icon="chevron.left" color={theme.colors.text} />
       </Button>
       <View style={styles.titleWrapper}>

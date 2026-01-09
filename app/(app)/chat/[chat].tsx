@@ -4,11 +4,11 @@ import Footer from '@components/chatScreen/footer'
 import Header from '@components/chatScreen/header'
 import Message from '@components/chatScreen/message'
 import type { Chat as ChatType, Message as MessageType } from '@interfaces'
-import type { LegendListRef } from '@legendapp/list'
-import { KeyboardAvoidingLegendList } from '@legendapp/list/keyboard'
+import { FlashList } from '@shopify/flash-list'
 import { useLocalSearchParams } from 'expo-router'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
+import { KeyboardStickyView, useKeyboardState } from 'react-native-keyboard-controller'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Chat() {
@@ -19,26 +19,39 @@ export default function Chat() {
   const { messages, addMessage } = useMessages(_chat?.id)
   const [seenId, setSeenId] = useState<number>(0)
   const [footerHeight, setFooterHeight] = useState<number>(0)
+  const height = useKeyboardState((state) => state.height)
+  const [ss, sss] = useState(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [lastMessageId, setLastMessageId] = useState<number>(0)
-  const listRef = useRef<LegendListRef>(null)
 
   const renderItem = useCallback(
     ({ item, index }: { item: MessageType; index: number }) => {
       if (item?.type === 'date_header') {
-        return
+        return null
       }
 
       const prevItem = messages[index - 1]
       const nextItem = messages[index + 1]
 
-      return <Message key={item?.nonce} seen={seenId === item?.id} message={item} prevItem={prevItem} nextItem={nextItem} />
+      const CHAT_TIME_WINDOW = 5 * 60 * 1000
+
+      const isGroupStart =
+        !prevItem ||
+        prevItem.author_id !== item.author_id ||
+        new Date(item.date).getTime() - new Date(prevItem.date).getTime() > CHAT_TIME_WINDOW
+
+      const isGroupEnd =
+        !nextItem ||
+        nextItem.author_id !== item.author_id ||
+        new Date(nextItem.date).getTime() - new Date(item.date).getTime() > CHAT_TIME_WINDOW
+
+      return <Message seen={seenId === item?.id} message={item} isGroupEnd={isGroupEnd} isGroupStart={isGroupStart} />
     },
-    [seenId, lastMessageId, footerHeight, messages, footerHeight],
+    [seenId, lastMessageId, messages],
   )
 
   const keyExtractor = useCallback((item: MessageType, index: number) => {
-    return String(item?.nonce ?? item?.id ?? index)
+    return String(index)
   }, [])
 
   useEffect(() => {
@@ -58,19 +71,21 @@ export default function Chat() {
     <View style={styles.container}>
       <Header onLayout={setHeaderHeight} chat={_chat} />
       <EmptyModal chat={_chat} visible={messages.length === 0} />
-      <KeyboardAvoidingLegendList
-        data={messages}
-        renderItem={renderItem}
-        alignItemsAtEnd
-        maintainScrollAtEnd
-        ref={listRef}
-        keyExtractor={keyExtractor}
-        style={styles.list}
-        contentInset={{ bottom: footerHeight, top: headerHeight }}
-        contentContainerStyle={[styles.listContent]}
-        keyboardDismissMode="interactive"
-        showsVerticalScrollIndicator={false}
-      />
+      <KeyboardStickyView style={styles.list}>
+        <FlashList
+          data={messages}
+          ListHeaderComponent={<View style={{ height: ss, width: '100%', backgroundColor: 'red' }} />}
+          renderItem={renderItem}
+          maintainVisibleContentPosition={{
+            autoscrollToBottomThreshold: 0.2,
+            startRenderingFromBottom: true,
+          }}
+          keyExtractor={keyExtractor}
+          contentContainerStyle={[styles.listContent, { paddingBottom: footerHeight + 12, paddingTop: headerHeight }]}
+          keyboardDismissMode="interactive"
+          showsVerticalScrollIndicator={false}
+        />
+      </KeyboardStickyView>
       <Footer setFooterHeight={setFooterHeight} footerHeight={footerHeight} onSend={addMessage} />
     </View>
   )

@@ -4,7 +4,7 @@ export const styles = StyleSheet.create((theme) => ({
   header: {
     width: '100%',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
     flexDirection: 'row',
     zIndex: 1,
     top: 0,
@@ -29,9 +29,5 @@ export const styles = StyleSheet.create((theme) => ({
   titleWrapper: {
     flex: 1,
     justifyContent: 'center',
-    gap: theme.spacing.xs,
-  },
-  button: {
-    backgroundColor: theme.colors.foregroundBlur,
   },
 }))

@@ -3,6 +3,7 @@ import { layoutAnimationSpringy } from '@constants/animations'
 import useChatScreenStore from '@stores/chatScreen'
 import { BlurView } from 'expo-blur'
 import type React from 'react'
+import { Platform } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 import ReplyBlock from '../replyBlock'
@@ -21,7 +22,9 @@ export default function MessageInput({ setValue, value }: MessageInputProps): Re
 
   return (
     <Animated.View style={styles.inputWrapper} layout={layoutAnimationSpringy}>
-      <AnimatedBlurView layout={layoutAnimationSpringy} style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
+      {Platform.OS === 'ios' && (
+        <AnimatedBlurView layout={layoutAnimationSpringy} style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
+      )}
       <ReplyBlock onCancel={() => setReplyMessage(null)} message={replyMessage} />
 
       <Input
