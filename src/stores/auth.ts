@@ -14,6 +14,8 @@ type AuthStore = {
   setPasssword: (password: string) => void
   username: string
   setUsername: (username: string) => void
+  exists: boolean
+  setExists: (exists: boolean) => void
 }
 
 const useAuthStore = create<AuthStore>((set) => ({
@@ -30,6 +32,8 @@ const useAuthStore = create<AuthStore>((set) => ({
   setPasssword: (password) => set({ password }),
   username: '',
   setUsername: (username) => set({ username }),
+  exists: false,
+  setExists: (exists) => set({ exists }),
 }))
 
 export default useAuthStore

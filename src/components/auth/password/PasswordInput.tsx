@@ -1,5 +1,5 @@
 import { Icon, Input } from '@components/ui'
-import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
+import { layoutAnimation, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import { useEffect, useRef, useState } from 'react'
@@ -7,6 +7,8 @@ import { Pressable, type TextInput } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
+
+const AnimatedInput = Animated.createAnimatedComponent(Input)
 
 export default function AuthPasswordInput() {
   const { password, setPasssword } = useAuthStore()
@@ -20,8 +22,9 @@ export default function AuthPasswordInput() {
   }, [index])
 
   return (
-    <Input
+    <AnimatedInput
       ref={ref}
+      layout={layoutAnimation}
       value={password}
       onChangeText={setPasssword}
       maxLength={64}

@@ -1,9 +1,13 @@
 import { Icon, Input } from '@components/ui'
+import { layoutAnimation } from '@constants/animations'
 import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import { useEffect, useRef } from 'react'
 import type { TextInput } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+
+const AnimatedInput = Animated.createAnimatedComponent(Input)
 
 export default function AuthNickInput() {
   const { username, setUsername } = useAuthStore()
@@ -16,7 +20,8 @@ export default function AuthNickInput() {
   }, [index])
 
   return (
-    <Input
+    <AnimatedInput
+      layout={layoutAnimation}
       ref={ref}
       value={username}
       onChangeText={setUsername}

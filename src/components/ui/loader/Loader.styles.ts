@@ -4,6 +4,7 @@ export const styles = StyleSheet.create((theme) => ({
   container: (size: number) => ({
     width: size,
     height: size,
+    zIndex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   }),

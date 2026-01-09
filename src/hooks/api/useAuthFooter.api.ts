@@ -73,16 +73,27 @@ async function passwordHandler(token: string, password: string, mmkv: any): Prom
 
 export const authApi = {
   async handleEmailStep(email: string) {
-    const res = await axios.get(`${API_URL}/user/exists`, { params: { email } })
-    if (res.data?.exists === undefined) throw new Error('Failed to check user')
+    let exists: boolean = false
 
-    if (res.data.exists) {
+    try {
+      const res = await axios.get(`${API_URL}/user/exists`, { params: { email } })
+      exists = res.data?.exists
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        exists = false
+      } else {
+        throw new Error(error.response?.data?.message || 'Failed to check user')
+      }
+    }
+
+    if (exists) {
       axios.post(`${API_URL}/auth/request-code`, { email }).catch(console.error)
     } else {
       const regRes = await axios.post(`${API_URL}/auth/register`, { email })
       if (regRes.data?.error) throw new Error('Failed to register')
     }
-    return true
+
+    return { exists }
   },
 
   async handleOtpStep(email: string, otp: string) {

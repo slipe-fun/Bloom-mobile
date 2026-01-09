@@ -1,4 +1,4 @@
-import { Button, Icon } from '@components/ui'
+import { Button, Icon, Loader } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
 import { useAuthFooter, useInsets } from '@hooks'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
@@ -6,10 +6,12 @@ import Animated, { interpolate, interpolateColor, useAnimatedStyle } from 'react
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 
+const AnimatedLoader = Animated.createAnimatedComponent(Loader)
+
 export default function AuthFooter() {
   const insets = useInsets()
   const { theme } = useUnistyles()
-  const { index, label, isDisabled, progress, handlePress } = useAuthFooter()
+  const { index, label, isDisabled, progress, loading, handlePress } = useAuthFooter()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
 
   const animatedButtonBackgroundStyle = useAnimatedStyle(() => ({
@@ -38,11 +40,13 @@ export default function AuthFooter() {
         size="xl"
         variant="textIcon"
         icon={
-          index === 0 && (
+          index === 0 ? (
             <Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
               <Icon key="at-icon" size={26} color={theme.colors.text} icon="at" />
             </Animated.View>
-          )
+          ) : loading ? (
+            <AnimatedLoader color={theme.colors.white} size={20} entering={getFadeIn()} exiting={getFadeOut()} />
+          ) : null
         }
       >
         <Animated.View style={[styles.buttonBackground, animatedButtonBackgroundStyle]} />

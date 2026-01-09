@@ -1,5 +1,5 @@
 import { Icon, Input } from '@components/ui'
-import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
+import { layoutAnimation, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { PROVIDERS_LOGOS } from '@constants/providersLogos'
 import parseEmail from '@lib/parseEmail'
 import { useNavigationState } from '@react-navigation/native'
@@ -9,6 +9,8 @@ import type { TextInput } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
+
+const AnimatedInput = Animated.createAnimatedComponent(Input)
 
 export default function AuthEmailInput() {
   const { email, setEmail, setEmailValid } = useAuthStore()
@@ -50,7 +52,8 @@ export default function AuthEmailInput() {
   }, [index])
 
   return (
-    <Input
+    <AnimatedInput
+      layout={layoutAnimation}
       ref={ref}
       value={email}
       onChangeText={setEmail}

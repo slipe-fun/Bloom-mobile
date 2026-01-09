@@ -3,7 +3,7 @@ import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
 import { useRouter } from 'expo-router'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { type SharedValue, useSharedValue, withSpring } from 'react-native-reanimated'
 import { authApi } from './api/useAuthFooter.api'
 
@@ -13,14 +13,16 @@ interface UseAuthFooter {
   isDisabled: boolean
   progress: SharedValue<number>
   handlePress: () => Promise<void>
+  loading?: boolean
 }
 
 export default function useAuthFooter(): UseAuthFooter {
   const router = useRouter()
   const index = useNavigationState((s) => s.index)
-  const { email, emailValid, otp, username, password, setError, error } = useAuthStore()
+  const { email, emailValid, otp, username, password, setError, error, setExists } = useAuthStore()
   const { mmkv } = useStorageStore()
   const progress = useSharedValue(0)
+  const [loading, setLoading] = useState(false)
 
   const isDisabled = useMemo(
     () =>
@@ -33,7 +35,6 @@ export default function useAuthFooter(): UseAuthFooter {
       )[index] ?? false,
     [index, emailValid, otp, password],
   )
-
   const progressValue = useMemo(() => {
     if (index === 0) return 0
     if (error) return 3
@@ -42,24 +43,33 @@ export default function useAuthFooter(): UseAuthFooter {
   }, [index, emailValid, otp, password, error])
 
   const label = index === 0 ? 'Продолжить с Почтой' : index === 3 ? 'Завершить' : 'Продолжить'
+  const ERROR_TIMOUT = 10000
+  let _timeout: ReturnType<typeof setTimeout>
 
   const handlePress = useCallback(async () => {
     try {
+      setLoading(true)
+      clearTimeout(_timeout)
       if (index === 0) {
         router.navigate('/(auth)/signup/Email')
+        setLoading(false)
         return
       }
 
       if (index === 1) {
-        await authApi.handleEmailStep(email)
+        const { exists } = await authApi.handleEmailStep(email)
+        setLoading(false)
+        setExists(exists)
         router.navigate('/(auth)/signup/Otp')
         return
       }
 
       if (index === 2) {
         const data = await authApi.handleOtpStep(email, otp)
+        setLoading(false)
         if (!data?.token) {
           setError('Неверный код подтверждения. Попробуйте ещë раз')
+          _timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
           return
         }
         mmkv.set('token', data.token)
@@ -72,16 +82,20 @@ export default function useAuthFooter(): UseAuthFooter {
       if (index === 3) {
         const token = mmkv.getString('token')!
         await authApi.handleUsernameAndPasswordStep(token, username, password, mmkv)
+        setLoading(false)
         router.navigate('/(app)/(tabs)')
       }
     } catch (e: any) {
+      setLoading(false)
       setError(e?.response?.data || e?.message || 'Something went wrong')
+
+      _timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
     }
-  }, [index, email, otp, username, password, router, setError, mmkv])
+  }, [index, email, otp, username, password, router, setError, mmkv, loading, setLoading])
 
   useEffect(() => {
     progress.value = withSpring(progressValue, quickSpring)
   }, [progressValue])
 
-  return { index, label, isDisabled, progress, handlePress }
+  return { index, label, isDisabled, progress, loading, handlePress }
 }

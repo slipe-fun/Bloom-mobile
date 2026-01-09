@@ -1,7 +1,7 @@
 import googleOauth2ExchangeCode from '@api/lib/auth/googleOauth2ExchangeCode'
 import { getAuthUrl, REDIRECT_URL_WITH_SCHEME } from '@constants/googleOauth2Params'
+import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
-import useTokenTriggerStore from '@stores/tokenTriggerStore'
 import * as Linking from 'expo-linking'
 import { useRouter } from 'expo-router'
 import * as WebBrowser from 'expo-web-browser'
@@ -11,10 +11,10 @@ export default function () {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const setExits = useAuthStore((state) => state.setExists)
   const [error, setError] = useState('')
 
   const { mmkv } = useStorageStore()
-  const { counter, setCounter } = useTokenTriggerStore()
 
   async function startGoogleAuth() {
     setError('')
@@ -50,8 +50,8 @@ export default function () {
         mmkv.set('user_id', String(exchangeCode.user?.id))
         mmkv.set('user', JSON.stringify(exchangeCode.user))
         setResult(exchangeCode)
-        setCounter(counter + 1)
-        router.navigate('/(app)/(tabs)')
+        setExits(!!exchangeCode.token)
+        router.navigate('/(auth)/signup/Password')
       } catch {
         setError('Failed to save session data')
       }

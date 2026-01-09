@@ -116,8 +116,7 @@ const appThemes = {
 
 StyleSheet.configure({
   settings: {
-    initialTheme: 'dark',
-    adaptiveThemes: false,
+    adaptiveThemes: true,
   },
   themes: appThemes,
 })

@@ -23,7 +23,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderCurve: 'continuous',
     borderRadius: theme.radius.full,
     backgroundColor: blur && Platform.OS === 'ios' ? theme.colors.foregroundBlur : theme.colors.foreground,
-    gap: isTextIcon ? theme.spacing.md : 0,
+    gap: isTextIcon ? theme.spacing.md - theme.spacing.xxs : 0,
   }),
   label: (size: number) => ({
     color: theme.colors.text,
