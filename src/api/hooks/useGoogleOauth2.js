@@ -3,12 +3,14 @@ import { getAuthUrl, REDIRECT_URL_WITH_SCHEME } from '@constants/googleOauth2Par
 import useStorageStore from '@stores/storage'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
 import * as Linking from 'expo-linking'
+import { useRouter } from 'expo-router'
 import * as WebBrowser from 'expo-web-browser'
 import { useState } from 'react'
 
 export default function () {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
   const [error, setError] = useState('')
 
   const { mmkv } = useStorageStore()
@@ -49,6 +51,7 @@ export default function () {
         mmkv.set('user', JSON.stringify(exchangeCode.user))
         setResult(exchangeCode)
         setCounter(counter + 1)
+        router.navigate('/(app)/(tabs)')
       } catch {
         setError('Failed to save session data')
       }
