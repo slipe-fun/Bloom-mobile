@@ -1,5 +1,5 @@
 import { Input } from '@components/ui'
-import { layoutAnimationSpringy } from '@constants/animations'
+import { layoutAnimation } from '@constants/animations'
 import useChatScreenStore from '@stores/chatScreen'
 import { BlurView } from 'expo-blur'
 import type React from 'react'
@@ -11,7 +11,6 @@ import { styles } from './Footer.styles'
 
 type MessageInputProps = {
   setValue: (value: string) => void
-  hasValue: boolean
   value: string
 }
 
@@ -21,9 +20,9 @@ export default function MessageInput({ setValue, value }: MessageInputProps): Re
   const { replyMessage, setReplyMessage } = useChatScreenStore()
 
   return (
-    <Animated.View style={styles.inputWrapper} layout={layoutAnimationSpringy}>
+    <Animated.View style={styles.inputWrapper} layout={layoutAnimation}>
       {Platform.OS === 'ios' && (
-        <AnimatedBlurView layout={layoutAnimationSpringy} style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
+        <AnimatedBlurView layout={layoutAnimation} style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
       )}
       <ReplyBlock onCancel={() => setReplyMessage(null)} message={replyMessage} />
 

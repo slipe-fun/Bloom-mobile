@@ -7,9 +7,11 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { styles } from './Button.styles'
 import { SIZE_MAP, type Size } from './constats'
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
 type Variant = 'icon' | 'text' | 'textIcon'
 
-interface ButtonProps extends ComponentProps<typeof Pressable> {
+interface ButtonProps extends ComponentProps<typeof AnimatedPressable> {
   ref?: React.Ref<any>
   variant?: Variant
   label?: string
@@ -20,8 +22,6 @@ interface ButtonProps extends ComponentProps<typeof Pressable> {
   children?: React.ReactNode
   blur?: boolean
 }
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function Button({
   ref,
@@ -67,6 +67,7 @@ export default function Button({
     [size, variant, paddingHorizontal, blur],
   )
   return (
+    // @ts-expect-error
     <AnimatedPressable
       onPressIn={() => handlePress(true)}
       onPressOut={() => handlePress(false)}
