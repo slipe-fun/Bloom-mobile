@@ -14,7 +14,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 export default function Chat() {
   const { chat } = useLocalSearchParams<{ chat: string }>()
 
-  const { messages, seenID, addMessage, _chat } = useChatController(chat)
+  const { messages, seenID, addMessage, nextPage, _chat } = useChatController(chat)
   const [footerHeight, setFooterHeight] = useState<number>(0)
   const insets = useInsets()
   const { theme } = useUnistyles()
@@ -51,6 +51,7 @@ export default function Chat() {
             autoscrollToBottomThreshold: 0.2,
             startRenderingFromBottom: true,
           }}
+          onStartReached={nextPage}
           keyExtractor={keyExtractor}
           contentContainerStyle={styles.listContent(footerHeight, headerHeight)}
           keyboardDismissMode="on-drag"

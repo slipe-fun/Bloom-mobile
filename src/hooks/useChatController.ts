@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 export default function useChatController(chat) {
   const _chat = JSON.parse(chat) as ChatType
 
-  const { messages, addMessage } = useMessages(_chat?.id)
+  const { messages, addMessage, nextPage } = useMessages(_chat?.id)
   const [seenID, setSeenID] = useState<number>(0)
 
   const CHAT_TIME_WINDOW = 5 * 60 * 1000
@@ -41,5 +41,5 @@ export default function useChatController(chat) {
     setSeenID(lastSeen)
   }, [messages.length, messages])
 
-  return { messages: computedMessages, addMessage, seenID, _chat }
+  return { messages: computedMessages, addMessage, seenID, nextPage, _chat }
 }

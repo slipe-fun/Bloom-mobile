@@ -4,7 +4,8 @@ import getMessagesFromApi from '@api/lib/messages/hooks/getMessagesFromApi'
 import getMessagesFromLocalRealmStorage from '@api/lib/messages/hooks/getMessagesFromLocalRealmStorage'
 import getNewMessagesFromMessageSocket from '@api/lib/messages/hooks/getNewMessagesFromMessageSocket'
 import sendSeenSocket from '@api/lib/messages/hooks/sendSeenSocket'
-import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
+import loadMessages from '@api/lib/messages/loadMessages'
+// import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
 import { useMessagesList } from '@api/providers/MessagesContext'
 import { useSeenMessagesList } from '@api/providers/SeenMessagesContext'
 import { useWebSocket } from '@api/providers/WebSocketContext'
@@ -22,11 +23,13 @@ export default function (chat_id) {
   // storages
   const { mmkv, realm } = useStorageStore()
 
+  const nextPage = async () => await loadMessages(realm, mmkv, chat_id, messages, setMessages)
+
   // ENCRYPT AND SEND MESSAGE
   const addMessage = async (content, reply_to) => encryptAndSendMessage(realm, mmkv, ws, content, reply_to, messages, setMessages, chat_id)
 
   const messagesWithDates = useMemo(() => {
-    return messages
+    return [...messages].reverse()
   }, [messages])
 
   // GET MESSAGES FROM API
@@ -54,5 +57,5 @@ export default function (chat_id) {
     sendSeenSocket(realm, ws, chat_id, messages, setMessages)
   }, [messages])
 
-  return { messages: messagesWithDates, addMessage }
+  return { messages: messagesWithDates, addMessage, nextPage }
 }
