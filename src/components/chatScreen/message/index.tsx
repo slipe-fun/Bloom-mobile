@@ -6,13 +6,12 @@ import MessageBubble from './MessageBubble'
 interface MessageProps {
   message: MessageType | null
   seen: boolean
-  paddingBottom: number
-  groupEnd: boolean
+  marginBottom: number
 }
 
-export default function Message({ message, seen, paddingBottom, groupEnd }: MessageProps) {
+export default function Message({ message, seen, marginBottom }: MessageProps) {
   return (
-    <Pressable style={[styles.messageWrapper(message?.isMe, paddingBottom)]}>
+    <Pressable style={[styles.messageWrapper(message?.isMe, marginBottom)]}>
       <MessageBubble message={message} />
     </Pressable>
   )

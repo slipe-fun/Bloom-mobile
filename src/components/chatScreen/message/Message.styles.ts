@@ -9,11 +9,11 @@ export const styles = StyleSheet.create((theme) => ({
     minHeight: 44,
     backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
   }),
-  messageWrapper: (isMe: boolean, paddingBottom) => {
+  messageWrapper: (isMe: boolean, marginBottom) => {
     return {
       gap: theme.spacing.md,
       position: 'relative',
-      paddingBottom,
+      marginBottom,
       alignItems: isMe ? 'flex-end' : 'flex-start',
     }
   },

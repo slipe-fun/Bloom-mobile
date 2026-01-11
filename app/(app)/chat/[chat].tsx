@@ -21,17 +21,16 @@ export default function Chat() {
   const { height } = useChatKeyboard()
 
   const headerHeight = insets.top + 44 + theme.spacing.md
-  const endPadding = theme.spacing.lg + theme.spacing.xl + theme.spacing.md
 
   const renderItem = useCallback(
     ({ item }: { item: MessageType }) => {
       const grouped = !item?.groupEnd && !item?.groupStart
 
-      const paddingBottom = grouped ? theme.spacing.sm : item?.groupEnd ? endPadding : theme.spacing.lg
+      const marginBottom = grouped ? theme.spacing.sm : item?.groupEnd ? theme.spacing.lg : theme.spacing.sm
 
-      return <Message seen={seenID === item?.id} message={item} paddingBottom={paddingBottom} groupEnd={item?.groupEnd} />
+      return <Message seen={seenID === item?.id} message={item} marginBottom={marginBottom} />
     },
-    [seenID, endPadding],
+    [seenID],
   )
 
   const keyExtractor = useCallback((item: MessageType) => {
@@ -47,6 +46,7 @@ export default function Chat() {
           data={messages}
           ListHeaderComponent={<View style={{ height: height, width: '100%' }} />}
           renderItem={renderItem}
+          onStartReachedThreshold={0.5}
           maintainVisibleContentPosition={{
             autoscrollToBottomThreshold: 0.2,
             startRenderingFromBottom: true,
@@ -71,9 +71,10 @@ const styles = StyleSheet.create((theme) => ({
   list: {
     flex: 1,
   },
-  listContent: (paddingBottom: number, paddingTop: number) => ({
+  listContent: (marginBottom: number, marginTop: number) => ({
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom,
-    paddingTop: paddingTop + theme.spacing.md,
+    marginBottom,
+    gap: theme.spacing.sm,
+    marginTop: marginTop + theme.spacing.md,
   }),
 }))

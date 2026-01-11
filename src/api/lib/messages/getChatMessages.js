@@ -11,7 +11,7 @@ export async function getChatMessagesAfterID(chat_id, after_id = 0) {
     const token = Storage.getString('token')
 
     // send get messages api request
-    const response = await axios.get(`${API_URL}/chat/${chat_id}/messages/after/${after_id}?count=10`, {
+    const response = await axios.get(`${API_URL}/chat/${chat_id}/messages/after/${after_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
 
@@ -28,7 +28,7 @@ export async function getChatMessagesBeforeID(chat_id, after_id = 0) {
     const token = Storage.getString('token')
 
     // send get messages api request
-    const response = await axios.get(`${API_URL}/chat/${chat_id}/messages/before/${after_id}?count=10`, {
+    const response = await axios.get(`${API_URL}/chat/${chat_id}/messages/before/${after_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
 
