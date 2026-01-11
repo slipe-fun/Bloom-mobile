@@ -12,7 +12,7 @@ import FloatingHeader from './header/FloatingHeader'
 import { styles } from './Search.styles'
 
 export default function Search(): React.JSX.Element {
-  const { isSearch, searchValue, tabBarHeight } = useTabBarStore()
+  const { search, searchValue, height } = useTabBarStore()
   const insets = useInsets()
   const scrollY = useSharedValue<number>(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
@@ -20,7 +20,7 @@ export default function Search(): React.JSX.Element {
 
   const ss = ''
 
-  const isStoryEmpty: boolean = !!ss && isSearch
+  const isStoryEmpty: boolean = !!ss && search
   const isEmpty: boolean = status === 'empty' || status === 'error'
 
   const keyExtractor = useCallback((item: SearchUser) => {
@@ -37,7 +37,7 @@ export default function Search(): React.JSX.Element {
     },
   })
 
-  return isSearch ? (
+  return search ? (
     <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.container}>
       <FloatingHeader scrollY={scrollY} headerHeight={headerHeight} />
       <AnimatedLegendList
@@ -50,10 +50,10 @@ export default function Search(): React.JSX.Element {
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator
-        contentContainerStyle={{ paddingBottom: tabBarHeight }}
+        contentContainerStyle={{ paddingBottom: height }}
         scrollIndicatorInsets={{
           top: headerHeight - insets.realTop,
-          bottom: tabBarHeight - insets.realBottom,
+          bottom: height - insets.realBottom,
         }}
         data={users}
         renderItem={renderItem}

@@ -8,7 +8,7 @@ import Animated, { LayoutAnimationConfig, useSharedValue } from 'react-native-re
 import { StyleSheet } from 'react-native-unistyles'
 import TabBarIndicator from './Indicator'
 import TabBarItem from './Item'
-import TabBarSearchButton from './search'
+import TabBarButton from './search'
 import TabBarSearchBackButton from './search/backButton'
 import TabBarSearchInput from './search/Input'
 import { styles } from './TabBarContainer.styles'
@@ -36,7 +36,7 @@ export default function TabBarContainer() {
             </Animated.View>
           )}
         </Animated.View>
-        <TabBarSearchButton inputRef={inputRef} />
+        <TabBarButton inputRef={inputRef} />
       </LayoutAnimationConfig>
     </Animated.View>
   )

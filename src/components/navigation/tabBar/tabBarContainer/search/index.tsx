@@ -32,7 +32,7 @@ export default function TabBarSearchButton({ inputRef }) {
       onPress={() => blurInput()}
       layout={layoutAnimation}
     >
-      <Icon icon="x" color={theme.colors.text} size={28} />
+      <Icon icon="x" color={theme.colors.text} size={26} />
     </AnimatedButton>
   ) : !search ? (
     <AnimatedButton

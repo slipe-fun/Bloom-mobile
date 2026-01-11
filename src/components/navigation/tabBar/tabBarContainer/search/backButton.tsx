@@ -11,14 +11,14 @@ const AnimatedButton = Animated.createAnimatedComponent(Button)
 
 export default function TabBarSearchBackButton(): React.JSX.Element {
   const { theme } = useUnistyles()
-  const { setIsSearch } = useTabBarStore()
+  const { setSearch } = useTabBarStore()
   const activeTab = useNavigationState((state) => state.routes[state.index].name)
 
   const tabIcon = TAB_ICONS[activeTab]
 
   return (
     <AnimatedButton
-      onPress={() => setIsSearch(false)}
+      onPress={() => setSearch(false)}
       variant="icon"
       size="lg"
       key="tabBarBackButton"
