@@ -41,23 +41,27 @@ export default function Chat() {
     <View style={styles.container}>
       <Header chat={_chat} />
       <EmptyModal chat={_chat} visible={messages.length === 0} />
-      <KeyboardStickyView style={styles.list}>
-        <FlashList
-          data={messages}
-          ListHeaderComponent={<View style={{ height: height, width: '100%' }} />}
-          renderItem={renderItem}
-          onStartReachedThreshold={0.5}
-          maintainVisibleContentPosition={{
-            autoscrollToBottomThreshold: 0.2,
-            startRenderingFromBottom: true,
-          }}
-          onStartReached={nextPage}
-          keyExtractor={keyExtractor}
-          contentContainerStyle={styles.listContent(footerHeight, headerHeight)}
-          keyboardDismissMode="on-drag"
-          showsVerticalScrollIndicator={false}
-        />
-      </KeyboardStickyView>
+      {messages.length > 0 && footerHeight && (
+        <KeyboardStickyView style={styles.list}>
+          <FlashList
+            data={messages}
+            extraData={height}
+            ListHeaderComponent={<View style={{ height: height, width: '100%' }} />}
+            renderItem={renderItem}
+            onStartReachedThreshold={0.5}
+            maintainVisibleContentPosition={{
+              autoscrollToBottomThreshold: 0.2,
+              startRenderingFromBottom: true,
+            }}
+            onStartReached={nextPage}
+            keyExtractor={keyExtractor}
+            contentContainerStyle={styles.listContent(footerHeight, headerHeight)}
+            keyboardDismissMode="on-drag"
+            showsVerticalScrollIndicator={false}
+          />
+        </KeyboardStickyView>
+      )}
+
       <Footer setFooterHeight={setFooterHeight} footerHeight={footerHeight} onSend={addMessage} />
     </View>
   )
@@ -71,10 +75,10 @@ const styles = StyleSheet.create((theme) => ({
   list: {
     flex: 1,
   },
-  listContent: (marginBottom: number, marginTop: number) => ({
+  listContent: (paddingBottom: number, paddingTop: number) => ({
     paddingHorizontal: theme.spacing.lg,
-    marginBottom,
+    paddingBottom,
     gap: theme.spacing.sm,
-    marginTop: marginTop + theme.spacing.md,
+    paddingTop: paddingTop + theme.spacing.md,
   }),
 }))

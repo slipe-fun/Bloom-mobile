@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
-  message: (isMe: boolean) => ({
+  message: (isMe: boolean, seen: boolean) => ({
     maxWidth: '82%',
     borderRadius: theme.radius.lg,
     borderCurve: 'continuous',
     zIndex: 10,
     minHeight: 44,
-    backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
+    backgroundColor: isMe ? (seen ? theme.colors.primary : theme.colors.primaryBackdrop) : theme.colors.foreground,
   }),
   messageWrapper: (isMe: boolean, marginBottom) => {
     return {

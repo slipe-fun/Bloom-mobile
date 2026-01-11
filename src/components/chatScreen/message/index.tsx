@@ -12,7 +12,7 @@ interface MessageProps {
 export default function Message({ message, seen, marginBottom }: MessageProps) {
   return (
     <Pressable style={[styles.messageWrapper(message?.isMe, marginBottom)]}>
-      <MessageBubble message={message} />
+      <MessageBubble message={message} seen={seen} />
     </Pressable>
   )
 }
