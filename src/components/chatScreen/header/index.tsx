@@ -42,7 +42,7 @@ export default function Header({ chat }: HeaderProps): React.ReactNode {
       </Button>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>{chat?.recipient?.username}</Text>
-        <Text style={styles.time}>Была(а) недавно</Text>
+        <Text style={styles.time}>Был(а) недавно</Text>
       </View>
 
       <AnimatedPressable style={triggerAnimatedStyle} {...triggerProps}>
