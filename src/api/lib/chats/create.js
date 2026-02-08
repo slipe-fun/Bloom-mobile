@@ -6,7 +6,7 @@ export default async function createChatRequest(recipient) {
     const Storage = await createSecureStorage('user-storage')
     const token = Storage.getString('token')
 
-    const response = await fetch(`${API_URL}/message/seen`, {
+    const response = await fetch(`${API_URL}/chat/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -18,11 +18,13 @@ export default async function createChatRequest(recipient) {
     })
 
     if (!response.ok) {
+      console.log(response)
       return null
     }
 
     return await response.json()
-  } catch {
+  } catch (err) {
+    console.log(err)
     return null
   }
 }

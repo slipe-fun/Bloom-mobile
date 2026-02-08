@@ -20,7 +20,7 @@ export default function TabChats() {
   const { tabBarHeight, search } = useTabBarStore()
   const { userID } = useTokenTriggerStore()
   const insets = useInsets()
-  const chats = useChatList()
+  const { chats } = useChatList()
 
   const animatedViewStyle = useAnimatedStyle(
     (): ViewStyle => ({

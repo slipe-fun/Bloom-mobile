@@ -1,8 +1,7 @@
-import addKeysToDump from '@api/lib/keys/addKeysToDump'
+import addChatToStorage from '@api/lib/chats/addChatToStorage'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import setChatKeysToStorage from '@lib/setChatKeysToStorage'
 import decrypt from '@lib/skid/decrypt'
-import generateKeys from '@lib/skid/generateKeys'
 import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import { Q } from '@nozbe/watermelondb'
 import useStorageStore from '@stores/storage'
@@ -129,6 +128,15 @@ export default function ChatsProvider({ children }) {
     })
   }
 
+  function addChat(chat) {
+    // add new chat to chats var
+    setChats((prev) => {
+      const next = [...prev, chat]
+      sort(next).then((sorted) => setChats(sorted))
+      return next
+    })
+  }
+
   useEffect(() => {
     setChats(getChatsFromStorage(mmkv))
   }, [])
@@ -168,54 +176,9 @@ export default function ChatsProvider({ children }) {
               ed_public_key: message?.ed_public_key,
             })
           } else if (message?.type === 'chat.new') {
-            // chat created socket
-            // parse chats from mmkv storage
-            let _chats
-            try {
-              _chats = JSON.parse(mmkv.getString('chats'))
-            } catch {
-              _chats = []
-            }
+            await addChatToStorage(message?.id, message?.encryption_key)
 
-            // generate current user encryption keys
-            const myKeys = generateKeys()
-
-            // send current user public keys
-            ws.send(
-              JSON.stringify({
-                type: 'add_keys',
-                chat_id: message?.id,
-                kyber_public_key: myKeys.kyber_public_key,
-                ecdh_public_key: myKeys.ecdh_public_key,
-                ed_public_key: myKeys.ed_public_key,
-              }),
-            )
-
-            // add chat to mmkv storage
-            _chats = [
-              ..._chats,
-              {
-                id: message?.id,
-                key: message?.encryption_key,
-                keys: {
-                  my: { ...myKeys },
-                  recipient: {},
-                },
-              },
-            ]
-
-            // send dump
-            addKeysToDump(mmkv, { chat_id: message?.id, ...myKeys })
-
-            // save changes
-            mmkv.set('chats', JSON.stringify(_chats))
-
-            // add new chat to chats var
-            setChats((prev) => {
-              const next = [...prev, message.chat]
-              sort(next).then((sorted) => setChats(sorted))
-              return next
-            })
+            addChat(message)
           }
         } catch {}
       })
@@ -259,7 +222,7 @@ export default function ChatsProvider({ children }) {
     }
   }, [chats])
 
-  return <ChatsContext.Provider value={chats}>{children}</ChatsContext.Provider>
+  return <ChatsContext.Provider value={{ chats, addChat }}>{children}</ChatsContext.Provider>
 }
 
 export const useChatList = () => useContext(ChatsContext)
