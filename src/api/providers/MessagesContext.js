@@ -65,7 +65,7 @@ export default function MessagesProvider({ children }) {
           : null
 
         // if socket type is message
-        if (message?.type === 'message') {
+        if (message?.type === 'message.new') {
           try {
             //
             // IF SOFT SKID ENCRYPTION TYPE

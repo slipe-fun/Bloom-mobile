@@ -161,13 +161,13 @@ export default function ChatsProvider({ children }) {
           }
 
           // if someone from chat changed keys change them in mmkv storage
-          if (message?.type === 'keys_added') {
+          if (message?.type === 'chat.keys_updated') {
             await setChatKeysToStorage(message?.chat_id, {
               kyber_public_key: message?.kyber_public_key,
               ecdh_public_key: message?.ecdh_public_key,
               ed_public_key: message?.ed_public_key,
             })
-          } else if (message?.chat) {
+          } else if (message?.type === 'chat.new') {
             // chat created socket
             // parse chats from mmkv storage
             let _chats
@@ -184,7 +184,7 @@ export default function ChatsProvider({ children }) {
             ws.send(
               JSON.stringify({
                 type: 'add_keys',
-                chat_id: message?.chat?.id,
+                chat_id: message?.id,
                 kyber_public_key: myKeys.kyber_public_key,
                 ecdh_public_key: myKeys.ecdh_public_key,
                 ed_public_key: myKeys.ed_public_key,
@@ -195,8 +195,8 @@ export default function ChatsProvider({ children }) {
             _chats = [
               ..._chats,
               {
-                id: message?.chat?.id,
-                key: message?.chat?.encryption_key,
+                id: message?.id,
+                key: message?.encryption_key,
                 keys: {
                   my: { ...myKeys },
                   recipient: {},
@@ -205,7 +205,7 @@ export default function ChatsProvider({ children }) {
             ]
 
             // send dump
-            addKeysToDump(mmkv, { chat_id: message?.chat?.id, ...myKeys })
+            addKeysToDump(mmkv, { chat_id: message?.id, ...myKeys })
 
             // save changes
             mmkv.set('chats', JSON.stringify(_chats))

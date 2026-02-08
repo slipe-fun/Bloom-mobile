@@ -24,7 +24,7 @@ export default function SeenMessagesProvider({ children }) {
         }
 
         // if socket type is message_seen
-        if (message?.type === 'message_seen') {
+        if (message?.type === 'message.seen') {
           // get seen messages from socket message
           const messages = message?.messages
 
