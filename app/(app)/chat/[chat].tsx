@@ -28,7 +28,7 @@ export default function Chat() {
 
       const marginBottom = grouped ? theme.spacing.sm : item?.groupEnd ? theme.spacing.lg : theme.spacing.sm
 
-      return <Message seen={seenID === item?.id} message={item} marginBottom={marginBottom} />
+      return <Message seen={seenID >= item?.id} message={item} marginBottom={marginBottom} />
     },
     [seenID],
   )
