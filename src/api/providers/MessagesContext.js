@@ -26,46 +26,46 @@ export default function MessagesProvider({ children }) {
           return
         }
 
-        // get chat from mmkv storage
-        const chat = await getChatFromStorage(message?.chat_id)
-
-        if (!chat) return
-
-        // get current user chat keys
-        const myKeys = chat?.keys?.my
-        // get recipient chat keys
-        const recipientKeys = chat?.keys?.recipient
-        // get general chat key
-        const key = chat?.key
-
-        let reply_to
-        if (message?.reply_to) {
-          try {
-            const reply_to_message = getReplyToMessageFromStorage(message?.reply_to?.id)
-
-            if (reply_to_message) {
-              reply_to = reply_to_message
-            }
-
-            reply_to = message?.encapsulated_key
-              ? decrypt(message?.reply_to, myKeys, recipientKeys, false)
-              : sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
-          } catch {}
-        }
-
-        const reply_to_json = reply_to
-          ? {
-              id: message?.reply_to?.id,
-              chat_id: message?.chat_id,
-              content: reply_to?.content,
-              author_id: reply_to?.author_id || reply_to?.from_id,
-              date: reply_to?.date,
-              seen: message?.reply_to?.seen,
-            }
-          : null
-
         // if socket type is message
         if (message?.type === 'message.new') {
+          // get chat from mmkv storage
+          const chat = await getChatFromStorage(message?.chat_id)
+
+          if (!chat) return
+
+          // get current user chat keys
+          const myKeys = chat?.keys?.my
+          // get recipient chat keys
+          const recipientKeys = chat?.keys?.recipient
+          // get general chat key
+          const key = chat?.key
+
+          let reply_to
+          if (message?.reply_to) {
+            try {
+              const reply_to_message = getReplyToMessageFromStorage(message?.reply_to?.id)
+
+              if (reply_to_message) {
+                reply_to = reply_to_message
+              }
+
+              reply_to = message?.encapsulated_key
+                ? decrypt(message?.reply_to, myKeys, recipientKeys, false)
+                : sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+            } catch {}
+          }
+
+          const reply_to_json = reply_to
+            ? {
+                id: message?.reply_to?.id,
+                chat_id: message?.chat_id,
+                content: reply_to?.content,
+                author_id: reply_to?.author_id || reply_to?.from_id,
+                date: reply_to?.date,
+                seen: message?.reply_to?.seen,
+              }
+            : null
+
           try {
             //
             // IF SOFT SKID ENCRYPTION TYPE

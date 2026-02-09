@@ -1,11 +1,9 @@
-import { database } from 'src/db'
 import getChatFromStorage from '../../lib/getChatFromStorage'
 import encrypt from '../../lib/skid/encrypt'
 import { encrypt as sskEncrypt } from '../../lib/skid/serversideKeyEncryption'
 import { createSecureStorage } from '../../lib/storage'
-import sendMessageRequest from '../lib/messages/send'
 
-export default async function (content, reply_to, chat_id, count, ws) {
+export default async function (content, chat_id, count) {
   try {
     // mmkv storage
     const storage = await createSecureStorage('user-storage')
@@ -32,33 +30,7 @@ export default async function (content, reply_to, chat_id, count, ws) {
       encrypted = encrypt(content, { ...chatData?.keys?.my, id: user_id }, chatData?.keys?.recipient, count)
     }
 
-    // send encrypted message socket
-    const response = await sendMessageRequest({
-      encryption_type: !chatData?.keys?.recipient?.kyber_public_key ? 'server' : 'client',
-      chat_id: chat_id,
-      reply_to,
-      ...encrypted,
-    })
-
-    if (response) {
-      // write decrypted messages to local storage
-      await database.write(async () => {
-        const collection = database.get('messages')
-
-        await collection.create((m) => {
-          m.serverId = response?.id
-          m.chatId = chat_id
-          m.content = content
-          m.authorId = user_id
-          m.date = new Date()
-          m.seen = null
-          m.nonce = response?.nonce
-          m.replyToId = reply_to
-        })
-      })
-
-      return response?.nonce
-    }
+    return encrypted
   } catch (err) {
     console.log(err)
   }

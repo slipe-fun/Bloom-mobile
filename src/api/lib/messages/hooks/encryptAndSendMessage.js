@@ -1,11 +1,13 @@
-import sendMessage from '@api/lib/sendMessage'
+import encryptMessage from '@api/lib/encryptMessage'
 import mergeAndSort from '@api/lib/utils/mergeAndSort'
 import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
+import sendMessageAndSave from '../sendMessageAndSave'
 
 export default async function (mmkv, ws, content, reply_to, messages, setMessages, chat_id) {
   try {
     // send message socket
-    const nonce = await sendMessage(content, reply_to, chat_id, messages?.length, ws)
+    const message = await encryptMessage(content, chat_id, messages?.length)
+    if (!message) return
 
     let _reply_to
     if (reply_to) {
@@ -36,7 +38,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
       id: lastId + 1,
       isMe: true,
       isSending: true,
-      nonce,
+      nonce: message?.nonce,
       chat_id,
       content,
       author_id: parseInt(mmkv?.getString('user_id'), 10),
@@ -46,5 +48,21 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
     }
 
     setMessages((prev) => mergeAndSort(prev, [newMsg]))
-  } catch {}
+
+    const response = await sendMessageAndSave(content, chat_id, message, reply_to)
+    if (!response) return
+
+    setMessages((prev) =>
+      mergeAndSort(prev, [
+        {
+          ...newMsg,
+          id: response?.id,
+          isSending: false,
+        },
+      ]),
+    )
+    console.log('saved')
+  } catch (err) {
+    console.log(err)
+  }
 }
