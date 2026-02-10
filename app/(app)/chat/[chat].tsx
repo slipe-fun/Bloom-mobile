@@ -3,7 +3,7 @@ import Footer from '@components/chatScreen/footer'
 import Header from '@components/chatScreen/header'
 import Message from '@components/chatScreen/message'
 import { useChatController, useChatKeyboard, useInsets } from '@hooks'
-import type { Message as MessageType } from '@interfaces'
+import type { DateHeader, Message as MessageType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useState } from 'react'
@@ -33,8 +33,11 @@ export default function Chat() {
     [seenID],
   )
 
-  const keyExtractor = useCallback((item: MessageType) => {
-    return String(item?.nonce)
+  const keyExtractor = useCallback((item) => {
+    if ('date' in item && !('_id' in item)) {
+      return (item as DateHeader)._id
+    }
+    return String((item as MessageType).nonce)
   }, [])
 
   return (

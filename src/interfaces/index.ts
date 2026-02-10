@@ -59,6 +59,13 @@ export interface Position {
   width: number
 }
 
+export interface DateHeader {
+  _id: string
+  type: string
+  date: Date
+  text: string
+}
+
 export interface Option {
   icon?: keyof typeof ICONS
   label?: string

@@ -9,7 +9,7 @@ import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Chat.styles'
 
-type ChatProps = {
+interface ChatProps {
   chat: ChatView
   isSearch?: boolean
 }

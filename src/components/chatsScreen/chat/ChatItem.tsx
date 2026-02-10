@@ -1,7 +1,6 @@
 import Chat from '@components/chatsScreen/chat'
 import type { Chat as ChatType, ChatView } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
-import type React from 'react'
 import { useMemo } from 'react'
 
 interface ChatItemProps {
@@ -9,7 +8,7 @@ interface ChatItemProps {
   userId: string | number
 }
 
-export default function ChatItem({ item, userId }: ChatItemProps): React.JSX.Element {
+export default function ChatItem({ item, userId }: ChatItemProps) {
   const numericUserId = typeof userId === 'string' ? parseInt(userId, 10) : userId
 
   const recipient = useMemo(() => item.members?.find((member) => member.id !== numericUserId), [item, item.members, numericUserId])

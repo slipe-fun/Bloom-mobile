@@ -5,7 +5,7 @@ import getMessagesFromLocalStorage from '@api/lib/messages/hooks/getMessagesFrom
 import getNewMessagesFromMessageSocket from '@api/lib/messages/hooks/getNewMessagesFromMessageSocket'
 import sendSeenSocket from '@api/lib/messages/hooks/sendSeenSocket'
 import loadMessages from '@api/lib/messages/loadMessages'
-// import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
+import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
 import { useMessagesList } from '@api/providers/MessagesContext'
 import { useSeenMessagesList } from '@api/providers/SeenMessagesContext'
 import { useWebSocket } from '@api/providers/WebSocketContext'
@@ -29,7 +29,7 @@ export default function (chat_id) {
   const addMessage = async (content, reply_to) => encryptAndSendMessage(mmkv, ws, content, reply_to, messages, setMessages, chat_id)
 
   const messagesWithDates = useMemo(() => {
-    return [...messages].reverse()
+    return addDateHeaders([...messages]).reverse()
   }, [messages])
 
   // GET MESSAGES FROM API

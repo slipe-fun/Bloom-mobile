@@ -10,7 +10,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 type GradientDirection = 'top-to-bottom' | 'bottom-to-top' | 'bottom-left-to-top-right'
 
-type GradientBlurProps = {
+interface GradientBlurProps {
   direction?: GradientDirection
   ref?: React.Ref<MaskedView>
   style?: StyleProp<ViewStyle>
@@ -24,11 +24,11 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
   const { start, end } = useMemo(() => {
     switch (direction) {
       case 'top-to-bottom':
-        return { start: { x: 0.5, y: 0.85 }, end: { x: 0.5, y: 0 } }
+        return { start: { x: 0.5, y: 1 }, end: { x: 0.5, y: 0 } }
       case 'bottom-left-to-top-right':
         return { start: { x: 0.5, y: 0.5 }, end: { x: 1, y: 1 } }
       default:
-        return { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 0.85 } }
+        return { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 1 } }
     }
   }, [direction])
 
@@ -37,11 +37,11 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       easeGradient({
         colorStops: {
           0: { color: 'transparent' },
-          0.5: { color: theme.colors.background },
-          1: { color: theme.colors.background },
+          0.5: { color: theme.colors.gradientBlur },
+          1: { color: theme.colors.gradientBlur },
         },
       }),
-    [theme.colors.background],
+    [theme],
   )
 
   return (
@@ -54,14 +54,14 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
             <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
           }
         >
-          <BlurView style={StyleSheet.absoluteFill} intensity={16} tint="systemChromeMaterialDark" />
+          <BlurView style={StyleSheet.absoluteFill} intensity={20} tint="systemChromeMaterialDark" />
         </MaskedView>
       )}
 
       <LinearGradient
         start={start}
         end={end}
-        colors={['transparent', theme.colors.background]}
+        colors={['transparent', theme.colors.gradientBlur]}
         style={[StyleSheet.absoluteFill, keyboard ? styles.gradient(insets.bottom) : null, style]}
       />
     </>

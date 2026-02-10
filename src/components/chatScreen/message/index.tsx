@@ -1,7 +1,7 @@
 import type { Message as MessageType } from '@interfaces'
 import { Pressable } from 'react-native'
+import MessageBubble from './Bubble'
 import { styles } from './Message.styles'
-import MessageBubble from './MessageBubble'
 
 interface MessageProps {
   message: MessageType | null

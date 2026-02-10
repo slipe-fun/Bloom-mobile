@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
-  message: (isMe: boolean, seen: boolean) => ({
+  message: (isMe: boolean) => ({
     maxWidth: '82%',
     borderRadius: theme.radius.lg,
     borderCurve: 'continuous',
     zIndex: 10,
-    minHeight: 44,
-    backgroundColor: isMe ? (seen ? theme.colors.primary : theme.colors.primaryBackdrop) : theme.colors.foreground,
+    minHeight: 42,
+    backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
   }),
   messageWrapper: (isMe: boolean, marginBottom) => {
     return {
@@ -18,14 +18,15 @@ export const styles = StyleSheet.create((theme) => ({
     }
   },
   messageContent: {
-    paddingHorizontal: theme.spacing.lg,
-    padding: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg - 2,
+    padding: theme.spacing.sm,
+    minHeight: 40,
     flexDirection: 'row',
     width: '100%',
   },
   text: (isMe: boolean) => ({
     fontSize: theme.fontSize.md,
-    fontFamily: theme.fontFamily.medium,
+    fontFamily: theme.fontFamily.regular,
     color: isMe ? theme.colors.white : theme.colors.text,
     textAlign: 'left',
   }),
@@ -33,22 +34,9 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.xs,
     fontFamily: theme.fontFamily.medium,
     position: 'absolute',
-    right: theme.spacing.lg,
-    bottom: theme.spacing.md - 2,
+    right: theme.spacing.md + 2,
+    bottom: theme.spacing.sm - 2,
     color: isMe ? theme.colors.white : theme.colors.text,
     opacity: theme.opacity.contentText,
   }),
-  metaRowText: {
-    color: theme.colors.secondaryText,
-    fontSize: theme.fontSize.sm,
-    position: 'absolute',
-    bottom: theme.spacing.lg,
-    fontFamily: theme.fontFamily.medium,
-  },
-  messageBubbleWrapper: {
-    flexDirection: 'row',
-    gap: theme.spacing.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 }))
