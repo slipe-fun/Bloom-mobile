@@ -44,12 +44,12 @@ export default function useAuthFooter(): UseAuthFooter {
 
   const label = index === 0 ? 'Продолжить с Почтой' : index === 3 ? 'Завершить' : 'Продолжить'
   const ERROR_TIMOUT = 10000
-  let _timeout: ReturnType<typeof setTimeout>
+  let timeout: NodeJS.Timeout
 
   const handlePress = useCallback(async () => {
     try {
       setLoading(true)
-      clearTimeout(_timeout)
+      clearTimeout(timeout)
       if (index === 0) {
         router.navigate('/(auth)/signup/Email')
         setLoading(false)
@@ -69,7 +69,7 @@ export default function useAuthFooter(): UseAuthFooter {
         setLoading(false)
         if (!data?.token) {
           setError('Неверный код подтверждения. Попробуйте ещë раз')
-          _timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
+          timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
           return
         }
         mmkv.set('token', data.token)
@@ -90,7 +90,7 @@ export default function useAuthFooter(): UseAuthFooter {
       setLoading(false)
       setError(e?.response?.data || e?.message || 'Something went wrong')
 
-      _timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
+      timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
     }
   }, [index, email, otp, username, password, router, setError, mmkv, loading, setLoading])
 

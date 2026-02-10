@@ -6,98 +6,117 @@ import type { ChatView } from '@interfaces'
 import useChatsStore from '@stores/chats'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
 import { useRouter } from 'expo-router'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import type { ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
-import { type AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { type AnimatedStyle, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 
 interface useChatItem {
   selected: boolean
   edit: boolean
   pinned: boolean
+  animatedChatStyle: AnimatedStyle<ViewStyle>
   animatedMetaRowStyle: AnimatedStyle<ViewStyle>
   animatedShiftStyle: AnimatedStyle<ViewStyle>
-  openChat: () => void
   pin: () => void
   select: () => void
+  handlePress: (inn?: boolean) => void
+  onPressHandler: () => void
 }
 
 export default function useChatNavigation(chat: ChatView): useChatItem {
   const router = useRouter()
-
+  const { theme } = useUnistyles()
   const { userID } = useTokenTriggerStore()
-  const { edit, selectedChats, toggleChat } = useChatsStore()
-  const animationFinished = useSharedValue<boolean>(true)
+  const { edit, selectedChats, toggleChat, setEdit } = useChatsStore()
   const { chats, addChat } = useChatList()
+  const pressedValue = useSharedValue(0)
+  const timer = useRef<NodeJS.Timeout>(null)
+  const ignorePress = useRef(false)
 
-  const recipient = chat?.recipient
-  const targetId = recipient?.id || chat?.id
+  const targetId = chat.recipient?.id || chat.id
+  const selected = useMemo(() => selectedChats.includes(chat.id), [selectedChats, chat.id])
 
-  const pinned = useMemo(() => false, [])
+  const animatedMetaRowStyle = useAnimatedStyle(() => ({
+    opacity: withSpring(edit ? 0 : 1, quickSpring),
+    transform: [{ translateX: withSpring(edit ? -24 : 0, quickSpring) }],
+  }))
 
-  const selected = useMemo(() => selectedChats.includes(chat.id), [selectedChats])
+  const animatedShiftStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: withSpring(edit ? 44 : 0, quickSpring) }],
+  }))
 
-  const animatedMetaRowStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      opacity: withSpring(edit ? 0 : 1, quickSpring),
-      transform: [{ translateX: withSpring(edit ? -24 : 0, quickSpring) }],
-    }),
-  )
+  const animatedChatStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(pressedValue.get(), [0, 1], ['transparent', theme.colors.foreground]),
+  }))
 
-  const animatedShiftStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      transform: [{ translateX: withSpring(edit ? 44 : 0, quickSpring, (finished) => animationFinished.set(finished)) }],
-    }),
-  )
+  const nav = (id: string) => router.push({ pathname: '/chat/[chat]', params: { chat: JSON.stringify({ ...chat, id }) } })
 
-  const redirect = (id) =>
-    router.push({
-      pathname: '/chat/[chat]',
-      params: {
-        chat: JSON.stringify({ ...chat, id }),
-      },
-    })
+  const openChat = useCallback(async () => {
+    const exist = chats?.find((c) => c.members?.some((m) => m?.id === userID) && c.members?.some((m) => m?.id === targetId))
+    if (exist) return nav(exist.id)
 
-  const openChat = async () => {
-    const existingChat = chats?.find((c) => c?.members?.some((m) => m?.id === userID) && c?.members?.some((m) => m?.id === targetId))
-
-    if (existingChat) {
-      redirect(existingChat?.id)
-      return
+    const res = await createChatRequest(targetId)
+    if (res) {
+      addChatToStorage(res.id, res.encryption_key)
+      addChat(res)
+      nav(res.id)
     }
-
-    const response = await createChatRequest(targetId)
-
-    if (response) {
-      addChatToStorage(response?.id, response?.encryption_key)
-      addChat(response)
-
-      redirect(response?.id)
-      return
-    }
-  }
-
-  const pin = useCallback(() => {
-    console.log(1)
-  }, [])
+  }, [chats, userID, targetId])
 
   const select = useCallback(() => {
     Haptics.impact('light')
     toggleChat(chat.id)
   }, [chat.id, toggleChat])
 
-  useEffect(() => {
-    animationFinished.set(false)
-  }, [edit])
+  const handlePress = useCallback(
+    (inn = true) => {
+      if (edit) return pressedValue.set(withSpring(0, quickSpring))
+
+      if (inn) {
+        if (timer.current) {
+          clearTimeout(timer.current)
+          timer.current = null
+        }
+        ignorePress.current = false
+        timer.current = setTimeout(() => {
+          setEdit(true)
+          ignorePress.current = true
+          select()
+        }, 400)
+      } else {
+        if (timer.current) {
+          clearTimeout(timer.current)
+          timer.current = null
+        }
+      }
+
+      pressedValue.set(withSpring(inn ? 1 : 0, quickSpring))
+    },
+    [edit, select],
+  )
+
+  const onPressHandler = useCallback(() => {
+    if (ignorePress.current) {
+      ignorePress.current = false
+      return
+    }
+    edit ? select() : openChat()
+  }, [edit, select, openChat])
+
+  useEffect(() => () => clearTimeout(timer.current), [])
 
   return {
     selected,
     edit,
-    pinned,
+    pinned: false,
+    animatedChatStyle,
     animatedMetaRowStyle,
     animatedShiftStyle,
-    openChat,
-    pin,
+    pin: useCallback(() => console.log(1), []),
     select,
+    handlePress,
+    onPressHandler,
   }
 }

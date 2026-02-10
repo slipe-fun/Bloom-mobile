@@ -3,7 +3,6 @@ import Icon from '@components/ui/Icon'
 import { getCharEnter, getCharExit, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { useChatItem } from '@hooks'
 import type { ChatView } from '@interfaces'
-import type React from 'react'
 import { useMemo } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
@@ -18,17 +17,23 @@ type ChatProps = {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const AnimatedCheckbox = Animated.createAnimatedComponent(Checkbox)
 
-export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.Element {
+export default function Chat({ chat, isSearch = false }: ChatProps) {
   const { theme } = useUnistyles()
-  const { selected, edit, pinned, animatedMetaRowStyle, animatedShiftStyle, openChat, pin, select } = useChatItem(chat)
+  const { selected, edit, pinned, animatedMetaRowStyle, animatedShiftStyle, animatedChatStyle, pin, select, handlePress, onPressHandler } =
+    useChatItem(chat)
 
   const recipient = chat?.recipient
   const lastMessage = chat?.lastMessage
-
   const timeChars = useMemo(() => (!isSearch ? lastMessage?.time?.split('') || [] : null), [lastMessage?.time, isSearch])
 
   return (
-    <AnimatedPressable entering={getFadeIn()} onPress={edit ? select : openChat} style={styles.chat}>
+    <AnimatedPressable
+      onPressIn={() => handlePress(true)}
+      onPressOut={() => handlePress(false)}
+      entering={getFadeIn()}
+      onPress={onPressHandler}
+      style={[styles.chat, animatedChatStyle]}
+    >
       <LayoutAnimationConfig skipEntering skipExiting>
         {edit && (
           <>
@@ -57,6 +62,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
           </>
         )}
         <Animated.View style={[styles.avatarWrapper, animatedShiftStyle]}>
+          {/* Show avatar only in non-search mode */}
           <Avatar size={!isSearch ? 'lg' : 'md'} image={chat?.avatar} username={recipient?.username} />
         </Animated.View>
         <Animated.View style={[styles.content, animatedShiftStyle]}>
@@ -65,6 +71,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
 
             <Animated.View style={[styles.metaRow, animatedMetaRowStyle]}>
               {!isSearch && (
+                // Show time only in non-search mode
                 <Animated.View layout={layoutAnimationSpringy} style={styles.charStack}>
                   {timeChars.map((char, i) => (
                     <Animated.Text
@@ -78,6 +85,7 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
                     </Animated.Text>
                   ))}
                 </Animated.View>
+                //
               )}
               <Icon icon="chevron.right" size={16} color={theme.colors.secondaryText} />
             </Animated.View>
@@ -94,9 +102,11 @@ export default function Chat({ chat, isSearch = false }: ChatProps): React.JSX.E
               {lastMessage.content}
             </Animated.Text>
           ) : (
+            // In search mode, show the username instead of the last message
             <Text numberOfLines={1} style={styles.secondary(edit)}>
               @{recipient?.username}
             </Text>
+            //
           )}
         </Animated.View>
       </LayoutAnimationConfig>

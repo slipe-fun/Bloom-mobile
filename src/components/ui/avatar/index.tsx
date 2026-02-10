@@ -29,7 +29,7 @@ export default function Avatar({
   const SIZE_MAP: Record<Size, number> = {
     sm: 40,
     md: 44,
-    lg: 52,
+    lg: 48,
     xl: 68,
     '2xl': 100,
     '3xl': 128,

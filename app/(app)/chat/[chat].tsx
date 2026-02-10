@@ -5,7 +5,7 @@ import Message from '@components/chatScreen/message'
 import { useChatController, useChatKeyboard, useInsets } from '@hooks'
 import type { Message as MessageType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { KeyboardStickyView } from 'react-native-keyboard-controller'
@@ -16,7 +16,6 @@ export default function Chat() {
 
   const { messages, seenID, addMessage, nextPage, _chat } = useChatController(chat)
   const [footerHeight, setFooterHeight] = useState<number>(0)
-  const router = useRouter()
   const insets = useInsets()
   const { theme } = useUnistyles()
   const { height } = useChatKeyboard()
@@ -33,8 +32,6 @@ export default function Chat() {
     },
     [seenID],
   )
-
-  console.log(router.canDismiss(), router.canGoBack())
 
   const keyExtractor = useCallback((item: MessageType) => {
     return String(item?.nonce)

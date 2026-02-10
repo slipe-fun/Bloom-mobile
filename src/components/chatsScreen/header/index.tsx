@@ -2,7 +2,7 @@ import { useWebSocket } from '@api/providers/WebSocketContext'
 import { Button, GradientBlur, Icon } from '@components/ui'
 import { charAnimationIn, charAnimationOut, quickSpring, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useInsets } from '@hooks'
-import useChatsScreenStore from '@stores/chats'
+import useChatsStore from '@stores/chats'
 import useTabBarStore from '@stores/tabBar'
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
@@ -18,7 +18,7 @@ export default function Header() {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const [status, setStatus] = useState('connecting')
-  const { setHeaderHeight, setEdit, edit } = useChatsScreenStore()
+  const { setHeaderHeight, setEdit, edit } = useChatsStore()
   const setType = useTabBarStore((state) => state.setType)
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
