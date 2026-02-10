@@ -18,7 +18,7 @@ export default function Header() {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const [status, setStatus] = useState('connecting')
-  const { setHeaderHeight, setEdit, edit } = useChatsStore()
+  const { setHeaderHeight, setEdit, edit, clearSelectedChats } = useChatsStore()
   const setType = useTabBarStore((state) => state.setType)
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
@@ -27,6 +27,7 @@ export default function Header() {
 
   const editPress = () => {
     setEdit(!edit)
+    if (edit) clearSelectedChats()
     setType(edit ? 'default' : 'edit')
   }
 
