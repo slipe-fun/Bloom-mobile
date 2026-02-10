@@ -52,7 +52,7 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
 
   const redirect = (id) =>
     router.push({
-      pathname: '/(app)/chat/[chat]',
+      pathname: '/chat/[chat]',
       params: {
         chat: JSON.stringify({ ...chat, id }),
       },

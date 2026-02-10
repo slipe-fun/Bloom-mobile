@@ -2,7 +2,6 @@ import { GradientBlur } from '@components/ui'
 import { layoutAnimation } from '@constants/animations'
 import { useInsets } from '@hooks'
 import useTabBarStore from '@stores/tabBar'
-import type React from 'react'
 import { useEffect, useMemo } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
@@ -16,7 +15,7 @@ export const TAB_BAR_HEIGHT = 54
 
 const AnimatedStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
-export default function TabBar(): React.JSX.Element {
+export default function TabBar() {
   const { setHeight, setWidth, type } = useTabBarStore()
   const { theme } = useUnistyles()
   const { width } = useWindowDimensions()

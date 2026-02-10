@@ -27,7 +27,7 @@
 				"backgroundColor": "#000000"
 			},
 			"edgeToEdgeEnabled": true,
-			"predictiveBackGestureEnabled": true,
+			"predictiveBackGestureEnabled": false,
 			"package": "pw.bloom.app",
 			"permissions": [
 				"android.permission.READ_EXTERNAL_STORAGE",

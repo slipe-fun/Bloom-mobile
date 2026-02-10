@@ -13,17 +13,16 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
     screenStyleInterpolator: ({ layouts: { screen }, progress }) => {
       'worklet'
 
-      const translateX = interpolate(progress, [0, 1, 2], [screen.width / 4, 0, -screen.width / 4], 'clamp')
-      const opacity = interpolate(progress, [0, 1, 2], [0, 1, 0], 'clamp')
+      const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width / 3], 'clamp')
+      // const opacity = interpolate(progress, [0, 1, 2], [0, 1, 0], 'clamp')
 
       return {
         contentStyle: {
           transform: [{ translateX }],
           overflow: 'hidden',
-          opacity: opacity,
         },
         overlayStyle: {
-          opacity: opacity,
+          opacity: 0,
           backgroundColor: color,
         },
       }

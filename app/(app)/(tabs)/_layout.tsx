@@ -15,7 +15,7 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{ lazy: true, freezeOnBlur: true, headerShown: false, animation: 'fade', sceneStyle: styles.scene }}
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={() => <TabBar />}
     >
       <Tabs.Screen name="Friends" options={springOptions} />
       <Tabs.Screen name="Explore" options={springOptions} />
