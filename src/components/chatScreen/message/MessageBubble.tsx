@@ -1,7 +1,6 @@
 import { quickSpring } from '@constants/easings'
 import type { Message } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
-import type React from 'react'
 import { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'

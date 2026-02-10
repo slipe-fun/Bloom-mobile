@@ -1,10 +1,8 @@
 import { Input } from '@components/ui'
-import { layoutAnimation } from '@constants/animations'
 import useChatScreenStore from '@stores/chatScreen'
 import { BlurView } from 'expo-blur'
 import type React from 'react'
-import { Platform } from 'react-native'
-import Animated from 'react-native-reanimated'
+import { Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import ReplyBlock from '../replyBlock'
 import { styles } from './Footer.styles'
@@ -14,16 +12,12 @@ type MessageInputProps = {
   value: string
 }
 
-const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
-
 export default function MessageInput({ setValue, value }: MessageInputProps): React.JSX.Element {
   const { replyMessage, setReplyMessage } = useChatScreenStore()
 
   return (
-    <Animated.View style={styles.inputWrapper} layout={layoutAnimation}>
-      {Platform.OS === 'ios' && (
-        <AnimatedBlurView layout={layoutAnimation} style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />
-      )}
+    <View style={styles.inputWrapper}>
+      {Platform.OS === 'ios' && <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />}
       <ReplyBlock onCancel={() => setReplyMessage(null)} message={replyMessage} />
 
       <Input
@@ -37,6 +31,6 @@ export default function MessageInput({ setValue, value }: MessageInputProps): Re
         value={value}
         placeholder="Cообщение..."
       />
-    </Animated.View>
+    </View>
   )
 }

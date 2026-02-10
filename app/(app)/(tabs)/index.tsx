@@ -17,7 +17,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 export default function TabChats() {
   const { headerHeight } = useChatsScreenStore()
-  const { tabBarHeight, search } = useTabBarStore()
+  const { height, search } = useTabBarStore()
   const { userID } = useTokenTriggerStore()
   const insets = useInsets()
   const { chats } = useChatList()
@@ -49,11 +49,11 @@ export default function TabChats() {
           showsVerticalScrollIndicator
           contentContainerStyle={{
             paddingTop: headerHeight ?? 0,
-            paddingBottom: tabBarHeight ?? 0,
+            paddingBottom: height ?? 0,
           }}
           scrollIndicatorInsets={{
             top: (headerHeight ?? 0) - (insets.realTop ?? 0),
-            bottom: (tabBarHeight ?? 0) - (insets.realBottom ?? 0),
+            bottom: (height ?? 0) - (insets.realBottom ?? 0),
           }}
         />
         {chats?.length === 0 ? (

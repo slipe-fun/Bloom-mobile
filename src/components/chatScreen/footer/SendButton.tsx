@@ -1,35 +1,22 @@
 import { Button, Icon } from '@components/ui'
-import { layoutAnimation, paperplaneAnimationIn, paperplaneAnimationOut, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
-import useChatScreenStore from '@stores/chatScreen'
+import { paperplaneAnimationIn, paperplaneAnimationOut, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 
-type MessageInputProps = {
-  setValue: (value: string) => void
-  onSend: (value: string, id: number) => void
-  value: string
+interface SendButtonProps {
+  handleSend: () => void
+  hasValue: boolean
 }
 
-export default function SendButton({ setValue, onSend, value }: MessageInputProps) {
-  const { replyMessage, setReplyMessage } = useChatScreenStore()
+export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
   const { theme } = useUnistyles()
 
-  const hasValue: boolean = value.trim() !== ''
-
-  const handleSend = () => {
-    if (hasValue) {
-      onSend(value.trim(), replyMessage?.id)
-      setValue('')
-      setReplyMessage(null)
-    }
-  }
-
   return (
-    <Button layout={layoutAnimation} onPress={handleSend} blur variant="icon">
+    <Button onPress={handleSend} blur variant="icon">
       {hasValue ? (
         <>
-          <Animated.View entering={zoomAnimationIn} style={styles.buttonBackground} />
+          <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut} style={styles.buttonBackground} />
           <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
             <Icon icon="paperplane" size={26} color={theme.colors.white} />
           </Animated.View>

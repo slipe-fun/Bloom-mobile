@@ -1,6 +1,5 @@
 import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import type { Message } from '@interfaces'
-import type React from 'react'
 import Animated from 'react-native-reanimated'
 import { styles } from './Message.styles'
 

@@ -1,7 +1,7 @@
 import { Button, GradientBlur } from '@components/ui'
 import Icon from '@components/ui/Icon'
-import { layoutAnimation, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useInsets } from '@hooks'
+import useChatScreenStore from '@stores/chatScreen'
 import { useCallback, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
@@ -11,7 +11,7 @@ import { styles } from './Footer.styles'
 import MessageInput from './MessageInput'
 import SendButton from './SendButton'
 
-type FooterProps = {
+interface FooterProps {
   onSend: (content: string, reply_to: number) => void
   setFooterHeight: (value: number) => void
   footerHeight: number
@@ -23,33 +23,49 @@ export default function Footer({ onSend, setFooterHeight, footerHeight }: Footer
   const insets = useInsets()
   const { theme } = useUnistyles()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
-  const [value, setValue] = useState<string>('')
+  const [inputValue, setInputValue] = useState('')
+  const { replyMessage, setReplyMessage } = useChatScreenStore()
 
   const onFooterLayout = useCallback(
     (event: LayoutChangeEvent) => {
-      setFooterHeight(event.nativeEvent.layout.height)
+      const newHeight = event.nativeEvent.layout.height
+
+      if (newHeight !== footerHeight) {
+        setFooterHeight(newHeight)
+      }
     },
-    [footerHeight, setFooterHeight],
+    [setFooterHeight],
   )
 
   const animatedViewStyle = useAnimatedStyle(() => ({
     paddingHorizontal: keyboardProgress.get() > 0.1 ? theme.spacing.lg : theme.spacing.xxxl,
   }))
 
+  const handleSendPress = useCallback(() => {
+    const trimmedValue = inputValue.trim()
+    if (!trimmedValue) return
+
+    onSend(trimmedValue, replyMessage?.id)
+
+    setInputValue('')
+    if (replyMessage) {
+      setReplyMessage(null)
+    }
+  }, [inputValue, replyMessage, onSend, setReplyMessage])
+
   return (
     <AnimatedKeyboardStickyView
-      layout={layoutAnimation}
       offset={{ opened: -theme.spacing.lg, closed: -insets.bottom }}
       onLayout={onFooterLayout}
       style={[styles.footer, animatedViewStyle]}
     >
       <GradientBlur keyboard />
-      <Button layout={layoutAnimation} blur exiting={zoomAnimationOut} entering={zoomAnimationIn} variant="icon">
+      <Button blur variant="icon">
         <Icon icon="plus" size={26} color={theme.colors.text} />
       </Button>
 
-      <MessageInput setValue={setValue} value={value} />
-      <SendButton value={value} onSend={onSend} setValue={setValue} />
+      <MessageInput setValue={setInputValue} value={inputValue} />
+      <SendButton handleSend={handleSendPress} hasValue={inputValue.trim().length > 0} />
     </AnimatedKeyboardStickyView>
   )
 }
