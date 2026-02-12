@@ -6,7 +6,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radius.lg,
     borderCurve: 'continuous',
     zIndex: 10,
-    minHeight: 42,
+    minHeight: 40,
     backgroundColor: mountFinished ? (isMe ? theme.colors.primary : theme.colors.foreground) : 'transparent',
   }),
   messageWrapper: (isMe: boolean, marginBottom) => {

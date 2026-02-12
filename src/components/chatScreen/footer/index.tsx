@@ -1,6 +1,8 @@
 import { Button, GradientBlur } from '@components/ui'
 import Icon from '@components/ui/Icon'
 import { useInsets } from '@hooks'
+import type { Message } from '@interfaces'
+import type { FlashListRef } from '@shopify/flash-list'
 import useChatScreenStore from '@stores/chatScreen'
 import { useCallback, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
@@ -15,11 +17,12 @@ interface FooterProps {
   onSend: (content: string, reply_to: number) => void
   setFooterHeight: (value: number) => void
   footerHeight: number
+  listRef: FlashListRef<Message>
 }
 
 const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
-export default function Footer({ onSend, setFooterHeight, footerHeight }: FooterProps) {
+export default function Footer({ onSend, setFooterHeight, footerHeight, listRef }: FooterProps) {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
@@ -45,6 +48,7 @@ export default function Footer({ onSend, setFooterHeight, footerHeight }: Footer
     const trimmedValue = inputValue.trim()
     if (!trimmedValue) return
 
+    listRef?.prepareForLayoutAnimationRender()
     onSend(trimmedValue, replyMessage?.id)
 
     setInputValue('')

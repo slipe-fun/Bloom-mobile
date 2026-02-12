@@ -5,7 +5,7 @@ import getMessagesFromLocalStorage from '@api/lib/messages/hooks/getMessagesFrom
 import getNewMessagesFromMessageSocket from '@api/lib/messages/hooks/getNewMessagesFromMessageSocket'
 import sendSeenSocket from '@api/lib/messages/hooks/sendSeenSocket'
 import loadMessages from '@api/lib/messages/loadMessages'
-import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
+// import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
 import { useMessagesList } from '@api/providers/MessagesContext'
 import { useSeenMessagesList } from '@api/providers/SeenMessagesContext'
 import { useWebSocket } from '@api/providers/WebSocketContext'

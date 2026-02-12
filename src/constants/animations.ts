@@ -9,7 +9,7 @@ import {
   type WithSpringConfig,
   withSpring,
 } from 'react-native-reanimated'
-import { quickSpring } from './easings'
+import { normalSpring, quickSpring } from './easings'
 
 type SpringTriple = { mass: number; stiffness: number; damping: number }
 
@@ -101,22 +101,12 @@ export const reversedZoomAnimationIn = (): LayoutAnimResult => {
   }
 }
 
-export const messageFocusAnimationOut = (): LayoutAnimResult => {
+export const messageAnimationIn = (): LayoutAnimResult => {
   'worklet'
   return {
-    initialValues: { transform: [{ scale: 1.1 }] },
+    initialValues: { transform: [{ scale: 0.5 }, { translateX: '120%' }] },
     animations: {
-      transform: [{ scale: withSpring(1, springyMessage) }],
-    },
-  }
-}
-
-export const messageFocusAnimationIn = (): LayoutAnimResult => {
-  'worklet'
-  return {
-    initialValues: { transform: [{ scale: 0.95 }] },
-    animations: {
-      transform: [{ scale: withSpring(1.1, springyMessage) }],
+      transform: [{ scale: withSpring(1, normalSpring) }, { translateX: withSpring(0, normalSpring) }],
     },
   }
 }

@@ -1,6 +1,6 @@
 import { normalSpring } from '@constants/easings'
 import { Blur, Canvas, ColorMatrix, Group, Paint, Rect, RoundedRect } from '@shopify/react-native-skia'
-import { useEffect, useLayoutEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { interpolate, useDerivedValue, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
@@ -15,28 +15,28 @@ export default function StatusBubble({ isActive, setMountFinished }: StatusBubbl
   const { theme } = useUnistyles()
   const progress = useSharedValue(0)
 
-  const TARGET_OFFSET = 21
+  const TARGET_OFFSET = 21 * 5.7
 
-  useLayoutEffect(() => {
-    progress.value = withSpring(isActive ? 1 : 5.7, normalSpring, (_finished) => scheduleOnRN(setMountFinished, true))
+  useEffect(() => {
+    progress.value = withSpring(isActive ? 1 : 0, normalSpring, (_finished) => scheduleOnRN(setMountFinished, true))
   }, [isActive])
 
   const cx2 = useDerivedValue(() => {
-    return progress.value * TARGET_OFFSET
+    return interpolate(progress.value, [0, 1], [TARGET_OFFSET, 21])
   })
 
   const width = useDerivedValue(() => {
-    const w = interpolate(progress.value, [1, 5.7], [82, 41])
+    const w = interpolate(progress.value, [1, 0], [82, 41])
     return w
   })
 
   const height = useDerivedValue(() => {
-    const h = interpolate(progress.value, [1, 5.7], [42, 21])
+    const h = interpolate(progress.value, [1, 0], [42, 21])
     return h
   })
 
   const y = useDerivedValue(() => {
-    const offset = interpolate(progress.value, [1, 5.7], [10, 20])
+    const offset = interpolate(progress.value, [1, 0], [10, 20])
     return offset
   })
 

@@ -1,6 +1,7 @@
 import type { Message as MessageType } from '@interfaces'
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { Pressable } from 'react-native'
+import { useSharedValue } from 'react-native-reanimated'
 import MessageBubble from './Bubble'
 import { styles } from './Message.styles'
 import StatusBubble from './StatusBubble'
@@ -12,22 +13,19 @@ interface MessageProps {
   shouldAnimate: boolean
 }
 
-export default function Message({ message, seen, marginBottom, shouldAnimated }: MessageProps) {
+export default function Message({ message, seen, marginBottom, shouldAnimate }: MessageProps) {
   const [mountFinished, setMountFinished] = useState(false)
+  const height = useSharedValue<number>(0)
+  const width = useSharedValue<number>(0)
 
-  const messageTime = new Date(message.date).getTime()
-
-  // Анимируем ТОЛЬКО если сообщение новее, чем момент открытия чата
-  const shouldAnimate = messageTime > shouldAnimated
-
-  useEffect(() => {
-    setMountFinished(shouldAnimate ? false : true)
-  }, [message?.nonce])
+  useLayoutEffect(() => {
+    setMountFinished(!shouldAnimate)
+  }, [message?.id])
 
   return (
     <Pressable style={[styles.messageWrapper(message?.isMe, marginBottom)]}>
-      <StatusBubble setMountFinished={setMountFinished} isActive={shouldAnimate} />
-      <MessageBubble message={message} mountFinished={mountFinished} shouldAnimate={shouldAnimate} seen={seen} />
+      {!mountFinished && shouldAnimate && <StatusBubble setMountFinished={setMountFinished} isActive={shouldAnimate} />}
+      <MessageBubble height={height} width={width} message={message} shouldAnimate={shouldAnimate} mountFinished={mountFinished} />
     </Pressable>
   )
 }

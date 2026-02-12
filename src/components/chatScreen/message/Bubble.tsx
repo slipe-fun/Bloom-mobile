@@ -1,45 +1,40 @@
-import { normalSpring } from '@constants/animations'
+import { messageAnimationIn } from '@constants/animations'
 import type { Message } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
-import { useEffect, useLayoutEffect } from 'react'
-import { Text, View, type ViewStyle } from 'react-native'
-import Animated, { interpolate, useAnimatedReaction, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useLayoutEffect } from 'react'
+import { Text, View } from 'react-native'
+import Animated, { type MeasuredDimensions, measure, type SharedValue, useAnimatedRef } from 'react-native-reanimated'
+import { scheduleOnUI } from 'react-native-worklets'
 import { styles } from './Message.styles'
 
 interface MessageBubbleProps {
   message: Message | null
-  seen: boolean
-  shouldAnimate: boolean // <--- Важный проп
   mountFinished: boolean
+  shouldAnimate: boolean
+  height: SharedValue<number>
+  width: SharedValue<number>
 }
 
-export default function MessageBubble({ message, shouldAnimate, mountFinished }: MessageBubbleProps) {
+export default function MessageBubble({ message, mountFinished, shouldAnimate, height, width }: MessageBubbleProps) {
+  const animatedRef = useAnimatedRef<View>()
   const isMe: boolean = message?.isMe
-
-  const progress = useSharedValue(shouldAnimate ? 0 : 1)
-
-  const animatedStyle = useAnimatedStyle((): ViewStyle => {
-    return {
-      transform: [
-        {
-          translateX: interpolate(progress.value, [0, 1], [isMe ? 100 : -100, 0]),
-        },
-        {
-          scale: interpolate(progress.value, [0, 1], [0.5, 1]),
-        },
-      ],
-    }
-  })
 
   useLayoutEffect(() => {
     if (shouldAnimate) {
-      progress.value = 0
-      progress.value = withSpring(1, normalSpring)
+      const measureView = (): void => {
+        'worklet'
+        const measurment: MeasuredDimensions = measure(animatedRef)
+
+        height.set(Math.floor(measurment.height))
+        width.set(Math.floor(measurment.width))
+      }
+
+      scheduleOnUI(measureView)
     }
-  }, [shouldAnimate])
+  }, [])
 
   return (
-    <Animated.View style={[styles.message(isMe, mountFinished), animatedStyle]}>
+    <Animated.View ref={animatedRef} entering={shouldAnimate ? messageAnimationIn : null} style={[styles.message(isMe, mountFinished)]}>
       <View style={styles.messageContent}>
         <Text style={[styles.text(isMe)]}>
           {message?.content}
