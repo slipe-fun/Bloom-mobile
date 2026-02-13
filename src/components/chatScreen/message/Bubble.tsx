@@ -3,19 +3,19 @@ import type { Message } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
 import { useLayoutEffect } from 'react'
 import { Text, View } from 'react-native'
-import Animated, { type MeasuredDimensions, measure, type SharedValue, useAnimatedRef } from 'react-native-reanimated'
-import { scheduleOnUI } from 'react-native-worklets'
+import Animated, { type MeasuredDimensions, measure, useAnimatedRef } from 'react-native-reanimated'
+import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets'
 import { styles } from './Message.styles'
 
 interface MessageBubbleProps {
   message: Message | null
   mountFinished: boolean
   shouldAnimate: boolean
-  height: SharedValue<number>
-  width: SharedValue<number>
+  setHeight: (height: number) => void
+  setWidth: (width: number) => void
 }
 
-export default function MessageBubble({ message, mountFinished, shouldAnimate, height, width }: MessageBubbleProps) {
+export default function MessageBubble({ message, mountFinished, shouldAnimate, setHeight, setWidth }: MessageBubbleProps) {
   const animatedRef = useAnimatedRef<View>()
   const isMe: boolean = message?.isMe
 
@@ -25,8 +25,8 @@ export default function MessageBubble({ message, mountFinished, shouldAnimate, h
         'worklet'
         const measurment: MeasuredDimensions = measure(animatedRef)
 
-        height.set(Math.floor(measurment.height))
-        width.set(Math.floor(measurment.width))
+        scheduleOnRN(setHeight, Math.floor(measurment.height))
+        scheduleOnRN(setWidth, Math.floor(measurment.width))
       }
 
       scheduleOnUI(measureView)

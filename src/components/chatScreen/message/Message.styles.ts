@@ -5,6 +5,7 @@ export const styles = StyleSheet.create((theme) => ({
     maxWidth: '82%',
     borderRadius: theme.radius.lg,
     borderCurve: 'continuous',
+    transformOrigin: 'right center',
     zIndex: 10,
     minHeight: 40,
     backgroundColor: mountFinished ? (isMe ? theme.colors.primary : theme.colors.foreground) : 'transparent',
@@ -40,11 +41,12 @@ export const styles = StyleSheet.create((theme) => ({
     color: isMe ? theme.colors.white : theme.colors.text,
     opacity: theme.opacity.contentText,
   }),
-  statusCanvas: {
-    width: 120,
-    height: 60,
+  statusCanvas: (height: number) => ({
+    height,
+    left: 0,
+    right: 0,
     backgroundColor: 'transparent',
-    right: -16,
+    marginRight: -16,
     position: 'absolute',
-  },
+  }),
 }))
