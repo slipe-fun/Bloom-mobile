@@ -23,7 +23,7 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     textAlign: 'center',
     fontSize: theme.fontSize.sm,
-    color: theme.colors.secondaryText,
+    color: theme.colors.overlayText,
     fontFamily: theme.fontFamily.medium,
   },
   titleWrapper: {

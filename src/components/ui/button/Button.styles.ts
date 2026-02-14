@@ -22,6 +22,8 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: size >= SIZE_MAP.xl ? 0 : paddingHorizontal,
     borderCurve: 'continuous',
     borderRadius: theme.radius.full,
+    borderColor: blur ? theme.colors.border : 'transparent',
+    borderWidth: blur ? theme.borderWidth.md : 0,
     backgroundColor: blur && Platform.OS === 'ios' ? theme.colors.foregroundBlur : theme.colors.foreground,
     gap: isTextIcon ? theme.spacing.md - theme.spacing.xxs : 0,
   }),

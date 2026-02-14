@@ -7,7 +7,7 @@ import useChatScreenStore from '@stores/chatScreen'
 import { useCallback, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 import MessageInput from './MessageInput'
@@ -41,7 +41,8 @@ export default function Footer({ onSend, setFooterHeight, footerHeight, listRef 
   )
 
   const animatedViewStyle = useAnimatedStyle(() => ({
-    paddingHorizontal: keyboardProgress.get() > 0.1 ? theme.spacing.lg : theme.spacing.xxxl,
+    // paddingHorizontal: withSpring(keyboardProgress.get() > 0.1 ? theme.spacing.lg : theme.spacing.xxxl, quickSpring),
+    paddingHorizontal: interpolate(keyboardProgress.get(), [0, 1], [theme.spacing.xxxl, theme.spacing.lg]),
   }))
 
   const handleSendPress = useCallback(() => {
@@ -59,13 +60,13 @@ export default function Footer({ onSend, setFooterHeight, footerHeight, listRef 
 
   return (
     <AnimatedKeyboardStickyView
-      offset={{ opened: -theme.spacing.lg, closed: -insets.bottom }}
+      offset={{ opened: -theme.spacing.sm - 2, closed: -insets.bottom }}
       onLayout={onFooterLayout}
       style={[styles.footer, animatedViewStyle]}
     >
       <GradientBlur keyboard />
-      <Button blur variant="icon">
-        <Icon icon="plus" size={26} color={theme.colors.text} />
+      <Button blur size="sm" variant="icon">
+        <Icon icon="plus" size={24} color={theme.colors.text} />
       </Button>
 
       <MessageInput setValue={setInputValue} value={inputValue} />

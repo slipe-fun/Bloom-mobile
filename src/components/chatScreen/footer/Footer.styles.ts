@@ -14,6 +14,8 @@ export const styles = StyleSheet.create((theme) => ({
   inputWrapper: {
     backgroundColor: Platform.OS === 'ios' ? theme.colors.foregroundBlur : theme.colors.foreground,
     borderRadius: theme.radius.lg,
+    borderWidth: theme.borderWidth.md,
+    borderColor: theme.colors.border,
     overflow: 'hidden',
     flex: 1,
     borderCurve: 'continuous',

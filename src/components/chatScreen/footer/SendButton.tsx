@@ -13,17 +13,17 @@ export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
   const { theme } = useUnistyles()
 
   return (
-    <Button onPress={handleSend} blur variant="icon">
+    <Button onPress={handleSend} size="sm" blur variant="icon">
       {hasValue ? (
         <>
           <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut} style={styles.buttonBackground} />
           <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
-            <Icon icon="paperplane" size={26} color={theme.colors.white} />
+            <Icon icon="paperplane" size={24} color={theme.colors.white} />
           </Animated.View>
         </>
       ) : (
         <Animated.View key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
-          <Icon icon="waveform" size={26} color={theme.colors.text} />
+          <Icon icon="waveform" size={24} color={theme.colors.text} />
         </Animated.View>
       )}
     </Button>

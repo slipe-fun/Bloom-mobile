@@ -26,7 +26,7 @@ export default function MessageInput({ setValue, value }: MessageInputProps): Re
         multiline
         submitBehavior="newline"
         basic
-        size="md"
+        size="sm"
         returnKeyType="previous"
         value={value}
         placeholder="Cообщение..."
