@@ -23,7 +23,6 @@
     "@noble/ed25519": "^3.0.0",
     "@noble/hashes": "^2.0.1",
     "@noble/post-quantum": "^0.5.4",
-    "@noble/secp256k1": "^3.0.0",
     "@nozbe/watermelondb": "^0.28.0",
     "@react-native-masked-view/masked-view": "^0.3.2",
     "@react-native/babel-preset": "^0.83.1",
