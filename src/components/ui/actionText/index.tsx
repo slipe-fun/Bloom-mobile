@@ -1,13 +1,14 @@
-import { type GestureResponderEvent, Text, type TextProps } from 'react-native'
+import { type GestureResponderEvent, type StyleProp, Text, type TextProps, type TextStyle } from 'react-native'
 import { styles } from './ActionText.styles'
 
 type ActionTextProps = Omit<TextProps, 'children'> & {
   text: string
   actionText?: string
   onPress?: (event: GestureResponderEvent) => void
+  actionStyle?: StyleProp<TextStyle>
 }
 
-export default function ActionText({ text, actionText, onPress, style, ...props }: ActionTextProps) {
+export default function ActionText({ text, actionText, onPress, style, actionStyle, ...props }: ActionTextProps) {
   if (!actionText) {
     return <Text style={styles.text}>{text}</Text>
   }
@@ -17,7 +18,7 @@ export default function ActionText({ text, actionText, onPress, style, ...props 
   return (
     <Text style={[styles.text, style]} {...props}>
       {parts[0]}
-      <Text style={[styles.actionText, style]} onPress={onPress}>
+      <Text style={[styles.actionText, actionStyle]} onPress={onPress}>
         {' '}
         {actionText}{' '}
       </Text>
