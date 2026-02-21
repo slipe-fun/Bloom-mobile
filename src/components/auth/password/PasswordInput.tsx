@@ -11,7 +11,8 @@ import { styles } from './Input.styles'
 const AnimatedInput = Animated.createAnimatedComponent(Input)
 
 export default function AuthPasswordInput() {
-  const { password, setPasssword } = useAuthStore()
+  const password = useAuthStore((state) => state.password)
+  const setPassword = useAuthStore((state) => state.setPassword)
   const index = useNavigationState((state) => state.index)
   const [secure, setSecure] = useState<boolean>(true)
   const { theme } = useUnistyles()
@@ -26,7 +27,7 @@ export default function AuthPasswordInput() {
       ref={ref}
       layout={layoutAnimation}
       value={password}
-      onChangeText={setPasssword}
+      onChangeText={setPassword}
       maxLength={64}
       secureTextEntry={secure}
       keyboardType="default"

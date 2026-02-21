@@ -41,9 +41,10 @@ export default function AuthActions() {
       {iOS && (
         <Button
           labelStyle={styles.buttonLabel(false)}
-          icon={focusedIcon(!iOS, true)}
-          label={!iOS ? 'Продолжить с Apple' : 'Продолжить с Google'}
-          onPress={() => onPress(!iOS ? 'apple' : 'google')}
+          style={styles.button(false)}
+          icon={focusedIcon(false)}
+          label={'Продолжить с Google'}
+          onPress={() => onPress('google')}
           size="xl"
           variant="textIcon"
         />

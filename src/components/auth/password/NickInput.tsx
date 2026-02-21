@@ -10,7 +10,8 @@ import { useUnistyles } from 'react-native-unistyles'
 const AnimatedInput = Animated.createAnimatedComponent(Input)
 
 export default function AuthNickInput() {
-  const { username, setUsername } = useAuthStore()
+  const username = useAuthStore((state) => state.username)
+  const setUsername = useAuthStore((state) => state.setUsername)
   const index = useNavigationState((state) => state.index)
   const { theme } = useUnistyles()
   const ref = useRef<TextInput>(null)

@@ -13,7 +13,9 @@ import { styles } from './Input.styles'
 const AnimatedInput = Animated.createAnimatedComponent(Input)
 
 export default function AuthEmailInput() {
-  const { email, setEmail, setEmailValid } = useAuthStore()
+  const email = useAuthStore((state) => state.email)
+  const setEmail = useAuthStore((state) => state.setEmail)
+  const setEmailValid = useAuthStore((state) => state.setEmailValid)
   const { theme } = useUnistyles()
   const index = useNavigationState((state) => state.index)
   const ref = useRef<TextInput>(null)
@@ -61,6 +63,7 @@ export default function AuthEmailInput() {
       keyboardType="email-address"
       autoCapitalize="none"
       autoCorrect={false}
+      returnKeyType="done"
       textContentType="emailAddress"
       autoComplete="email"
       icon={icon}

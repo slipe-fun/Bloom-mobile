@@ -11,7 +11,7 @@ type AuthStore = {
   setError: (error: string) => void
   footerHeight: number
   password: string
-  setPasssword: (password: string) => void
+  setPassword: (password: string) => void
   username: string
   setUsername: (username: string) => void
   dbUsername: string
@@ -31,7 +31,7 @@ const useAuthStore = create<AuthStore>((set) => ({
   setError: (error) => set({ error }),
   footerHeight: 68,
   password: '',
-  setPasssword: (password) => set({ password }),
+  setPassword: (password) => set({ password }),
   username: '',
   setUsername: (username) => set({ username }),
   exists: false,

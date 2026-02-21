@@ -4,6 +4,7 @@ import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Keyboard } from 'react-native'
 import { type SharedValue, useSharedValue, withSpring } from 'react-native-reanimated'
 import { authApi } from './api/useAuthFooter.api'
 
@@ -50,6 +51,7 @@ export default function useAuthFooter(): UseAuthFooter {
     try {
       setLoading(true)
       clearTimeout(timeout)
+      Keyboard.dismiss()
       if (index === 0) {
         router.navigate('/(auth)/signup/Email')
         setLoading(false)

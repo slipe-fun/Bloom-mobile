@@ -51,7 +51,6 @@ const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.spacing.xl,
     gap: theme.spacing.lg,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background,
     paddingBottom,
   }),
 }))

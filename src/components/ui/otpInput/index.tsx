@@ -89,6 +89,7 @@ export default function OTPInput({ length = 6, value, onChange }: OTPInputProps)
         value={value}
         onChangeText={onChangeText}
         keyboardType="number-pad"
+        returnKeyType="done"
         maxLength={length}
         style={styles.hiddenInput}
         caretHidden

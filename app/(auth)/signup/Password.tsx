@@ -16,7 +16,9 @@ export default function SignupPassword() {
   const keyboard = useReanimatedKeyboardAnimation()
   const insets = useInsets()
   const { theme } = useUnistyles()
-  const { error, exists, dbUsername } = useAuthStore()
+  const error = useAuthStore((state) => state.error)
+  const exists = useAuthStore((state) => state.exists)
+  const dbUsername = useAuthStore((state) => state.dbUsername)
   // Needs only for read and write first keyboard height to mmkv storage
   const { height: _height } = useChatKeyboard()
   const errorValue = useSharedValue(0)

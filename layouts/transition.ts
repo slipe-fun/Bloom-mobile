@@ -20,6 +20,7 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
         contentStyle: {
           transform: [{ translateX }],
           overflow: 'hidden',
+          backgroundColor: color,
         },
         overlayStyle: {
           opacity: 0,
