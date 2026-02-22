@@ -1,7 +1,7 @@
 import { randomBytes } from '@noble/hashes/utils.js'
 import deriveAesKey from './modules/crypto/aes/deriveAesKey'
 import encryptCekWithKek from './modules/crypto/aes/encryptCekWithKek'
-import encryptMessage from './modules/crypto/aes/encryptMessage'
+import { encryptMessage } from './modules/crypto/aes/encryptMessage'
 import signPayload from './modules/crypto/ed/signPayload'
 import { hybridEncrypt } from './modules/crypto/hybrid/hybrid'
 import generateIV from './modules/crypto/utils/generateIV'

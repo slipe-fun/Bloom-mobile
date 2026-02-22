@@ -1,4 +1,5 @@
 import { quickSpring } from '@constants/easings'
+import generateKeys from '@lib/skid/generateKeys'
 import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
@@ -74,9 +75,27 @@ export default function useAuthFooter(): UseAuthFooter {
           timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
           return
         }
-        mmkv.set('token', data.token)
-        mmkv.set('user_id', String(data.user?.id))
-        mmkv.set('user', JSON.stringify(data.user))
+
+        const session_keys = generateKeys()
+
+        const send_keys = await authApi.addSessionKeys(data?.token, session_keys)
+        if (!send_keys) {
+          setError('Не удалось сгенерировать ключи шифрования. Попробуйте ещё раз')
+          timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
+          return
+        }
+
+        mmkv.set(
+          'session',
+          JSON.stringify({
+            id: data?.session_id,
+            ...session_keys,
+          }),
+        )
+        mmkv.set('token', data?.token)
+        mmkv.set('user_id', String(data?.user?.id))
+        mmkv.set('session_id', String(data?.session_id))
+        mmkv.set('user', JSON.stringify(data?.user))
         setDbUsername(data?.user?.username)
         router.navigate('/(auth)/signup/Password')
         return
