@@ -1,5 +1,5 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
-import createChatRequest from '@api/lib/chats/create'
+import createChat from '@api/lib/chats/create'
 import { useChatList } from '@api/providers/ChatsContext'
 import { quickSpring } from '@constants/easings'
 import type { ChatView } from '@interfaces'
@@ -54,14 +54,13 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
   const nav = (id: string) => router.push({ pathname: '/chat/[chat]', params: { chat: JSON.stringify({ ...chat, id }) } })
 
   const openChat = useCallback(async () => {
-    const exist = chats?.find((c) => c.members?.some((m) => m?.id === userID) && c.members?.some((m) => m?.id === targetId))
-    if (exist) return nav(exist.id)
-
-    const res = await createChatRequest(targetId)
+    //const exist = chats?.find((c) => c.members?.some((m) => m?.id === userID) && c.members?.some((m) => m?.id === targetId))
+    //if (exist) return nav(exist.id)
+    console.log(targetId)
+    const res = await createChat(targetId)
     if (res) {
-      addChatToStorage(res.id, res.encryption_key)
       addChat(res)
-      nav(res.id)
+      nav(res?.id)
     }
   }, [chats, userID, targetId])
 

@@ -1,6 +1,5 @@
 import getReplyToMessageFromStorage from '@api/lib/messages/getReplyToMessageFromStorage'
 import getChatFromStorage from '@lib/getChatFromStorage'
-import decrypt from '@lib/skid/decrypt'
 import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { database } from 'src/db'
@@ -30,13 +29,8 @@ export default function MessagesProvider({ children }) {
         if (message?.type === 'message.new') {
           // get chat from mmkv storage
           const chat = await getChatFromStorage(message?.chat_id)
-
           if (!chat) return
 
-          // get current user chat keys
-          const myKeys = chat?.keys?.my
-          // get recipient chat keys
-          const recipientKeys = chat?.keys?.recipient
           // get general chat key
           const key = chat?.key
 
@@ -49,9 +43,7 @@ export default function MessagesProvider({ children }) {
                 reply_to = reply_to_message
               }
 
-              reply_to = message?.encapsulated_key
-                ? decrypt(message?.reply_to, myKeys, recipientKeys, false)
-                : sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+              reply_to = sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
             } catch {}
           }
 
@@ -67,78 +59,21 @@ export default function MessagesProvider({ children }) {
             : null
 
           try {
-            //
-            // IF SOFT SKID ENCRYPTION TYPE
-            //
+            // decrypt message by general chat key
+            const decrypted = sskDecrypt(message?.ciphertext, message?.nonce, key)
 
-            if (message?.encryption_type === 'server') {
-              // decrypt message by general chat key
-              const decrypted = sskDecrypt(message?.ciphertext, message?.nonce, key)
-
-              // add decrypted message to messages var
-              setMessages((prev) => [
-                ...prev,
-                {
-                  ...decrypted,
-                  chat_id: message?.chat_id,
-                  id: message?.id,
-                  reply_to: reply_to_json,
-                  nonce: message?.nonce,
-                  raw: message,
-                },
-              ])
-
-              // add decrypted message to local storage
-              await database.write(async () => {
-                await database.get('messages').create((msg) => {
-                  msg.serverId = message?.id
-                  msg.chatId = message?.chat_id
-                  msg.content = decrypted?.content
-                  msg.authorId = decrypted?.from_id
-                  msg.date = new Date()
-                  msg.seen = null
-                  msg.nonce = message?.nonce
-                  msg.replyToId = reply_to_json?.id
-                })
-              })
-
-              return
-            }
-
-            //
-            // IF HEAVY SKID ENCRYPTION TYPE
-            //
-
-            // decrypt message by current user and recipient keys
-            let decrypted
-
-            try {
-              // if kyber message sent by recipient then decrypt using both key pairs
-              // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
-              decrypted = {
-                ...decrypt(message, myKeys, recipientKeys, false),
+            // add decrypted message to messages var
+            setMessages((prev) => [
+              ...prev,
+              {
+                ...decrypted,
                 chat_id: message?.chat_id,
                 id: message?.id,
                 reply_to: reply_to_json,
                 nonce: message?.nonce,
-              }
-            } catch (error) {
-              // if kyber message sent by user (current session user) decrypt using only his keys
-              if (error.message === 'invalid polyval tag') {
-                try {
-                  decrypted = {
-                    ...decrypt(message, myKeys, myKeys, true),
-                    chat_id: message?.chat_id,
-                    id: message?.id,
-                    reply_to: reply_to_json,
-                    nonce: message?.nonce,
-                  }
-                } catch {}
-              }
-            }
-
-            // add decrypted message to messages var
-            setMessages((prev) => [...prev, decrypted])
+                raw: message,
+              },
+            ])
 
             // add decrypted message to local storage
             await database.write(async () => {
@@ -153,6 +88,8 @@ export default function MessagesProvider({ children }) {
                 msg.replyToId = reply_to_json?.id
               })
             })
+
+            return
           } catch {}
         }
       })

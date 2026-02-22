@@ -1,9 +1,7 @@
 import { API_URL } from '@constants/api'
 import getChatFromStorage from '@lib/getChatFromStorage'
-import generateKeys from '@lib/skid/generateKeys'
 import { createSecureStorage } from '@lib/storage'
 import axios from 'axios'
-import addChatKeysRequest from '../keys/addChatKeys.js'
 import addKeysToDump from '../keys/addKeysToDump.js'
 
 export default async function getChats(ws) {
@@ -30,33 +28,11 @@ export default async function getChats(ws) {
     // response chats map
     await Promise.all(
       response?.data?.map(async (chat) => {
-        // get recipient from chat api object
-        const recipient = chat?.members?.find((member) => member?.id !== parseInt(Storage.getString('user_id'), 10))
-
         // get chat from mmkv storage
         const chatInStorage = await getChatFromStorage(chat?.id)
 
-        // current user keys variable
-        var myKeys
-
-        // generate keys if current user dont have its
-        if (!chatInStorage?.keys?.my?.kyberSecretKey) {
-          myKeys = generateKeys()
-
-          // send new public keys to recipient
-          addChatKeysRequest({
-            chat_id: chat?.id,
-            kyber_public_key: myKeys.kyber_public_key,
-            ecdh_public_key: myKeys.ecdh_public_key,
-            ed_public_key: myKeys.ed_public_key,
-          })
-        }
-
-        // find chat from mmkv storage (wtf i need to use chat variable mb??idk)
-        // TODO: replace _chat with chat
-        const _chat = chats?.find((_chat) => _chat?.id === chat?.id)
         // if chat exists in mmkv storage
-        if (_chat) {
+        if (chat) {
           // find chat index
           const chatIndex = chats?.findIndex((_chat) => _chat?.id === chat?.id)
           if (chatIndex !== -1) {
@@ -64,30 +40,21 @@ export default async function getChats(ws) {
             // PS: if recipient keys changed in api they will be changed in mmkv storage too because this code
             chats[chatIndex] = {
               id: chat?.id,
-              key: chat?.encryption_key,
-              keys: {
-                my: { ...(myKeys || chatInStorage?.keys?.my) },
-                recipient: { ...recipient },
-              },
+              key: chatInStorage?.key,
+              members: [...(chat?.members || [])],
             }
 
             // send dump
-            addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my) })
+            addKeysToDump(Storage, chats[chatIndex])
           }
         } else {
           // IF CHAT IS NOT EXISTS IN MMKV STORAGE
           // add chat to storage
           chats.push({
             id: chat?.id,
-            key: chat?.encryption_key,
-            keys: {
-              my: { ...(myKeys || chatInStorage?.keys?.my) },
-              recipient: { ...recipient },
-            },
+            key: null,
+            members: [...(chat?.members || [])],
           })
-
-          //send dump
-          addKeysToDump(Storage, { chat_id: chat?.id, ...(myKeys || chatInStorage?.keys?.my) })
         }
       }),
     )

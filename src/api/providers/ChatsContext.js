@@ -1,7 +1,5 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
 import getChatFromStorage from '@lib/getChatFromStorage'
-import setChatKeysToStorage from '@lib/setChatKeysToStorage'
-import decrypt from '@lib/skid/decrypt'
 import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import { Q } from '@nozbe/watermelondb'
 import useStorageStore from '@stores/storage'
@@ -36,42 +34,21 @@ export default function ChatsProvider({ children }) {
   async function decryptMessage(_chat, message) {
     // get chat from mmkv storage
     const chat = await getChatFromStorage(message?.chat_id)
-
     if (!chat) return
 
-    // get current user chat keys
-    const myKeys = chat?.keys?.my
-    // get recipient chat keys
-    const recipientKeys = chat?.keys?.recipient
-    // get general chat key
     const key = chat?.key
 
     try {
       // if kyber message sent by recipient then decrypt using both key pairs
       // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
       return {
-        ...(message?.encapsulated_key
-          ? decrypt(message, myKeys, recipientKeys, false)
-          : sskDecrypt(message?.ciphertext, message?.nonce, key)),
+        ...sskDecrypt(message?.ciphertext, message?.nonce, key),
         chat_id: message?.chat_id,
         id: message?.id,
         seen: message?.seen,
         nonce: message?.nonce,
       }
-    } catch (error) {
-      // if kyber message sent by user (current session user) decrypt using only his keys
-      if (error.message === 'invalid polyval tag') {
-        try {
-          return {
-            ...decrypt(message, myKeys, myKeys, true),
-            chat_id: message?.chat_id,
-            id: message?.id,
-            seen: message?.seen,
-            nonce: message?.nonce,
-          }
-        } catch {}
-      }
-    }
+    } catch {}
   }
 
   async function sort(chats) {
@@ -168,15 +145,8 @@ export default function ChatsProvider({ children }) {
             return
           }
 
-          // if someone from chat changed keys change them in mmkv storage
-          if (message?.type === 'chat.keys_updated') {
-            await setChatKeysToStorage(message?.chat_id, {
-              kyber_public_key: message?.kyber_public_key,
-              ecdh_public_key: message?.ecdh_public_key,
-              ed_public_key: message?.ed_public_key,
-            })
-          } else if (message?.type === 'chat.new') {
-            await addChatToStorage(message?.id, message?.encryption_key)
+          if (message?.type === 'chat.new') {
+            await addChatToStorage(message?.id)
 
             addChat(message)
           }

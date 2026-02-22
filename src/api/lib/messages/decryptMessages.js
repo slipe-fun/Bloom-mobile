@@ -1,5 +1,4 @@
 import getChatFromStorage from '@lib/getChatFromStorage'
-import decrypt from '@lib/skid/decrypt'
 import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import { Q } from '@nozbe/watermelondb'
 import { database } from 'src/db'
@@ -12,11 +11,7 @@ export default async function (mmkv, chat_id, messages) {
   const chat = await getChatFromStorage(chat_id)
   if (!chat) return
 
-  // kyber, ecdh, ed keys
-  const myKeys = chat?.keys?.my
-  const recipientKeys = chat?.keys?.recipient
-
-  const key = chat?.encryption_key
+  const key = chat?.key
 
   // user id
   const userId = parseInt(mmkv.getString('user_id'), 10)
@@ -31,9 +26,7 @@ export default async function (mmkv, chat_id, messages) {
           if (reply_to_message) {
             reply_to = reply_to_message
           } else {
-            reply_to = message?.encapsulated_key
-              ? decrypt(message?.reply_to, myKeys, recipientKeys, false)
-              : sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+            reply_to = sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
           }
         } catch {}
       }
@@ -42,9 +35,7 @@ export default async function (mmkv, chat_id, messages) {
         // if kyber message sent by recipient then decrypt using both key pairs
         // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
         return {
-          ...(message?.encapsulated_key
-            ? decrypt(message, myKeys, recipientKeys, false)
-            : sskDecrypt(message?.ciphertext, message?.nonce, chat?.key)),
+          ...sskDecrypt(message?.ciphertext, message?.nonce, chat?.key),
           chat_id: message?.chat_id,
           id: message?.id,
           seen: message?.seen,
@@ -60,30 +51,7 @@ export default async function (mmkv, chat_id, messages) {
               }
             : null,
         }
-      } catch (error) {
-        // if kyber message sent by user (current session user) decrypt using only his keys
-        if (error.message === 'invalid polyval tag') {
-          try {
-            return {
-              ...decrypt(message, myKeys, myKeys, true),
-              chat_id: message?.chat_id,
-              id: message?.id,
-              seen: message?.seen,
-              nonce: message?.nonce,
-              reply_to: reply_to
-                ? {
-                    id: message?.reply_to?.id,
-                    chat_id: message?.chat_id,
-                    content: reply_to?.content,
-                    author_id: reply_to?.from_id,
-                    date: reply_to?.date,
-                    seen: message?.reply_to?.seen,
-                  }
-                : null,
-            }
-          } catch {}
-        }
-      }
+      } catch {}
 
       return null
     })
