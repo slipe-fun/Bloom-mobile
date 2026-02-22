@@ -105,4 +105,38 @@ export const authApi = {
     await usernameHandler(token, username)
     await passwordHandler(token, password, mmkv)
   },
+
+  async addSessionKeys(token: string, keys: { ed_public_key: string; ecdh_public_key: string; kyber_public_key: string }): Promise<any> {
+    if (!token) throw new Error('Authorization token is required')
+    if (!keys?.ed_public_key || !keys?.ecdh_public_key || !keys?.kyber_public_key) {
+      throw new Error('All keys must be provided')
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/session/add-keys`,
+        {
+          identity_pub: keys.ed_public_key,
+          ecdh_pub: keys.ecdh_public_key,
+          kyber_pub: keys.kyber_public_key,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+
+      return response.data
+    } catch (err: any) {
+      if (err.response) {
+        throw new Error(`Failed to add session keys: ${err.response.data}`)
+      } else if (err.request) {
+        throw new Error('No response from server')
+      } else {
+        throw new Error(`Request error: ${err.message}`)
+      }
+    }
+  },
 }
