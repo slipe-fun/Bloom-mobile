@@ -1,5 +1,5 @@
 import decryptCekWithKek from './modules/crypto/aes/decryptCekWithKek'
-import decryptMessage from './modules/crypto/aes/decryptMessage'
+import { decryptMessage } from './modules/crypto/aes/decryptMessage'
 import deriveAesKey from './modules/crypto/aes/deriveAesKey'
 import verifySignature from './modules/crypto/ed/verifySignature'
 import { hybridDecrypt } from './modules/crypto/hybrid/hybrid'
