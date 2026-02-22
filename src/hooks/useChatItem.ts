@@ -54,9 +54,9 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
   const nav = (id: string) => router.push({ pathname: '/chat/[chat]', params: { chat: JSON.stringify({ ...chat, id }) } })
 
   const openChat = useCallback(async () => {
-    //const exist = chats?.find((c) => c.members?.some((m) => m?.id === userID) && c.members?.some((m) => m?.id === targetId))
-    //if (exist) return nav(exist.id)
-    console.log(targetId)
+    const exist = chats?.find((c) => c.members?.some((m) => m?.id === userID) && c.members?.some((m) => m?.id === targetId))
+    if (exist) return nav(exist.id)
+
     const res = await createChat(targetId)
     if (res) {
       addChat(res)
