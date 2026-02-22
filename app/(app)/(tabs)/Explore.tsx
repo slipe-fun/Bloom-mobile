@@ -1,5 +1,5 @@
-import Header from '@components/settingsScreen/header'
-import FloatingHeader from '@components/settingsScreen/header/FloatingHeader'
+import Header from '@components/settingsScreen'
+import FloatingHeader from '@components/settingsScreen/FloatingHeader'
 import { SettingsGroup } from '@components/ui'
 import { SETTINGS_SECTIONS } from '@constants/settings'
 import { useMe, useSnapScroll } from '@hooks'

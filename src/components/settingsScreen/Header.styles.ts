@@ -1,15 +1,15 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
-  header: (paddingTop: number) => ({
+  header: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop,
+    position: 'absolute',
+    zIndex: 1,
     gap: theme.spacing.lg,
-    paddingBottom: theme.spacing.xxl,
-    paddingHorizontal: theme.spacing.lg,
-  }),
+    paddingBottom: theme.spacing.md,
+  },
   floatingHeader: (paddingTop: number) => ({
     left: 0,
     right: 0,
@@ -20,9 +20,9 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     paddingBottom: theme.spacing.md,
   }),
-  floatingHeaderTitle: {
-    color: theme.colors.text,
+  title: {
+    color: theme.colors.white,
+    fontSize: theme.fontSize.xxl - 4,
     fontFamily: theme.fontFamily.semibold,
-    fontSize: theme.fontSize.lg,
   },
 }))

@@ -1,5 +1,5 @@
-import Header from '@components/settingsScreen/header'
-import FloatingHeader from '@components/settingsScreen/header/FloatingHeader'
+import Header from '@components/settingsScreen'
+import FloatingHeader from '@components/settingsScreen/FloatingHeader'
 import { SettingsGroup } from '@components/ui'
 import { SETTINGS_SECTIONS } from '@constants/settings'
 import { useMe, useSnapScroll } from '@hooks'
@@ -12,8 +12,8 @@ import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function TabSettings() {
-  const { snapEndPosition } = useSettingsScreenStore()
-  const { height } = useTabBarStore()
+  const { snapEndPosition, headerHeight } = useSettingsScreenStore()
+  const height = useTabBarStore((state) => state.height)
   const { scrollY, animatedRef, scrollHandler } = useSnapScroll<any>(snapEndPosition)
   const { user } = useMe()
 
@@ -42,13 +42,14 @@ export default function TabSettings() {
 
   return (
     <View style={styles.container}>
-      <FloatingHeader scrollY={scrollY} user={user} />
+      {/* <FloatingHeader scrollY={scrollY} user={user} /> */}
+      <Header scrollY={scrollY} user={user} />
       <AnimatedLegendList
         ref={animatedRef}
         keyExtractor={keyExtractor}
-        ListHeaderComponent={<Header scrollY={scrollY} user={user} />}
+        // ListHeaderComponent={<Header scrollY={scrollY} user={user} />}
         onScroll={scrollHandler}
-        contentContainerStyle={styles.list(height)}
+        contentContainerStyle={styles.list(height, headerHeight)}
         showsVerticalScrollIndicator={false}
         data={data}
         renderItem={renderItem}
@@ -62,8 +63,9 @@ const styles = StyleSheet.create((theme) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  list: (paddingBottom: number) => ({
+  list: (paddingBottom: number, paddingTop: number) => ({
     paddingBottom,
+    paddingTop,
     paddingHorizontal: theme.spacing.lg,
   }),
 }))

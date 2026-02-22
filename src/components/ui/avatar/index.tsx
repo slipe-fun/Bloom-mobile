@@ -17,6 +17,15 @@ type AvatarProps = {
   ref?: React.Ref<any>
 }
 
+export const SIZE_MAP: Record<Size, number> = {
+  sm: 40,
+  md: 44,
+  lg: 48,
+  xl: 68,
+  '2xl': 100,
+  '3xl': 128,
+}
+
 export default function Avatar({
   size = 'md',
   square = false,
@@ -26,15 +35,6 @@ export default function Avatar({
   username = '',
   ref = null,
 }: AvatarProps): React.ReactNode {
-  const SIZE_MAP: Record<Size, number> = {
-    sm: 40,
-    md: 44,
-    lg: 48,
-    xl: 68,
-    '2xl': 100,
-    '3xl': 128,
-  }
-
   const emojiResult = EMOJI_AVATARS[username?.toLowerCase().slice(0, 1)]
 
   const avatarStyle = useMemo(
