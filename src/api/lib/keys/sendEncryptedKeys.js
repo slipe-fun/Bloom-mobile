@@ -1,22 +1,18 @@
 import { API_URL } from '@constants/api'
 import { createSecureStorage } from '@lib/storage'
 
-export default async function addChatKeysRequest(payload) {
+export default async function (chat_id, recipient, keys) {
   try {
     const Storage = await createSecureStorage('user-storage')
     const token = Storage.getString('token')
 
-    const response = await fetch(`${API_URL}/chat/${payload.chat_id}/keys/public`, {
+    const response = await fetch(`${API_URL}/chat/${chat_id}/member/${recipient}/encryption-keys`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        kyber_public_key: payload.kyber_public_key,
-        ecdh_public_key: payload.ecdh_public_key,
-        ed_public_key: payload.ed_public_key,
-      }),
+      body: JSON.stringify(keys),
     })
 
     if (!response.ok) {
@@ -24,7 +20,8 @@ export default async function addChatKeysRequest(payload) {
     }
 
     return await response.json()
-  } catch {
+  } catch (err) {
+    console.log(err)
     return null
   }
 }
