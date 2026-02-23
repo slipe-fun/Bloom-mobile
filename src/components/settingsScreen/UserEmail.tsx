@@ -15,10 +15,7 @@ export default function UserEmail({ scrollY, user }: FloatingHeaderProps) {
   const animatedStyle = useAnimatedStyle(
     (): TextStyle => ({
       opacity: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0], 'clamp'),
-      transform: [
-        { scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0.75], 'clamp') },
-        { translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, -8], 'clamp') },
-      ],
+      transform: [{ scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0.85], 'clamp') }],
     }),
   )
   return <Animated.Text style={[styles.subTitle, animatedStyle]}>{user?.email}</Animated.Text>

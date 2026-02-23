@@ -1,9 +1,12 @@
+import { Avatar } from '@components/ui'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
-import { Blur, Canvas, Fill, Group, Image, Paint, Shader, Skia, useImage } from '@shopify/react-native-skia'
+import type { SkImage } from '@shopify/react-native-skia'
+import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader, Skia } from '@shopify/react-native-skia'
 import useSettingsScreenStore from '@stores/settings'
-import { Platform, useWindowDimensions } from 'react-native'
-import Animated, { interpolate, type SharedValue, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated'
+import { useEffect, useRef, useState } from 'react'
+import { AppState, Platform, useWindowDimensions, type View } from 'react-native'
+import Animated, { interpolate, type SharedValue, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated'
 import { gooeyShader } from './shader'
 
 interface HeaderAvatarProps {
@@ -11,14 +14,15 @@ interface HeaderAvatarProps {
   user: User
 }
 
-export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps): React.JSX.Element {
+export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   const insets = useInsets()
   const START_Y = insets.top + 15
 
-  const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.value))
   const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
   const { width } = useWindowDimensions()
-  const image = useImage('https://i.pinimg.com/736x/f8/40/56/f840564f611c2ed373ea289e18ec2113.jpg')
+  const avatarRef = useRef<View>(null)
+  const [capturedImage, setCapturedImage] = useState<SkImage | null>(null)
+  const isFocused = useSharedValue(AppState.currentState === 'active')
 
   const CENTER_X = width / 2
   const ISLAND_WIDTH = 90
@@ -30,15 +34,13 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps): Reac
   const CARD_R = CARD_SIZE / 2
   const CANVAS_HEIGHT = CARD_SIZE + START_Y
 
-  const ballScale = useDerivedValue(() => {
+  const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.value))
+
+  const animationProgress = useDerivedValue(() => {
     return interpolate(cardY.value, [-ISLAND_Y, START_Y], [0.35, 1], 'clamp')
   })
 
-  const imageOpacity = useDerivedValue(() => {
-    return interpolate(cardY.value, [-ISLAND_Y, START_Y], [0.35, 1], 'clamp')
-  })
-
-  const currentRadius = useDerivedValue(() => CARD_R * ballScale.value)
+  const currentRadius = useDerivedValue(() => CARD_R * animationProgress.value)
 
   const uniforms = useDerivedValue(() => {
     return {
@@ -61,37 +63,77 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps): Reac
     return interpolate(cardY.value, [-ISLAND_Y, START_Y], [8, 0], 'clamp')
   })
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, snapEndPosition], 'clamp') }],
+  const canvasAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: scrollY.value > 0.01 && isFocused.value ? 1 : 0,
+    transform: [{ translateY: interpolate(scrollY.value, [0, snapEndPosition], [0, snapEndPosition], 'clamp') }],
   }))
 
-  return (
-    <Animated.View style={[{ width: '100%', height: CANVAS_HEIGHT }, animatedStyle]}>
-      <Canvas style={{ flex: 1, backgroundColor: 'transparent' }}>
-        <Fill>
-          <Shader source={gooeyShader} uniforms={uniforms} />
-        </Fill>
+  const avatarAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: scrollY.value > 0.01 ? 0 : 1,
+    top: START_Y,
+    position: 'absolute',
+  }))
 
-        {image && (
-          <Group
-            layer={
-              <Paint blendMode="srcATop" opacity={imageOpacity}>
-                <Blur blur={imageBlur} />
-              </Paint>
-            }
-          >
-            <Group clip={clipPath}>
-              <Group>
-                <Image image={image} x={CENTER_X - CARD_R} y={cardY} width={CARD_SIZE} height={CARD_SIZE} fit="cover" />
+  useEffect(() => {
+    let isMounted = true
+
+    const captureAvatar = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      if (isMounted && avatarRef.current) {
+        try {
+          const snapshot = await makeImageFromView(avatarRef)
+          if (isMounted) {
+            setCapturedImage(snapshot)
+          }
+        } catch (error) {
+          console.warn('Failed to capture avatar image:', error)
+        }
+      }
+    }
+
+    captureAvatar()
+
+    return () => {
+      isMounted = false
+    }
+  }, [user])
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      isFocused.value = nextAppState === 'active'
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [isFocused])
+  return (
+    <>
+      <Animated.View style={[{ width: '100%', height: CANVAS_HEIGHT, zIndex: 10 }, canvasAnimatedStyle]} pointerEvents="none">
+        <Canvas style={{ flex: 1, backgroundColor: 'transparent' }}>
+          <Fill>
+            <Shader source={gooeyShader} uniforms={uniforms} />
+          </Fill>
+          {capturedImage && (
+            <Group
+              layer={
+                <Paint blendMode="srcATop" opacity={animationProgress}>
+                  <Blur blur={imageBlur} />
+                </Paint>
+              }
+            >
+              <Group clip={clipPath}>
+                <Image image={capturedImage} x={CENTER_X - CARD_R} y={cardY} width={CARD_SIZE} height={CARD_SIZE} fit="cover" />
               </Group>
             </Group>
-          </Group>
-        )}
-      </Canvas>
-    </Animated.View>
-    // <Animated.View style={[styles.avatarWrapper, animatedStyle]}>
-    //   <Avatar size="2xl" image={user?.avatar} username={user?.username || user?.display_name} style={styles.avatar} />
-    //   {Platform.OS === 'ios' && <AnimatedBlurView tint="dark" animatedProps={animatedBlurStyle} style={StyleSheet.absoluteFill} />}
-    // </Animated.View>
+          )}
+        </Canvas>
+      </Animated.View>
+
+      <Animated.View ref={avatarRef} collapsable={false} style={avatarAnimatedStyle}>
+        <Avatar size="2xl" image={user?.avatar} username={user?.username || user?.display_name} />
+      </Animated.View>
+    </>
   )
 }
