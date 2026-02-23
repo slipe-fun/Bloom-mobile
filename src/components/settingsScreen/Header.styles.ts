@@ -10,19 +10,16 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
   },
-  floatingHeader: (paddingTop: number) => ({
-    left: 0,
-    right: 0,
-    top: 0,
-    zIndex: 1,
-    paddingTop,
-    position: 'absolute',
-    alignItems: 'center',
-    paddingBottom: theme.spacing.md,
-  }),
   title: {
-    color: theme.colors.white,
+    color: theme.colors.text,
     fontSize: theme.fontSize.xxl - 4,
     fontFamily: theme.fontFamily.semibold,
+  },
+  subTitle: {
+    color: theme.colors.secondaryText,
+    fontSize: theme.fontSize.md,
+    fontFamily: theme.fontFamily.medium,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xxl,
   },
 }))

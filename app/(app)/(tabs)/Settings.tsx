@@ -1,4 +1,5 @@
 import Header from '@components/settingsScreen'
+import UserEmail from '@components/settingsScreen/UserEmail'
 import { SettingsGroup } from '@components/ui'
 import { SETTINGS_SECTIONS } from '@constants/settings'
 import { useMe } from '@hooks'
@@ -35,10 +36,8 @@ export default function TabSettings() {
 
   return (
     <View style={styles.container}>
-      {/* <FloatingHeader scrollY={scrollY} user={user} /> */}
       <Header scrollY={scrollY} user={user} />
       <Animated.ScrollView
-        // ListHeaderComponent={<Header scrollY={scrollY} user={user} />}
         onScroll={scrollHandler}
         decelerationRate="fast"
         snapToOffsets={[0, headerHeight]}
@@ -46,6 +45,7 @@ export default function TabSettings() {
         contentContainerStyle={styles.list(height, headerHeight)}
         showsVerticalScrollIndicator={false}
       >
+        <UserEmail user={user} />
         {data.map((item, _index) => (
           <SettingsGroup key={item.id} section={item} />
         ))}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   list: (paddingBottom: number, paddingTop: number) => ({
     paddingBottom,
-    paddingTop,
+    paddingTop: paddingTop - theme.spacing.xs,
     paddingHorizontal: theme.spacing.lg,
   }),
 }))

@@ -1,8 +1,7 @@
 import { useInsets } from '@hooks'
 import type { User as UserType } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
-import type React from 'react'
-import { type LayoutChangeEvent, View } from 'react-native'
+import type { LayoutChangeEvent } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { styles } from './Header.styles'
@@ -14,7 +13,7 @@ interface HeaderProps {
   user: UserType
 }
 
-export default function Header({ scrollY, user }: HeaderProps): React.JSX.Element {
+export default function Header({ scrollY, user }: HeaderProps) {
   const insets = useInsets()
   const { setSnapEndPosition, setHeaderHeight, snapEndPosition } = useSettingsScreenStore()
 
