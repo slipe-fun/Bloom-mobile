@@ -1,6 +1,7 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
 import changeChatKey from '@api/lib/keys/changeChatKey'
 import getEncryptedKeys from '@api/lib/keys/getEncryptedKeys'
+import sendEncryptedKeys from '@api/lib/keys/sendEncryptedKeys'
 import getMySession from '@api/lib/sessions/getMySession'
 import getMySessions from '@api/lib/sessions/getMySessions'
 import getUserSessions from '@api/lib/sessions/getUserSessions'
@@ -8,6 +9,8 @@ import getMyUser from '@api/lib/users/getMyUser'
 import { Buffer } from '@craftzdog/react-native-buffer'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import decryptKey from '@lib/skid/decryptKey'
+import encryptKey from '@lib/skid/encryptKey'
+import base64ToUint8Array from '@lib/skid/modules/utils/base64ToUint8Array'
 import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import { Q } from '@nozbe/watermelondb'
 import useStorageStore from '@stores/storage'
@@ -185,6 +188,64 @@ export default function ChatsProvider({ children }) {
           }
         } catch (error) {
           console.log(error)
+        }
+      })()
+    }
+  }, [ws])
+
+  useEffect(() => {
+    if (ws?.readyState === WebSocket?.OPEN) {
+      ;(async () => {
+        try {
+          const mySession = await getMySession()
+          const myUser = await getMyUser()
+
+          const mySessions = await getMySessions()
+          if (!mySessions) return
+
+          const encrypted_keys = await getEncryptedKeys()
+          if (!encrypted_keys) return
+
+          const chats = await getChatsFromStorage(mmkv)
+          if (!chats) return
+
+          await Promise.all(
+            mySessions
+              .filter(
+                (session) =>
+                  session?.identity_pub &&
+                  session?.ecdh_pub &&
+                  session?.kyber_pub &&
+                  !encrypted_keys.find((key) => key?.session_id === session?.id),
+              )
+              .map((session) =>
+                Promise.all(
+                  chats.map(async (chat) => {
+                    const encrypted = encryptKey(base64ToUint8Array(chat?.key), mySession, {
+                      kyber_public_key: session.kyber_pub,
+                      ecdh_public_key: session.ecdh_pub,
+                      edPublicKey: session.identity_pub,
+                    })
+
+                    const key = [
+                      {
+                        session_id: session.id,
+                        encrypted_key: encrypted?.ciphertext,
+                        encapsulated_key: encrypted?.encapsulated_key,
+                        cek_wrap: encrypted?.cek_wrap,
+                        cek_wrap_iv: encrypted?.cek_wrap_iv,
+                        salt: encrypted?.cek_wrap_salt,
+                        nonce: encrypted?.nonce,
+                      },
+                    ]
+
+                    return sendEncryptedKeys(chat?.id, myUser?.id, key)
+                  }),
+                ),
+              ),
+          )
+        } catch (e) {
+          console.error(e)
         }
       })()
     }
