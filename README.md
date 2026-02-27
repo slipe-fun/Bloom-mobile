@@ -73,6 +73,15 @@ npx expo run:ios
 npx expo run:android
 ```
 
+If on **Linux** this shows a CommandError that the emulator could not be connected, then you probably forgot to set the ANDROID_HOME environment variable.
+Just add this to your `~/.bashrc` file:
+```
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+
 ---
 
 ## Scripts
