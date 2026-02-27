@@ -11,7 +11,7 @@ import Transition from 'react-native-screen-transitions'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 export default function NewMessage() {
-  const [users, setUsers] = useState<User[]>()
+  const [users, setUsers] = useState<User[]>([])
   const insets = useInsets()
   const [_loadingUsers, setLoadingUsers] = useState(false)
   const { theme } = useUnistyles()
@@ -21,9 +21,12 @@ export default function NewMessage() {
 
   const headerHeight = theme.spacing.lg + theme.spacing.md + 44
 
-  const renderItem: ListRenderItem<SearchUserType> = useCallback(({ item, index }) => {
-    return <SearchUser user={item} isLast={index === lastIndex} />
-  }, [])
+  const renderItem: ListRenderItem<SearchUserType> = useCallback(
+    ({ item, index }) => {
+      return <SearchUser user={item} isLast={index === lastIndex} />
+    },
+    [lastIndex],
+  )
 
   const keyExtractor = useCallback((item: User) => {
     return String(item?.id)

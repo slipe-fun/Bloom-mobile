@@ -29,9 +29,12 @@ export default function Search() {
     return String(item.id)
   }, [])
 
-  const renderItem: ListRenderItem<SearchUserType> = useCallback(({ item, index }) => {
-    return <SearchUser user={item} isLast={index === lastIndex} />
-  }, [])
+  const renderItem: ListRenderItem<SearchUserType> = useCallback(
+    ({ item, index }) => {
+      return <SearchUser user={item} isLast={index === lastIndex} />
+    },
+    [lastIndex],
+  )
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {

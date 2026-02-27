@@ -30,9 +30,12 @@ export default function TabChats() {
     return String(item?.id)
   }, [])
 
-  const renderItem = useCallback(({ item, index }: { item: ChatType; index: number }) => {
-    return <Chat chat={item} isLast={index === lastIndex} />
-  }, [])
+  const renderItem = useCallback(
+    ({ item, index }: { item: ChatType; index: number }) => {
+      return <Chat chat={item} isLast={index === lastIndex} />
+    },
+    [lastIndex],
+  )
 
   return (
     <>
