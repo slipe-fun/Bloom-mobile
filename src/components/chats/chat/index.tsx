@@ -11,20 +11,20 @@ import { styles } from './Chat.styles'
 
 interface ChatProps {
   chat: ChatView
-  isSearch?: boolean
+  isLast?: boolean
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const AnimatedCheckbox = Animated.createAnimatedComponent(Checkbox)
 
-export default function Chat({ chat, isSearch = false }: ChatProps) {
+export default function Chat({ chat, isLast = false }: ChatProps) {
   const { theme } = useUnistyles()
   const { selected, edit, pinned, animatedMetaRowStyle, animatedShiftStyle, animatedChatStyle, pin, select, handlePress, onPressHandler } =
-    useChatItem(chat)
+    useChatItem(chat, false, theme)
 
   const recipient = chat?.recipient
   const lastMessage = chat?.lastMessage
-  const timeChars = useMemo(() => (!isSearch ? lastMessage?.time?.split('') || [] : null), [lastMessage?.time, isSearch])
+  const timeChars = useMemo(() => lastMessage?.time?.split('') || [], [lastMessage?.time])
 
   return (
     <AnimatedPressable
@@ -62,55 +62,42 @@ export default function Chat({ chat, isSearch = false }: ChatProps) {
           </>
         )}
         <Animated.View style={[styles.avatarWrapper, animatedShiftStyle]}>
-          {/* Show avatar only in non-search mode */}
-          <Avatar size={!isSearch ? 'lg' : 'md'} image={chat?.avatar} username={recipient?.username} />
+          <Avatar size="lg" image={chat?.avatar} username={recipient?.username || recipient?.display_name} />
         </Animated.View>
         <Animated.View style={[styles.content, animatedShiftStyle]}>
           <View style={styles.headerRow}>
             <Text style={styles.name}>{recipient?.username}</Text>
 
             <Animated.View style={[styles.metaRow, animatedMetaRowStyle]}>
-              {!isSearch && (
-                // Show time only in non-search mode
-                <Animated.View layout={layoutAnimationSpringy} style={styles.charStack}>
-                  {timeChars.map((char, i) => (
-                    <Animated.Text
-                      key={`${i}-${char}`}
-                      style={styles.secondary(false)}
-                      entering={getCharEnter(springyChar(i))}
-                      exiting={getCharExit(springyChar(i))}
-                      numberOfLines={1}
-                    >
-                      {char}
-                    </Animated.Text>
-                  ))}
-                </Animated.View>
-                //
-              )}
+              <Animated.View layout={layoutAnimationSpringy} style={styles.charStack}>
+                {timeChars.map((char, i) => (
+                  <Animated.Text
+                    key={`${i}-${char}`}
+                    style={styles.secondary(false)}
+                    entering={getCharEnter(springyChar(i))}
+                    exiting={getCharExit(springyChar(i))}
+                    numberOfLines={1}
+                  >
+                    {char}
+                  </Animated.Text>
+                ))}
+              </Animated.View>
               <Icon icon="chevron.right" size={16} color={theme.colors.secondaryText} />
             </Animated.View>
           </View>
 
-          {!isSearch ? (
-            <Animated.Text
-              entering={getCharEnter()}
-              exiting={getCharExit()}
-              key={lastMessage.content}
-              style={styles.secondary(edit)}
-              numberOfLines={2}
-            >
-              {lastMessage.content}
-            </Animated.Text>
-          ) : (
-            // In search mode, show the username instead of the last message
-            <Text numberOfLines={1} style={styles.secondary(edit)}>
-              @{recipient?.username}
-            </Text>
-            //
-          )}
+          <Animated.Text
+            entering={getCharEnter()}
+            exiting={getCharExit()}
+            key={lastMessage?.content}
+            style={styles.secondary(edit)}
+            numberOfLines={2}
+          >
+            {lastMessage?.content}
+          </Animated.Text>
         </Animated.View>
       </LayoutAnimationConfig>
-      <View style={styles.separator} />
+      {!isLast && <View style={styles.separator} />}
     </AnimatedPressable>
   )
 }

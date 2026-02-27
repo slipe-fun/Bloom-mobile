@@ -1,17 +1,19 @@
 import { EmptyModal } from '@components/ui'
 import { getFadeIn, getFadeOut } from '@constants/animations'
 import { useInsets, useUsersSearch } from '@hooks'
-import type { SearchUser } from '@interfaces'
-import { AnimatedLegendList } from '@legendapp/list/reanimated'
+import type { SearchUser as SearchUserType } from '@interfaces'
+import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback, useState } from 'react'
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
-import Chat from '../chat'
 import SearchHeader from './header'
 import FloatingHeader from './header/FloatingHeader'
 import { styles } from './Search.styles'
+import SearchUser from './SearchUser'
 
-export default function Search(): React.JSX.Element {
+const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
+
+export default function Search() {
   const { search, searchValue, height } = useTabBarStore()
   const insets = useInsets()
   const scrollY = useSharedValue<number>(0)
@@ -19,16 +21,17 @@ export default function Search(): React.JSX.Element {
   const { users, status, loadMore } = useUsersSearch(searchValue)
 
   const ss = ''
+  const lastIndex = users?.length - 1
 
   const isStoryEmpty: boolean = !!ss && search
   const isEmpty: boolean = status === 'empty' || status === 'error'
 
-  const keyExtractor = useCallback((item: SearchUser) => {
+  const keyExtractor = useCallback((item: SearchUserType) => {
     return String(item.id)
   }, [])
 
-  const renderItem = useCallback(({ item }: { item: SearchUser }) => {
-    return <Chat isSearch chat={{ recipient: item }} />
+  const renderItem: ListRenderItem<SearchUserType> = useCallback(({ item, index }) => {
+    return <SearchUser user={item} isLast={index === lastIndex} />
   }, [])
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -40,7 +43,7 @@ export default function Search(): React.JSX.Element {
   return search ? (
     <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.container}>
       <FloatingHeader scrollY={scrollY} headerHeight={headerHeight} />
-      <AnimatedLegendList
+      <AnimatedFlashList
         key="search"
         onScroll={scrollHandler}
         onEndReached={() => loadMore()}

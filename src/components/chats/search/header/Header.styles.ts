@@ -1,16 +1,13 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
-  header: (large: boolean = false, paddingTop: number) => ({
-    position: 'absolute',
-    left: 0,
-    right: 0,
+  header: (paddingTop: number) => ({
     paddingTop,
     zIndex: 1,
-    top: 0,
+    width: '100%',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: large ? theme.spacing.lg : theme.spacing.md,
-    alignItems: large ? 'flex-start' : 'center',
+    paddingBottom: theme.spacing.md,
+    alignItems: 'flex-start',
   }),
   title: (large: boolean = false) => ({
     fontFamily: large ? theme.fontFamily.bold : theme.fontFamily.semibold,

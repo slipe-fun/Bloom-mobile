@@ -74,30 +74,18 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
     position: 'absolute',
   }))
 
-  useEffect(() => {
-    let isMounted = true
+  const captureAvatar = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 100))
 
-    const captureAvatar = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100))
-
-      if (isMounted && avatarRef.current) {
-        try {
-          const snapshot = await makeImageFromView(avatarRef)
-          if (isMounted) {
-            setCapturedImage(snapshot)
-          }
-        } catch (error) {
-          console.warn('Failed to capture avatar image:', error)
-        }
+    if (avatarRef.current) {
+      try {
+        const snapshot = await makeImageFromView(avatarRef)
+        setCapturedImage(snapshot)
+      } catch (error) {
+        console.warn('Failed to capture avatar image:', error)
       }
     }
-
-    captureAvatar()
-
-    return () => {
-      isMounted = false
-    }
-  }, [user])
+  }
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -132,7 +120,12 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
       </Animated.View>
 
       <Animated.View ref={avatarRef} collapsable={false} style={avatarAnimatedStyle}>
-        <Avatar size="2xl" image={user?.avatar} username={user?.username || user?.display_name} />
+        <Avatar
+          onLoadEnd={async () => await captureAvatar()}
+          size="2xl"
+          image={user?.avatar}
+          username={user?.username || user?.display_name}
+        />
       </Animated.View>
     </>
   )

@@ -1,4 +1,3 @@
-import addChatToStorage from '@api/lib/chats/addChatToStorage'
 import createChat from '@api/lib/chats/create'
 import { useChatList } from '@api/providers/ChatsContext'
 import { quickSpring } from '@constants/easings'
@@ -10,7 +9,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import type { ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
 import { type AnimatedStyle, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 
 interface useChatItem {
   selected: boolean
@@ -25,9 +23,8 @@ interface useChatItem {
   onPressHandler: () => void
 }
 
-export default function useChatNavigation(chat: ChatView): useChatItem {
+export default function useChatNavigation(chat: ChatView, isSearch: boolean = false, theme: any): useChatItem {
   const router = useRouter()
-  const { theme } = useUnistyles()
   const { userID } = useTokenTriggerStore()
   const { edit, selectedChats, toggleChat, setEdit } = useChatsStore()
   const { chats, addChat } = useChatList()
@@ -71,9 +68,9 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
 
   const handlePress = useCallback(
     (inn = true) => {
-      if (edit) return pressedValue.set(withSpring(0, quickSpring))
+      if (edit && !isSearch) return pressedValue.set(withSpring(0, quickSpring))
 
-      if (inn) {
+      if (inn && !isSearch) {
         if (timer.current) {
           clearTimeout(timer.current)
           timer.current = null
@@ -101,7 +98,7 @@ export default function useChatNavigation(chat: ChatView): useChatItem {
       ignorePress.current = false
       return
     }
-    edit ? select() : openChat()
+    edit && !isSearch ? select() : openChat()
   }, [edit, select, openChat])
 
   useEffect(() => () => clearTimeout(timer.current), [])
