@@ -74,7 +74,7 @@ npx expo run:android
 ```
 
 If on **Linux** this shows a CommandError that the emulator could not be connected, then you probably forgot to set the ANDROID_HOME environment variable.
-Just add this to your `~/.bashrc` file:
+Just add this to your `~/.bashrc` file and restart the terminal emulator window:
 ```
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
