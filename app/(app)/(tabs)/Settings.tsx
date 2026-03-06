@@ -17,7 +17,7 @@ export default function TabSettings() {
   const scrollY = useSharedValue(0)
   const { user } = useMe()
 
-  const snapOffset = snapEndPosition + theme.spacing.lg
+  // const snapOffset = snapEndPosition + theme.spacing.lg
 
   const data = useMemo(
     () =>

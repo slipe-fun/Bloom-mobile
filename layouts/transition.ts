@@ -4,9 +4,10 @@ import { interpolate } from 'react-native-reanimated'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
 import { UnistylesRuntime } from 'react-native-unistyles'
 
+const TOP_OFFSET = Platform.OS === 'ios' ? 12 : 16
+
 export const screenTransition = (gestures: boolean = true): BlankStackNavigationOptions => {
   const color = UnistylesRuntime.getTheme().colors.background
-  const iOS = Platform.OS === 'ios'
 
   return {
     experimental_enableHighRefreshRate: true,
@@ -16,10 +17,7 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
       'worklet'
 
       const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width / 3.5], 'clamp')
-      const borderRadius = iOS
-        ? interpolate(progress, [0.95, 1, 1.05], [insets.top, insets.top - 12, 0], 'clamp')
-        : interpolate(progress, [0.95, 1, 1.05], [insets.top * 2.5, insets.top - 16, 0], 'clamp')
-
+      const borderRadius = interpolate(progress, [0.95, 1, 1.05], [insets.top, insets.top - TOP_OFFSET, 0], 'clamp')
       return {
         contentStyle: {
           transform: [{ translateX }],
