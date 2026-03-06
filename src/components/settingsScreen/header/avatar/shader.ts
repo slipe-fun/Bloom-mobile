@@ -1,6 +1,6 @@
 import { Skia } from '@shopify/react-native-skia'
 
-export const gooeyShader = Skia.RuntimeEffect.Make(`
+const shaderString = `
 uniform vec2 islandCenter;
 uniform vec2 islandHalfSize;
 uniform float islandRadius;
@@ -12,6 +12,7 @@ uniform float gooeyness;
 
 // Функция плавного слияния (Smooth Minimum)
 float smin(float a, float b, float k) {
+    if (k <= 0.0) return min(a, b); // Protection against division by zero
     float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
     return mix(b, a, h) - k * h * (1.0 - h);
 }
@@ -28,19 +29,17 @@ float sdCircle(vec2 p, float r) {
 }
 
 vec4 main(vec2 pos) {
-    // 1. Считаем расстояние от текущего пикселя до Острова
     float d1 = sdRoundRect(pos - islandCenter, islandHalfSize, islandRadius);
-    
-    // 2. Считаем расстояние до Шара
     float d2 = sdCircle(pos - ballCenter, ballRadius);
-    
-    // 3. Математически сливаем их вместе (Gooey эффект)
     float d = smin(d1, d2, gooeyness);
     
-    // 4. Идеальное сглаживание (Anti-aliasing) шириной ровно в 1 пиксель
-    float alpha = clamp(0.5 - d, 0.0, 1.0);
+    float alpha = clamp(0.0 - d, 0.0, 1.0);
     
-    // Возвращаем черный цвет с идеальной прозрачностью по краям
-    return vec4(0.0, 0.0, 0.0, alpha);
+    // Skia requires Premultiplied Alpha! 
+    // Multiply your RGB values by the alpha channel.
+    vec3 color = vec3(0.0, 0.0, 0.0); 
+    return vec4(color * alpha, alpha);
 }
-`)
+`
+
+export const gooeyShader = Skia.RuntimeEffect.Make(shaderString)

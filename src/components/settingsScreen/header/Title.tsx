@@ -1,6 +1,6 @@
 import type { User as UserType } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
-import type { LayoutChangeEvent, TextStyle } from 'react-native'
+import { type LayoutChangeEvent, Text, type TextStyle } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from '../Header.styles'
@@ -11,7 +11,7 @@ interface UserProps {
   onLayout: (layout: LayoutChangeEvent) => void
 }
 
-export default function SettingsTitle({ scrollY, user, onLayout }: UserProps): React.JSX.Element {
+export default function SettingsTitle({ scrollY, user, onLayout }: UserProps) {
   const { theme } = useUnistyles()
   const { snapEndPosition } = useSettingsScreenStore()
 
@@ -29,8 +29,14 @@ export default function SettingsTitle({ scrollY, user, onLayout }: UserProps): R
   )
 
   return (
-    <Animated.Text onLayout={onLayout} style={[styles.title, animatedStyle]}>
-      {user?.display_name}
-    </Animated.Text>
+    <>
+      {/* This text component only for layout measurement (because we need to get minimised title height */}
+      <Text onLayout={onLayout} style={styles.measureTitle}>
+        {user?.display_name}
+      </Text>
+
+      {/* This is actual title */}
+      <Animated.Text style={[styles.title, animatedStyle]}>{user?.display_name}</Animated.Text>
+    </>
   )
 }

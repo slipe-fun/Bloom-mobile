@@ -43,10 +43,6 @@ export default function TabSettings() {
       <Header scrollY={scrollY} user={user} />
       <Animated.ScrollView
         onScroll={scrollHandler}
-        decelerationRate="fast"
-        snapToOffsets={[0, snapOffset]}
-        snapToAlignment="start"
-        snapToEnd={false}
         contentContainerStyle={styles.list(height, headerHeight)}
         showsVerticalScrollIndicator={false}
       >

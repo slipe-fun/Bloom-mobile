@@ -22,6 +22,13 @@ export const styles = StyleSheet.create((theme) => ({
     textAlign: 'center',
     marginBottom: theme.spacing.xxl,
   },
+  measureTitle: {
+    fontSize: theme.fontSize.md,
+    fontFamily: theme.fontFamily.medium,
+    position: 'absolute',
+    opacity: 0,
+    pointerEvents: 'none',
+  },
   gradientWrapper: (height: number) => ({
     width: '100%',
     position: 'absolute',

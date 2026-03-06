@@ -2,7 +2,7 @@ import { Avatar } from '@components/ui'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
 import type { SkImage } from '@shopify/react-native-skia'
-import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader, Skia } from '@shopify/react-native-skia'
+import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader } from '@shopify/react-native-skia'
 import useSettingsScreenStore from '@stores/settings'
 import { useEffect, useRef, useState } from 'react'
 import { AppState, Platform, useWindowDimensions, type View } from 'react-native'
@@ -27,7 +27,8 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   const CENTER_X = width / 2
   const ISLAND_WIDTH = 90
   const ISLAND_HEIGHT = 32
-  const ISLAND_Y = Platform.OS === 'android' ? -ISLAND_HEIGHT : ISLAND_HEIGHT / 2
+  const IMAGE_BLUR = Platform.OS === 'android' ? 30 : 10
+  const ISLAND_Y = Platform.OS === 'android' ? -2 : ISLAND_HEIGHT / 2
   const ISLAND_R = 0
 
   const CARD_SIZE = 100
@@ -37,7 +38,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.value))
 
   const animationProgress = useDerivedValue(() => {
-    return interpolate(cardY.value, [-ISLAND_Y, START_Y], [0.35, 1], 'clamp')
+    return interpolate(scrollY.value, [0, CANVAS_HEIGHT], [1, 0.1], 'clamp')
   })
 
   const currentRadius = useDerivedValue(() => CARD_R * animationProgress.value)
@@ -49,18 +50,21 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
       islandRadius: ISLAND_R,
       ballCenter: [CENTER_X, cardY.value + CARD_R],
       ballRadius: currentRadius.value,
-      gooeyness: 40.0,
+      gooeyness: 35.0,
     }
   })
 
-  const clipPath = useDerivedValue(() => {
-    const path = Skia.Path.Make()
-    path.addCircle(CENTER_X, cardY.value + CARD_R, currentRadius.value)
-    return path
+  const clipRRect = useDerivedValue(() => {
+    const r = currentRadius.value
+    return {
+      rect: { x: CENTER_X - r, y: cardY.value + CARD_R - r, width: r * 2, height: r * 2 },
+      rx: r,
+      ry: r,
+    }
   })
 
   const imageBlur = useDerivedValue(() => {
-    return interpolate(cardY.value, [-ISLAND_Y, START_Y], [8, 0], 'clamp')
+    return interpolate(scrollY.value, [0, CANVAS_HEIGHT], [0, IMAGE_BLUR], 'clamp')
   })
 
   const canvasAnimatedStyle = useAnimatedStyle(() => ({
@@ -75,17 +79,22 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   }))
 
   const captureAvatar = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 100))
-
-    if (avatarRef.current) {
+    await new Promise(requestAnimationFrame)
+    if (avatarRef.current && capturedImage === null) {
       try {
         const snapshot = await makeImageFromView(avatarRef)
         setCapturedImage(snapshot)
       } catch (error) {
-        console.warn('Failed to capture avatar image:', error)
+        console.warn('Failed to capture avatar imag:', error)
       }
     }
   }
+
+  useEffect(() => {
+    return () => {
+      capturedImage?.dispose()
+    }
+  }, [capturedImage])
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -96,6 +105,11 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
       subscription.remove()
     }
   }, [isFocused])
+
+  useEffect(() => {
+    captureAvatar()
+  }, [user])
+
   return (
     <>
       <Animated.View style={[{ width: '100%', height: CANVAS_HEIGHT, zIndex: 10 }, canvasAnimatedStyle]} pointerEvents="none">
@@ -111,7 +125,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
                 </Paint>
               }
             >
-              <Group clip={clipPath}>
+              <Group clip={clipRRect}>
                 <Image image={capturedImage} x={CENTER_X - CARD_R} y={cardY} width={CARD_SIZE} height={CARD_SIZE} fit="cover" />
               </Group>
             </Group>
@@ -120,12 +134,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
       </Animated.View>
 
       <Animated.View ref={avatarRef} collapsable={false} style={avatarAnimatedStyle}>
-        <Avatar
-          onLoadEnd={async () => await captureAvatar()}
-          size="2xl"
-          image={user?.avatar}
-          username={user?.username || user?.display_name}
-        />
+        <Avatar onLoadEnd={captureAvatar} size="2xl" image={user?.avatar} username={user?.username || user?.display_name} />
       </Animated.View>
     </>
   )
