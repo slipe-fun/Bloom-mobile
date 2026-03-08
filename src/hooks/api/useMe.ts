@@ -1,7 +1,6 @@
-import { API_URL } from '@constants/api'
+import getMyUserRequest from '@api/lib/users/getMyUserRequest'
 import type { User } from '@interfaces'
 import { createSecureStorage } from '@lib/storage'
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 interface useMe {
@@ -23,16 +22,13 @@ export default function useMe(): useMe {
       try {
         // mmkv storage
         const Storage = await createSecureStorage('user-storage')
-        // get user token from mmkv storage
-        const token = Storage.getString('token')
 
         // send get user info request
-        const response = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        const response = await getMyUserRequest()
+
         if (!canceled) {
-          setUser(response?.data)
-          Storage.set('user', JSON.stringify(response?.data))
+          setUser(response)
+          Storage.set('user', JSON.stringify(response))
         }
       } catch (err) {
         setError(err)
