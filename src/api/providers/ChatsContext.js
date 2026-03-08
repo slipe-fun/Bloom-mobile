@@ -204,7 +204,6 @@ export default function ChatsProvider({ children }) {
           if (!mySessions) return
 
           const encrypted_keys = await getEncryptedKeys()
-          if (!encrypted_keys) return
 
           const chats = await getChatsFromStorage(mmkv)
           if (!chats) return
@@ -216,12 +215,12 @@ export default function ChatsProvider({ children }) {
                   session?.identity_pub &&
                   session?.ecdh_pub &&
                   session?.kyber_pub &&
-                  !encrypted_keys.find((key) => key?.session_id === session?.id),
+                  !encrypted_keys?.find((key) => key?.session_id === session?.id),
               )
               .map((session) =>
                 Promise.all(
                   chats.map(async (chat) => {
-                    const encrypted = encryptKey(base64ToUint8Array(chat?.key), mySession, {
+                    const encrypted = encryptKey(base64ToUint8Array(chat.key), mySession, {
                       kyber_public_key: session.kyber_pub,
                       ecdh_public_key: session.ecdh_pub,
                       edPublicKey: session.identity_pub,
@@ -230,19 +229,56 @@ export default function ChatsProvider({ children }) {
                     const key = [
                       {
                         session_id: session.id,
-                        encrypted_key: encrypted?.ciphertext,
-                        encapsulated_key: encrypted?.encapsulated_key,
-                        cek_wrap: encrypted?.cek_wrap,
-                        cek_wrap_iv: encrypted?.cek_wrap_iv,
-                        salt: encrypted?.cek_wrap_salt,
-                        nonce: encrypted?.nonce,
+                        encrypted_key: encrypted.ciphertext,
+                        encapsulated_key: encrypted.encapsulated_key,
+                        cek_wrap: encrypted.cek_wrap,
+                        cek_wrap_iv: encrypted.cek_wrap_iv,
+                        salt: encrypted.cek_wrap_salt,
+                        nonce: encrypted.nonce,
                       },
                     ]
 
-                    return sendEncryptedKeys(chat?.id, myUser?.id, key)
+                    return sendEncryptedKeys(chat.id, myUser.id, key)
                   }),
                 ),
               ),
+          )
+
+          await Promise.all(
+            chats.map(async (chat) => {
+              const otherMember = chat.members.filter((m) => m.id !== myUser.id)[0]
+
+              const recipient_sessions = await getUserSessions(otherMember?.id)
+              if (!recipient_sessions) return
+
+              const sessionsToSend = recipient_sessions.filter(
+                (session) => session?.identity_pub && session?.ecdh_pub && session?.kyber_pub,
+              )
+
+              return Promise.all(
+                sessionsToSend.map(async (session) => {
+                  const encrypted = encryptKey(base64ToUint8Array(chat.key), mySession, {
+                    kyber_public_key: session.kyber_pub,
+                    ecdh_public_key: session.ecdh_pub,
+                    edPublicKey: session.identity_pub,
+                  })
+
+                  const key = [
+                    {
+                      session_id: session.id,
+                      encrypted_key: encrypted.ciphertext,
+                      encapsulated_key: encrypted.encapsulated_key,
+                      cek_wrap: encrypted.cek_wrap,
+                      cek_wrap_iv: encrypted.cek_wrap_iv,
+                      salt: encrypted.cek_wrap_salt,
+                      nonce: encrypted.nonce,
+                    },
+                  ]
+
+                  return await sendEncryptedKeys(chat.id, otherMember.id, key)
+                }),
+              )
+            }),
           )
         } catch (e) {
           console.error(e)
