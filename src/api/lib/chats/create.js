@@ -49,7 +49,7 @@ export default async function createChat(recipient) {
   const chat = await createChatRequest(recipient)
   if (!chat) return null
 
-  await addChatToStorage(chat?.id)
+  await addChatToStorage(chat)
 
   const chat_key = randomBytes(32)
 

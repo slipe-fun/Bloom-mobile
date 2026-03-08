@@ -1,7 +1,7 @@
 import createChat from '@api/lib/chats/create'
 import { useChatList } from '@api/providers/ChatsContext'
 import { quickSpring } from '@constants/easings'
-import type { ChatView } from '@interfaces'
+import type { ChatView, Member, User } from '@interfaces'
 import useChatsStore from '@stores/chats'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
 import { useRouter } from 'expo-router'
@@ -23,7 +23,7 @@ interface useChatItem {
   onPressHandler: () => void
 }
 
-export default function useChatNavigation(chat: ChatView, isSearch: boolean = false, theme: any): useChatItem {
+export default function useChatNavigation(chat: ChatView | User, isSearch: boolean = false, theme: any): useChatItem {
   const router = useRouter()
   const { userID } = useTokenTriggerStore()
   const { edit, selectedChats, toggleChat, setEdit } = useChatsStore()
@@ -48,16 +48,34 @@ export default function useChatNavigation(chat: ChatView, isSearch: boolean = fa
     backgroundColor: interpolateColor(pressedValue.get(), [0, 1], ['transparent', theme.colors.foreground]),
   }))
 
-  const nav = (id: string) => router.push({ pathname: '/chat/[chat]', params: { chat: JSON.stringify({ ...chat, id }) } })
+  const nav = (newChat: ChatView, create: boolean) =>
+    router.push({
+      pathname: '/chat/[chat]',
+      params: {
+        chat: JSON.stringify(
+          create
+            ? {
+                lastMessage: null,
+                unreadCount: 0,
+                last_message: null,
+                members: newChat?.members,
+                avatar: '',
+                id: newChat?.id,
+                recipient: chat,
+              }
+            : { ...chat, id: newChat?.id },
+        ),
+      },
+    })
 
   const openChat = useCallback(async () => {
     const exist = chats?.find((c) => c.members?.some((m) => m?.id === userID) && c.members?.some((m) => m?.id === targetId))
-    if (exist) return nav(exist.id)
+    if (exist) return nav(isSearch ? exist : chat, isSearch)
 
     const res = await createChat(targetId)
     if (res) {
       addChat(res)
-      nav(res?.id)
+      nav(res, true)
     }
   }, [chats, userID, targetId])
 

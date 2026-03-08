@@ -23,7 +23,8 @@ export default function EmptyModal({ chat, visible }: EmptyModalProps): React.Re
       <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut} style={styles.modal}>
         <Avatar username={chat?.recipient?.username} image={chat?.recipient?.avatar} size="xl" />
         <Text style={styles.title(false)}>
-          Вы начали чат с <Text style={styles.title(true)}>{chat?.recipient?.username}</Text> - отправьте своё первое сообщение!
+          Вы начали чат с <Text style={styles.title(true)}>{chat?.recipient?.display_name || chat?.recipient?.username}</Text> - отправьте
+          своё первое сообщение!
         </Text>
       </Animated.View>
     </Animated.View>

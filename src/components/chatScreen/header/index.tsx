@@ -41,7 +41,7 @@ export default function Header({ chat }: HeaderProps): React.ReactNode {
         <Icon icon="chevron.left" color={theme.colors.text} />
       </Button>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{chat?.recipient?.username}</Text>
+        <Text style={styles.title}>{chat?.recipient?.display_name || chat?.recipient?.username}</Text>
         <Text style={styles.time}>Был(а) недавно</Text>
       </View>
 
