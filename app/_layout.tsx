@@ -6,6 +6,7 @@ import { WebSocketProvider } from '@api/providers/WebSocketContext'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { PortalProvider } from '@gorhom/portal'
 import { createSecureStorage } from '@lib/storage'
+import LogRocket from '@logrocket/react-native'
 import { SessionProvider } from '@providers/SessionProvider'
 import useStorageStore from '@stores/storage'
 import { useFonts } from 'expo-font'
@@ -27,6 +28,10 @@ export default function RootLayout() {
   })
 
   const { setMMKV } = useStorageStore()
+
+  useEffect(() => {
+    LogRocket.init('cepguw/bloom')
+  }, [])
 
   useEffect(() => {
     ;(async () => {

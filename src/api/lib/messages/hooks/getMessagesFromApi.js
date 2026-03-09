@@ -11,7 +11,7 @@ export default async function (mmkv, setMessages, chat_id) {
   const lastMessage = lastMessages[0]
 
   // get messages from api sent after last message
-  const messages = await getChatMessagesAfterID(chat_id, lastMessage?.id || 0)
+  const messages = await getChatMessagesAfterID(chat_id, lastMessage?._raw?.server_id || 0)
 
   // decrypt messages from api
   const decrypted_messages = await decryptMessages(mmkv, chat_id, messages)
