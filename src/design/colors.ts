@@ -1,0 +1,26 @@
+export const staticColors = {
+  white: '#ffffff',
+  black: '#000000',
+  primary: '#1A8CFF',
+  orange: '#FF531B',
+  green: '#1AFF7A',
+  pink: '#FF1A45',
+  yellow: '#FF901A',
+  cyan: '#28A8E9',
+  purple: '#A41AFF',
+  red: '#F43025',
+  gray: '#8C8C8C',
+
+  // Backdrops
+  whiteBackdrop: '#ffffff80',
+  blackBackdrop: '#00000080',
+  primaryBackdrop: '#1A8CFF80',
+  orangeBackdrop: '#FF531B80',
+  greenBackdrop: '#1AFF7A80',
+  pinkBackdrop: '#FF1A4580',
+  yellowBackdrop: '#FF901A80',
+  cyanBackdrop: '#28a8e980',
+  purpleBackdrop: '#A41AFF80',
+  redBackdrop: '#F4302580',
+  grayBackdrop: '#8C8C8C80',
+}

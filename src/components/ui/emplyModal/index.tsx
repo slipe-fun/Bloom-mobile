@@ -1,11 +1,11 @@
 import { getFadeOut, reversedZoomAnimationIn } from '@constants/animations'
 import type { ICONS } from '@constants/icons'
+import type { staticColors } from '@design/colors'
 import type React from 'react'
 import { type StyleProp, Text, View, type ViewStyle } from 'react-native'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import type { staticColor } from 'unistyles'
 import Icon from '../Icon'
 import { styles } from './EmptyModal.styles'
 
@@ -14,7 +14,7 @@ type EmptyModalProps = {
   style?: StyleProp<ViewStyle>
   icon?: keyof typeof ICONS
   iconElement?: React.JSX.Element
-  color: keyof typeof staticColor
+  color: keyof typeof staticColors
 }
 
 export default function EmptyModal({ text, style, icon, iconElement, color, ...props }: EmptyModalProps): React.JSX.Element {

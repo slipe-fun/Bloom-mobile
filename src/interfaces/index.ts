@@ -1,6 +1,6 @@
 import type { ICONS } from '@constants/icons'
 import type { ROUTES } from '@constants/routes'
-import type { staticColor } from 'unistyles'
+import type { staticColors } from '@design/colors'
 
 interface ChatLastMessage {
   content?: string
@@ -78,7 +78,7 @@ export type TabValue = TabsObject[keyof TabsObject]
 export type TabBarType = 'default' | 'edit' | 'settings'
 
 export type IconType = 'transparent' | 'gradient'
-export type ColorKey = keyof typeof staticColor | null
+export type ColorKey = keyof typeof staticColors | null
 
 export interface SettingsItem {
   icon?: keyof typeof ICONS

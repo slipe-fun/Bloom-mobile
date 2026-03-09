@@ -23,6 +23,7 @@ module.exports = (api) => {
             '@app': './app',
             '@layouts': './layouts',
             '@providers': './src/providers',
+            '@design': './src/design',
           },
         },
       ],

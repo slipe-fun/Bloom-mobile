@@ -1,13 +1,13 @@
 import { Avatar, Button, GradientBlur, Menu } from '@components/ui'
 import Icon from '@components/ui/Icon'
 import { quickSpring } from '@constants/easings'
+import { staticColors } from '@design/colors'
 import { useContextMenu, useInsets } from '@hooks'
 import type { Chat, Option } from '@interfaces'
 import { useNavigation } from '@react-navigation/native'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { staticColor } from 'unistyles'
 import { styles } from './Header.styles'
 
 type HeaderProps = {
@@ -16,10 +16,10 @@ type HeaderProps = {
 }
 
 const options: Option[] = [
-  { label: 'Открыть профиль', icon: 'person', color: staticColor.white, action: () => 'swag' },
-  { label: 'Поиск', icon: 'magnifyingglass', color: staticColor.primary, action: () => 'swag' },
-  { label: 'Сменить обои', icon: 'image', color: staticColor.yellow, action: () => 'swag' },
-  { label: 'Удалить чат', icon: 'trash', color: staticColor.orange, action: () => 'swag' },
+  { label: 'Открыть профиль', icon: 'person', color: staticColors.white, action: () => 'swag' },
+  { label: 'Поиск', icon: 'magnifyingglass', color: staticColors.primary, action: () => 'swag' },
+  { label: 'Сменить обои', icon: 'image', color: staticColors.yellow, action: () => 'swag' },
+  { label: 'Удалить чат', icon: 'trash', color: staticColors.orange, action: () => 'swag' },
 ]
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)

@@ -1,9 +1,9 @@
-import { staticColor } from 'unistyles'
+import { staticColors } from '@design/colors'
 
 export const AUTH_TITLES = [
-  { title: 'Привет!', color: staticColor.pink },
-  { title: 'Hello!', color: staticColor.orange },
-  { title: 'Salut!', color: staticColor.yellow },
-  { title: 'Hola!', color: staticColor.green },
-  { title: 'Bloom', color: staticColor.primary },
+  { title: 'Привет!', color: staticColors.pink },
+  { title: 'Hello!', color: staticColors.orange },
+  { title: 'Salut!', color: staticColors.yellow },
+  { title: 'Hola!', color: staticColors.green },
+  { title: 'Bloom', color: staticColors.primary },
 ]

@@ -20,7 +20,8 @@
       "@api/*": ["src/api/*"],
       "@app/*": ["app/*"],
       "@layouts/*": ["layouts/*"],
-      "@providers/*": ["src/providers/*"]
+      "@providers/*": ["src/providers/*"],
+      "@design/*": ["src/design/*"]
     },
     "isolatedModules": true,
     "noEmit": true,
