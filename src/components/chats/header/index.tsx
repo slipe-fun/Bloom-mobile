@@ -41,6 +41,9 @@ export default function Header() {
     } else {
       setStatus('connecting')
     }
+    // setInterval(() => {
+    //   setStatus((prev) => (prev === 'connected' ? 'connecting' : 'connected'))
+    // }, 3000)
   }, [ws])
 
   return (
