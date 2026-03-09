@@ -69,13 +69,7 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
                 variant="icon"
               />
             </Animated.View>
-            <AnimatedCheckbox
-              style={{ position: 'absolute', left: 16 }}
-              entering={getFadeIn()}
-              exiting={getFadeOut()}
-              onTouch={select}
-              value={selected}
-            />
+            <AnimatedCheckbox style={styles.checkbox} entering={getFadeIn()} exiting={getFadeOut()} onTouch={select} value={selected} />
           </>
         )}
         <Animated.View style={[styles.avatarWrapper, animatedShiftStyle]}>

@@ -12,12 +12,14 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './header.styles'
 
 export default function Title({ state }) {
-  const theme = useAnimatedTheme()
+  const animatedTheme = useAnimatedTheme()
   const color = useSharedValue(0)
+  const { theme } = useUnistyles()
   const rotation = useSharedValue(0)
 
   const startRotation = () => {
@@ -37,7 +39,7 @@ export default function Title({ state }) {
 
   const animatedProps = useAnimatedProps(() => {
     return {
-      fill: interpolateColor(color.get(), [0, 1], [theme.value.colors.primary, theme.value.colors.yellow]),
+      fill: interpolateColor(color.get(), [0, 1], [animatedTheme.value.colors.primary, animatedTheme.value.colors.yellow]),
     }
   })
 
@@ -54,7 +56,7 @@ export default function Title({ state }) {
   return (
     <Animated.View key="connected" layout={layoutAnimationSpringy} style={styles.container}>
       <Animated.View style={animatedStyle} layout={layoutAnimationSpringy}>
-        <Icon animatedProps={animatedProps} icon="logo" size={28} />
+        <Icon color={theme.colors.primary} animatedProps={animatedProps} icon="logo" size={28} />
       </Animated.View>
 
       {state !== 'connecting' ? (

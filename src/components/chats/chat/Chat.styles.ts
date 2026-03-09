@@ -7,6 +7,7 @@ export const styles = StyleSheet.create((theme) => ({
     paddingRight: theme.spacing.lg,
     paddingLeft: theme.spacing.md,
     gap: theme.spacing.md,
+    alignItems: 'center',
   },
   avatarWrapper: {
     padding: theme.spacing.lg,
@@ -21,6 +22,7 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     paddingTop: theme.spacing.lg,
     gap: theme.spacing.xs + 2,
+    height: '100%',
     paddingBottom: theme.spacing.lg,
   },
   headerRow: {
@@ -58,9 +60,13 @@ export const styles = StyleSheet.create((theme) => ({
   pinButton: (pinned: boolean) => ({
     backgroundColor: pinned ? theme.colors.redBackdrop : theme.colors.yellowBackdrop,
   }),
+  checkbox: {
+    position: 'absolute',
+    left: theme.spacing.md,
+  },
   pinButtonWrapper: {
     position: 'absolute',
-    right: 16,
+    right: theme.spacing.md,
     zIndex: 1,
   },
 }))
