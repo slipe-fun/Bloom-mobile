@@ -8,11 +8,11 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   }),
-  bar: (color?: string) => ({
+  bar: (color: string, size: number) => ({
     position: 'absolute',
-    width: 2,
-    height: 6,
-    borderRadius: 99,
-    backgroundColor: color ? color : theme.colors.primary,
+    width: 2 * (size / 6.4),
+    height: 6 * (size / 7),
+    borderRadius: theme.radius.full,
+    backgroundColor: color ? color : theme.colors.text,
   }),
 }))

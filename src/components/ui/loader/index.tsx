@@ -1,6 +1,6 @@
-import { springy } from '@constants/animations'
+import { LoaderAnimationIn, LoaderAnimationOut, springy } from '@constants/animations'
 import { useEffect, useState } from 'react'
-import { View, type ViewStyle } from 'react-native'
+import type { ViewStyle } from 'react-native'
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { styles } from './Loader.styles'
 
@@ -34,11 +34,11 @@ export default function Loader({ interval = 100, size = 26, segments = 8, color,
   }, [])
 
   return (
-    <View ref={ref} style={styles.container(size)}>
+    <Animated.View entering={LoaderAnimationIn} exiting={LoaderAnimationOut} ref={ref} style={styles.container(size)}>
       {Array.from({ length: segments }, (_, i) => i).map((i) => (
         <Bar key={i} index={i} progress={progress} radius={radius} segments={segments} color={color} />
       ))}
-    </View>
+    </Animated.View>
   )
 }
 
@@ -60,5 +60,5 @@ function Bar({ index, progress, radius, segments, color }: Bar) {
     animationProgress.set(withSpring(index === progress ? 1 : 0, springy))
   }, [progress, index])
 
-  return <Animated.View style={[styles.bar(color), animatedViewStyles]} />
+  return <Animated.View style={[styles.bar(color, radius), animatedViewStyles]} />
 }

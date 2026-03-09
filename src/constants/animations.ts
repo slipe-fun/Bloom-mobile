@@ -185,3 +185,25 @@ export const vSlideAnimationIn = (): LayoutAnimResult => {
     },
   }
 }
+
+export const LoaderAnimationOut = (): LayoutAnimResult => {
+  'worklet'
+  return {
+    initialValues: { opacity: 1, transform: [{ rotate: 0 }, { scale: 1 }] },
+    animations: {
+      opacity: withSpring(0, quickSpring),
+      transform: [{ rotate: withSpring(-15, quickSpring) }, { scale: withSpring(0.5, quickSpring) }],
+    },
+  }
+}
+
+export const LoaderAnimationIn = (): LayoutAnimResult => {
+  'worklet'
+  return {
+    initialValues: { opacity: 0, transform: [{ rotate: -15 }, { scale: 0.5 }] },
+    animations: {
+      opacity: withSpring(1, quickSpring),
+      transform: [{ rotate: withSpring(0, quickSpring) }, { scale: withSpring(1, quickSpring) }],
+    },
+  }
+}

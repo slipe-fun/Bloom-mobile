@@ -1,12 +1,12 @@
-import { EmptyModal } from '@components/ui'
+import { EmptyModal, Loader } from '@components/ui'
 import { getFadeIn, getFadeOut } from '@constants/animations'
 import { useUsersSearch } from '@hooks'
 import type { SearchUser as SearchUserType } from '@interfaces'
 import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback, useMemo, useState } from 'react'
-import { ActivityIndicator, View } from 'react-native' // Добавили ActivityIndicator
-import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import SearchHeader from './header'
 import FloatingHeader from './header/FloatingHeader'
 import { styles } from './Search.styles'
@@ -15,15 +15,17 @@ import SearchUser from './SearchUser'
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 export default function Search() {
-  const { search, searchValue, height } = useTabBarStore()
+  const search = useTabBarStore((state) => state.search)
+  const searchValue = useTabBarStore((state) => state.searchValue)
+  const height = useTabBarStore((state) => state.height)
   const scrollY = useSharedValue<number>(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const { users, status, loadMore } = useUsersSearch(searchValue)
+  const keyboard = useReanimatedKeyboardAnimation()
 
   const lastIndex = users.length - 1
   const isInitialLoading = status === 'loading' && users.length === 0
   const isNotFound = (status === 'empty' || status === 'error') && users.length === 0
-
   const isHistoryEmpty = !searchValue && search
 
   const keyExtractor = useCallback((item: SearchUserType) => String(item.id), [])
@@ -42,6 +44,10 @@ export default function Search() {
     onScroll: (event) => {
       scrollY.value = event.contentOffset.y
     },
+  })
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return { transform: [{ translateY: keyboard.height.value / 2 }] }
   })
 
   if (!search) return null
@@ -67,9 +73,9 @@ export default function Search() {
       )}
 
       {isInitialLoading && (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color="#999" />
-        </View>
+        <Animated.View style={[styles.loaderWrapper, animatedStyles]}>
+          <Loader size={32} />
+        </Animated.View>
       )}
 
       {isHistoryEmpty ? (

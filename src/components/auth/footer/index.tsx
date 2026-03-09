@@ -6,8 +6,6 @@ import Animated, { interpolate, interpolateColor, useAnimatedStyle } from 'react
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 
-const AnimatedLoader = Animated.createAnimatedComponent(Loader)
-
 export default function AuthFooter() {
   const insets = useInsets()
   const { theme } = useUnistyles()
@@ -45,7 +43,7 @@ export default function AuthFooter() {
               <Icon key="at-icon" size={26} color={theme.colors.text} icon="at" />
             </Animated.View>
           ) : loading ? (
-            <AnimatedLoader color={theme.colors.white} size={20} entering={getFadeIn()} exiting={getFadeOut()} />
+            <Loader color={theme.colors.white} size={20} />
           ) : null
         }
       >
