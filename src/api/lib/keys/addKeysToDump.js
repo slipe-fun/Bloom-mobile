@@ -23,7 +23,10 @@ export default async function (mmkv, keys) {
     const salt = mmkv.getString('salt')
     const token = mmkv.getString('token')
 
-    const { ciphertext, nonce } = skid.server.encryptKeys(base64ToUint8Array(password), new TextEncoder().encode(JSON.stringify(newDump)))
+    const { ciphertext, nonce } = skid.server.encryptKeys(
+      base64ToUint8Array(password),
+      new TextEncoder().encode(JSON.stringify(newDump.map((chat) => ({ id: chat?.id, key: chat?.key })))),
+    )
 
     return await axios
       .post(

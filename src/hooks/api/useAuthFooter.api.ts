@@ -47,27 +47,7 @@ async function passwordHandler(token: string, password: string, mmkv: any): Prom
 
   try {
     const keys = skid.server.decryptKeys(hash, privateKeys.ciphertext, privateKeys.nonce)
-    mmkv.set(
-      'chats',
-      JSON.stringify(
-        keys
-          .map((k) => ({
-            id: k.chat_id,
-            keys: {
-              my: {
-                kyber_public_key: k.kyber_public_key,
-                ecdh_public_key: k.ecdh_public_key,
-                ed_public_key: k.ed_public_key,
-                kyber_secret_key: k.kyber_secret_key,
-                ecdh_secret_key: k.ecdh_secret_key,
-                ed_secret_key: k.ed_secret_key,
-              },
-              recipient: {},
-            },
-          }))
-          .filter((k) => k.id),
-      ),
-    )
+    mmkv.set('chats', JSON.stringify(keys.filter((k) => k.id)))
   } catch {
     console.log('FAILED TO DECRYPT KEYS')
   }

@@ -16,7 +16,8 @@ interface EncryptedKeys {
 }
 
 interface ChatKeys extends Keys {
-  chat_id: number
+  id: number
+  key: string
 }
 
 export async function hashPassword(password: BinaryLike | Buffer, salt?: Uint8Array): Promise<HashedPassword> {
