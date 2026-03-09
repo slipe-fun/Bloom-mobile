@@ -3,7 +3,7 @@ import { useInsets } from '@hooks'
 import type { User as UserType } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
 import { useState } from 'react'
-import type { LayoutChangeEvent } from 'react-native'
+import { type LayoutChangeEvent, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
@@ -40,21 +40,15 @@ export default function Header({ scrollY, user }: HeaderProps) {
     ],
   }))
 
-  const animatedGradientStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, theme.spacing.sm], 'clamp'),
-      },
-    ],
-  }))
-
   return (
-    <Animated.View onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>
-      <Animated.View style={[styles.gradientWrapper(gradientHeight), animatedGradientStyle]}>
+    <>
+      <View style={styles.gradientWrapper(gradientHeight)}>
         <GradientBlur direction="top-to-bottom" />
+      </View>
+      <Animated.View onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>
+        <HeaderAvatar user={user} scrollY={scrollY} />
+        <SettingsTitle onLayout={onTitleLayout} scrollY={scrollY} user={user} />
       </Animated.View>
-      <HeaderAvatar user={user} scrollY={scrollY} />
-      <SettingsTitle onLayout={onTitleLayout} scrollY={scrollY} user={user} />
-    </Animated.View>
+    </>
   )
 }

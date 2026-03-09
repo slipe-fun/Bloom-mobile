@@ -6,7 +6,7 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    zIndex: 1,
+    zIndex: 2,
     gap: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
   },
@@ -33,6 +33,6 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     position: 'absolute',
     height,
-    bottom: theme.spacing.sm,
+    zIndex: 1,
   }),
 }))
