@@ -14,6 +14,7 @@ export const styles = StyleSheet.create((theme) => ({
   title: {
     fontFamily: theme.fontFamily.bold,
     fontSize: theme.fontSize.xxxl,
+    textAlign: 'center',
     color: theme.colors.text,
   },
 }))
