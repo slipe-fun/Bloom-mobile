@@ -14,7 +14,7 @@ export default function TabSettings() {
   const { headerHeight } = useSettingsScreenStore()
   const height = useTabBarStore((state) => state.height)
   const scrollY = useSharedValue(0)
-  const { user } = useMe()
+  const { user, loading } = useMe()
 
   // const snapOffset = snapEndPosition + theme.spacing.lg
 
@@ -39,7 +39,7 @@ export default function TabSettings() {
 
   return (
     <View style={styles.container}>
-      <Header scrollY={scrollY} user={user} />
+      <Header loading={loading} scrollY={scrollY} user={user} />
       <Animated.ScrollView
         onScroll={scrollHandler}
         contentContainerStyle={styles.list(height, headerHeight)}

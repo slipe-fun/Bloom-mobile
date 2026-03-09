@@ -12,9 +12,10 @@ import { gooeyShader } from './shader'
 interface HeaderAvatarProps {
   scrollY: SharedValue<number>
   user: User
+  loading: boolean
 }
 
-export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
+export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarProps) {
   const insets = useInsets()
   const START_Y = insets.top + 15
 
@@ -27,7 +28,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   const CENTER_X = width / 2
   const ISLAND_WIDTH = 90
   const ISLAND_HEIGHT = 32
-  const IMAGE_BLUR = Platform.OS === 'android' ? 30 : 10
+  const IMAGE_BLUR = 30
   const ISLAND_Y = Platform.OS === 'android' ? -2 : ISLAND_HEIGHT / 2
   const ISLAND_R = 0
 
@@ -38,7 +39,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.value))
 
   const animationProgress = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, CANVAS_HEIGHT], [1, 0.1], 'clamp')
+    return interpolate(scrollY.value, [0, CANVAS_HEIGHT / 1.5], [1, 0.1], 'clamp')
   })
 
   const currentRadius = useDerivedValue(() => CARD_R * animationProgress.value)
@@ -64,7 +65,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
   })
 
   const imageBlur = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, CANVAS_HEIGHT], [0, IMAGE_BLUR], 'clamp')
+    return interpolate(scrollY.value, [0, CANVAS_HEIGHT / 1.5], [0, IMAGE_BLUR], 'clamp')
   })
 
   const canvasAnimatedStyle = useAnimatedStyle(() => ({
@@ -80,7 +81,7 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
 
   const captureAvatar = async () => {
     await new Promise(requestAnimationFrame)
-    if (avatarRef.current && capturedImage === null) {
+    if (avatarRef.current && capturedImage === null && !loading) {
       try {
         const snapshot = await makeImageFromView(avatarRef)
         setCapturedImage(snapshot)
@@ -105,10 +106,6 @@ export default function HeaderAvatar({ scrollY, user }: HeaderAvatarProps) {
       subscription.remove()
     }
   }, [isFocused])
-
-  useEffect(() => {
-    captureAvatar()
-  }, [user])
 
   return (
     <>

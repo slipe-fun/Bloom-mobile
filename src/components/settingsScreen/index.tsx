@@ -14,9 +14,10 @@ import SettingsTitle from './header/Title'
 interface HeaderProps {
   scrollY: SharedValue<number>
   user: UserType
+  loading: boolean
 }
 
-export default function Header({ scrollY, user }: HeaderProps) {
+export default function Header({ scrollY, user, loading }: HeaderProps) {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const [gradientHeight, setGradientHeight] = useState(0)
@@ -46,7 +47,7 @@ export default function Header({ scrollY, user }: HeaderProps) {
         <GradientBlur direction="top-to-bottom" />
       </View>
       <Animated.View onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>
-        <HeaderAvatar user={user} scrollY={scrollY} />
+        <HeaderAvatar user={user} scrollY={scrollY} loading={loading} />
         <SettingsTitle onLayout={onTitleLayout} scrollY={scrollY} user={user} />
       </Animated.View>
     </>
