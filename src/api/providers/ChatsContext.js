@@ -1,4 +1,5 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
+import addKeysToDump from '@api/lib/keys/addKeysToDump'
 import changeChatKey from '@api/lib/keys/changeChatKey'
 import getEncryptedKeys from '@api/lib/keys/getEncryptedKeys'
 import sendEncryptedKeys from '@api/lib/keys/sendEncryptedKeys'
@@ -185,6 +186,7 @@ export default function ChatsProvider({ children }) {
               await addChatToStorage(key?.chat_id)
             }
             await changeChatKey(key?.chat_id, Buffer.from(decrypted).toString('base64'))
+            await addKeysToDump(mmkv, { id: key?.chat_id, key: Buffer.from(decrypted).toString('base64') })
           }
         } catch (error) {
           console.log(error)
@@ -339,6 +341,7 @@ export default function ChatsProvider({ children }) {
               await addChatToStorage(message?.chat_id)
             }
             await changeChatKey(message?.chat_id, Buffer.from(decrypted).toString('base64'))
+            await addKeysToDump(mmkv, { id: message?.chat_id, key: Buffer.from(decrypted).toString('base64') })
           }
         } catch {}
       })
