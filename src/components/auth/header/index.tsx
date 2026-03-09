@@ -1,9 +1,9 @@
 import { Button, Icon } from '@components/ui'
-import { zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useInsets } from '@hooks'
 import { useNavigationState } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import Animated from 'react-native-reanimated'
+import { View } from 'react-native'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Header.styles'
 
@@ -20,16 +20,17 @@ export default function AuthHeader() {
   }
 
   return (
-    <Animated.View style={styles.header(insets.top)}>
+    <View style={styles.header(insets.top)}>
       {!disabled && (
         <Button
-          entering={zoomAnimationIn}
-          exiting={zoomAnimationOut}
+          entering={FadeIn}
+          exiting={FadeOut}
+          key="button123455"
           onPress={back}
           variant="icon"
           icon={<Icon icon="chevron.left" color={theme.colors.text} size={26} />}
         />
       )}
-    </Animated.View>
+    </View>
   )
 }

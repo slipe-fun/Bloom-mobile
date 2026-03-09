@@ -1,6 +1,7 @@
-import { quickSpring } from '@constants/easings'
+import { springy } from '@constants/animations'
 import { BlurView } from 'expo-blur'
-import React, { type ComponentProps, useMemo } from 'react'
+import type React from 'react'
+import type { ComponentProps } from 'react'
 import { Platform, Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -36,7 +37,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const { theme } = useUnistyles()
-  const opacity = useSharedValue(1)
+  const scale = useSharedValue(1)
 
   let paddingHorizontal = 0
   if (variant !== 'icon') {
@@ -55,17 +56,21 @@ export default function Button({
   }
 
   const handlePress = (inn: boolean = true) => {
-    opacity.value = withSpring(inn ? 0.8 : 1, quickSpring)
+    scale.set(withSpring(inn ? (variant !== 'icon' ? 1.035 : 1.135) : 1, springy))
   }
 
   const animatedPressabelStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
+    transform: [{ scale: scale.get() }],
   }))
 
-  const buttonStyle = useMemo(
-    () => styles.button({ size: SIZE_MAP[size], isIcon: variant === 'icon', paddingHorizontal, blur, isTextIcon: variant === 'textIcon' }),
-    [size, variant, paddingHorizontal, blur],
-  )
+  const buttonStyle = styles.button({
+    size: SIZE_MAP[size],
+    isIcon: variant === 'icon',
+    paddingHorizontal,
+    blur,
+    isTextIcon: variant === 'textIcon',
+  })
+
   return (
     // @ts-expect-error
     <AnimatedPressable
