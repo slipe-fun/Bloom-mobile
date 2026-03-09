@@ -1,6 +1,6 @@
 import { useInsets } from '@hooks'
 import { useCallback, useRef } from 'react'
-import { type LayoutChangeEvent, Text, type ViewStyle } from 'react-native'
+import { type LayoutChangeEvent, Text } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { styles } from './Header.styles'
 
@@ -10,7 +10,7 @@ type SearchHeaderProps = {
   setHeaderHeight: (height: number) => void
 }
 
-export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }: SearchHeaderProps): React.JSX.Element {
+export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }: SearchHeaderProps) {
   const insets = useInsets()
 
   const lastHeight = useRef(headerHeight)
@@ -18,23 +18,20 @@ export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }:
   const onLayout = useCallback(
     (event: LayoutChangeEvent) => {
       const { height } = event.nativeEvent.layout
-      const roundedHeight = Math.round(height)
 
-      if (roundedHeight > 0 && roundedHeight !== lastHeight.current) {
-        lastHeight.current = roundedHeight
-        if (roundedHeight !== headerHeight) {
-          setHeaderHeight(roundedHeight)
+      if (height > 0 && height !== lastHeight.current) {
+        lastHeight.current = height
+        if (height !== headerHeight) {
+          setHeaderHeight(height)
         }
       }
     },
     [headerHeight, setHeaderHeight],
   )
 
-  const animatedViewStyle = useAnimatedStyle((): ViewStyle => {
-    const endValue = Math.max(headerHeight - insets.top, 1)
-
+  const animatedViewStyle = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(scrollY.value, [0, endValue], [1, 0], 'clamp'),
+      opacity: interpolate(scrollY.get(), [0, insets.top], [1, 0], 'clamp'),
     }
   }, [headerHeight, insets.top])
 

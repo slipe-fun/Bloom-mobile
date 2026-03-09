@@ -8,12 +8,11 @@ import useTabBarStore from '@stores/tabBar'
 import { useMemo } from 'react'
 import { View } from 'react-native'
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { StyleSheet } from 'react-native-unistyles'
 
 export default function TabSettings() {
-  const { snapEndPosition, headerHeight } = useSettingsScreenStore()
+  const { headerHeight } = useSettingsScreenStore()
   const height = useTabBarStore((state) => state.height)
-  const { theme } = useUnistyles()
   const scrollY = useSharedValue(0)
   const { user } = useMe()
 

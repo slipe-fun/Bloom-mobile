@@ -25,7 +25,7 @@ export default function FloatingHeader({ scrollY, headerHeight }: FloatingHeader
   const animatedTextStyle = useAnimatedStyle(
     (): TextStyle => ({
       opacity: interpolate(scrollY.get(), [0, scrollTarget], [0, 1]),
-      transform: [{ translateY: interpolate(scrollY.get(), [0, scrollTarget], [24, 0], 'clamp') }],
+      transform: [{ translateY: interpolate(scrollY.get(), [0, scrollTarget], [12, 0], 'clamp') }],
     }),
     [scrollTarget],
   )

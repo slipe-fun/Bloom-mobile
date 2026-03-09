@@ -66,6 +66,7 @@ export default function Search() {
           style={styles.list}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: height }}
           data={users}
           renderItem={renderItem}
