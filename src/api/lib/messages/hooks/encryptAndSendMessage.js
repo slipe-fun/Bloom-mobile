@@ -61,7 +61,6 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
         },
       ]),
     )
-    // console.log('saved')
   } catch (err) {
     console.log(err)
   }

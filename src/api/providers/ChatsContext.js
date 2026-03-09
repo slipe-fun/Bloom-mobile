@@ -246,7 +246,7 @@ export default function ChatsProvider({ children }) {
 
           await Promise.all(
             chats.map(async (chat) => {
-              const otherMember = chat.members.filter((m) => m.id !== myUser.id)[0]
+              const otherMember = chat?.members?.filter((m) => m.id !== myUser.id)[0]
 
               const recipient_sessions = await getUserSessions(otherMember?.id)
               if (!recipient_sessions) return

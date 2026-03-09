@@ -1,6 +1,7 @@
 import ChatsProvider from '@api/providers/ChatsContext'
 import MessagesProvider from '@api/providers/MessagesContext'
 import SeenMessagesProvider from '@api/providers/SeenMessagesContext'
+import UserProvider from '@api/providers/UserContext'
 import { WebSocketProvider } from '@api/providers/WebSocketContext'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { PortalProvider } from '@gorhom/portal'
@@ -52,18 +53,20 @@ export default function RootLayout() {
               <StatusBar style="auto" />
               <SessionProvider>
                 <WebSocketProvider>
-                  <ChatsProvider>
-                    <MessagesProvider>
-                      <SeenMessagesProvider>
-                        <BottomSheetModalProvider>
-                          <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
-                            <Stack.Screen name="(app)" options={{ headerShown: false }} />
-                            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                          </Stack>
-                        </BottomSheetModalProvider>
-                      </SeenMessagesProvider>
-                    </MessagesProvider>
-                  </ChatsProvider>
+                  <UserProvider>
+                    <ChatsProvider>
+                      <MessagesProvider>
+                        <SeenMessagesProvider>
+                          <BottomSheetModalProvider>
+                            <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
+                              <Stack.Screen name="(app)" options={{ headerShown: false }} />
+                              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                            </Stack>
+                          </BottomSheetModalProvider>
+                        </SeenMessagesProvider>
+                      </MessagesProvider>
+                    </ChatsProvider>
+                  </UserProvider>
                 </WebSocketProvider>
               </SessionProvider>
             </PortalProvider>

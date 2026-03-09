@@ -1,13 +1,10 @@
-import getMyUserRequest from '@api/lib/users/getMyUserRequest'
 import { createSecureStorage } from '@lib/storage'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
-import { useRouter } from 'expo-router'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-const SessionContext = createContext<{ token: string }>({ token: '' })
+const SessionContext = createContext<{ token: string; setToken: object }>({ token: '', setToken: () => {} })
 
 export function SessionProvider({ children }) {
-  const router = useRouter()
   const [token, setToken] = useState<string>('')
   const { counter, setUserID } = useTokenTriggerStore()
 
@@ -28,25 +25,10 @@ export function SessionProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    ;(async () => {
-      if (token !== '') {
-        try {
-          await getMyUserRequest()
-        } catch (error) {
-          if (error?.response?.status === 401) {
-            setToken('')
-            router.navigate('/(auth)/Welcome')
-          }
-        }
-      }
-    })()
-  }, [token])
-
-  useEffect(() => {
     init()
   }, [counter])
 
-  return <SessionContext.Provider value={{ token }}>{children}</SessionContext.Provider>
+  return <SessionContext.Provider value={{ token, setToken }}>{children}</SessionContext.Provider>
 }
 
 export const useSession = () => useContext(SessionContext)
