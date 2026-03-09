@@ -28,7 +28,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const CENTER_X = width / 2
   const ISLAND_WIDTH = 90
   const ISLAND_HEIGHT = 32
-  const IMAGE_BLUR = 30
+  const IMAGE_BLUR = 20
   const ISLAND_Y = Platform.OS === 'android' ? -2 : ISLAND_HEIGHT / 2
   const ISLAND_R = 0
 

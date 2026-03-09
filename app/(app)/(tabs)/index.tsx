@@ -9,7 +9,6 @@ import { FlashList } from '@shopify/flash-list'
 import useChatsScreenStore from '@stores/chats'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback } from 'react'
-import type { ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -20,11 +19,9 @@ export default function TabChats() {
 
   const lastIndex = chats?.length - 1
 
-  const animatedViewStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      opacity: withSpring(search ? 0 : 1, fastSpring),
-    }),
-  )
+  const animatedViewStyle = useAnimatedStyle(() => ({
+    opacity: withSpring(search ? 0 : 1, fastSpring),
+  }))
 
   const keyExtractor = useCallback((item: ChatType) => {
     return String(item?.id)

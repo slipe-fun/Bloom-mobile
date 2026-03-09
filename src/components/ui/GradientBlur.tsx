@@ -38,9 +38,9 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
     () =>
       easeGradient({
         colorStops: {
-          0: { color: 'transparent' },
-          0.5: { color: theme.colors.gradientBlur },
-          1: { color: theme.colors.gradientBlur },
+          0: { color: theme.colors.gradientBlurEnd },
+          0.5: { color: theme.colors.gradientBlurStart },
+          1: { color: theme.colors.gradientBlurMiddle },
         },
       }),
     [theme],
@@ -56,11 +56,11 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
             <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
           }
         >
-          <BlurView style={StyleSheet.absoluteFill} intensity={20} tint="systemChromeMaterialDark" />
+          <BlurView style={StyleSheet.absoluteFill} intensity={30} tint="systemChromeMaterialDark" />
         </MaskedView>
       )}
 
-      <LinearGradient start={start} end={end} colors={['transparent', theme.colors.gradientBlur]} style={gradientStyles} />
+      <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={gradientStyles} />
     </>
   )
 }
