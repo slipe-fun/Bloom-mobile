@@ -25,7 +25,6 @@ export default function AuthHeader() {
         <Button
           entering={FadeIn}
           exiting={FadeOut}
-          key="button123455"
           onPress={back}
           variant="icon"
           icon={<Icon icon="chevron.left" color={theme.colors.text} size={26} />}
