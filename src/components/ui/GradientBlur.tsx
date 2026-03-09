@@ -1,6 +1,6 @@
 import { useInsets } from '@hooks'
 import MaskedView from '@react-native-masked-view/masked-view'
-import { BlurView } from 'expo-blur'
+import { type BlurTint, BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
 import { useMemo } from 'react'
@@ -18,10 +18,12 @@ interface GradientBlurProps {
 }
 
 export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard }: GradientBlurProps) {
-  const { theme } = useUnistyles()
+  const { theme, rt } = useUnistyles()
   const insets = useInsets()
 
   const gradientStyles = [StyleSheet.absoluteFill, keyboard ? styles.gradient(insets.bottom) : null, style]
+
+  const tint: BlurTint = rt.themeName.includes('dark') ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
 
   const { start, end } = useMemo(() => {
     switch (direction) {
@@ -56,7 +58,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
             <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
           }
         >
-          <BlurView style={StyleSheet.absoluteFill} intensity={30} tint="systemChromeMaterialDark" />
+          <BlurView style={StyleSheet.absoluteFill} intensity={30} tint={tint} />
         </MaskedView>
       )}
 
