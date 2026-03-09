@@ -31,7 +31,7 @@ export default function UserProvider({ children }) {
     })()
   }, [token])
 
-  return <UserContext.Provider>{children}</UserContext.Provider>
+  return <UserContext.Provider value={null}>{children}</UserContext.Provider>
 }
 
 export const useUser = () => useContext(UserContext)
