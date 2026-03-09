@@ -1,5 +1,5 @@
 import { Buffer } from '@craftzdog/react-native-buffer'
-import encryptKey from '@lib/skid/encryptKey'
+import { getSKID } from '@lib/skid/lazySkid'
 import { createSecureStorage } from '@lib/storage'
 import { randomBytes } from '@noble/hashes/utils.js'
 import addKeysToDump from '../keys/addKeysToDump'
@@ -12,11 +12,13 @@ import getMyUser from '../users/getMyUser'
 import addChatToStorage from './addChatToStorage'
 import createChatRequest from './createChatRequest'
 
-function encryptKeys(sessions, chat_key, mySession) {
+async function encryptKeys(sessions, chat_key, mySession) {
+  const skid = await getSKID()
+
   let keys = []
   for (const session of sessions) {
     if (session?.identity_pub && session?.ecdh_pub && session?.kyber_pub) {
-      const encrypted = encryptKey(chat_key, mySession, {
+      const encrypted = skid.local.encryptKey(chat_key, mySession, {
         kyber_public_key: session?.kyber_pub,
         ecdh_public_key: session?.ecdh_pub,
         edPublicKey: session?.identity_pub,

@@ -1,5 +1,5 @@
 import { quickSpring } from '@constants/easings'
-import generateKeys from '@lib/skid/generateKeys'
+import { getSKID } from '@lib/skid/lazySkid'
 import { useNavigationState } from '@react-navigation/native'
 import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
@@ -76,7 +76,8 @@ export default function useAuthFooter(): UseAuthFooter {
           return
         }
 
-        const session_keys = generateKeys()
+        const skid = await getSKID()
+        const session_keys = skid.local.generateKeys()
 
         const send_keys = await authApi.addSessionKeys(data?.token, session_keys)
         if (!send_keys) {
