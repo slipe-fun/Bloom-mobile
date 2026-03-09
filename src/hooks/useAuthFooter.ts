@@ -112,7 +112,7 @@ export default function useAuthFooter(): UseAuthFooter {
       }
     } catch (e: any) {
       setLoading(false)
-      setError(e?.response?.data || e?.message || 'Something went wrong')
+      setError(e?.response?.data || e?.message || e || 'Something went wrong')
 
       timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
     }
