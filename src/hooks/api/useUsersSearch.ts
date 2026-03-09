@@ -19,41 +19,35 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
-    setPage(1)
-  }, [query])
-
-  useEffect(() => {
     let ignore = false
 
     if (!query.trim()) {
-      setUsers([])
-      setStatus('idle')
+      setUsers((prev) => (prev.length ? [] : prev))
+      setStatus((prev) => (prev !== 'idle' ? 'idle' : prev))
       return
     }
 
-    setStatus('loading')
-    setError('')
+    if (page === 1) setStatus('loading')
 
     async function fetchUsers() {
       try {
         const response = await axios.get(`${API_URL}/user/search?q=${query}&offset=${(page - 1) * 12}&limit=12`)
 
+        if (ignore) return
+
         const data = response?.data ?? []
 
-        setUsers(page === 1 ? data : (prev) => [...prev, ...data])
-
+        setUsers((prev) => (page === 1 ? data : [...prev, ...data]))
         setStatus(data.length === 0 && page === 1 ? 'empty' : 'success')
-      } catch (err) {
+      } catch (err: any) {
         if (!ignore) {
-          setError(err)
+          setError(err?.message || 'Error')
           setStatus('error')
         }
       }
     }
 
-    const timeOut = setTimeout(() => {
-      fetchUsers()
-    }, 600)
+    const timeOut = setTimeout(fetchUsers, 600)
 
     return () => {
       ignore = true
@@ -61,10 +55,18 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
     }
   }, [query, page])
 
+  useEffect(() => {
+    setPage((prev) => (prev !== 1 ? 1 : prev))
+  }, [query])
+
   return {
     users,
     status,
     error,
-    loadMore: () => setPage((p) => p + 1),
+    loadMore: () => {
+      if (status !== 'loading' && status !== 'empty') {
+        setPage((p) => p + 1)
+      }
+    },
   }
 }
