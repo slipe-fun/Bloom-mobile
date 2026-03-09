@@ -1,11 +1,13 @@
 import getChatFromStorage from '@lib/getChatFromStorage'
-import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
+import { getSKID } from '@lib/skid/lazySkid'
 import { Q } from '@nozbe/watermelondb'
 import { database } from 'src/db'
 import getReplyToMessageFromStorage from './getReplyToMessageFromStorage'
 
 export default async function (mmkv, chat_id, messages) {
   if (!messages) return
+
+  const skid = await getSKID()
 
   // is chat in storage check
   const chat = await getChatFromStorage(chat_id)
@@ -26,7 +28,7 @@ export default async function (mmkv, chat_id, messages) {
           if (reply_to_message) {
             reply_to = reply_to_message
           } else {
-            reply_to = sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+            reply_to = skid.aes.decrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
           }
         } catch {}
       }
@@ -35,7 +37,7 @@ export default async function (mmkv, chat_id, messages) {
         // if kyber message sent by recipient then decrypt using both key pairs
         // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
         return {
-          ...sskDecrypt(message?.ciphertext, message?.nonce, chat?.key),
+          ...skid.aes.decrypt(message?.ciphertext, message?.nonce, chat?.key),
           chat_id: message?.chat_id,
           id: message?.id,
           seen: message?.seen,

@@ -1,6 +1,6 @@
 import getReplyToMessageFromStorage from '@api/lib/messages/getReplyToMessageFromStorage'
 import getChatFromStorage from '@lib/getChatFromStorage'
-import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
+import { getSKID } from '@lib/skid/lazySkid'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { database } from 'src/db'
 import { useWebSocket } from './WebSocketContext'
@@ -25,6 +25,8 @@ export default function MessagesProvider({ children }) {
           return
         }
 
+        const skid = await getSKID()
+
         // if socket type is message
         if (message?.type === 'message.new') {
           // get chat from mmkv storage
@@ -43,7 +45,7 @@ export default function MessagesProvider({ children }) {
                 reply_to = reply_to_message
               }
 
-              reply_to = sskDecrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+              reply_to = skid.aes.decrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
             } catch {}
           }
 
@@ -60,7 +62,7 @@ export default function MessagesProvider({ children }) {
 
           try {
             // decrypt message by general chat key
-            const decrypted = sskDecrypt(message?.ciphertext, message?.nonce, key)
+            const decrypted = skid.aes.decrypt(message?.ciphertext, message?.nonce, key)
 
             // add decrypted message to messages var
             setMessages((prev) => [

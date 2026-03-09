@@ -8,10 +8,8 @@ import getUserSessions from '@api/lib/sessions/getUserSessions'
 import getMyUser from '@api/lib/users/getMyUser'
 import { Buffer } from '@craftzdog/react-native-buffer'
 import getChatFromStorage from '@lib/getChatFromStorage'
-import decryptKey from '@lib/skid/decryptKey'
-import encryptKey from '@lib/skid/encryptKey'
+import { getSKID } from '@lib/skid/lazySkid'
 import base64ToUint8Array from '@lib/skid/modules/utils/base64ToUint8Array'
-import { decrypt as sskDecrypt } from '@lib/skid/serversideKeyEncryption'
 import { Q } from '@nozbe/watermelondb'
 import useStorageStore from '@stores/storage'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -44,6 +42,7 @@ export default function ChatsProvider({ children }) {
   }
 
   async function decryptMessage(_chat, message) {
+    const skid = await getSKID()
     // get chat from mmkv storage
     const chat = await getChatFromStorage(message?.chat_id)
     if (!chat) return
@@ -54,7 +53,7 @@ export default function ChatsProvider({ children }) {
       // if kyber message sent by recipient then decrypt using both key pairs
       // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
       return {
-        ...sskDecrypt(message?.ciphertext, message?.nonce, key),
+        ...skid.aes.decrypt(message?.ciphertext, message?.nonce, key),
         chat_id: message?.chat_id,
         id: message?.id,
         seen: message?.seen,
@@ -148,6 +147,7 @@ export default function ChatsProvider({ children }) {
     if (ws?.readyState === WebSocket?.OPEN) {
       ;(async () => {
         try {
+          const skid = await getSKID()
           const myUser = await getMyUser()
           const mySession = await getMySession()
 
@@ -174,7 +174,7 @@ export default function ChatsProvider({ children }) {
               recipient_session = recipient_sessions?.find((session) => session?.id === key?.from_session_id)
             }
 
-            const decrypted = decryptKey({ ...key, ciphertext: key?.encrypted_key, cek_wrap_salt: key?.salt }, mySession, {
+            const decrypted = skid.local.decryptKey({ ...key, ciphertext: key?.encrypted_key, cek_wrap_salt: key?.salt }, mySession, {
               kyber_public_key: recipient_session?.kyber_pub,
               ecdh_public_key: recipient_session?.ecdh_pub,
               edPublicKey: recipient_session?.identity_pub,
@@ -197,6 +197,7 @@ export default function ChatsProvider({ children }) {
     if (ws?.readyState === WebSocket?.OPEN) {
       ;(async () => {
         try {
+          const skid = await getSKID()
           const mySession = await getMySession()
           const myUser = await getMyUser()
 
@@ -220,7 +221,7 @@ export default function ChatsProvider({ children }) {
               .map((session) =>
                 Promise.all(
                   chats.map(async (chat) => {
-                    const encrypted = encryptKey(base64ToUint8Array(chat.key), mySession, {
+                    const encrypted = skid.local.encryptKey(base64ToUint8Array(chat.key), mySession, {
                       kyber_public_key: session.kyber_pub,
                       ecdh_public_key: session.ecdh_pub,
                       edPublicKey: session.identity_pub,
@@ -257,7 +258,7 @@ export default function ChatsProvider({ children }) {
 
               return Promise.all(
                 sessionsToSend.map(async (session) => {
-                  const encrypted = encryptKey(base64ToUint8Array(chat.key), mySession, {
+                  const encrypted = skid.local.encryptKey(base64ToUint8Array(chat.key), mySession, {
                     kyber_public_key: session.kyber_pub,
                     ecdh_public_key: session.ecdh_pub,
                     edPublicKey: session.identity_pub,
@@ -305,6 +306,7 @@ export default function ChatsProvider({ children }) {
 
             addChat(message)
           } else if (message?.type === 'keys.new') {
+            const skid = await getSKID()
             const myUser = await getMyUser()
             const mySession = await getMySession()
 
@@ -322,7 +324,7 @@ export default function ChatsProvider({ children }) {
             const encrypted_key = message?.keys?.find((key) => key?.session_id === mySession?.id)
             if (!encrypted_key) return
 
-            const decrypted = decryptKey(
+            const decrypted = skid.local.decryptKey(
               { ...encrypted_key, ciphertext: encrypted_key?.encrypted_key, cek_wrap_salt: encrypted_key?.salt },
               mySession,
               {

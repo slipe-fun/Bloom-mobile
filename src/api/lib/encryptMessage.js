@@ -1,9 +1,10 @@
+import { getSKID } from '@lib/skid/lazySkid'
 import getChatFromStorage from '../../lib/getChatFromStorage'
-import { encrypt as sskEncrypt } from '../../lib/skid/serversideKeyEncryption'
 import { createSecureStorage } from '../../lib/storage'
 
-export default async function (content, chat_id, count) {
+export default async function (content, chat_id) {
   try {
+    const skid = await getSKID()
     // mmkv storage
     const storage = await createSecureStorage('user-storage')
     // get chat from mmkv storage
@@ -12,7 +13,7 @@ export default async function (content, chat_id, count) {
     const user_id = parseInt(storage.getString('user_id'), 10)
 
     try {
-      return sskEncrypt(content, user_id, chatData?.key)
+      return skid.aes.encrypt(content, user_id, chatData?.key)
     } catch {
       return
     }

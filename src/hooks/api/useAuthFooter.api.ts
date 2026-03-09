@@ -1,6 +1,6 @@
 import { API_URL } from '@constants/api'
 import { Buffer } from '@craftzdog/react-native-buffer'
-import { decryptKeys, encryptKeys, hashPassword } from '@lib/skid/encryptKeys'
+import { getSKID } from '@lib/skid/lazySkid'
 import axios from 'axios'
 
 interface PrivateKeysResponse {
@@ -16,6 +16,7 @@ async function usernameHandler(token: string, username: string): Promise<void> {
 }
 
 async function passwordHandler(token: string, password: string, mmkv: any): Promise<void> {
+  const skid = await getSKID()
   const privateKeys: PrivateKeysResponse | null = await axios
     .get(`${API_URL}/chats/keys/private`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -24,8 +25,8 @@ async function passwordHandler(token: string, password: string, mmkv: any): Prom
     .catch(() => null)
 
   if (!privateKeys) {
-    const { hash, salt } = await hashPassword(password)
-    const { ciphertext, nonce } = encryptKeys(hash, new TextEncoder().encode('[]'))
+    const { hash, salt } = await skid.server.hashPassword(password)
+    const { ciphertext, nonce } = skid.server.encryptKeys(hash, new TextEncoder().encode('[]'))
 
     await axios.post(
       `${API_URL}/chats/keys/private`,
@@ -38,13 +39,13 @@ async function passwordHandler(token: string, password: string, mmkv: any): Prom
     return
   }
 
-  const { hash } = await hashPassword(password, Buffer.from(privateKeys.salt, 'base64'))
+  const { hash } = await skid.server.hashPassword(password, Buffer.from(privateKeys.salt, 'base64'))
 
   mmkv.set('password', Buffer.from(hash).toString('base64'))
   mmkv.set('salt', privateKeys.salt)
 
   try {
-    const keys = decryptKeys(hash, privateKeys.ciphertext, privateKeys.nonce)
+    const keys = skid.server.decryptKeys(hash, privateKeys.ciphertext, privateKeys.nonce)
     mmkv.set(
       'chats',
       JSON.stringify(
