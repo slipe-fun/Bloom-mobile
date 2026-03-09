@@ -22,6 +22,8 @@ export default function SignupEmail() {
     return { transform: [{ translateY: (keyboard.height.value + insets.top) / 2 }] }
   })
 
+  console.log(error)
+
   const animatedTextStyles = useAnimatedStyle(
     () => ({
       color: interpolateColor(errorValue.get(), [0, 1], [theme.colors.secondaryText, theme.colors.red]),
@@ -40,7 +42,7 @@ export default function SignupEmail() {
       <AnimatedActionText
         layout={layoutAnimation}
         style={animatedTextStyles}
-        text={error ? error : 'После этого мы отправим 6-значный код подтверждения на вашу почту'}
+        text={error ? error?.message : 'После этого мы отправим 6-значный код подтверждения на вашу почту'}
       />
     </Animated.View>
   )
