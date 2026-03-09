@@ -65,8 +65,8 @@ export default function Footer({ onSend, setFooterHeight, footerHeight, listRef 
       style={[styles.footer, animatedViewStyle]}
     >
       <GradientBlur keyboard />
-      <Button blur size="sm" variant="icon">
-        <Icon icon="plus" size={24} color={theme.colors.text} />
+      <Button variant="icon">
+        <Icon icon="plus" color={theme.colors.text} />
       </Button>
 
       <MessageInput setValue={setInputValue} value={inputValue} />

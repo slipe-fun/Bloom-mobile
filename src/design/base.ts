@@ -52,4 +52,7 @@ export const base = {
     /** Semibold */ semibold: 'OpenRunde-Semibold',
     /** Bold     */ bold: 'OpenRunde-Bold',
   },
+  shadows: {
+    pressable: '0px 4px 12px 4px',
+  },
 }

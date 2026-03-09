@@ -71,7 +71,7 @@ export default function NewMessage() {
       />
       <View style={styles.header}>
         <GradientBlur direction="top-to-bottom" />
-        <Button onPress={handlePress} blur variant="icon">
+        <Button onPress={handlePress} variant="icon">
           <Icon icon="x" color={theme.colors.text} />
         </Button>
         <Text style={styles.title}>Новый чат</Text>

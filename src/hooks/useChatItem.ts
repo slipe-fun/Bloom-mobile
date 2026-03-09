@@ -1,7 +1,7 @@
 import createChat from '@api/lib/chats/create'
 import { useChatList } from '@api/providers/ChatsContext'
 import { quickSpring } from '@constants/easings'
-import type { ChatView, Member, User } from '@interfaces'
+import type { ChatView, User } from '@interfaces'
 import useChatsStore from '@stores/chats'
 import useTokenTriggerStore from '@stores/tokenTriggerStore'
 import { useRouter } from 'expo-router'
@@ -9,6 +9,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import type { ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
 import { type AnimatedStyle, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 
 interface useChatItem {
   selected: boolean
@@ -23,11 +24,12 @@ interface useChatItem {
   onPressHandler: () => void
 }
 
-export default function useChatNavigation(chat: ChatView | User, isSearch: boolean = false, theme: any): useChatItem {
+export default function useChatNavigation(chat: ChatView | User, isSearch: boolean = false): useChatItem {
   const router = useRouter()
   const { userID } = useTokenTriggerStore()
   const { edit, selectedChats, toggleChat, setEdit } = useChatsStore()
   const { chats, addChat } = useChatList()
+  const theme = useAnimatedTheme()
   const pressedValue = useSharedValue(0)
   const timer = useRef<NodeJS.Timeout>(null)
   const ignorePress = useRef(false)
@@ -41,11 +43,11 @@ export default function useChatNavigation(chat: ChatView | User, isSearch: boole
   }))
 
   const animatedShiftStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: withSpring(edit ? 44 : 0, quickSpring) }],
+    transform: [{ translateX: withSpring(edit ? 40 : 0, quickSpring) }],
   }))
 
   const animatedChatStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(pressedValue.get(), [0, 1], ['transparent', theme.colors.foreground]),
+    backgroundColor: interpolateColor(pressedValue.get(), [0, 1], ['transparent', theme.value.colors.foreground]),
   }))
 
   const nav = (newChat: ChatView, create: boolean) =>

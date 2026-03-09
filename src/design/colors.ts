@@ -10,6 +10,7 @@ export const staticColors = {
   purple: '#A41AFF',
   red: '#F43025',
   gray: '#8C8C8C',
+  shadow: 'rgba(0, 0, 0, 0.06)',
 
   // Backdrops
   whiteBackdrop: '#ffffff80',

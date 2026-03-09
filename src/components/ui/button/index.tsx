@@ -1,10 +1,9 @@
 import { springy } from '@constants/animations'
-import { BlurView } from 'expo-blur'
 import type React from 'react'
 import type { ComponentProps } from 'react'
-import { Platform, Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
+import { Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Button.styles'
 import { SIZE_MAP, type Size } from './constats'
 
@@ -21,7 +20,7 @@ interface ButtonProps extends ComponentProps<typeof AnimatedPressable> {
   labelStyle?: StyleProp<TextStyle>
   icon?: React.JSX.Element | null | boolean
   children?: React.ReactNode
-  blur?: boolean
+  elevated?: boolean
 }
 
 export default function Button({
@@ -33,7 +32,7 @@ export default function Button({
   icon,
   style,
   labelStyle,
-  blur = false,
+  elevated = true,
   ...props
 }: ButtonProps) {
   const { theme } = useUnistyles()
@@ -67,7 +66,7 @@ export default function Button({
     size: SIZE_MAP[size],
     isIcon: variant === 'icon',
     paddingHorizontal,
-    blur,
+    elevated,
     isTextIcon: variant === 'textIcon',
   })
 
@@ -80,9 +79,6 @@ export default function Button({
       ref={ref}
       {...props}
     >
-      {blur && Platform.OS === 'ios' && (
-        <BlurView style={StyleSheet.absoluteFill} experimentalBlurMethod="dimezisBlurView" intensity={40} tint="systemChromeMaterialDark" />
-      )}
       {icon}
       {label && (
         <Text numberOfLines={1} style={[styles.label(SIZE_MAP[size]), labelStyle]}>

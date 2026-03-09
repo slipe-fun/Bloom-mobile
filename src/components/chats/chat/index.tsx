@@ -41,7 +41,7 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
     [chat.id, lastMessage, recipient],
   )
   const { selected, edit, pinned, animatedMetaRowStyle, animatedShiftStyle, animatedChatStyle, pin, select, handlePress, onPressHandler } =
-    useChatItem(chatData, false, theme)
+    useChatItem(chatData, false)
 
   return (
     <AnimatedPressable
@@ -58,6 +58,7 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
               <Button
                 style={styles.pinButton(pinned)}
                 onPress={pin}
+                elevated={false}
                 size="sm"
                 icon={
                   pinned ? (

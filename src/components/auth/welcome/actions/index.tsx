@@ -30,6 +30,7 @@ export default function AuthActions() {
   return (
     <View style={styles.actionsContainer(52 + insets.bottom)}>
       <Button
+        elevated={false}
         style={styles.button(true)}
         labelStyle={styles.buttonLabel(true)}
         icon={focusedIcon(iOS)}
@@ -45,6 +46,7 @@ export default function AuthActions() {
           labelStyle={styles.buttonLabel(false)}
           style={styles.button(false)}
           icon={focusedIcon(false)}
+          elevated={false}
           label={t('auth:footer.emailBtn')}
           onPress={() => onPress('google')}
           size="xl"

@@ -1,6 +1,7 @@
+import { springy } from '@constants/animations'
 import type React from 'react'
-import { useMemo } from 'react'
 import { type StyleProp, TextInput, View, type ViewStyle } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Input.styles'
 
@@ -14,6 +15,7 @@ type InputProps = {
   icon?: React.ReactNode
   button?: React.ReactNode
   disabled?: boolean
+  elevated?: boolean
   basic?: boolean
 } & React.ComponentProps<typeof TextInput>
 
@@ -23,14 +25,25 @@ const SIZE_MAP: Record<Size, number> = {
   lg: 48,
 }
 
-export default function Input({ size, ref, viewStyle, style, icon, button, disabled, basic, ...props }: InputProps): React.JSX.Element {
+export default function Input({ size, ref, viewStyle, style, icon, button, disabled, basic, elevated = true, ...props }: InputProps) {
   const { theme } = useUnistyles()
+  const scale = useSharedValue(1)
 
-  const viewStyleMemo = useMemo(() => styles.inputWrapper({ height: SIZE_MAP[size], disabled }), [size])
+  const viewStyleMemo = styles.inputWrapper({ height: SIZE_MAP[size], disabled, elevated })
+
+  const handlePress = (inn: boolean = true) => {
+    scale.set(withSpring(inn ? 1.035 : 1, springy))
+  }
+
+  const animatedlStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.get() }],
+  }))
 
   const inputComponent = (
     <TextInput
       ref={ref}
+      onPressIn={() => handlePress(true)}
+      onPressOut={() => handlePress(false)}
       cursorColor={theme.colors.secondaryText}
       selectionColor={theme.colors.secondaryText}
       keyboardAppearance="dark"
@@ -41,11 +54,11 @@ export default function Input({ size, ref, viewStyle, style, icon, button, disab
   )
 
   return !basic ? (
-    <View style={[viewStyleMemo, viewStyle]}>
+    <Animated.View style={[viewStyleMemo, viewStyle, animatedlStyle]}>
       {icon && <View style={styles.iconWrapper}>{icon}</View>}
       {inputComponent}
       {button}
-    </View>
+    </Animated.View>
   ) : (
     inputComponent
   )

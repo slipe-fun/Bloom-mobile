@@ -4,16 +4,20 @@ import { StyleSheet } from 'react-native-unistyles'
 type InputStyleProps = {
   height: number
   disabled: boolean
+  elevated: boolean
 }
 
 export const styles = StyleSheet.create((theme) => ({
-  inputWrapper: ({ height, disabled }: InputStyleProps) => ({
+  inputWrapper: ({ height, disabled, elevated }: InputStyleProps) => ({
     width: '100%',
     height,
-    backgroundColor: theme.colors.foregroundTransparent,
+    backgroundColor: theme.colors.pressable,
     borderRadius: theme.radius.full,
     borderCurve: 'continuous',
+    boxShadow: elevated ? `${theme.shadows.pressable} ${theme.colors.shadow}` : undefined,
     flexDirection: 'row',
+    borderColor: elevated ? theme.colors.border : 'transparent',
+    borderWidth: theme.borderWidth.md,
     opacity: disabled ? theme.opacity.secondaryText : 1,
     pointerEvents: disabled ? 'none' : 'auto',
     alignItems: 'center',

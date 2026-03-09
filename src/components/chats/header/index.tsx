@@ -50,7 +50,7 @@ export default function Header() {
     <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)} style={[styles.header, { paddingTop: insets.top }]}>
       <GradientBlur direction="top-to-bottom" />
       <View style={[styles.topHeader]}>
-        <Button onPress={editPress} blur variant="icon">
+        <Button onPress={editPress} variant="icon">
           {edit ? (
             <>
               <Animated.View style={styles.buttonBackground} entering={zoomAnimationIn} exiting={zoomAnimationOut} />
@@ -65,7 +65,7 @@ export default function Header() {
           )}
         </Button>
         <Title state={status} />
-        <Button onPress={handlePresentModalPress} style={animatedButtonStyle} blur variant="icon">
+        <Button onPress={handlePresentModalPress} style={animatedButtonStyle} variant="icon">
           <Icon icon="plus" color={theme.colors.text} />
         </Button>
       </View>

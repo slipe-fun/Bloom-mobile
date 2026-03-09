@@ -49,6 +49,7 @@ export default function AuthFooter() {
         onPress={handlePress}
         style={styles.button}
         size="xl"
+        elevated={false}
         variant="textIcon"
         icon={
           index === 0 ? (

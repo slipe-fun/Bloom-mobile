@@ -1,11 +1,5 @@
 import { Input } from '@components/ui'
-import useChatScreenStore from '@stores/chatScreen'
-import { BlurView } from 'expo-blur'
 import type React from 'react'
-import { Platform, View } from 'react-native'
-import { StyleSheet } from 'react-native-unistyles'
-import ReplyBlock from '../replyBlock'
-import { styles } from './Footer.styles'
 
 type MessageInputProps = {
   setValue: (value: string) => void
@@ -13,24 +7,17 @@ type MessageInputProps = {
 }
 
 export default function MessageInput({ setValue, value }: MessageInputProps): React.JSX.Element {
-  const { replyMessage, setReplyMessage } = useChatScreenStore()
-
   return (
-    <View style={styles.inputWrapper}>
-      {Platform.OS === 'ios' && <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />}
-      <ReplyBlock onCancel={() => setReplyMessage(null)} message={replyMessage} />
-
-      <Input
-        numberOfLines={7}
-        onChangeText={setValue}
-        multiline
-        submitBehavior="newline"
-        basic
-        size="sm"
-        returnKeyType="previous"
-        value={value}
-        placeholder="Cообщение..."
-      />
-    </View>
+    <Input
+      numberOfLines={7}
+      onChangeText={setValue}
+      multiline
+      submitBehavior="newline"
+      size="md"
+      viewStyle={{ flex: 1, width: 'auto' }}
+      returnKeyType="previous"
+      value={value}
+      placeholder="Cообщение..."
+    />
   )
 }

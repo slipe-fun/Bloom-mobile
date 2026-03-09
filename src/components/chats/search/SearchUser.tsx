@@ -17,7 +17,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function SearchUser({ user, isLast = false }: ChatProps) {
   const { theme } = useUnistyles()
-  const { handlePress, onPressHandler, animatedChatStyle } = useChatItem(user, true, theme)
+  const { handlePress, onPressHandler, animatedChatStyle } = useChatItem(user, true)
 
   return (
     <AnimatedPressable
