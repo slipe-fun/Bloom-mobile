@@ -2,7 +2,6 @@ import { base } from '@design/base'
 import { useMemo } from 'react'
 import { Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useUnistyles } from 'react-native-unistyles'
 
 interface Insets {
   top: number

@@ -1,6 +1,7 @@
 import SearchUser from '@components/chats/search/SearchUser'
 import { Button, GradientBlur, Icon } from '@components/ui'
 import { API_URL } from '@constants/api'
+import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { SearchUser as SearchUserType, User } from '@interfaces'
 import axios from 'axios'
@@ -19,7 +20,7 @@ export default function NewMessage() {
 
   const lastIndex = users?.length - 1
 
-  const headerHeight = theme.spacing.lg + theme.spacing.md + 44
+  const headerHeight = base.spacing.lg + base.spacing.md + 44
 
   const renderItem: ListRenderItem<SearchUserType> = useCallback(
     ({ item, index }) => {

@@ -1,17 +1,17 @@
+import { SIZE_MAP } from '@components/ui/avatar'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   chat: {
     flexDirection: 'row',
     paddingRight: theme.spacing.lg,
-    alignItems: 'center',
-    paddingLeft: theme.spacing.lg,
-    gap: theme.spacing.lg,
+    paddingLeft: theme.spacing.md,
+    gap: theme.spacing.md,
   },
   avatarWrapper: {
     padding: theme.spacing.lg,
     paddingLeft: 0,
-    paddingRight: theme.spacing.xs,
+    paddingRight: 0,
   },
   charStack: {
     flexDirection: 'row',
@@ -19,8 +19,9 @@ export const styles = StyleSheet.create((theme) => ({
   },
   content: {
     flex: 1,
+    paddingTop: theme.spacing.lg,
     gap: theme.spacing.xs + 2,
-    paddingVertical: theme.spacing.lg,
+    paddingBottom: theme.spacing.lg,
   },
   headerRow: {
     flexDirection: 'row',
@@ -44,16 +45,16 @@ export const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fontFamily.medium,
     marginRight: edit ? 100 : 0,
   }),
-  separator: {
+  separator: (size: string = 'lg') => ({
     left: 0,
     right: 0,
-    marginLeft: 52 + theme.spacing.lg * 2,
+    marginLeft: SIZE_MAP[size] + theme.spacing.md * 2,
     height: 1,
     bottom: 0,
     marginRight: theme.spacing.lg,
     position: 'absolute',
     backgroundColor: theme.colors.foreground,
-  },
+  }),
   pinButton: (pinned: boolean) => ({
     backgroundColor: pinned ? theme.colors.redBackdrop : theme.colors.yellowBackdrop,
   }),

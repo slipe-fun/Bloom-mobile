@@ -15,6 +15,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './TitleTemplate.styles'
 
 interface TitleTemplateProps {
@@ -25,6 +26,7 @@ interface TitleTemplateProps {
 export default function AuthTitleTemplate({ icon, title }: TitleTemplateProps) {
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const { theme } = useUnistyles()
+  const animatedTheme = useAnimatedTheme()
   const error = useAuthStore((state) => state.error)
   const errorValue = useSharedValue(0)
 
@@ -36,7 +38,7 @@ export default function AuthTitleTemplate({ icon, title }: TitleTemplateProps) {
   )
 
   const animatedIconProps = useAnimatedProps(() => ({
-    fill: interpolateColor(errorValue.get(), [0, 1], [theme.colors.primary, theme.colors.red]),
+    fill: interpolateColor(errorValue.get(), [0, 1], [animatedTheme.value.colors.primary, animatedTheme.value.colors.red]),
   }))
 
   useEffect(() => {

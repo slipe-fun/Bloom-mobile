@@ -1,14 +1,14 @@
 import { EMOJI_AVATARS } from '@constants/emojiAvatars'
-import FastImage, { type ImageStyle as FastImageStyle } from '@d11/react-native-fast-image'
-import { Image, type ImageProps, type ImageStyle, type StyleProp, View } from 'react-native'
+import FastImage, { type FastImageProps, type ImageStyle as FastImageStyle } from '@d11/react-native-fast-image'
+import { type StyleProp, View } from 'react-native'
 import { styles } from './Avatar.styles'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
 
-interface AvatarProps extends Omit<ImageProps, 'source'> {
+interface AvatarProps extends Omit<FastImageProps, 'source'> {
   size?: Size
   square?: boolean
-  style?: StyleProp<ImageStyle>
+  style?: StyleProp<FastImageStyle>
   imageStyle?: StyleProp<FastImageStyle>
   image?: string
   username?: string
@@ -18,7 +18,7 @@ interface AvatarProps extends Omit<ImageProps, 'source'> {
 export const SIZE_MAP: Record<Size, number> = {
   sm: 40,
   md: 44,
-  lg: 52,
+  lg: 56,
   xl: 68,
   '2xl': 100,
   '3xl': 128,
@@ -49,10 +49,9 @@ export default function Avatar({
   return (
     <View ref={ref} style={!image ? [avatarStyle, style] : undefined}>
       {image ? (
-        // @ts-expect-error
         <FastImage {...props} source={{ uri: image }} style={[avatarStyle, imageStyle]} />
       ) : (
-        <Image {...props} source={emojiResult?.emoji} style={styles.emoji} />
+        <FastImage {...props} source={emojiResult?.emoji} style={styles.emoji} />
       )}
     </View>
   )

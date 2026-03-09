@@ -1,14 +1,17 @@
 import { Button, Icon, Loader } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
+import { base } from '@design/base'
 import { useAuthFooter, useInsets } from '@hooks'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolate, interpolateColor, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Footer.styles'
 
 export default function AuthFooter() {
   const insets = useInsets()
   const { theme } = useUnistyles()
+  const animatedTheme = useAnimatedTheme()
   const { index, label, isDisabled, progress, loading, handlePress } = useAuthFooter()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
 
@@ -16,7 +19,12 @@ export default function AuthFooter() {
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1, 2, 3],
-      [theme.colors.foregroundTransparent, theme.colors.foregroundTransparent, theme.colors.primary, theme.colors.red],
+      [
+        animatedTheme.value.colors.foregroundTransparent,
+        animatedTheme.value.colors.foregroundTransparent,
+        animatedTheme.value.colors.primary,
+        animatedTheme.value.colors.red,
+      ],
     ),
     transform: [{ scaleX: interpolate(keyboardProgress.value, [0, 1], [1, 1.2]) }],
   }))
@@ -25,12 +33,17 @@ export default function AuthFooter() {
     color: interpolateColor(
       progress.value,
       [0, 1, 2, 3],
-      [theme.colors.text, theme.colors.secondaryText, theme.colors.white, theme.colors.white],
+      [
+        animatedTheme.value.colors.text,
+        animatedTheme.value.colors.secondaryText,
+        animatedTheme.value.colors.white,
+        animatedTheme.value.colors.white,
+      ],
     ),
   }))
 
   return (
-    <KeyboardStickyView offset={{ opened: -theme.spacing.lg, closed: -insets.bottom }} style={styles.footer}>
+    <KeyboardStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={styles.footer}>
       <Button
         disabled={isDisabled}
         onPress={handlePress}

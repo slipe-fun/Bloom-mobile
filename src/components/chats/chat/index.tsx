@@ -114,7 +114,7 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
           </Animated.Text>
         </Animated.View>
       </LayoutAnimationConfig>
-      {!isLast && <View style={styles.separator} />}
+      {!isLast && <View style={styles.separator('lg')} />}
     </AnimatedPressable>
   )
 }

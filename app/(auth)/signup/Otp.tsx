@@ -7,7 +7,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { StyleSheet } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 
 const AnimatedActionText = Animated.createAnimatedComponent(ActionText)
 
@@ -18,7 +19,7 @@ export default function SignupOTP() {
   const keyboard = useReanimatedKeyboardAnimation()
   const insets = useInsets()
   const { t } = useTranslation()
-  const { theme } = useUnistyles()
+  const theme = useAnimatedTheme()
   const error = useAuthStore((state) => state.error)
   const errorValue = useSharedValue(0)
 
@@ -28,9 +29,9 @@ export default function SignupOTP() {
 
   const animatedTextStyles = useAnimatedStyle(
     () => ({
-      color: interpolateColor(errorValue.get(), [0, 1], [theme.colors.secondaryText, theme.colors.red]),
+      color: interpolateColor(errorValue.get(), [0, 1], [theme.value.colors.secondaryText, theme.value.colors.red]),
     }),
-    [theme, error],
+    [error],
   )
 
   useEffect(() => {

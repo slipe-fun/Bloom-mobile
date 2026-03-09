@@ -45,7 +45,7 @@ export default function SearchUser({ user, isLast = false }: ChatProps) {
           </Text>
         </View>
       </LayoutAnimationConfig>
-      {!isLast && <View style={styles.separator} />}
+      {!isLast && <View style={styles.separator('md')} />}
     </AnimatedPressable>
   )
 }
