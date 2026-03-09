@@ -4,6 +4,7 @@ import { layoutAnimation, quickSpring } from '@constants/animations'
 import { useInsets } from '@hooks'
 import useAuthStore from '@stores/auth'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -11,9 +12,12 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 const AnimatedActionText = Animated.createAnimatedComponent(ActionText)
 
 export default function SignupOTP() {
-  const { email, otp, setOtp } = useAuthStore()
+  const email = useAuthStore((state) => state.email)
+  const otp = useAuthStore((state) => state.otp)
+  const setOtp = useAuthStore((state) => state.setOtp)
   const keyboard = useReanimatedKeyboardAnimation()
   const insets = useInsets()
+  const { t } = useTranslation()
   const { theme } = useUnistyles()
   const error = useAuthStore((state) => state.error)
   const errorValue = useSharedValue(0)
@@ -35,12 +39,12 @@ export default function SignupOTP() {
 
   return (
     <Animated.View style={[styles.container(52 + insets.bottom), animatedStyles]}>
-      <AuthTitleTemplate icon="id" title="Проверка почты" />
+      <AuthTitleTemplate icon="id" title={t('auth:otp.title')} />
       <OTPInput value={otp} onChange={setOtp} />
       <AnimatedActionText
         layout={layoutAnimation}
         style={animatedTextStyles}
-        text={error ? error : 'Введите 6-значный код, который был отправлен на'}
+        text={error ? error : t('auth:otp.subTitle')}
         actionText={error ? '' : email}
       />
     </Animated.View>

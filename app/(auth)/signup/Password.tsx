@@ -6,6 +6,7 @@ import { layoutAnimation, quickSpring } from '@constants/animations'
 import { useChatKeyboard, useInsets } from '@hooks'
 import useAuthStore from '@stores/auth'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -22,6 +23,7 @@ export default function SignupPassword() {
   // Needs only for read and write first keyboard height to mmkv storage
   const { height: _height } = useChatKeyboard()
   const errorValue = useSharedValue(0)
+  const { t } = useTranslation()
 
   const animatedStyles = useAnimatedStyle(() => {
     return { transform: [{ translateY: (keyboard.height.value + insets.top) / 2 }] }
@@ -40,20 +42,14 @@ export default function SignupPassword() {
 
   return (
     <Animated.View style={[styles.container(116 + insets.bottom), animatedStyles]}>
-      <AuthTitleTemplate icon="lock" title={exists ? 'Введите пароль' : 'Пароль и ник'} />
+      <AuthTitleTemplate icon="lock" title={t(exists ? 'auth:password.existsTitle' : 'auth:password.title')} />
       {exists && dbUsername.length > 0 ? null : <AuthNickInput />}
       <AuthPasswordInput />
       <AnimatedActionText
         layout={layoutAnimation}
         style={animatedTextStyles}
-        actionText={error || exists ? '' : 'синхронизации ключей'}
-        text={
-          error
-            ? error
-            : exists
-              ? 'Введите ваш пароль от аккаунта для входа'
-              : 'Пароль должен состоять из 8-64 любых символов. Он используется для'
-        }
+        actionText={error || exists ? '' : t('auth:password.actionText')}
+        text={error ? error : t(exists ? 'auth:password.existsSubTitle' : 'auth:password.subTitle')}
       />
     </Animated.View>
   )

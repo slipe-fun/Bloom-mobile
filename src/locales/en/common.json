@@ -1,1 +1,14 @@
-{}
+{
+  "footer": {
+    "appleBtn": "Continue with Apple",
+    "googleBtn": "Continue with Google",
+    "emailBtn": "Continue with Email",
+    "continueBtn": "Continue",
+    "completeBtn": "Complete",
+    "separator": "OR"
+  },
+  "email": {
+    "title": "Enter your email",
+    "subTitle": "After that, we will send a 6-digit verification code to your email"
+  }
+}

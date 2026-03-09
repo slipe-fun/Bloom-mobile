@@ -5,6 +5,7 @@ import useAuthStore from '@stores/auth'
 import useStorageStore from '@stores/storage'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Keyboard } from 'react-native'
 import { type SharedValue, useSharedValue, withSpring } from 'react-native-reanimated'
 import { authApi } from './api/useAuthFooter.api'
@@ -21,6 +22,7 @@ interface UseAuthFooter {
 export default function useAuthFooter(): UseAuthFooter {
   const router = useRouter()
   const index = useNavigationState((s) => s.index)
+  const { t } = useTranslation('auth')
   const { exists, email, emailValid, otp, username, dbUsername, password, setError, setDbUsername, error, setExists } = useAuthStore()
   const { mmkv } = useStorageStore()
   const progress = useSharedValue(0)
@@ -44,7 +46,7 @@ export default function useAuthFooter(): UseAuthFooter {
     return valid ? 2 : 1
   }, [index, emailValid, otp, password, error])
 
-  const label = index === 0 ? 'Продолжить с Почтой' : index === 3 ? 'Завершить' : 'Продолжить'
+  const label = index === 0 ? t('auth:footer.emailBtn') : index === 3 ? t('auth:footer.completeBtn') : t('auth:footer.continueBtn')
   const ERROR_TIMOUT = 10000
   let timeout: NodeJS.Timeout
 

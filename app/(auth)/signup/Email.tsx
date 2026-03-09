@@ -5,6 +5,7 @@ import { layoutAnimation, quickSpring } from '@constants/animations'
 import { useInsets } from '@hooks'
 import useAuthStore from '@stores/auth'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
@@ -15,6 +16,7 @@ export default function SignupEmail() {
   const keyboard = useReanimatedKeyboardAnimation()
   const insets = useInsets()
   const { theme } = useUnistyles()
+  const { t } = useTranslation()
   const error = useAuthStore((state) => state.error)
   const errorValue = useSharedValue(0)
 
@@ -37,13 +39,9 @@ export default function SignupEmail() {
 
   return (
     <Animated.View style={[styles.container(52 + insets.bottom), animatedStyles]}>
-      <AuthTitleTemplate icon="at" title="Введите почту" />
+      <AuthTitleTemplate icon="at" title={t('auth:email.title')} />
       <AuthEmailInput />
-      <AnimatedActionText
-        layout={layoutAnimation}
-        style={animatedTextStyles}
-        text={error ? error?.message : 'После этого мы отправим 6-значный код подтверждения на вашу почту'}
-      />
+      <AnimatedActionText layout={layoutAnimation} style={animatedTextStyles} text={error ? error : t('auth:email.subTitle')} />
     </Animated.View>
   )
 }
