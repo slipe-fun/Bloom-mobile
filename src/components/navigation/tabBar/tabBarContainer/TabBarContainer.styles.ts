@@ -36,7 +36,7 @@ export const styles = StyleSheet.create((theme) => ({
     left: theme.spacing.xs,
     transformOrigin: 'center',
     borderCurve: 'continuous',
-    height: 52 - theme.spacing.xs * 2,
+    height: 51.5 - theme.spacing.xs * 2,
     backgroundColor: theme.colors.foregroundTransparent,
     borderRadius: theme.radius.full,
   },
@@ -44,5 +44,6 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+    height: '100%',
   },
 }))

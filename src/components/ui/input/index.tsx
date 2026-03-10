@@ -55,8 +55,8 @@ export default function Input({
   const inputComponent = (
     <TextInput
       ref={ref}
-      onPressIn={() => handlePress(true)}
-      onPressOut={() => handlePress(false)}
+      onTouchStart={() => handlePress(true)}
+      onTouchEnd={() => handlePress(false)}
       cursorColor={theme.colors.secondaryText}
       selectionColor={theme.colors.secondaryText}
       keyboardAppearance={rt.themeName.includes('dark') ? 'dark' : 'light'}
