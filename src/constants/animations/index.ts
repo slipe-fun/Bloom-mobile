@@ -9,7 +9,7 @@ import {
   type WithSpringConfig,
   withSpring,
 } from 'react-native-reanimated'
-import { normalSpring, quickSpring } from './easings'
+import { normalSpring, quickSpring } from '../easings'
 
 type SpringTriple = { mass: number; stiffness: number; damping: number }
 
@@ -18,7 +18,7 @@ export type LayoutAnimResult = {
   animations: Record<string, any>
 }
 
-export * from './easings'
+export * from '../easings'
 export const springy = physicsSpring({
   mass: quickSpring.mass,
   duration: 0.25,

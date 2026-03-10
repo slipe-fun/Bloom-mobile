@@ -1,4 +1,5 @@
 import { springy } from '@constants/animations'
+import { PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
 import type React from 'react'
 import { type StyleProp, TextInput, View, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -45,7 +46,7 @@ export default function Input({
   const viewStyleMemo = styles.inputWrapper({ height: SIZE_MAP[size], disabled, elevated })
 
   const handlePress = (inn: boolean = true) => {
-    scale.set(withSpring(inn ? 1.035 : 1, springy))
+    scale.set(withSpring(inn ? PRESSABLE_INPUT_SCALE : 1, springy))
   }
 
   const animatedlStyle = useAnimatedStyle(() => ({

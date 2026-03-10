@@ -1,4 +1,5 @@
 import { getFadeIn, getFadeOut, layoutAnimation, springy, vSlideAnimationIn, vSlideAnimationOut } from '@constants/animations'
+import { PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
 import { useNavigationState } from '@react-navigation/native'
 import useTabBarStore from '@stores/tabBar'
 import { useRef } from 'react'
@@ -19,7 +20,7 @@ export default function TabBarContainer() {
   const x = useSharedValue(0)
 
   const handlePress = (inn: boolean = true) => {
-    scale.set(withSpring(inn ? 1.035 : 1, springy))
+    scale.set(withSpring(inn ? PRESSABLE_INPUT_SCALE : 1, springy))
   }
 
   const animatedStyle = useAnimatedStyle(() => ({
