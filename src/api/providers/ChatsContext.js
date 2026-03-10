@@ -183,7 +183,7 @@ export default function ChatsProvider({ children }) {
 
             const chatFromStorage = await getChatFromStorage(key?.chat_id)
             if (!chatFromStorage) {
-              await addChatToStorage(key?.chat_id)
+              await addChatToStorage({ id: key?.chat_id })
             }
             await changeChatKey(key?.chat_id, Buffer.from(decrypted).toString('base64'))
             await addKeysToDump(mmkv, { id: key?.chat_id, key: Buffer.from(decrypted).toString('base64') })
@@ -304,7 +304,7 @@ export default function ChatsProvider({ children }) {
           }
 
           if (message?.type === 'chat.new') {
-            await addChatToStorage(message?.id)
+            await addChatToStorage(message)
 
             addChat(message)
           } else if (message?.type === 'keys.new') {
@@ -338,7 +338,7 @@ export default function ChatsProvider({ children }) {
 
             const chatFromStorage = await getChatFromStorage(message?.chat_id)
             if (!chatFromStorage) {
-              await addChatToStorage(message?.chat_id)
+              await addChatToStorage({ id: message?.chat_id })
             }
             await changeChatKey(message?.chat_id, Buffer.from(decrypted).toString('base64'))
             await addKeysToDump(mmkv, { id: message?.chat_id, key: Buffer.from(decrypted).toString('base64') })
