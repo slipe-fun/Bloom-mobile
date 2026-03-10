@@ -22,6 +22,8 @@ export default function TabBarSearchInput({ ref }: TabBarSearchInputProps): Reac
       ref={ref}
       value={searchValue}
       size="lg"
+      elevated={false}
+      animation={false}
       onChangeText={setSearchValue}
       onFocus={() => setSearchFocused(true)}
       viewStyle={{ backgroundColor: 'transparent' }}

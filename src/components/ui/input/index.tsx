@@ -15,6 +15,7 @@ type InputProps = {
   icon?: React.ReactNode
   button?: React.ReactNode
   disabled?: boolean
+  animation?: boolean
   elevated?: boolean
   basic?: boolean
 } & React.ComponentProps<typeof TextInput>
@@ -25,7 +26,19 @@ const SIZE_MAP: Record<Size, number> = {
   lg: 48,
 }
 
-export default function Input({ size, ref, viewStyle, style, icon, button, disabled, basic, elevated = true, ...props }: InputProps) {
+export default function Input({
+  size,
+  ref,
+  viewStyle,
+  style,
+  icon,
+  button,
+  disabled,
+  basic,
+  elevated = true,
+  animation = true,
+  ...props
+}: InputProps) {
   const { theme, rt } = useUnistyles()
   const scale = useSharedValue(1)
 
@@ -54,7 +67,7 @@ export default function Input({ size, ref, viewStyle, style, icon, button, disab
   )
 
   return !basic ? (
-    <Animated.View style={[viewStyleMemo, viewStyle, animatedlStyle]}>
+    <Animated.View style={[viewStyleMemo, viewStyle, animation ? animatedlStyle : undefined]}>
       {icon && <View style={styles.iconWrapper}>{icon}</View>}
       {inputComponent}
       {button}
