@@ -10,7 +10,7 @@ type InputStyleProps = {
 export const styles = StyleSheet.create((theme) => ({
   inputWrapper: ({ height, disabled, elevated }: InputStyleProps) => ({
     width: '100%',
-    height: "auto"
+    height: 'auto',
     minHeight: height,
     backgroundColor: theme.colors.pressable,
     borderRadius: theme.radius.full,

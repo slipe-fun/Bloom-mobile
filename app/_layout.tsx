@@ -30,7 +30,7 @@ export default function RootLayout() {
   const { setMMKV } = useStorageStore()
 
   useEffect(() => {
-    LogRocket.init('cepguw/bloom')
+    LogRocket.init('cepguw/bloom', { textSanitizer: 'excluded' })
   }, [])
 
   useEffect(() => {
