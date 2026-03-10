@@ -26,7 +26,7 @@ const SIZE_MAP: Record<Size, number> = {
 }
 
 export default function Input({ size, ref, viewStyle, style, icon, button, disabled, basic, elevated = true, ...props }: InputProps) {
-  const { theme } = useUnistyles()
+  const { theme, rt } = useUnistyles()
   const scale = useSharedValue(1)
 
   const viewStyleMemo = styles.inputWrapper({ height: SIZE_MAP[size], disabled, elevated })
@@ -46,7 +46,7 @@ export default function Input({ size, ref, viewStyle, style, icon, button, disab
       onPressOut={() => handlePress(false)}
       cursorColor={theme.colors.secondaryText}
       selectionColor={theme.colors.secondaryText}
-      keyboardAppearance="dark"
+      keyboardAppearance={rt.themeName.includes('dark') ? 'dark' : 'light'}
       placeholderTextColor={theme.colors.secondaryText}
       style={[styles.input(!!icon, SIZE_MAP[size]), style]}
       {...props}
