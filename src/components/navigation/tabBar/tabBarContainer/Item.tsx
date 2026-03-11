@@ -1,6 +1,6 @@
 import Icon from '@components/ui/Icon'
-import { quickSpring, springy } from '@constants/animations'
-import { TAB_COLORS, TAB_ICONS } from '@constants/tabBar'
+import { quickSpring } from '@constants/animations'
+import { TAB_ICONS } from '@constants/tabBar'
 import type { TabValue } from '@interfaces'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect } from 'react'
@@ -8,6 +8,7 @@ import { Pressable, type ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
 import Animated, { interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './TabBarContainer.styles'
 
 interface TabBarItemProps {
@@ -19,14 +20,13 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function TabBarItem({ route, focused }: TabBarItemProps) {
   const { theme } = useUnistyles()
+  const animatedTheme = useAnimatedTheme()
   const color = useSharedValue(0)
-  const scale = useSharedValue(1)
+  const opacity = useSharedValue(1)
   const router = useRouter()
 
-  const TAB_COLORS_RES = TAB_COLORS()
-
   const iconScale = (out: boolean = false) => {
-    scale.value = withSpring(out ? 1 : 1.2, springy)
+    opacity.set(withSpring(out ? 1 : 0.5, quickSpring))
   }
 
   const onPress = useCallback(() => {
@@ -39,16 +39,12 @@ export default function TabBarItem({ route, focused }: TabBarItemProps) {
 
   const animatedStyle = useAnimatedStyle(
     (): ViewStyle => ({
-      transform: [
-        {
-          scale: scale.value,
-        },
-      ],
+      opacity: opacity.get(),
     }),
   )
 
   const animatedProps = useAnimatedProps(() => ({
-    fill: interpolateColor(color.value, [0, 1], [theme.colors.text, TAB_COLORS_RES[route.name]]),
+    fill: interpolateColor(color.value, [0, 1], [animatedTheme.value.colors.text, animatedTheme.value.colors.primary]),
   }))
 
   useEffect(() => {
@@ -59,8 +55,8 @@ export default function TabBarItem({ route, focused }: TabBarItemProps) {
     <AnimatedPressable
       style={[styles.tabBarItem, animatedStyle]}
       onPress={() => onPress()}
-      onPressIn={() => iconScale()}
-      onPressOut={() => iconScale(true)}
+      onTouchStart={() => iconScale()}
+      onTouchEnd={() => iconScale(true)}
     >
       <Icon animatedProps={animatedProps} color={theme.colors.text} size={30} icon={TAB_ICONS[route.name]} />
     </AnimatedPressable>

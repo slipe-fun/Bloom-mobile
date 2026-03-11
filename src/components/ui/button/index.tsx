@@ -1,4 +1,5 @@
 import { springy } from '@constants/animations'
+import { ICON_PRESSABLE_SCALE, PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
 import type React from 'react'
 import type { ComponentProps } from 'react'
 import { Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
@@ -55,7 +56,7 @@ export default function Button({
   }
 
   const handlePress = (inn: boolean = true) => {
-    scale.set(withSpring(inn ? (variant !== 'icon' ? 1.035 : 1.135) : 1, springy))
+    scale.set(withSpring(inn ? (variant !== 'icon' ? PRESSABLE_INPUT_SCALE : ICON_PRESSABLE_SCALE) : 1, springy))
   }
 
   const animatedPressabelStyle = useAnimatedStyle(() => ({
@@ -73,8 +74,8 @@ export default function Button({
   return (
     // @ts-expect-error
     <AnimatedPressable
-      onPressIn={() => handlePress(true)}
-      onPressOut={() => handlePress(false)}
+      onTouchStart={() => handlePress(true)}
+      onTouchEnd={() => handlePress(false)}
       style={[buttonStyle, style, animatedPressabelStyle]}
       ref={ref}
       {...props}

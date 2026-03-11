@@ -20,14 +20,14 @@ export default function TabBarIndicator({ x }: TabBarIndicatorProps) {
   const animatedStyle = useAnimatedStyle(
     (): ViewStyle => ({
       transform: [{ translateX: x.get() }],
-      width: tabBarWidth / 4 + 5,
+      width: tabBarWidth / 4 + 4,
     }),
   )
 
   useEffect(() => {
     if (tabsCount <= 0) return
 
-    const target = (tabBarWidth / 4 - 4.5) * index
+    const target = (tabBarWidth / 4 - 5) * index
 
     x.set(withSpring(target, springy))
   }, [index, tabsCount, tabBarWidth])

@@ -1,4 +1,3 @@
-import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -20,8 +19,11 @@ export const styles = StyleSheet.create((theme) => ({
   },
   tabBarWrapper: {
     flex: 1,
-    backgroundColor: Platform.OS === 'ios' ? theme.colors.foregroundBlur : theme.colors.foreground,
+    backgroundColor: theme.colors.pressable,
     borderRadius: theme.radius.full,
+    boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
+    borderWidth: theme.borderWidth.md,
+    borderColor: theme.colors.border,
     zIndex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -34,13 +36,14 @@ export const styles = StyleSheet.create((theme) => ({
     left: theme.spacing.xs,
     transformOrigin: 'center',
     borderCurve: 'continuous',
-    height: 54 - theme.spacing.xs * 2,
-    backgroundColor: theme.colors.indicator,
+    height: 51.5 - theme.spacing.xs * 2,
+    backgroundColor: theme.colors.foregroundTransparent,
     borderRadius: theme.radius.full,
   },
   tabBarItem: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+    height: '100%',
   },
 }))

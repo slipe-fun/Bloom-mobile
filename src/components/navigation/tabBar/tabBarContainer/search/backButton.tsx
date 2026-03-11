@@ -22,7 +22,6 @@ export default function TabBarSearchBackButton(): React.JSX.Element {
       variant="icon"
       size="lg"
       key="tabBarBackButton"
-      blur
       exiting={zoomAnimationOut}
       entering={zoomAnimationIn}
     >

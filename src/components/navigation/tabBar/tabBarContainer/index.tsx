@@ -1,11 +1,10 @@
-import { getFadeIn, getFadeOut, layoutAnimation, vSlideAnimationIn, vSlideAnimationOut } from '@constants/animations'
+import { getFadeIn, getFadeOut, layoutAnimation, springy, vSlideAnimationIn, vSlideAnimationOut } from '@constants/animations'
+import { PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
 import { useNavigationState } from '@react-navigation/native'
 import useTabBarStore from '@stores/tabBar'
-import { BlurView } from 'expo-blur'
 import { useRef } from 'react'
-import { Platform, type TextInput } from 'react-native'
-import Animated, { LayoutAnimationConfig, useSharedValue } from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
+import type { TextInput } from 'react-native'
+import Animated, { LayoutAnimationConfig, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import TabBarIndicator from './Indicator'
 import TabBarItem from './Item'
 import TabBarButton from './search'
@@ -17,14 +16,27 @@ export default function TabBarContainer() {
   const { search, searchFocused } = useTabBarStore()
   const state = useNavigationState((state) => state)
   const inputRef = useRef<TextInput>(null)
+  const scale = useSharedValue(1)
   const x = useSharedValue(0)
+
+  const handlePress = (inn: boolean = true) => {
+    scale.set(withSpring(inn ? PRESSABLE_INPUT_SCALE : 1, springy))
+  }
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.get() }],
+  }))
 
   return (
     <Animated.View exiting={vSlideAnimationOut} entering={vSlideAnimationIn} style={styles.container}>
       <LayoutAnimationConfig skipEntering skipExiting>
         {search && !searchFocused && <TabBarSearchBackButton />}
-        <Animated.View layout={layoutAnimation} style={styles.tabBarWrapper}>
-          {Platform.OS === 'ios' && <BlurView style={StyleSheet.absoluteFill} intensity={40} tint="systemChromeMaterialDark" />}
+        <Animated.View
+          onTouchStart={() => handlePress(true)}
+          onTouchEnd={() => handlePress(false)}
+          layout={layoutAnimation}
+          style={[styles.tabBarWrapper, animatedStyle]}
+        >
           {search ? (
             <TabBarSearchInput key="tabBarSearchInput" ref={inputRef} />
           ) : (

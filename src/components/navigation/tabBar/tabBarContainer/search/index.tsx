@@ -24,7 +24,6 @@ export default function TabBarSearchButton({ inputRef }) {
   return renderX ? (
     <AnimatedButton
       size="lg"
-      blur
       key="tabBarSearchButtonX"
       variant="icon"
       exiting={zoomAnimationOut}
@@ -37,7 +36,6 @@ export default function TabBarSearchButton({ inputRef }) {
   ) : !search ? (
     <AnimatedButton
       style={styles.searchButton}
-      blur
       variant="icon"
       key="tabBarSearchButtonMain"
       exiting={zoomAnimationOut}
