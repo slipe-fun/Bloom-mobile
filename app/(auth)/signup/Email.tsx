@@ -25,8 +25,6 @@ export default function SignupEmail() {
     return { transform: [{ translateY: (keyboard.height.value + insets.top) / 2 }] }
   })
 
-  console.log(error)
-
   const animatedTextStyles = useAnimatedStyle(
     () => ({
       color: interpolateColor(errorValue.get(), [0, 1], [theme.value.colors.secondaryText, theme.value.colors.red]),

@@ -1,7 +1,6 @@
 import { API_URL } from '@constants/api'
 import { Buffer } from '@craftzdog/react-native-buffer'
 import { getSKID } from '@lib/skid/lazySkid'
-import base64ToUint8Array from '@lib/skid/modules/utils/base64ToUint8Array'
 import axios from 'axios'
 
 interface PrivateKeysResponse {
