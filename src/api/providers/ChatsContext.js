@@ -149,7 +149,6 @@ export default function ChatsProvider({ children }) {
       ;(async () => {
         try {
           const skid = await getSKID()
-          const myUser = await getMyUser()
           const mySession = await getMySession()
 
           const encrypted_keys = await getEncryptedKeys()
@@ -164,15 +163,7 @@ export default function ChatsProvider({ children }) {
             if (key?.from_session_id === key?.session_id) {
               recipient_session = mySessions?.find((session) => session?.id === key?.from_session_id)
             } else {
-              const chat = await getChatById(key?.chat_id)
-              if (!chat) return
-
-              const recipient = chat?.members?.find((member) => member?.id !== myUser?.id)
-
-              const recipient_sessions = await getUserSessions(recipient?.id)
-              if (!recipient_sessions) return
-
-              recipient_session = recipient_sessions?.find((session) => session?.id === key?.from_session_id)
+              recipient_session = key?.sender_public_keys
             }
 
             const decrypted = skid.local.decryptKey({ ...key, ciphertext: key?.encrypted_key, cek_wrap_salt: key?.salt }, mySession, {
