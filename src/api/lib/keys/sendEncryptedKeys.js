@@ -1,12 +1,12 @@
 import { API_URL } from '@constants/api'
 import { createSecureStorage } from '@lib/storage'
 
-export default async function (chat_id, recipient, keys) {
+export default async function (keys) {
   try {
     const Storage = await createSecureStorage('user-storage')
     const token = Storage.getString('token')
 
-    const response = await fetch(`${API_URL}/chat/${chat_id}/member/${recipient}/encryption-keys`, {
+    const response = await fetch(`${API_URL}/chats/encryption-keys`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -16,6 +16,7 @@ export default async function (chat_id, recipient, keys) {
     })
 
     if (!response.ok) {
+      console.log(await response?.json())
       return null
     }
 

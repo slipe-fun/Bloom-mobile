@@ -1,6 +1,7 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
 import addKeysToDump from '@api/lib/keys/addKeysToDump'
 import changeChatKey from '@api/lib/keys/changeChatKey'
+import filterEncryptedKeys from '@api/lib/keys/filterEncryptedKeys'
 import getEncryptedKeys from '@api/lib/keys/getEncryptedKeys'
 import sendEncryptedKeys from '@api/lib/keys/sendEncryptedKeys'
 import getMySession from '@api/lib/sessions/getMySession'
@@ -158,6 +159,8 @@ export default function ChatsProvider({ children }) {
             mySessions = await getMySessions()
           }
 
+          const keysForDump = []
+
           for (const key of encrypted_keys) {
             let recipient_session
             if (key?.from_session_id === key?.session_id) {
@@ -177,8 +180,10 @@ export default function ChatsProvider({ children }) {
               await addChatToStorage({ id: key?.chat_id })
             }
             await changeChatKey(key?.chat_id, Buffer.from(decrypted).toString('base64'))
-            await addKeysToDump(mmkv, { id: key?.chat_id, key: Buffer.from(decrypted).toString('base64') })
+            keysForDump.push({ id: key?.chat_id, key: Buffer.from(decrypted).toString('base64') })
           }
+
+          await addKeysToDump(mmkv, keysForDump)
         } catch (error) {
           console.log(error)
         }
@@ -202,80 +207,90 @@ export default function ChatsProvider({ children }) {
           const chats = await getChatsFromStorage(mmkv)
           if (!chats) return
 
-          await Promise.all(
-            mySessions
-              .filter(
-                (session) =>
-                  session?.identity_pub &&
-                  session?.ecdh_pub &&
-                  session?.kyber_pub &&
-                  !encrypted_keys?.find((key) => key?.session_id === session?.id),
+          const allOtherIds = [...new Set(chats.flatMap((chat) => (chat.members || []).filter((m) => m.id !== myUser.id).map((m) => m.id)))]
+
+          const allRecipientSessions = await getUserSessions(allOtherIds)
+
+          const sessionsByUser = new Map()
+          allRecipientSessions.forEach((recipient) => {
+            const validSessions = (recipient.sessions || []).filter((s) => s.identity_pub && s.ecdh_pub && s.kyber_pub)
+            sessionsByUser.set(recipient.user_id, validSessions)
+          })
+
+          const keys = [
+            ...(
+              await Promise.all(
+                mySessions
+                  .filter(
+                    (session) =>
+                      session?.identity_pub &&
+                      session?.ecdh_pub &&
+                      session?.kyber_pub &&
+                      ![encrypted_keys || []]?.find((key) => key?.session_id === session?.id),
+                  )
+                  .map((session) =>
+                    Promise.all(
+                      chats.map(async (chat) => {
+                        const encrypted = skid.local.encryptKey(base64ToUint8Array(chat.key), mySession, {
+                          kyber_public_key: session.kyber_pub,
+                          ecdh_public_key: session.ecdh_pub,
+                          edPublicKey: session.identity_pub,
+                        })
+
+                        return {
+                          chat_id: chat?.id,
+                          recipient: myUser?.id,
+                          session_id: session.id,
+                          encrypted_key: encrypted.ciphertext,
+                          encapsulated_key: encrypted.encapsulated_key,
+                          cek_wrap: encrypted.cek_wrap,
+                          cek_wrap_iv: encrypted.cek_wrap_iv,
+                          salt: encrypted.cek_wrap_salt,
+                          nonce: encrypted.nonce,
+                        }
+                      }),
+                    ),
+                  ),
               )
-              .map((session) =>
-                Promise.all(
-                  chats.map(async (chat) => {
-                    const encrypted = skid.local.encryptKey(base64ToUint8Array(chat.key), mySession, {
-                      kyber_public_key: session.kyber_pub,
-                      ecdh_public_key: session.ecdh_pub,
-                      edPublicKey: session.identity_pub,
-                    })
+            ).flat(),
+            ...(
+              await Promise.all(
+                chats.map(async (chat) => {
+                  const participants = (chat.members || []).filter((m) => m.id !== myUser.id)
 
-                    const key = [
-                      {
-                        session_id: session.id,
-                        encrypted_key: encrypted.ciphertext,
-                        encapsulated_key: encrypted.encapsulated_key,
-                        cek_wrap: encrypted.cek_wrap,
-                        cek_wrap_iv: encrypted.cek_wrap_iv,
-                        salt: encrypted.cek_wrap_salt,
-                        nonce: encrypted.nonce,
-                      },
-                    ]
+                  await Promise.all(
+                    participants.flatMap((participant) => {
+                      const sessions = sessionsByUser.get(participant.id) || []
 
-                    return sendEncryptedKeys(chat.id, myUser.id, key)
-                  }),
-                ),
-              ),
-          )
+                      return sessions.map((session) => {
+                        const encrypted = skid.local.encryptKey(base64ToUint8Array(chat.key), mySession, {
+                          kyber_public_key: session.kyber_pub,
+                          ecdh_public_key: session.ecdh_pub,
+                          edPublicKey: session.identity_pub,
+                        })
 
-          await Promise.all(
-            chats.map(async (chat) => {
-              const otherMember = chat?.members?.filter((m) => m.id !== myUser.id)[0]
-
-              const recipient_sessions = await getUserSessions(otherMember?.id)
-              if (!recipient_sessions) return
-
-              const sessionsToSend = recipient_sessions.filter(
-                (session) => session?.identity_pub && session?.ecdh_pub && session?.kyber_pub,
-              )
-
-              return Promise.all(
-                sessionsToSend.map(async (session) => {
-                  const encrypted = skid.local.encryptKey(base64ToUint8Array(chat.key), mySession, {
-                    kyber_public_key: session.kyber_pub,
-                    ecdh_public_key: session.ecdh_pub,
-                    edPublicKey: session.identity_pub,
-                  })
-
-                  const key = [
-                    {
-                      session_id: session.id,
-                      encrypted_key: encrypted.ciphertext,
-                      encapsulated_key: encrypted.encapsulated_key,
-                      cek_wrap: encrypted.cek_wrap,
-                      cek_wrap_iv: encrypted.cek_wrap_iv,
-                      salt: encrypted.cek_wrap_salt,
-                      nonce: encrypted.nonce,
-                    },
-                  ]
-
-                  return await sendEncryptedKeys(chat.id, otherMember.id, key)
+                        return {
+                          chat_id: chat?.id,
+                          recipient: participant.id,
+                          session_id: session.id,
+                          encrypted_key: encrypted.ciphertext,
+                          encapsulated_key: encrypted.encapsulated_key,
+                          cek_wrap: encrypted.cek_wrap,
+                          cek_wrap_iv: encrypted.cek_wrap_iv,
+                          salt: encrypted.cek_wrap_salt,
+                          nonce: encrypted.nonce,
+                        }
+                      })
+                    }),
+                  )
                 }),
               )
-            }),
-          )
-        } catch (e) {
-          console.error(e)
+            ).flat(),
+          ]
+
+          await sendEncryptedKeys(filterEncryptedKeys(keys))
+        } catch (error) {
+          console.log(error)
         }
       })()
     }
@@ -308,10 +323,10 @@ export default function ChatsProvider({ children }) {
 
             const recipient = chat?.members?.find((member) => member?.id !== myUser?.id)
 
-            const recipient_sessions = await getUserSessions(recipient?.id)
-            if (!recipient_sessions) return
+            const recipient_sessions = await getUserSessions([recipient?.id])
+            if (!recipient_sessions[0]?.sessions) return
 
-            const recipient_session = recipient_sessions?.find((session) => session?.id === message?.from_session_id)
+            const recipient_session = recipient_sessions[0]?.sessions?.find((session) => session?.id === message?.from_session_id)
             if (!recipient_session) return
 
             const encrypted_key = message?.keys?.find((key) => key?.session_id === mySession?.id)

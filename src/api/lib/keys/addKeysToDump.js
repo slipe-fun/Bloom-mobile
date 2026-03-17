@@ -8,36 +8,50 @@ export default async function (mmkv, keys) {
   try {
     const skid = await getSKID()
 
-    const dump = getKeys(mmkv)
+    const dump = getKeys(mmkv) || []
 
-    let newDump = dump
-    const existantChat = dump.find((_keys) => _keys.id === keys.id)
-    if (existantChat) {
-      const existantChatIndex = dump.indexOf(existantChat)
-      newDump[existantChatIndex] = keys
-    } else {
-      newDump = [...newDump, keys]
+    const keysArray = Array.isArray(keys) ? keys : [keys]
+
+    const newDump = [...dump]
+
+    for (const keyItem of keysArray) {
+      if (!keyItem?.id) continue
+
+      const index = newDump.findIndex((k) => k.id === keyItem.id)
+
+      if (index !== -1) {
+        newDump[index] = {
+          ...newDump[index],
+          ...keyItem,
+        }
+      } else {
+        newDump.push(keyItem)
+      }
     }
 
     const password = mmkv.getString('password')
     const salt = mmkv.getString('salt')
     const token = mmkv.getString('token')
 
-    const { ciphertext, nonce } = skid.server.encryptKeys(
-      base64ToUint8Array(password),
-      new TextEncoder().encode(JSON.stringify(newDump.map((chat) => ({ id: chat?.id, key: chat?.key })))),
-    )
+    if (!password || !salt || !token) return false
 
-    return await axios
-      .post(
-        `${API_URL}/chats/keys/private`,
-        { ciphertext, nonce, salt },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-      .then(() => true)
-      .catch(() => false)
+    const payload = newDump
+      .filter((chat) => chat?.id && chat?.key)
+      .map((chat) => ({
+        id: chat.id,
+        key: chat.key,
+      }))
+
+    const { ciphertext, nonce } = skid.server.encryptKeys(base64ToUint8Array(password), new TextEncoder().encode(JSON.stringify(payload)))
+
+    await axios.post(
+      `${API_URL}/chats/keys/private`,
+      { ciphertext, nonce, salt },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
+    return true
   } catch {
     return false
   }

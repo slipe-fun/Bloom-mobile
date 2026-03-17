@@ -15,5 +15,7 @@ export default async function () {
     })
 
     return response.data
-  } catch {}
+  } catch (error) {
+    console.log(error)
+  }
 }
