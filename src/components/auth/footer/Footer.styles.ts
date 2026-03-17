@@ -15,13 +15,4 @@ export const styles = StyleSheet.create((theme) => ({
   partsContainer: {
     flexDirection: 'row',
   },
-  button: {
-    backgroundColor: 'transparent',
-  },
-  buttonBackground: {
-    ...StyleSheet.absoluteFillObject,
-    marginHorizontal: theme.spacing.md,
-    borderRadius: theme.radius.full,
-    borderCurve: 'continuous',
-  },
 }))

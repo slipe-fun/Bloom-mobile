@@ -8,6 +8,8 @@ import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Footer.styles'
 
+const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
+
 export default function AuthFooter() {
   const insets = useInsets()
   const { theme } = useUnistyles()
@@ -15,7 +17,7 @@ export default function AuthFooter() {
   const { index, label, isDisabled, progress, loading, handlePress } = useAuthFooter()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
 
-  const animatedButtonBackgroundStyle = useAnimatedStyle(() => ({
+  const animatedButtonStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1, 2, 3],
@@ -26,7 +28,6 @@ export default function AuthFooter() {
         animatedTheme.value.colors.red,
       ],
     ),
-    transform: [{ scaleX: interpolate(keyboardProgress.value, [0, 1], [1, 1.2]) }],
   }))
 
   const animatedLabelStyle = useAnimatedStyle(() => ({
@@ -42,12 +43,16 @@ export default function AuthFooter() {
     ),
   }))
 
+  const animatedViewStyle = useAnimatedStyle(() => ({
+    paddingHorizontal: interpolate(keyboardProgress.get(), [0, 1], [base.spacing.xxxl, base.spacing.lg]),
+  }))
+
   return (
-    <KeyboardStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={styles.footer}>
+    <AnimatedKeyboardStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={[styles.footer, animatedViewStyle]}>
       <Button
         disabled={isDisabled}
         onPress={handlePress}
-        style={styles.button}
+        style={animatedButtonStyle}
         size="xl"
         elevated={false}
         variant="textIcon"
@@ -61,7 +66,6 @@ export default function AuthFooter() {
           ) : null
         }
       >
-        <Animated.View style={[styles.buttonBackground, animatedButtonBackgroundStyle]} />
         <Animated.View layout={layoutAnimationSpringy} style={styles.partsContainer}>
           {label.split(' ').map((part) => (
             <Animated.Text
@@ -76,6 +80,6 @@ export default function AuthFooter() {
           ))}
         </Animated.View>
       </Button>
-    </KeyboardStickyView>
+    </AnimatedKeyboardStickyView>
   )
 }

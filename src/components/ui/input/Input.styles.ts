@@ -11,7 +11,7 @@ export const styles = StyleSheet.create((theme) => ({
   inputWrapper: ({ height, disabled, elevated }: InputStyleProps) => ({
     width: '100%',
     height,
-    backgroundColor: theme.colors.pressable,
+    backgroundColor: elevated ? theme.colors.pressable : theme.colors.foreground,
     borderRadius: theme.radius.full,
     borderCurve: 'continuous',
     boxShadow: elevated ? `${theme.shadows.pressable} ${theme.colors.shadow}` : undefined,
