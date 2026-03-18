@@ -1,11 +1,11 @@
 import { quickSpring } from '@constants/easings'
-import { Platform } from 'react-native'
+import { staticColors } from '@design/colors'
 import { interpolate } from 'react-native-reanimated'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
 import { UnistylesRuntime } from 'react-native-unistyles'
+import { TOP_OFFSET } from './transition'
 
-const TOP_OFFSET = Platform.OS === 'ios' ? 12 : 16
-const SHEET_RADIUS = 38
+export const SHEET_RADIUS = 38
 
 export const sheetTransition = (gestures: boolean = true): BlankStackNavigationOptions => {
   const backgroundColor = UnistylesRuntime.getTheme().colors.background
@@ -14,19 +14,16 @@ export const sheetTransition = (gestures: boolean = true): BlankStackNavigationO
     experimental_enableHighRefreshRate: true,
     gestureEnabled: gestures,
     gestureDirection: ['vertical'],
-    screenStyleInterpolator: ({ layouts: { screen }, progress, previous, insets }) => {
+    screenStyleInterpolator: ({ layouts: { screen }, progress, previous, insets, active }) => {
       'worklet'
 
       const sheetHeight = screen.height * 0.925
 
       const translateY = interpolate(progress, [0, 1], [screen.height, screen.height - sheetHeight], 'clamp')
-
       const scale = interpolate(progress, [1, 2], [1, 0.875], 'clamp')
-      const opacity = interpolate(progress, [1, 2], [1, 0.5], 'clamp')
+      const opacity = interpolate(progress, [0, 1, 2], [0, 0.5, 0], 'clamp')
 
-      const borderRadius = interpolate(progress, [1, 2], [insets.top - TOP_OFFSET, SHEET_RADIUS], 'clamp')
-
-      const radius = previous ? SHEET_RADIUS : borderRadius
+      const radius = active.progress === 0 ? 0 : previous ? SHEET_RADIUS : insets.top - TOP_OFFSET
       const transform = [{ scale }]
       // @ts-expect-error
       if (previous) transform.unshift({ translateY })
@@ -35,14 +32,15 @@ export const sheetTransition = (gestures: boolean = true): BlankStackNavigationO
         contentStyle: {
           transform,
           overflow: 'hidden',
-          opacity,
-          borderTopLeftRadius: radius,
-          borderTopRightRadius: radius,
+          borderRadius: radius,
           borderCurve: 'continuous',
-          paddingBottom: previous ? screen.height - sheetHeight : 0,
           backgroundColor,
+          paddingBottom: previous ? screen.height - sheetHeight : 0,
         },
-        overlayStyle: { opacity: 0 },
+        overlayStyle: {
+          opacity,
+          backgroundColor: staticColors.black,
+        },
       }
     },
     transitionSpec: {

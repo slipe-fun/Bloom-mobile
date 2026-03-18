@@ -5,7 +5,7 @@ import { interpolate } from 'react-native-reanimated'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
 import { UnistylesRuntime } from 'react-native-unistyles'
 
-const TOP_OFFSET = Platform.OS === 'ios' ? 6 : 10
+export const TOP_OFFSET = Platform.OS === 'ios' ? 5 : 9
 
 export const screenTransition = (gestures: boolean = true): BlankStackNavigationOptions => {
   const color = UnistylesRuntime.getTheme().colors.background

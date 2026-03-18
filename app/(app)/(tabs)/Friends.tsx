@@ -1,3 +1,4 @@
+import { useInsets } from '@hooks'
 import { Blur, Canvas, Fill, Group, Image, Paint, Shader, Skia, useImage } from '@shopify/react-native-skia'
 import { Dimensions, StyleSheet, View } from 'react-native'
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useDerivedValue, useSharedValue } from 'react-native-reanimated'
@@ -63,6 +64,7 @@ vec4 main(vec2 pos) {
 export default function TabFriends() {
   const scrollY = useSharedValue(0)
   const image = useImage('https://i.pinimg.com/736x/f8/40/56/f840564f611c2ed373ea289e18ec2113.jpg')
+  const insets = useInsets()
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y
@@ -126,6 +128,8 @@ export default function TabFriends() {
           )}
         </Canvas>
       </View>
+
+      <View style={{ width: '100%', height: insets.realTop, backgroundColor: 'red' }} />
 
       <Animated.ScrollView
         onScroll={scrollHandler}
