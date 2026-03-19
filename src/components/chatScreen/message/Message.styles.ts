@@ -1,28 +1,26 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
-  message: (isMe: boolean, mountFinished: boolean) => ({
+  message: (isMe: boolean) => ({
     maxWidth: '82%',
     borderRadius: theme.radius.lg,
     borderCurve: 'continuous',
     transformOrigin: 'right center',
     zIndex: 10,
     minHeight: 40,
-    backgroundColor: mountFinished ? (isMe ? theme.colors.primary : theme.colors.foreground) : 'transparent',
+    backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
   }),
-  messageWrapper: (isMe: boolean, marginBottom) => {
-    return {
-      gap: theme.spacing.md,
-      position: 'relative',
-      justifyContent: 'center',
-      marginBottom,
-      alignItems: isMe ? 'flex-end' : 'flex-start',
-    }
-  },
+  messageWrapper: (isMe: boolean, marginBottom) => ({
+    gap: theme.spacing.md,
+    position: 'relative',
+    justifyContent: 'center',
+    marginBottom,
+    alignItems: isMe ? 'flex-end' : 'flex-start',
+  }),
   messageContent: {
-    paddingHorizontal: theme.spacing.lg - 2,
-    padding: theme.spacing.sm + 2,
-    minHeight: 40,
+    paddingHorizontal: theme.spacing.lg,
+    padding: theme.spacing.md - 1,
+    minHeight: 42,
     flexDirection: 'row',
     width: '100%',
   },
@@ -37,9 +35,9 @@ export const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fontFamily.medium,
     position: 'absolute',
     right: theme.spacing.md + 2,
-    bottom: theme.spacing.sm - 2,
+    bottom: theme.spacing.sm,
     color: isMe ? theme.colors.white : theme.colors.text,
-    opacity: theme.opacity.contentText,
+    opacity: theme.opacity.secondaryText,
   }),
   statusCanvas: (height: number) => ({
     height,
