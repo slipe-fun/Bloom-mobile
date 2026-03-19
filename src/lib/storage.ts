@@ -15,20 +15,31 @@ const getOrCreateKey = async (service: string): Promise<string> => {
   if (existing) return existing.password
 
   const key = genKey()
-  await Keychain.setGenericPassword('mmkv', key, {
+  const success = await Keychain.setGenericPassword('mmkv', key, {
     service,
     accessible: Platform.OS === 'ios' ? Keychain.ACCESSIBLE.WHEN_UNLOCKED : undefined,
     storage: Platform.OS === 'android' ? Keychain.STORAGE_TYPE.AES_GCM_NO_AUTH : undefined,
   })
-  return key
-}
 
-export const createSecureStorage = async (id: string): Promise<MMKV> => {
-  const service = `${SERVICE_PREFIX}.${id}.${Platform.OS}`
-  const key = await getOrCreateKey(service)
-  return createMMKV({ id, encryptionKey: key })
+  if (!success) {
+    throw new Error('Keychain is not supported or failed to save the key')
+  }
+
+  return key
 }
 
 export const createStorage = (id: string): MMKV => {
   return createMMKV({ id })
+}
+
+export const createSecureStorage = async (id: string): Promise<MMKV> => {
+  const service = `${SERVICE_PREFIX}.${id}.${Platform.OS}`
+
+  try {
+    const key = await getOrCreateKey(service)
+    return createMMKV({ id, encryptionKey: key })
+  } catch (error) {
+    console.warn(`[Storage] Secure storage initialization failed for id: "${id}". Falling back to unencrypted storage.`, error)
+    return createStorage(id)
+  }
 }
