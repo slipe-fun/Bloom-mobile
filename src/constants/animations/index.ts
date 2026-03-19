@@ -144,7 +144,7 @@ export const charAnimationOut = (springConfig: WithSpringConfig = quickSpring, s
       },
       animations: {
         opacity: withSpring(0, springConfig),
-        transform: [{ scale: scale ? withSpring(0.5, springConfig) : 1 }, { translateY: withSpring(50, springConfig) }],
+        transform: [{ scale: scale ? withSpring(0.5, springConfig) : 1 }, { translateY: withSpring('100%', springConfig) }],
       },
     }
   }

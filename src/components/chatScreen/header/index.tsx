@@ -37,7 +37,7 @@ export default function Header({ chat }: HeaderProps): React.ReactNode {
   return (
     <Animated.View style={[styles.header, { paddingTop: insets.top }, animatedViewStyles]}>
       <GradientBlur direction="top-to-bottom" />
-      <Button blur variant="icon" onPress={() => navigation.goBack()}>
+      <Button variant="icon" onPress={() => navigation.goBack()}>
         <Icon icon="chevron.left" color={theme.colors.text} />
       </Button>
       <View style={styles.titleWrapper}>

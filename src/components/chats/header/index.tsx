@@ -1,13 +1,14 @@
 import { useWebSocket } from '@api/providers/WebSocketContext'
 import { Button, GradientBlur, Icon } from '@components/ui'
-import { charAnimationIn, charAnimationOut, quickSpring, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
+import { getFadeIn, getFadeOut, quickSpring, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useInsets } from '@hooks'
 import useChatsStore from '@stores/chats'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './header.styles'
 import Title from './Title'
 
@@ -15,16 +16,22 @@ export default function Header() {
   const ws = useWebSocket()
   const insets = useInsets()
   const { theme } = useUnistyles()
+  const animatedTheme = useAnimatedTheme()
   const [status, setStatus] = useState('connecting')
   const { setHeaderHeight, setEdit, edit, clearSelectedChats } = useChatsStore()
   const router = useRouter()
+  const animation = useSharedValue(1)
 
   const handlePresentModalPress = useCallback(() => {
     router.navigate('/NewMessage')
   }, [])
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
-    opacity: withSpring(edit ? 0 : 1, quickSpring),
+    opacity: animation.get(),
+  }))
+
+  const animatedEditButtonStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(animation.get(), [1, 0], [animatedTheme.value.colors.pressable, animatedTheme.value.colors.primary]),
   }))
 
   const editPress = () => {
@@ -38,23 +45,21 @@ export default function Header() {
     } else {
       setStatus('connecting')
     }
-    // setInterval(() => {
-    //   setStatus((prev) => (prev === 'connected' ? 'connecting' : 'connected'))
-    // }, 3000)
   }, [ws])
+
+  useEffect(() => {
+    animation.set(withSpring(edit ? 0 : 1, quickSpring))
+  }, [edit])
 
   return (
     <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)} style={[styles.header, { paddingTop: insets.top }]}>
       <GradientBlur direction="top-to-bottom" />
       <View style={[styles.topHeader]}>
-        <Button onPress={editPress} variant="icon">
+        <Button style={animatedEditButtonStyle} onPress={editPress} variant="icon">
           {edit ? (
-            <>
-              <Animated.View style={styles.buttonBackground} entering={zoomAnimationIn} exiting={zoomAnimationOut} />
-              <Animated.View entering={charAnimationIn()} exiting={charAnimationOut()}>
-                <Icon icon="checkmark" color={theme.colors.white} />
-              </Animated.View>
-            </>
+            <Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
+              <Icon icon="checkmark" color={theme.colors.white} />
+            </Animated.View>
           ) : (
             <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut}>
               <Icon icon="pencil" color={theme.colors.text} />
