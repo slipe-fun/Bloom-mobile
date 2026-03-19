@@ -30,16 +30,17 @@ export const styles = StyleSheet.create((theme) => ({
     overflow: 'hidden',
     borderCurve: 'continuous',
   },
-  indicator: {
+  indicator: (width) => ({
     position: 'absolute',
     top: theme.spacing.xs,
+    width,
     left: theme.spacing.xs,
     transformOrigin: 'center',
     borderCurve: 'continuous',
     height: 51.5 - theme.spacing.xs * 2,
     backgroundColor: theme.colors.foregroundTransparent,
     borderRadius: theme.radius.full,
-  },
+  }),
   tabBarItem: {
     alignItems: 'center',
     justifyContent: 'center',

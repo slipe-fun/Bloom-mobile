@@ -1,7 +1,6 @@
 import { Icon, Input } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimation } from '@constants/animations'
 import useTabBarStore from '@stores/tabBar'
-import type React from 'react'
 import type { Ref } from 'react'
 import type { TextInput } from 'react-native'
 import Animated from 'react-native-reanimated'
@@ -13,8 +12,11 @@ type TabBarSearchInputProps = {
   ref: Ref<TextInput>
 }
 
-export default function TabBarSearchInput({ ref }: TabBarSearchInputProps): React.JSX.Element {
-  const { searchValue, setSearchValue, setSearchFocused } = useTabBarStore()
+export default function TabBarSearchInput({ ref }: TabBarSearchInputProps) {
+  const searchValue = useTabBarStore((state) => state.searchValue)
+  const setSearchValue = useTabBarStore((state) => state.setSearchValue)
+  const setSearchFocused = useTabBarStore((state) => state.setSearchFocused)
+
   const { theme } = useUnistyles()
 
   return (

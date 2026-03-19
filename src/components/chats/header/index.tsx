@@ -3,7 +3,6 @@ import { Button, GradientBlur, Icon } from '@components/ui'
 import { charAnimationIn, charAnimationOut, quickSpring, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useInsets } from '@hooks'
 import useChatsStore from '@stores/chats'
-import useTabBarStore from '@stores/tabBar'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
@@ -18,7 +17,6 @@ export default function Header() {
   const { theme } = useUnistyles()
   const [status, setStatus] = useState('connecting')
   const { setHeaderHeight, setEdit, edit, clearSelectedChats } = useChatsStore()
-  const setType = useTabBarStore((state) => state.setType)
   const router = useRouter()
 
   const handlePresentModalPress = useCallback(() => {
@@ -32,7 +30,6 @@ export default function Header() {
   const editPress = () => {
     setEdit(!edit)
     if (edit) clearSelectedChats()
-    setType(edit ? 'default' : 'edit')
   }
 
   useEffect(() => {

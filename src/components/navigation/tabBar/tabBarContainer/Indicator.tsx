@@ -2,7 +2,6 @@ import { springy } from '@constants/animations'
 import { useNavigationState } from '@react-navigation/native'
 import useTabBarStore from '@stores/tabBar'
 import { useEffect } from 'react'
-import type { ViewStyle } from 'react-native'
 import Animated, { type SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './TabBarContainer.styles'
 
@@ -17,12 +16,9 @@ export default function TabBarIndicator({ x }: TabBarIndicatorProps) {
   const index = state.index
   const tabsCount = state.routes.map((s) => s.name)?.length
 
-  const animatedStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      transform: [{ translateX: x.get() }],
-      width: tabBarWidth / 4 + 4,
-    }),
-  )
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: x.get() }],
+  }))
 
   useEffect(() => {
     if (tabsCount <= 0) return
@@ -32,5 +28,5 @@ export default function TabBarIndicator({ x }: TabBarIndicatorProps) {
     x.set(withSpring(target, springy))
   }, [index, tabsCount, tabBarWidth])
 
-  return <Animated.View style={[styles.indicator, animatedStyle]} />
+  return <Animated.View style={[styles.indicator(tabBarWidth / 4 + 4), animatedStyle]} />
 }

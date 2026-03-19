@@ -4,7 +4,7 @@ import { TAB_ICONS } from '@constants/tabBar'
 import type { TabValue } from '@interfaces'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect } from 'react'
-import { Pressable, type ViewStyle } from 'react-native'
+import { Pressable } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
 import Animated, { interpolateColor, useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
@@ -37,18 +37,16 @@ export default function TabBarItem({ route, focused }: TabBarItemProps) {
     }
   }, [focused, route])
 
-  const animatedStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      opacity: opacity.get(),
-    }),
-  )
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.get(),
+  }))
 
   const animatedProps = useAnimatedProps(() => ({
     fill: interpolateColor(color.value, [0, 1], [animatedTheme.value.colors.text, animatedTheme.value.colors.primary]),
   }))
 
   useEffect(() => {
-    color.value = withSpring(focused ? 1 : 0, quickSpring)
+    color.set(withSpring(focused ? 1 : 0, quickSpring))
   }, [focused])
 
   return (

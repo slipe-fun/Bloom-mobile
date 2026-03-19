@@ -7,7 +7,6 @@ import { useEffect, useMemo } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
-import TabBarActionButtonDelete from './deleteButton'
 import { styles } from './TabBar.styles'
 import TabBarContainer from './tabBarContainer'
 
@@ -16,7 +15,8 @@ export const TAB_BAR_HEIGHT = 54
 const AnimatedStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
 export default function TabBar() {
-  const { setHeight, setWidth, type } = useTabBarStore()
+  const setHeight = useTabBarStore((state) => state.setHeight)
+  const setWidth = useTabBarStore((state) => state.setWidth)
   const { width } = useWindowDimensions()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const insets = useInsets()
@@ -40,7 +40,7 @@ export default function TabBar() {
       style={[styles.tabBarContainer, animatedViewStyles]}
     >
       <GradientBlur keyboard />
-      {type === 'default' ? <TabBarContainer /> : <TabBarActionButtonDelete />}
+      <TabBarContainer />
     </AnimatedStickyView>
   )
 }
