@@ -18,7 +18,7 @@ export default function MessageBubble({ message, shouldAnimate }: MessageBubbleP
       <View style={styles.messageContent}>
         <Text style={[styles.text(isMe)]}>
           {message?.content}
-          <Text>{'         '}</Text>
+          <View style={styles.timeSpacer} />
         </Text>
         <Animated.Text style={[styles.secondaryText(isMe)]}>{formatSentTime(message?.date)}</Animated.Text>
       </View>

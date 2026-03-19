@@ -4,10 +4,10 @@ export const styles = StyleSheet.create((theme) => ({
   message: (isMe: boolean) => ({
     maxWidth: '82%',
     borderRadius: theme.radius.lg,
+    alignSelf: isMe ? 'flex-end' : 'flex-start',
     borderCurve: 'continuous',
-    transformOrigin: 'right center',
     zIndex: 10,
-    minHeight: 40,
+    minHeight: 42,
     backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
   }),
   messageWrapper: (isMe: boolean, marginBottom) => ({
@@ -22,12 +22,11 @@ export const styles = StyleSheet.create((theme) => ({
     padding: theme.spacing.md - 1,
     minHeight: 42,
     flexDirection: 'row',
-    width: '100%',
+    position: 'relative',
   },
   text: (isMe: boolean) => ({
     fontSize: theme.fontSize.md,
     fontFamily: theme.fontFamily.regular,
-    textAlignVertical: 'center',
     color: isMe ? theme.colors.white : theme.colors.text,
   }),
   secondaryText: (isMe: boolean) => ({
@@ -36,9 +35,14 @@ export const styles = StyleSheet.create((theme) => ({
     position: 'absolute',
     right: theme.spacing.md + 2,
     bottom: theme.spacing.sm,
-    color: isMe ? theme.colors.white : theme.colors.text,
-    opacity: theme.opacity.secondaryText,
+    color: isMe ? theme.colors.white : theme.colors.secondaryText,
+    opacity: isMe ? theme.opacity.contentText : 1,
   }),
+  timeSpacer: {
+    width: 38,
+    height: 14,
+    marginRight: -theme.spacing.lg,
+  },
   statusCanvas: (height: number) => ({
     height,
     left: 0,
