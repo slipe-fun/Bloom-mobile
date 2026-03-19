@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export default function TabExplore() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hello :)</Text>
+      <Text style={styles.text}>In progress :)</Text>
     </View>
   )
 }
@@ -18,6 +18,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   text: {
     fontSize: theme.fontSize.xl,
+    fontFamily: theme.fontFamily.bold,
     color: theme.colors.text,
   },
 }))

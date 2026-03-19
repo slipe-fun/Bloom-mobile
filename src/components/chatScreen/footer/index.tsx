@@ -34,7 +34,7 @@ export default function Footer({ onSend, setFooterHeight, footerHeight, listRef 
       const newHeight = event.nativeEvent.layout.height
 
       if (newHeight !== footerHeight) {
-        setFooterHeight(newHeight)
+        setFooterHeight(newHeight + insets.bottom)
       }
     },
     [setFooterHeight],

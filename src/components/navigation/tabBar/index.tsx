@@ -1,12 +1,12 @@
 import { GradientBlur } from '@components/ui'
 import { layoutAnimation } from '@constants/animations'
+import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import useTabBarStore from '@stores/tabBar'
 import { useEffect, useMemo } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import TabBarActionButtonDelete from './deleteButton'
 import { styles } from './TabBar.styles'
 import TabBarContainer from './tabBarContainer'
@@ -17,16 +17,15 @@ const AnimatedStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
 export default function TabBar() {
   const { setHeight, setWidth, type } = useTabBarStore()
-  const { theme } = useUnistyles()
   const { width } = useWindowDimensions()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const insets = useInsets()
 
-  const tabBarHeight = useMemo(() => TAB_BAR_HEIGHT + theme.spacing.lg + insets.bottom, [theme, insets.bottom])
-  const tabBarWidth = useMemo(() => width - theme.spacing.xxl * 2 - theme.spacing.md - TAB_BAR_HEIGHT, [width, theme])
+  const tabBarHeight = useMemo(() => TAB_BAR_HEIGHT + base.spacing.lg + insets.bottom, [base, insets.bottom])
+  const tabBarWidth = useMemo(() => width - base.spacing.xxl * 2 - base.spacing.md - TAB_BAR_HEIGHT, [width, base])
 
   const animatedViewStyles = useAnimatedStyle(() => ({
-    paddingHorizontal: keyboardProgress.get() > 0.5 ? theme.spacing.lg : theme.spacing.xxl,
+    paddingHorizontal: keyboardProgress.get() > 0.5 ? base.spacing.lg : base.spacing.xxl,
   }))
 
   useEffect(() => {
@@ -37,7 +36,7 @@ export default function TabBar() {
   return (
     <AnimatedStickyView
       layout={layoutAnimation}
-      offset={{ opened: -theme.spacing.lg, closed: -insets.bottom }}
+      offset={{ opened: -base.spacing.lg, closed: -insets.bottom }}
       style={[styles.tabBarContainer, animatedViewStyles]}
     >
       <GradientBlur keyboard />
