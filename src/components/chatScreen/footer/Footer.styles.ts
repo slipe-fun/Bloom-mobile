@@ -10,13 +10,4 @@ export const styles = StyleSheet.create((theme) => ({
     bottom: 0,
     gap: theme.spacing.md,
   },
-  buttonBackground: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radius.full,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    top: 0,
-  },
 }))

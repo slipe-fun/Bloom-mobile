@@ -1,8 +1,9 @@
 import { Button, Icon } from '@components/ui'
-import { paperplaneAnimationIn, paperplaneAnimationOut, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
-import Animated from 'react-native-reanimated'
+import { getFadeIn, getFadeOut, paperplaneAnimationIn, paperplaneAnimationOut, quickSpring } from '@constants/animations'
+import { useEffect } from 'react'
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { styles } from './Footer.styles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 
 interface SendButtonProps {
   handleSend: () => void
@@ -11,18 +12,25 @@ interface SendButtonProps {
 
 export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
   const { theme } = useUnistyles()
+  const animatedTheme = useAnimatedTheme()
+  const color = useSharedValue(1)
+
+  const animatedButtonStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(color.get(), [1, 0], [animatedTheme.value.colors.pressable, animatedTheme.value.colors.primary]),
+  }))
+
+  useEffect(() => {
+    color.set(withSpring(hasValue ? 0 : 1, quickSpring))
+  }, [hasValue])
 
   return (
-    <Button onPress={handleSend} variant="icon">
+    <Button style={animatedButtonStyle} onPress={handleSend} variant="icon">
       {hasValue ? (
-        <>
-          <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut} style={styles.buttonBackground} />
-          <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
-            <Icon icon="paperplane" color={theme.colors.white} />
-          </Animated.View>
-        </>
+        <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
+          <Icon icon="paperplane" color={theme.colors.white} />
+        </Animated.View>
       ) : (
-        <Animated.View key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
+        <Animated.View key="waveform" entering={getFadeIn()} exiting={getFadeOut()}>
           <Icon icon="waveform" color={theme.colors.text} />
         </Animated.View>
       )}

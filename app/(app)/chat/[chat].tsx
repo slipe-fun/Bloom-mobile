@@ -9,7 +9,7 @@ import { FlashList, type FlashListRef } from '@shopify/flash-list'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useRef, useState } from 'react'
 import { View } from 'react-native'
-import { KeyboardChatScrollView } from 'react-native-keyboard-controller'
+import { KeyboardChatScrollView, type KeyboardChatScrollViewProps } from 'react-native-keyboard-controller'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Chat() {
@@ -21,7 +21,6 @@ export default function Chat() {
   const { messages, seenID, addMessage, nextPage, _chat } = useChatController({ chat, listRef: listRef.current })
 
   const headerHeight = insets.top + 44 + base.spacing.md
-  const keyboardOffset = { closed: -insets.bottom + 16, opened: base.spacing.sm - 2 }
 
   const renderItem = useCallback(
     ({ item }: { item: MessageType }) => {
@@ -38,11 +37,11 @@ export default function Chat() {
   )
 
   const renderScrollComponent = useCallback(
-    (props) => (
+    (props: KeyboardChatScrollViewProps) => (
       <KeyboardChatScrollView
         contentInsetAdjustmentBehavior="never"
         keyboardDismissMode="on-drag"
-        offset={30}
+        offset={base.spacing.lg}
         automaticallyAdjustContentInsets={false}
         keyboardLiftBehavior="always"
         {...props}
@@ -67,6 +66,7 @@ export default function Chat() {
       {messages.length > 0 && footerHeight && (
         <FlashList
           data={messages}
+          ref={listRef}
           renderItem={renderItem}
           onStartReachedThreshold={0.5}
           maintainVisibleContentPosition={{
@@ -97,7 +97,6 @@ const styles = StyleSheet.create((theme) => ({
   listContent: (paddingBottom: number, paddingTop: number) => ({
     paddingHorizontal: theme.spacing.lg,
     paddingBottom,
-    gap: theme.spacing.sm,
     paddingTop: paddingTop + theme.spacing.md,
   }),
 }))
