@@ -4,7 +4,7 @@ import { type BlurTint, BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
 import { useMemo } from 'react'
-import { Platform, type StyleProp, type ViewStyle } from 'react-native'
+import { Easing, Platform, type StyleProp, type ViewStyle } from 'react-native'
 import { easeGradient } from 'react-native-easing-gradient'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -41,13 +41,27 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       easeGradient({
         colorStops: {
           0: { color: theme.colors.gradientBlurEnd },
-          0.5: { color: theme.colors.gradientBlurStart },
-          1: { color: theme.colors.gradientBlurMiddle },
+          0.4: { color: theme.colors.gradientBlurMiddle },
+          1: { color: theme.colors.gradientBlurStart },
         },
+        easing: Easing.bezier(0.42, 0, 0.58, 1),
+        extraColorStopsPerTransition: 15,
       }),
     [theme],
   )
 
+  const { colors: dd, locations: ddd } = useMemo(
+    () =>
+      easeGradient({
+        colorStops: {
+          0: { color: theme.colors.gradientBlurEnd },
+          0.5: { color: theme.colors.gradientBlurStart },
+        },
+        easing: Easing.bezier(0.42, 0, 0.58, 1),
+        extraColorStopsPerTransition: 15,
+      }),
+    [theme],
+  )
   return (
     <>
       {Platform.OS !== 'android' && (
@@ -58,11 +72,11 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
             <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
           }
         >
-          <BlurView style={StyleSheet.absoluteFill} intensity={30} tint={tint} />
+          <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
         </MaskedView>
       )}
 
-      <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={gradientStyles} />
+      <LinearGradient start={start} end={end} locations={ddd as any} colors={dd as any} style={gradientStyles} />
     </>
   )
 }

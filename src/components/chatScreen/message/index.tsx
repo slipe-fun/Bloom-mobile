@@ -17,7 +17,7 @@ export default function Message({ message, seen, marginBottom, shouldAnimate }: 
       {/* {!mountFinished && shouldAnimate && (
         <StatusBubble width={width} height={height} setMountFinished={setMountFinished} isActive={shouldAnimate} />
       )} */}
-      <MessageBubble message={message} shouldAnimate={shouldAnimate} />
+      <MessageBubble message={message} seen={seen} shouldAnimate={shouldAnimate} />
     </Pressable>
   )
 }

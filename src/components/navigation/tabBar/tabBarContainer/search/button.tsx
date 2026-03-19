@@ -33,22 +33,20 @@ export default function TabBarButton({ inputRef }) {
       <Icon icon="x" color={theme.colors.text} size={26} />
     </Button>
   ) : !search ? (
-    <LayoutAnimationConfig skipEntering skipExiting>
-      <Button
-        style={{ width: TAB_BAR_HEIGHT, height: TAB_BAR_HEIGHT }}
-        variant="icon"
-        key="tabBarSearchButtonMain"
-        exiting={zoomAnimationOut}
-        layout={layoutAnimation}
-        entering={zoomAnimationIn}
-        onPress={() => (chatsTab ? setSearch(!search) : {})}
-      >
-        <LayoutAnimationConfig skipEntering skipExiting>
-          <Animated.View key="searchButton" entering={getFadeIn()} exiting={getFadeOut()}>
-            <Icon icon="magnifyingglass" color={theme.colors.text} size={30} />
-          </Animated.View>
-        </LayoutAnimationConfig>
-      </Button>
-    </LayoutAnimationConfig>
+    <Button
+      style={{ width: TAB_BAR_HEIGHT, height: TAB_BAR_HEIGHT }}
+      variant="icon"
+      key="tabBarSearchButtonMain"
+      exiting={zoomAnimationOut}
+      layout={layoutAnimation}
+      entering={zoomAnimationIn}
+      onPress={() => (chatsTab ? setSearch(!search) : {})}
+    >
+      <LayoutAnimationConfig skipEntering skipExiting>
+        <Animated.View key="searchButton" entering={getFadeIn()} exiting={getFadeOut()}>
+          <Icon icon="magnifyingglass" color={theme.colors.text} size={30} />
+        </Animated.View>
+      </LayoutAnimationConfig>
+    </Button>
   ) : null
 }

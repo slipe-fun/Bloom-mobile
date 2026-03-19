@@ -1,20 +1,29 @@
-import { messageAnimationIn } from '@constants/animations'
+import { messageAnimationIn, springy } from '@constants/animations'
 import type { Message } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
+import { useEffect } from 'react'
 import { Text, View } from 'react-native'
-import Animated from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { styles } from './Message.styles'
 
 interface MessageBubbleProps {
   message: Message | null
   shouldAnimate: boolean
+  seen: boolean
 }
 
-export default function MessageBubble({ message, shouldAnimate }: MessageBubbleProps) {
+export default function MessageBubble({ message, seen, shouldAnimate }: MessageBubbleProps) {
   const isMe: boolean = message?.isMe
+  const translateX = useSharedValue(0)
+
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ translateX: translateX.get() }] }))
+
+  useEffect(() => {
+    translateX.set(isMe ? withSpring(seen ? 0 : -12, springy) : 0)
+  }, [seen, message.id])
 
   return (
-    <Animated.View entering={shouldAnimate ? messageAnimationIn : null} style={[styles.message(isMe)]}>
+    <Animated.View entering={shouldAnimate ? messageAnimationIn : null} style={[styles.message(isMe), animatedStyle]}>
       <View style={styles.messageContent}>
         <Text style={[styles.text(isMe)]}>
           {message?.content}
