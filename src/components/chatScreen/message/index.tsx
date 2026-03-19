@@ -14,9 +14,7 @@ interface MessageProps {
 export default function Message({ message, seen, marginBottom, shouldAnimate }: MessageProps) {
   return (
     <Pressable style={[styles.messageWrapper(message?.isMe, marginBottom)]}>
-      {/* {!mountFinished && shouldAnimate && (
-        <StatusBubble width={width} height={height} setMountFinished={setMountFinished} isActive={shouldAnimate} />
-      )} */}
+      <StatusBubble isMe={message?.isMe} seen={seen} />
       <MessageBubble message={message} seen={seen} shouldAnimate={shouldAnimate} />
     </Pressable>
   )

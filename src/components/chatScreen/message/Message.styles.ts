@@ -51,4 +51,13 @@ export const styles = StyleSheet.create((theme) => ({
     marginRight: -16,
     position: 'absolute',
   }),
+  statusBubble: (isMe: boolean) => ({
+    backgroundColor: isMe ? theme.colors.primary : theme.colors.foreground,
+    borderRadius: theme.radius.full,
+    width: 8,
+    right: -6,
+    height: 8,
+    position: 'absolute',
+    borderCurve: 'continuous',
+  }),
 }))
