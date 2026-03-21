@@ -69,7 +69,6 @@ export default async function createChat(recipient) {
 
   if (keys.length > 0) {
     const add_chat_keys = await sendEncryptedKeys(filterEncryptedKeys(keys))
-    console.log(3, '|', add_chat_keys?.length)
     if (!add_chat_keys) return
   }
 

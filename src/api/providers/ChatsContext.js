@@ -43,7 +43,7 @@ export default function ChatsProvider({ children }) {
     }
   }
 
-  async function decryptMessage(_chat, message) {
+  async function decryptMessage(message) {
     const skid = await getSKID()
     // get chat from mmkv storage
     const chat = await getChatFromStorage(message?.chat_id)
@@ -82,7 +82,7 @@ export default function ChatsProvider({ children }) {
         if (msg) {
           if (isEncrypted) {
             try {
-              decryptedLastMessage = await decryptMessage(chat, msg)
+              decryptedLastMessage = await decryptMessage(msg)
             } catch (e) {
               console.warn('Decryption failed', e)
             }
@@ -144,6 +144,43 @@ export default function ChatsProvider({ children }) {
       })()
     }
   }, [ws])
+
+  useEffect(() => {
+    if (ws?.readyState === WebSocket?.OPEN) {
+      ;(async () => {
+        const lastReadMessages = chats?.map((chat) => chat?.last_read_message).filter(Boolean)
+
+        if (lastReadMessages?.length > 0) {
+          await database.write(async () => {
+            const collection = database.get('messages')
+
+            for (const message of lastReadMessages) {
+              const existing = await collection.query(Q.where('server_id', message?.id)).fetch()
+
+              if (existing[0]) {
+                await existing[0].update((m) => {
+                  m.seen = new Date(message?.seen)
+                })
+              } else {
+                const decryptedMessage = decryptMessage(message)
+
+                await collection.create((m) => {
+                  m.serverId = decryptedMessage?.id
+                  m.chatId = decryptedMessage.chat_id
+                  m.content = decryptedMessage.content
+                  m.authorId = decryptedMessage.from_id
+                  m.date = new Date(decryptedMessage.date)
+                  m.seen = new Date(message?.seen)
+                  m.nonce = decryptedMessage.nonce
+                  m.replyToId = decryptedMessage?.reply_to?.id
+                })
+              }
+            }
+          })
+        }
+      })()
+    }
+  }, [chats, ws])
 
   useEffect(() => {
     if (ws?.readyState === WebSocket?.OPEN) {
