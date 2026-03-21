@@ -78,7 +78,7 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
         </Animated.View>
         <Animated.View style={[styles.content, animatedShiftStyle]}>
           <View style={styles.headerRow}>
-            <Text style={styles.name}>{recipient?.username}</Text>
+            <Text style={styles.name}>{recipient?.display_name || recipient?.username}</Text>
 
             <Animated.View style={[styles.metaRow, animatedMetaRowStyle]}>
               <Animated.View layout={layoutAnimationSpringy} style={styles.charStack}>
