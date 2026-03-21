@@ -1,8 +1,7 @@
+import { useUser } from '@api/providers/UserContext'
 import { Button, Icon } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
-import type { Message } from '@interfaces'
-import getChatFromStorage from '@lib/getChatFromStorage'
-import { createSecureStorage } from '@lib/storage'
+import type { Member, Message } from '@interfaces'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
@@ -14,20 +13,20 @@ type ReplyBlockProps = {
   message: Message
   onCancel?: () => void
   isMe?: boolean
+  recipient: Member
 }
 
 const AnimatedButton = Animated.createAnimatedComponent(Button)
 
-export default function ReplyBlock({ message, onCancel, isMe }: ReplyBlockProps): React.JSX.Element {
+export default function ReplyBlock({ message, onCancel, isMe, recipient }: ReplyBlockProps): React.JSX.Element {
   const { theme } = useUnistyles()
   const [username, setUsername] = useState('')
+  const user = useUser()
 
   useEffect(() => {
     ;(async () => {
-      const storage = await createSecureStorage('user-storage')
-      const chat = await getChatFromStorage(message?.chat_id)
-      const user = JSON.parse(storage.getString('user'))?.user
-      const username = user?.id === message?.author_id ? user?.username : chat?.keys?.recipient?.username
+      const username =
+        user?.id === message?.author_id ? user?.display_name || user?.username : recipient?.display_name || recipient?.username
       setUsername(username || 'anon')
     })()
   }, [message])

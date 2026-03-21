@@ -1,7 +1,8 @@
 import addSessionKeys from '@api/lib/sessions/addSessionKeys'
 import getMySessionRequest from '@api/lib/sessions/getMySessionRequest'
+import getMyUserRequest from '@api/lib/users/getMyUserRequest'
 import { useRouter } from 'expo-router'
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useSession } from '../../providers/SessionProvider'
 
 const UserContext = createContext(null)
@@ -9,6 +10,7 @@ const UserContext = createContext(null)
 export default function UserProvider({ children }) {
   const router = useRouter()
   const { token, setToken } = useSession()
+  const [user, setUser] = useState()
 
   useEffect(() => {
     ;(async () => {
@@ -31,7 +33,22 @@ export default function UserProvider({ children }) {
     })()
   }, [token])
 
-  return <UserContext.Provider value={null}>{children}</UserContext.Provider>
+  useEffect(() => {
+    ;async () => {
+      if (token !== '') {
+        try {
+          const user = await getMyUserRequest()
+          if (user) {
+            setUser(user)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+  }, [token])
+
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>
 }
 
 export const useUser = () => useContext(UserContext)
