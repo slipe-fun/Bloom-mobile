@@ -81,16 +81,21 @@ export default function MessagesProvider({ children }) {
 
             // add decrypted message to local storage
             await database.write(async () => {
-              await database.get('messages').create((msg) => {
-                msg.serverId = message?.id
-                msg.chatId = message?.chat_id
-                msg.content = decrypted?.content
-                msg.authorId = decrypted?.from_id
-                msg.date = new Date()
-                msg.seen = null
-                msg.nonce = message?.nonce
-                msg.replyToId = reply_to_json?.id
-              })
+              const collection = database.get('messages')
+              const existing = await collection.query(Q.where('server_id', message?.id)).fetch()
+
+              if (!existing) {
+                await database.get('messages').create((msg) => {
+                  msg.serverId = message?.id
+                  msg.chatId = message?.chat_id
+                  msg.content = decrypted?.content
+                  msg.authorId = decrypted?.from_id
+                  msg.date = new Date()
+                  msg.seen = null
+                  msg.nonce = message?.nonce
+                  msg.replyToId = reply_to_json?.id
+                })
+              }
             })
 
             return
