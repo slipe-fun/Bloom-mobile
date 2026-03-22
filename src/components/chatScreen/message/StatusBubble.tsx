@@ -12,6 +12,8 @@ import Animated, {
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Message.styles'
 
+export const SWIPE_THRESHOLD = -60
+
 interface StatusBubbleProps {
   seen: boolean
   isMe: boolean
@@ -30,11 +32,14 @@ export default function StatusBubble({ isMe, seen, swipeX, hapticsTriggered }: S
   const seenTranslateXEnd = seen ? 24 : 12
 
   const animatedStyle = useAnimatedStyle((): ViewStyle => {
-    const scale = interpolate(swipeX.get(), [-60, 0], [4.5, 1], 'clamp')
+    const scale = interpolate(swipeX.get(), [SWIPE_THRESHOLD, 0], [4.5, 1], 'clamp')
+
+    const { colors } = animatedTheme.get()
+
     const backgroundColor = interpolateColor(
       triggeredAnimation.get(),
       [0, 1],
-      [isMe ? animatedTheme.get().colors.primaryBackdrop : animatedTheme.get().colors.foreground, animatedTheme.get().colors.primary],
+      [isMe ? colors.primaryBackdrop : colors.foreground, colors.primary],
     )
 
     return {
@@ -44,7 +49,7 @@ export default function StatusBubble({ isMe, seen, swipeX, hapticsTriggered }: S
   })
 
   const animatedWrapperStyle = useAnimatedStyle((): ViewStyle => {
-    const translateX = interpolate(swipeX.get(), [-60, 0], [seenTranslateXEnd, seenTranslateXStart], 'clamp')
+    const translateX = interpolate(swipeX.get(), [SWIPE_THRESHOLD, 0], [seenTranslateXEnd, seenTranslateXStart], 'clamp')
 
     return {
       transform: [{ translateX }],
@@ -52,12 +57,11 @@ export default function StatusBubble({ isMe, seen, swipeX, hapticsTriggered }: S
   })
 
   const animatedIconStyle = useAnimatedStyle((): ViewStyle => {
-    const opacity = interpolate(swipeX.get(), [-60, 0], [1, 0], 'clamp')
-    const scale = interpolate(swipeX.get(), [-60, 0], [1, 0], 'clamp')
+    const iconVisibility = interpolate(swipeX.get(), [SWIPE_THRESHOLD, 0], [1, 0], 'clamp')
 
     return {
-      opacity,
-      transform: [{ scale }],
+      opacity: iconVisibility,
+      transform: [{ scale: iconVisibility }],
     }
   })
 

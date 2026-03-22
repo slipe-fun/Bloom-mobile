@@ -7,7 +7,7 @@ import { NitroModules } from 'react-native-nitro-modules'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import MessageBubble from './Bubble'
 import { styles } from './Message.styles'
-import StatusBubble from './StatusBubble'
+import StatusBubble, { SWIPE_THRESHOLD } from './StatusBubble'
 
 interface MessageProps {
   message: MessageType | null
@@ -17,31 +17,28 @@ interface MessageProps {
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+const hapticsBox = NitroModules.box(Haptics)
 
 export default function Message({ message, seen, marginBottom, shouldAnimate }: MessageProps) {
   const swipeX = useSharedValue(0)
   const hapticTriggered = useSharedValue(false)
 
-  const boxed = NitroModules.box(Haptics)
-
   const panGesture = Gesture.Pan()
-    .activeOffsetX([-10, 10])
+    .activeOffsetX([-10, 10000])
+    .failOffsetX([-10000, 5])
     .onStart(() => {
       hapticTriggered.set(false)
     })
     .onUpdate((event) => {
-      'worklet'
       const x = event.translationX
 
-      if (x < -60) {
-        swipeX.set(-60 + (x + 60) * 0.125)
+      if (x < SWIPE_THRESHOLD) {
+        swipeX.set(SWIPE_THRESHOLD + (x - SWIPE_THRESHOLD) * 0.125)
 
         if (!hapticTriggered.get()) {
-          boxed.unbox().impact('heavy')
+          hapticsBox.unbox().impact('heavy')
           hapticTriggered.set(true)
         }
-      } else if (x > 0) {
-        swipeX.set(x * 0.125)
       } else {
         swipeX.set(x)
       }
@@ -57,10 +54,12 @@ export default function Message({ message, seen, marginBottom, shouldAnimate }: 
     }
   })
 
+  const isMe = message?.isMe ?? false
+
   return (
     <GestureDetector gesture={panGesture}>
-      <AnimatedPressable style={[styles.messageWrapper(message?.isMe, marginBottom), animatedMessageStyle]}>
-        <StatusBubble hapticsTriggered={hapticTriggered} isMe={message?.isMe} seen={seen} swipeX={swipeX} />
+      <AnimatedPressable style={[styles.messageWrapper(isMe, marginBottom), animatedMessageStyle]}>
+        <StatusBubble hapticsTriggered={hapticTriggered} isMe={isMe} seen={seen} swipeX={swipeX} />
         <MessageBubble message={message} seen={seen} shouldAnimate={shouldAnimate} />
       </AnimatedPressable>
     </GestureDetector>
