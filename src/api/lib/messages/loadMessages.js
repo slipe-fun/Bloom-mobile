@@ -1,6 +1,7 @@
 import decryptMessages from '@api/lib/messages/decryptMessages'
 import { getChatMessagesBeforeID } from '@api/lib/messages/getChatMessages'
 import mergeAndSort from '@api/lib/utils/mergeAndSort'
+import formatSentTime from '@lib/formatSentTime'
 import { Q } from '@nozbe/watermelondb'
 import { database } from 'src/db'
 
@@ -33,6 +34,7 @@ export default async function (mmkv, chat_id, messages, setMessages) {
       content: message.content,
       authorId: message.authorId,
       date: message.date,
+      formatted_date: formatSentTime(message?.date),
       seen: message.seen,
       nonce: message.nonce,
       isMe: message.authorId === userId,
