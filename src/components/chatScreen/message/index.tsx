@@ -39,6 +39,8 @@ export default function Message({ message, seen, marginBottom, shouldAnimate }: 
           hapticsBox.unbox().impact('heavy')
           hapticTriggered.set(true)
         }
+      } else if (x > 0) {
+        swipeX.set(x * 0.125)
       } else {
         swipeX.set(x)
       }
