@@ -3,7 +3,7 @@ import AuthPasswordInput from '@components/auth/password/PasswordInput'
 import AuthTitleTemplate from '@components/auth/titleTemplate'
 import { ActionText } from '@components/ui'
 import { layoutAnimation, quickSpring } from '@constants/animations'
-import { useChatKeyboard, useInsets } from '@hooks'
+import { useInsets } from '@hooks'
 import useAuthStore from '@stores/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,8 +21,6 @@ export default function SignupPassword() {
   const error = useAuthStore((state) => state.error)
   const exists = useAuthStore((state) => state.exists)
   const dbUsername = useAuthStore((state) => state.dbUsername)
-  // Needs only for read and write first keyboard height to mmkv storage
-  const { height: _height } = useChatKeyboard()
   const errorValue = useSharedValue(0)
   const { t } = useTranslation()
 
