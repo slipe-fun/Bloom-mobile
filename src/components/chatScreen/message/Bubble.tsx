@@ -19,7 +19,7 @@ export default function MessageBubble({ message, seen, shouldAnimate }: MessageB
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ translateX: translateX.get() }] }))
 
   useEffect(() => {
-    translateX.set(isMe ? withSpring(seen ? 0 : -12, springy) : 0)
+    translateX.set(isMe ? withSpring(!seen ? -12 : 0, springy) : 0)
   }, [seen, message.id])
 
   return (

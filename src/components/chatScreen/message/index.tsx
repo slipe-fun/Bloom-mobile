@@ -17,6 +17,7 @@ interface MessageProps {
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
 export default function Message({ message, seen, marginBottom, shouldAnimate }: MessageProps) {
   const swipeX = useSharedValue(0)
   const hapticTriggered = useSharedValue(false)
@@ -26,33 +27,33 @@ export default function Message({ message, seen, marginBottom, shouldAnimate }: 
   const panGesture = Gesture.Pan()
     .activeOffsetX([-10, 10])
     .onStart(() => {
-      hapticTriggered.value = false
+      hapticTriggered.set(false)
     })
     .onUpdate((event) => {
       'worklet'
       const x = event.translationX
 
       if (x < -60) {
-        swipeX.value = -60 + (x + 60) * 0.125
+        swipeX.set(-60 + (x + 60) * 0.125)
 
-        if (!hapticTriggered.value) {
+        if (!hapticTriggered.get()) {
           boxed.unbox().impact('heavy')
-          hapticTriggered.value = true
+          hapticTriggered.set(true)
         }
       } else if (x > 0) {
-        swipeX.value = x * 0.125
+        swipeX.set(x * 0.125)
       } else {
-        // Обычное движение
-        swipeX.value = x
+        swipeX.set(x)
       }
     })
     .onEnd(() => {
-      swipeX.value = withSpring(0, springy)
+      hapticTriggered.set(false)
+      swipeX.set(withSpring(0, springy))
     })
 
   const animatedMessageStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateX: swipeX.value }],
+      transform: [{ translateX: swipeX.get() }],
     }
   })
 
