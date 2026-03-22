@@ -47,7 +47,7 @@ export default function useChatController({ chat, listRef }: useChatControllerPr
     let lastSeen = 0
     for (let i = messages.length - 1; i >= 0; i--) {
       const m = messages[i]
-      if (m?.seen && m?.isMe) {
+      if (m?.seen) {
         lastSeen = m.id
         break
       }
