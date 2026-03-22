@@ -1,4 +1,5 @@
 import getReplyToMessageFromStorage from '@api/lib/messages/getReplyToMessageFromStorage'
+import formatSentTime from '@lib/formatSentTime'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import { getSKID } from '@lib/skid/lazySkid'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -72,6 +73,7 @@ export default function MessagesProvider({ children }) {
                 chat_id: message?.chat_id,
                 id: message?.id,
                 reply_to: reply_to_json,
+                formatted_date: formatSentTime(decrypted?.date),
                 nonce: message?.nonce,
                 raw: message,
               },

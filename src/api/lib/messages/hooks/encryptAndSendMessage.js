@@ -1,5 +1,6 @@
 import encryptMessage from '@api/lib/encryptMessage'
 import mergeAndSort from '@api/lib/utils/mergeAndSort'
+import formatSentTime from '@lib/formatSentTime'
 import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
 import sendMessageAndSave from '../sendMessageAndSave'
 
@@ -43,6 +44,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
       content,
       author_id: parseInt(mmkv?.getString('user_id'), 10),
       date: new Date(),
+      formatted_date: formatSentTime(new Date().toString()),
       seen: false,
       reply_to: reply_to_json,
     }

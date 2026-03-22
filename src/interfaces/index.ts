@@ -38,6 +38,7 @@ export interface Message {
   type?: string
   groupStart?: boolean
   groupEnd?: boolean
+  formatted_date?: string
 }
 
 export interface Chat {

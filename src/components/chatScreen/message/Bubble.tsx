@@ -1,6 +1,5 @@
 import { messageAnimationIn, springy } from '@constants/animations'
 import type { Message } from '@interfaces'
-import formatSentTime from '@lib/formatSentTime'
 import { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -29,7 +28,7 @@ export default function MessageBubble({ message, seen, shouldAnimate }: MessageB
           {message?.content}
           <View style={styles.timeSpacer} />
         </Text>
-        <Animated.Text style={[styles.secondaryText(isMe)]}>{formatSentTime(message?.date)}</Animated.Text>
+        <Animated.Text style={[styles.secondaryText(isMe)]}>{message?.formatted_date}</Animated.Text>
       </View>
     </Animated.View>
   )
