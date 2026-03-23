@@ -36,16 +36,15 @@ export default function Footer({ onSend, footerHeight, listRef }: FooterProps) {
 
   const handleSendPress = useCallback(() => {
     const trimmedValue = inputValue.trim()
-    setReplyMessage(null)
-    // if (!trimmedValue) return
+    if (!trimmedValue) return
 
-    // listRef?.prepareForLayoutAnimationRender()
-    // onSend(trimmedValue, replyMessage)
+    listRef?.prepareForLayoutAnimationRender()
+    onSend(trimmedValue, replyMessage)
 
-    // setInputValue('')
-    // if (replyMessage) {
-    //   setReplyMessage(null)
-    // }
+    setInputValue('')
+    if (replyMessage) {
+      setReplyMessage(null)
+    }
   }, [inputValue, replyMessage, onSend, setReplyMessage])
 
   return (
