@@ -3,12 +3,12 @@ import { create } from 'zustand'
 
 type ChatScreenStore = {
   replyMessage: Message | null
-  setReplyMessage: (newFocused: Message) => void
+  setReplyMessage: (replyMessage: Message) => void
 }
 
 const useChatScreenStore = create<ChatScreenStore>((set) => ({
   replyMessage: null,
-  setReplyMessage: (newMessage) => set({ replyMessage: newMessage }),
+  setReplyMessage: (replyMessage) => set({ replyMessage }),
 }))
 
 export default useChatScreenStore

@@ -3,7 +3,7 @@ import Icon from '@components/ui/Icon'
 import { useInsets } from '@hooks'
 import type { Message } from '@interfaces'
 import type { FlashListRef } from '@shopify/flash-list'
-import useChatScreenStore from '@stores/chatScreen'
+import useChatStore from '@stores/chat'
 import { useCallback, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
@@ -27,7 +27,7 @@ export default function Footer({ onSend, setFooterHeight, footerHeight, listRef 
   const { theme } = useUnistyles()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const [inputValue, setInputValue] = useState('')
-  const { replyMessage, setReplyMessage } = useChatScreenStore()
+  const { replyMessage, setReplyMessage } = useChatStore()
 
   const onFooterLayout = useCallback(
     (event: LayoutChangeEvent) => {

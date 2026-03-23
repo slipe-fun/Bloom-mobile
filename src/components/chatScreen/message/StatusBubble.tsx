@@ -33,7 +33,7 @@ export default function StatusBubble({ isMe, seen, swipeX, hapticsTriggered }: S
     },
   )
 
-  const seenTranslateXStart = seen && isMe ? 24 : 0
+  const seenTranslateXStart = seen || !isMe ? 24 : 0
   const seenTranslateXEnd = seen ? 24 : 12
 
   const animatedStyle = useAnimatedStyle((): ViewStyle => {

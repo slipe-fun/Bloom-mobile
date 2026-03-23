@@ -1,6 +1,7 @@
-import { springy } from '@constants/animations'
+import { quickSpring, springy } from '@constants/animations'
+import { base } from '@design/base'
 import type { Message as MessageType } from '@interfaces'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { Haptics } from 'react-native-nitro-haptics'
 import { NitroModules } from 'react-native-nitro-modules'
@@ -14,13 +15,15 @@ interface MessageProps {
   seen: boolean
   marginBottom: number
   shouldAnimate: boolean
+  reply: boolean
 }
 
 const hapticsBox = NitroModules.box(Haptics)
 
-export default function Message({ message, seen, marginBottom, shouldAnimate }: MessageProps) {
+export default function Message({ message, seen, marginBottom, shouldAnimate, reply }: MessageProps) {
   const swipeX = useSharedValue(0)
   const hapticTriggered = useSharedValue(false)
+  const opacity = useSharedValue(0)
 
   const isMe = message?.isMe ?? false
 
@@ -58,8 +61,13 @@ export default function Message({ message, seen, marginBottom, shouldAnimate }: 
   const animatedMessageStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: swipeX.get() }],
+      opacity: opacity.get(),
     }
   })
+
+  useEffect(() => {
+    opacity.set(withSpring(reply ? base.opacity.secondaryText : 1, quickSpring))
+  }, [reply, message.id])
 
   return (
     <GestureDetector gesture={panGesture}>

@@ -6,6 +6,7 @@ import { base } from '@design/base'
 import { useChatController, useInsets } from '@hooks'
 import type { Message as MessageType } from '@interfaces'
 import { FlashList, type FlashListRef } from '@shopify/flash-list'
+import useChatStore from '@stores/chat'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useRef, useState } from 'react'
 import { View } from 'react-native'
@@ -19,6 +20,7 @@ export default function Chat() {
   const listRef = useRef<FlashListRef<MessageType>>(null)
 
   const [footerHeight, setFooterHeight] = useState<number>(0)
+  const replyMessage = useChatStore((state) => state.replyMessage)
 
   const insets = useInsets()
   const { messages, seenID, addMessage, nextPage, _chat } = useChatController({ chat, listRef: listRef.current })
@@ -33,9 +35,11 @@ export default function Chat() {
       const messageTime = typeof item.date === 'number' ? item.date : new Date(item.date).getTime()
       const shouldAnimate = messageTime > mountTimestamp.current
 
-      return <Message seen={seenID >= item.id} message={item} marginBottom={marginBottom} shouldAnimate={shouldAnimate} />
+      return (
+        <Message seen={seenID >= item.id} message={item} marginBottom={marginBottom} shouldAnimate={shouldAnimate} reply={!!replyMessage} />
+      )
     },
-    [seenID],
+    [seenID, replyMessage],
   )
 
   const renderScrollComponent = useCallback(
