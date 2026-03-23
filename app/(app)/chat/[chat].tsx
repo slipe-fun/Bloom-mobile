@@ -8,9 +8,10 @@ import type { Message as MessageType } from '@interfaces'
 import { FlashList, type FlashListRef } from '@shopify/flash-list'
 import useChatStore from '@stores/chat'
 import { useLocalSearchParams } from 'expo-router'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { View } from 'react-native'
 import { KeyboardChatScrollView, type KeyboardChatScrollViewProps } from 'react-native-keyboard-controller'
+import { useSharedValue } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Chat() {
@@ -19,7 +20,7 @@ export default function Chat() {
   const mountTimestamp = useRef(Date.now())
   const listRef = useRef<FlashListRef<MessageType>>(null)
 
-  const [footerHeight, setFooterHeight] = useState<number>(0)
+  const footerHeight = useSharedValue(0)
   const replyMessage = useChatStore((state) => state.replyMessage)
 
   const insets = useInsets()
@@ -35,7 +36,7 @@ export default function Chat() {
       const messageTime = typeof item.date === 'number' ? item.date : new Date(item.date).getTime()
       const shouldAnimate = messageTime > mountTimestamp.current
 
-      const reply = replyMessage ? replyMessage !== item.id : false
+      const reply = replyMessage ? !(replyMessage === item.id) : false
 
       return <Message seen={seenID >= item.id} message={item} marginBottom={marginBottom} shouldAnimate={shouldAnimate} reply={reply} />
     },
@@ -49,6 +50,7 @@ export default function Chat() {
         contentInsetAdjustmentBehavior="never"
         keyboardDismissMode="on-drag"
         offset={base.spacing.lg}
+        extraContentPadding={footerHeight}
         automaticallyAdjustContentInsets={false}
         keyboardLiftBehavior="always"
       />
@@ -78,11 +80,11 @@ export default function Chat() {
         onStartReached={handleStartReached}
         keyExtractor={keyExtractor}
         renderScrollComponent={renderScrollComponent}
-        contentContainerStyle={styles.listContent(footerHeight, headerHeight)}
+        contentContainerStyle={styles.listContent(headerHeight)}
         showsVerticalScrollIndicator={false}
       />
 
-      <Footer listRef={listRef.current} setFooterHeight={setFooterHeight} footerHeight={footerHeight} onSend={addMessage} />
+      <Footer listRef={listRef.current} footerHeight={footerHeight} onSend={addMessage} />
     </View>
   )
 }
@@ -95,9 +97,8 @@ const styles = StyleSheet.create((theme) => ({
   list: {
     flex: 1,
   },
-  listContent: (paddingBottom: number, paddingTop: number) => ({
+  listContent: (paddingTop: number) => ({
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom,
     paddingTop: paddingTop + theme.spacing.md,
   }),
 }))

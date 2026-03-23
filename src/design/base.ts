@@ -33,7 +33,7 @@ export const base = {
     /** 16px   */ sm: 16,
     /** 20px   */ md: 20,
     /** 24px   */ lg: 24,
-    /** 28px   */ xl: 28,
+    /** 26px   */ xl: 26,
     /** 32px   */ xxl: 32,
     /** 42px   */ xxxl: 42,
     /** 9999px */ full: 9999,

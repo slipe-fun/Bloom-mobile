@@ -1,5 +1,5 @@
 import { Button, Icon } from '@components/ui'
-import { getFadeIn, getFadeOut, paperplaneAnimationIn, paperplaneAnimationOut, quickSpring } from '@constants/animations'
+import { getFadeIn, getFadeOut, layoutAnimation, paperplaneAnimationIn, paperplaneAnimationOut, quickSpring } from '@constants/animations'
 import { useEffect } from 'react'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
@@ -24,7 +24,7 @@ export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
   }, [hasValue])
 
   return (
-    <Button style={animatedButtonStyle} onPress={handleSend} variant="icon">
+    <Button layout={layoutAnimation} style={animatedButtonStyle} onPress={handleSend} variant="icon">
       {hasValue ? (
         <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
           <Icon icon="paperplane" color={theme.colors.white} />
