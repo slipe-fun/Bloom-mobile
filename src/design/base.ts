@@ -44,7 +44,7 @@ export const base = {
     /** 75%    */ overlayText: 0.75,
   },
   borderWidth: {
-    /** 1px    */ md: 1.25,
+    /** 1px    */ md: 0.85,
   },
   fontFamily: {
     /** Regular  */ regular: 'OpenRunde-Regular',
