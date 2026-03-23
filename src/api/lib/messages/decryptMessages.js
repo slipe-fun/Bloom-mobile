@@ -1,3 +1,4 @@
+import formatSentTime from '@lib/formatSentTime'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import { getSKID } from '@lib/skid/lazySkid'
 import { Q } from '@nozbe/watermelondb'
@@ -36,10 +37,13 @@ export default async function (mmkv, chat_id, messages) {
       try {
         // if kyber message sent by recipient then decrypt using both key pairs
         // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
+        const decrypted = skid.aes.decrypt(message?.ciphertext, message?.nonce, chat?.key)
+
         return {
-          ...skid.aes.decrypt(message?.ciphertext, message?.nonce, chat?.key),
+          ...decrypted,
           chat_id: message?.chat_id,
           id: message?.id,
+          formatted_date: formatSentTime(decrypted?.date),
           seen: message?.seen,
           nonce: message?.nonce,
           reply_to: reply_to

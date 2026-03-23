@@ -1,4 +1,5 @@
 import getReplyToMessageFromStorage from '@api/lib/messages/getReplyToMessageFromStorage'
+import formatSentTime from '@lib/formatSentTime'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import { getSKID } from '@lib/skid/lazySkid'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -72,6 +73,7 @@ export default function MessagesProvider({ children }) {
                 chat_id: message?.chat_id,
                 id: message?.id,
                 reply_to: reply_to_json,
+                formatted_date: formatSentTime(decrypted?.date),
                 nonce: message?.nonce,
                 raw: message,
               },
@@ -79,16 +81,21 @@ export default function MessagesProvider({ children }) {
 
             // add decrypted message to local storage
             await database.write(async () => {
-              await database.get('messages').create((msg) => {
-                msg.serverId = message?.id
-                msg.chatId = message?.chat_id
-                msg.content = decrypted?.content
-                msg.authorId = decrypted?.from_id
-                msg.date = new Date()
-                msg.seen = null
-                msg.nonce = message?.nonce
-                msg.replyToId = reply_to_json?.id
-              })
+              const collection = database.get('messages')
+              const existing = await collection.query(Q.where('server_id', message?.id)).fetch()
+
+              if (!existing) {
+                await database.get('messages').create((msg) => {
+                  msg.serverId = message?.id
+                  msg.chatId = message?.chat_id
+                  msg.content = decrypted?.content
+                  msg.authorId = decrypted?.from_id
+                  msg.date = new Date()
+                  msg.seen = null
+                  msg.nonce = message?.nonce
+                  msg.replyToId = reply_to_json?.id
+                })
+              }
             })
 
             return

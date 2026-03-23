@@ -25,7 +25,7 @@ export default function useChatController({ chat, listRef }: useChatControllerPr
   const CHAT_TIME_WINDOW = 5 * 60 * 1000
 
   const computedMessages = useMemo(() => {
-    return messages.reverse().map((item, index) => {
+    return [...messages].reverse().map((item, index) => {
       const prev = messages[index - 1]
       const next = messages[index + 1]
 
@@ -44,17 +44,22 @@ export default function useChatController({ chat, listRef }: useChatControllerPr
   }, [messages])
 
   useEffect(() => {
-    let lastSeen = 0
-    for (let i = messages.length - 1; i >= 0; i--) {
-      const m = messages[i]
-      if (m?.seen && m?.isMe) {
-        lastSeen = m.id
-        break
+    let lastSeenId = 0
+    let lastSeenTime = 0
+
+    messages.forEach((m) => {
+      if (m?.seen) {
+        const t = new Date(m.seen).getTime()
+        if (t > lastSeenTime) {
+          lastSeenTime = t
+          lastSeenId = m.id
+        }
       }
-    }
-    setSeenID(lastSeen)
+    })
+
+    setSeenID(lastSeenId)
     listRef?.scrollToEnd({ animated: true })
-  }, [messages.length, messages])
+  }, [messages, listRef])
 
   return { messages: computedMessages, addMessage, seenID, nextPage, _chat }
 }

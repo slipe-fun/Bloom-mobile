@@ -14,8 +14,8 @@ export default async function (content, chat_id) {
 
     try {
       return skid.aes.encrypt(content, user_id, chatData?.key)
-    } catch {
-      return
+    } catch (error) {
+      console.log(error)
     }
   } catch (err) {
     console.log(err)
