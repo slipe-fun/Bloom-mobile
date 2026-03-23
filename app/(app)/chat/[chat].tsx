@@ -63,23 +63,20 @@ export default function Chat() {
     <View style={styles.container}>
       <Header chat={_chat} />
       <EmptyModal chat={_chat} visible={messages.length === 0} />
-      {messages.length > 0 && footerHeight && (
-        <FlashList
-          data={messages}
-          ref={listRef}
-          renderItem={renderItem}
-          onStartReachedThreshold={0.5}
-          maintainVisibleContentPosition={{
-            disabled: true,
-            startRenderingFromBottom: true,
-          }}
-          onStartReached={handleStartReached}
-          keyExtractor={keyExtractor}
-          renderScrollComponent={renderScrollComponent}
-          contentContainerStyle={styles.listContent(footerHeight, headerHeight)}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+      <FlashList
+        data={messages}
+        ref={listRef}
+        renderItem={renderItem}
+        onStartReachedThreshold={0.5}
+        maintainVisibleContentPosition={{
+          startRenderingFromBottom: true,
+        }}
+        onStartReached={handleStartReached}
+        keyExtractor={keyExtractor}
+        renderScrollComponent={renderScrollComponent}
+        contentContainerStyle={styles.listContent(footerHeight, headerHeight)}
+        showsVerticalScrollIndicator={false}
+      />
 
       <Footer listRef={listRef.current} setFooterHeight={setFooterHeight} footerHeight={footerHeight} onSend={addMessage} />
     </View>

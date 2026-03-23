@@ -5,8 +5,9 @@ import Animated, {
   interpolate,
   interpolateColor,
   type SharedValue,
+  useAnimatedReaction,
   useAnimatedStyle,
-  useDerivedValue,
+  useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
@@ -23,18 +24,22 @@ interface StatusBubbleProps {
 
 export default function StatusBubble({ isMe, seen, swipeX, hapticsTriggered }: StatusBubbleProps) {
   const animatedTheme = useAnimatedTheme()
+  const triggeredAnimation = useSharedValue(0)
 
-  const triggeredAnimation = useDerivedValue(() => {
-    return withSpring(hapticsTriggered.get() ? 1 : 0, quickSpring)
-  })
+  useAnimatedReaction(
+    () => hapticsTriggered.get(),
+    (v) => {
+      triggeredAnimation.set(withSpring(v ? 1 : 0, quickSpring))
+    },
+  )
 
-  const seenTranslateXStart = seen ? 24 : 0
+  const seenTranslateXStart = seen && isMe ? 24 : 0
   const seenTranslateXEnd = seen ? 24 : 12
 
   const animatedStyle = useAnimatedStyle((): ViewStyle => {
     const scale = interpolate(swipeX.get(), [SWIPE_THRESHOLD, 0], [4.5, 1], 'clamp')
 
-    const { colors } = animatedTheme.get()
+    const colors = animatedTheme.get().colors
 
     const backgroundColor = interpolateColor(
       triggeredAnimation.get(),
