@@ -2,13 +2,13 @@ import type { Message } from '@interfaces'
 import { create } from 'zustand'
 
 type ChatScreenStore = {
-  replyMessage: Message | null
-  setReplyMessage: (replyMessage: Message) => void
+  replyMessage: Message['id'] | null
+  setReplyMessage: (replyMessage: Message['id']) => void
 }
 
-const useChatScreenStore = create<ChatScreenStore>((set) => ({
+const useChatStore = create<ChatScreenStore>((set) => ({
   replyMessage: null,
   setReplyMessage: (replyMessage) => set({ replyMessage }),
 }))
 
-export default useChatScreenStore
+export default useChatStore

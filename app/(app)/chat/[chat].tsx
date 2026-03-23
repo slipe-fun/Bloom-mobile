@@ -35,9 +35,9 @@ export default function Chat() {
       const messageTime = typeof item.date === 'number' ? item.date : new Date(item.date).getTime()
       const shouldAnimate = messageTime > mountTimestamp.current
 
-      return (
-        <Message seen={seenID >= item.id} message={item} marginBottom={marginBottom} shouldAnimate={shouldAnimate} reply={!!replyMessage} />
-      )
+      const reply = replyMessage ? replyMessage !== item.id : false
+
+      return <Message seen={seenID >= item.id} message={item} marginBottom={marginBottom} shouldAnimate={shouldAnimate} reply={reply} />
     },
     [seenID, replyMessage],
   )

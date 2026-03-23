@@ -1,11 +1,13 @@
 import { quickSpring, springy } from '@constants/animations'
 import { base } from '@design/base'
 import type { Message as MessageType } from '@interfaces'
+import useChatStore from '@stores/chat'
 import { useEffect, useMemo } from 'react'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { Haptics } from 'react-native-nitro-haptics'
 import { NitroModules } from 'react-native-nitro-modules'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { scheduleOnRN } from 'react-native-worklets'
 import MessageBubble from './Bubble'
 import { styles } from './Message.styles'
 import StatusBubble, { SWIPE_THRESHOLD } from './StatusBubble'
@@ -24,6 +26,8 @@ export default function Message({ message, seen, marginBottom, shouldAnimate, re
   const swipeX = useSharedValue(0)
   const hapticTriggered = useSharedValue(false)
   const opacity = useSharedValue(0)
+
+  const setReplyMessage = useChatStore((state) => state.setReplyMessage)
 
   const isMe = message?.isMe ?? false
 
@@ -52,7 +56,10 @@ export default function Message({ message, seen, marginBottom, shouldAnimate, re
           }
         })
         .onEnd(() => {
-          hapticTriggered.set(false)
+          if (hapticTriggered.get()) {
+            scheduleOnRN(setReplyMessage, message.id)
+            hapticTriggered.set(false)
+          }
           swipeX.set(withSpring(0, springy))
         }),
     [],
@@ -66,7 +73,7 @@ export default function Message({ message, seen, marginBottom, shouldAnimate, re
   })
 
   useEffect(() => {
-    opacity.set(withSpring(reply ? base.opacity.secondaryText : 1, quickSpring))
+    opacity.set(withSpring(reply ? base.opacity.contentText : 1, quickSpring))
   }, [reply, message.id])
 
   return (

@@ -50,7 +50,7 @@ export default function Footer({ onSend, setFooterHeight, footerHeight, listRef 
     if (!trimmedValue) return
 
     listRef?.prepareForLayoutAnimationRender()
-    onSend(trimmedValue, replyMessage?.id)
+    onSend(trimmedValue, replyMessage)
 
     setInputValue('')
     if (replyMessage) {
