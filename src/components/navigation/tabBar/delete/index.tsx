@@ -4,6 +4,7 @@ import {
   charAnimationOut,
   layoutAnimation,
   quickSpring,
+  springyChar,
   vSlideAnimationIn,
   vSlideAnimationOut,
 } from '@constants/animations'
@@ -30,19 +31,19 @@ export default function TabBarDelete() {
 
   useEffect(() => {
     color.set(withSpring(hasSelected ? 1 : 0, quickSpring))
-  }, countChars)
+  }, [countChars])
 
   return (
     <Animated.View pointerEvents="box-only" style={styles.container} entering={vSlideAnimationIn} exiting={vSlideAnimationOut}>
       <Button size="lg" variant="text" layout={layoutAnimation}>
         <LayoutAnimationConfig skipEntering skipExiting>
           <Animated.View layout={layoutAnimation} style={styles.deleteCharStack}>
-            {countChars.map((char) => (
+            {countChars.map((char, index) => (
               <Animated.Text
                 key={char}
                 style={styles.deleteChar}
-                entering={charAnimationIn()}
-                exiting={charAnimationOut()}
+                entering={charAnimationIn(springyChar(index))}
+                exiting={charAnimationOut(springyChar(index))}
                 numberOfLines={1}
               >
                 {char}

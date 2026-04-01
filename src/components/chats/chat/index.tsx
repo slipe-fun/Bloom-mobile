@@ -1,6 +1,6 @@
 import { Avatar, Button, Checkbox } from '@components/ui'
 import Icon from '@components/ui/Icon'
-import { getCharEnter, getCharExit, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
+import { charAnimationIn, charAnimationOut, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { useChatItem } from '@hooks'
 import type { Chat as ChatType, ChatView } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
@@ -86,8 +86,8 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
                   <Animated.Text
                     key={`${i}-${char}`}
                     style={styles.secondary(false)}
-                    entering={getCharEnter(springyChar(i))}
-                    exiting={getCharExit(springyChar(i))}
+                    entering={charAnimationIn(springyChar(i), false)}
+                    exiting={charAnimationOut(springyChar(i), false)}
                     numberOfLines={1}
                   >
                     {char}
@@ -99,8 +99,8 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
           </View>
 
           <Animated.Text
-            entering={getCharEnter()}
-            exiting={getCharExit()}
+            entering={getFadeIn()}
+            exiting={getFadeOut()}
             key={lastMessage?.content}
             style={styles.secondary(edit)}
             numberOfLines={2}

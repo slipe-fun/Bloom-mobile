@@ -37,7 +37,8 @@ export const springyMenu = physicsSpring({
   dampingRatio: 2.5,
 }) as SpringTriple
 
-export const springyChar = (i: number = 0) => physicsSpring({ mass: quickSpring.mass, duration: 0.5 + i * 0.05, dampingRatio: 0.65 })
+export const springyChar = (i: number = 0, fast: boolean = true) =>
+  physicsSpring({ mass: quickSpring.mass, duration: (fast ? 0.25 : 0.5) + i * 0.05, dampingRatio: 0.65 })
 
 export const springyTabBar = physicsSpring({
   mass: quickSpring.mass,

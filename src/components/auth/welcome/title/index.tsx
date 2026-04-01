@@ -36,8 +36,8 @@ export default function AuthTitle() {
         <Animated.Text
           key={`${char}-${Math.random()}`}
           layout={makeLayoutAnimation(springyChar(1))}
-          entering={charAnimationIn(springyChar(index), false)}
-          exiting={charAnimationOut(springyChar(index), false)}
+          entering={charAnimationIn(springyChar(index, false), false)}
+          exiting={charAnimationOut(springyChar(index, false), false)}
           style={[styles.char, animatedTextStyle]}
         >
           {char}
