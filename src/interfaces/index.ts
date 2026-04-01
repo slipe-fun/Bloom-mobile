@@ -47,7 +47,7 @@ export interface Chat {
   members?: Member[]
   avatar?: string
   id?: number
-  recipient?: User | Member
+  recipient?: Member
 }
 
 export interface ChatView extends Chat {

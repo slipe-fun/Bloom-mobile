@@ -32,6 +32,27 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radius.full,
     borderCurve: 'continuous',
     backgroundColor: theme.colors.foregroundTransparent,
-    padding: theme.spacing.md,
+    paddingLeft: theme.spacing.md,
+    paddingVertical: 0,
+    gap: theme.spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  replyText: {
+    fontFamily: theme.fontFamily.medium,
+    fontSize: theme.fontSize.sm,
+    flex: 1,
+    color: theme.colors.secondaryText,
+  },
+  replyRecipient: {
+    fontFamily: theme.fontFamily.semibold,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.text,
+  },
+  replyCancel: {
+    height: 36,
+    width: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }))

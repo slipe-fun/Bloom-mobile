@@ -84,7 +84,7 @@ export default function Chat() {
         showsVerticalScrollIndicator={false}
       />
 
-      <Footer listRef={listRef.current} footerHeight={footerHeight} onSend={addMessage} />
+      <Footer recipient={_chat.recipient} listRef={listRef.current} footerHeight={footerHeight} onSend={addMessage} />
     </View>
   )
 }

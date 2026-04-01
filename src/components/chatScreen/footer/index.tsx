@@ -2,7 +2,7 @@ import { Button, GradientBlur } from '@components/ui'
 import Icon from '@components/ui/Icon'
 import { layoutAnimation } from '@constants/animations'
 import { useInsets } from '@hooks'
-import type { Message } from '@interfaces'
+import type { Member, Message } from '@interfaces'
 import type { FlashListRef } from '@shopify/flash-list'
 import useChatStore from '@stores/chat'
 import { useCallback, useState } from 'react'
@@ -17,11 +17,12 @@ interface FooterProps {
   onSend: (content: string, reply_to: number) => void
   footerHeight: SharedValue<number>
   listRef: FlashListRef<Message>
+  recipient: Member
 }
 
 const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
-export default function Footer({ onSend, footerHeight, listRef }: FooterProps) {
+export default function Footer({ onSend, footerHeight, listRef, recipient }: FooterProps) {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
@@ -58,7 +59,7 @@ export default function Footer({ onSend, footerHeight, listRef }: FooterProps) {
         <Icon icon="plus" color={theme.colors.text} />
       </Button>
 
-      <MessageInput footerHeight={footerHeight} setValue={setInputValue} value={inputValue} />
+      <MessageInput recipient={recipient} footerHeight={footerHeight} setValue={setInputValue} value={inputValue} />
       <SendButton handleSend={handleSendPress} hasValue={inputValue.trim().length > 0} />
     </AnimatedKeyboardStickyView>
   )
