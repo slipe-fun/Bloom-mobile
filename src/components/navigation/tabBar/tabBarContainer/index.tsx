@@ -32,7 +32,7 @@ export default function TabBarContainer() {
   }))
 
   return !edit ? (
-    <Animated.View pointerEvents="box-only" entering={vSlideAnimationIn} exiting={vSlideAnimationOut} style={styles.container}>
+    <Animated.View entering={vSlideAnimationIn} exiting={vSlideAnimationOut} style={styles.container}>
       {search && !searchFocused && <TabBarSearchBackButton />}
       <Animated.View
         onTouchStart={() => handlePress(true)}

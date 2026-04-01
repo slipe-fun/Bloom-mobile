@@ -35,7 +35,6 @@ export default function TabBar() {
 
   return (
     <AnimatedStickyView
-      pointerEvents="box-only"
       layout={layoutAnimation}
       offset={{ opened: -base.spacing.lg, closed: -insets.bottom }}
       style={[styles.tabBarContainer, animatedViewStyles]}
