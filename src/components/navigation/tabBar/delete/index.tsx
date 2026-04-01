@@ -33,7 +33,7 @@ export default function TabBarDelete() {
   }, countChars)
 
   return (
-    <Animated.View style={styles.container} entering={vSlideAnimationIn} exiting={vSlideAnimationOut}>
+    <Animated.View pointerEvents="box-only" style={styles.container} entering={vSlideAnimationIn} exiting={vSlideAnimationOut}>
       <Button size="lg" variant="text" layout={layoutAnimation}>
         <LayoutAnimationConfig skipEntering skipExiting>
           <Animated.View layout={layoutAnimation} style={styles.deleteCharStack}>

@@ -41,7 +41,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       easeGradient({
         colorStops: {
           0: { color: theme.colors.gradientBlurEnd },
-          0.4: { color: theme.colors.gradientBlurMiddle },
+          0.25: { color: theme.colors.gradientBlurMiddle },
           1: { color: theme.colors.gradientBlurStart },
         },
         easing: Easing.bezier(0.42, 0, 0.58, 1),
@@ -55,7 +55,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       easeGradient({
         colorStops: {
           0: { color: theme.colors.gradientBlurEnd },
-          0.5: { color: theme.colors.gradientBlurStart },
+          0.65: { color: theme.colors.gradientBlurStart },
         },
         easing: Easing.bezier(0.42, 0, 0.58, 1),
         extraColorStopsPerTransition: 15,
@@ -67,6 +67,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       {Platform.OS !== 'android' && (
         <MaskedView
           ref={ref}
+          pointerEvents="none"
           style={gradientStyles}
           maskElement={
             <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
@@ -76,7 +77,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         </MaskedView>
       )}
 
-      <LinearGradient start={start} end={end} locations={ddd as any} colors={dd as any} style={gradientStyles} />
+      <LinearGradient pointerEvents="none" start={start} end={end} locations={ddd as any} colors={dd as any} style={gradientStyles} />
     </>
   )
 }

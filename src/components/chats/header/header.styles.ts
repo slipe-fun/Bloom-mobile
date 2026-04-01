@@ -1,22 +1,17 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
-  header: {
+  header: (paddingTop: number) => ({
     position: 'absolute',
-    top: 0,
-    zIndex: 2,
     width: '100%',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.xxl,
+    paddingTop,
     alignItems: 'center',
-    gap: theme.spacing.lg,
-  },
-  topHeader: {
-    width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-  },
+    gap: theme.spacing.lg,
+  }),
   container: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -39,7 +39,6 @@ export default function TabSettings() {
 
   return (
     <View style={styles.container}>
-      <Header loading={loading} scrollY={scrollY} user={user} />
       <Animated.ScrollView
         onScroll={scrollHandler}
         contentContainerStyle={styles.list(height, headerHeight)}
@@ -50,6 +49,7 @@ export default function TabSettings() {
           <SettingsGroup key={item.id} section={item} />
         ))}
       </Animated.ScrollView>
+      <Header loading={loading} scrollY={scrollY} user={user} />
     </View>
   )
 }

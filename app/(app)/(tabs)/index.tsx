@@ -3,21 +3,25 @@ import Chat from '@components/chats/chat'
 import Header from '@components/chats/header'
 import Search from '@components/chats/search'
 import { EmptyModal } from '@components/ui'
+import { SIZE_MAP } from '@components/ui/button/constats'
 import { fastSpring } from '@constants/easings'
+import { base } from '@design/base'
+import { useInsets } from '@hooks'
 import type { Chat as ChatType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
-import useChatsScreenStore from '@stores/chats'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback } from 'react'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function TabChats() {
-  const { headerHeight } = useChatsScreenStore()
   const { height, search } = useTabBarStore()
   const { chats } = useChatList()
+  const insets = useInsets()
 
   const lastIndex = chats?.length - 1
+
+  const headerHeight = insets.top + base.spacing.md + SIZE_MAP.md
 
   const animatedViewStyle = useAnimatedStyle(() => ({
     opacity: withSpring(search ? 0 : 1, fastSpring),
@@ -38,7 +42,6 @@ export default function TabChats() {
     <>
       <Search />
       <Animated.View style={[styles.container, animatedViewStyle]}>
-        <Header />
         <FlashList
           data={chats}
           style={styles.list}
@@ -58,6 +61,7 @@ export default function TabChats() {
         {chats?.length === 0 ? (
           <EmptyModal text="У вас еще нет ни одного чата! Создайте свой первый чат!" icon="message" color="primary" />
         ) : null}
+        <Header />
       </Animated.View>
     </>
   )

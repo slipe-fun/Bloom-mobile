@@ -69,7 +69,7 @@ export default function NewMessage() {
         renderItem={renderItem}
         data={users}
       />
-      <View style={styles.header}>
+      <View pointerEvents="box-only" style={styles.header}>
         <GradientBlur direction="top-to-bottom" />
         <Button onPress={handlePress} variant="icon">
           <Icon icon="x" color={theme.colors.text} />
@@ -97,7 +97,7 @@ const styles = StyleSheet.create((theme) => ({
     position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.xxl,
     paddingRight: 44 + theme.spacing.lg,
   },
   title: {

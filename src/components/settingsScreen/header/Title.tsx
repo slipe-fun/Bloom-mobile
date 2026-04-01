@@ -22,7 +22,7 @@ export default function SettingsTitle({ scrollY, user, onLayout }: UserProps) {
           scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, theme.fontSize.lg / (theme.fontSize.xxl - 4)], 'clamp'),
         },
         {
-          translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, -(theme.fontSize.lg - theme.fontSize.xxl - 4) / 2], 'clamp'),
+          translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, -8], 'clamp'),
         },
       ],
     }),
@@ -31,7 +31,7 @@ export default function SettingsTitle({ scrollY, user, onLayout }: UserProps) {
   return (
     <>
       {/* This text component only for layout measurement (because we need to get minimised title height */}
-      <Text onLayout={onLayout} style={styles.measureTitle}>
+      <Text pointerEvents="none" onLayout={onLayout} style={styles.measureTitle}>
         {user?.display_name}
       </Text>
 

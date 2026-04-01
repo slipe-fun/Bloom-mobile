@@ -18,7 +18,7 @@ export default function Header() {
   const { theme } = useUnistyles()
   const animatedTheme = useAnimatedTheme()
   const [status, setStatus] = useState('connecting')
-  const { setHeaderHeight, setEdit, edit, clearSelectedChats } = useChatsStore()
+  const { setEdit, edit, clearSelectedChats } = useChatsStore()
   const router = useRouter()
   const animation = useSharedValue(1)
 
@@ -52,25 +52,23 @@ export default function Header() {
   }, [edit])
 
   return (
-    <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)} style={[styles.header, { paddingTop: insets.top }]}>
+    <View pointerEvents="box-only" style={styles.header(insets.top)}>
       <GradientBlur direction="top-to-bottom" />
-      <View style={[styles.topHeader]}>
-        <Button style={animatedEditButtonStyle} onPress={editPress} variant="icon">
-          {edit ? (
-            <Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
-              <Icon icon="checkmark" color={theme.colors.white} />
-            </Animated.View>
-          ) : (
-            <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut}>
-              <Icon icon="pencil" color={theme.colors.text} />
-            </Animated.View>
-          )}
-        </Button>
-        <Title state={status} />
-        <Button onPress={handlePresentModalPress} style={animatedButtonStyle} variant="icon">
-          <Icon icon="plus" color={theme.colors.text} />
-        </Button>
-      </View>
+      <Button style={animatedEditButtonStyle} onPress={editPress} variant="icon">
+        {edit ? (
+          <Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
+            <Icon icon="checkmark" color={theme.colors.white} />
+          </Animated.View>
+        ) : (
+          <Animated.View entering={zoomAnimationIn} exiting={zoomAnimationOut}>
+            <Icon icon="pencil" color={theme.colors.text} />
+          </Animated.View>
+        )}
+      </Button>
+      <Title state={status} />
+      <Button onPress={handlePresentModalPress} style={animatedButtonStyle} variant="icon">
+        <Icon icon="plus" color={theme.colors.text} />
+      </Button>
     </View>
   )
 }

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export const styles = StyleSheet.create((theme) => ({
   tabBarContainer: {
     paddingHorizontal: theme.spacing.xxl,
-    paddingTop: theme.spacing.md,
+    paddingTop: theme.spacing.xxl,
     bottom: 0,
     position: 'absolute',
     flexDirection: 'row',
