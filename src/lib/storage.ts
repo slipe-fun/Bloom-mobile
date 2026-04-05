@@ -17,7 +17,7 @@ const getOrCreateKey = async (service: string): Promise<string> => {
   const key = genKey()
   const success = await Keychain.setGenericPassword('mmkv', key, {
     service,
-    accessible: Platform.OS === 'ios' ? Keychain.ACCESSIBLE.WHEN_UNLOCKED : undefined,
+    accessible: Platform.OS === 'ios' ? Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY : undefined,
     storage: Platform.OS === 'android' ? Keychain.STORAGE_TYPE.AES_GCM_NO_AUTH : undefined,
   })
 
