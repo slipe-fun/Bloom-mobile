@@ -14,7 +14,7 @@ export default function () {
   const setExits = useAuthStore((state) => state.setExists)
   const [error, setError] = useState('')
 
-  const { mmkv } = useStorageStore()
+  const { mmkv, ensureMMKV } = useStorageStore()
 
   async function startGoogleAuth() {
     setError('')
@@ -46,9 +46,11 @@ export default function () {
       }
 
       try {
-        mmkv.set('token', exchangeCode.token)
-        mmkv.set('user_id', String(exchangeCode.user?.id))
-        mmkv.set('user', JSON.stringify(exchangeCode.user))
+        const storage = mmkv ?? (await ensureMMKV())
+
+        storage.set('token', exchangeCode.token)
+        storage.set('user_id', String(exchangeCode.user?.id))
+        storage.set('user', JSON.stringify(exchangeCode.user))
         setResult(exchangeCode)
         setExits(!!exchangeCode.token)
         router.navigate('/(auth)/signup/Password')

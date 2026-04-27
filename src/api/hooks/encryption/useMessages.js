@@ -21,12 +21,18 @@ export default function (chat_id) {
   const ws = useWebSocket()
 
   // storages
-  const { mmkv } = useStorageStore()
+  const { mmkv, ensureMMKV } = useStorageStore()
 
-  const nextPage = async () => await loadMessages(mmkv, chat_id, messages, setMessages)
+  const nextPage = async () => {
+    const storage = mmkv ?? (await ensureMMKV())
+    return loadMessages(storage, chat_id, messages, setMessages)
+  }
 
   // ENCRYPT AND SEND MESSAGE
-  const addMessage = async (content, reply_to) => encryptAndSendMessage(mmkv, ws, content, reply_to, messages, setMessages, chat_id)
+  const addMessage = async (content, reply_to) => {
+    const storage = mmkv ?? (await ensureMMKV())
+    return encryptAndSendMessage(storage, ws, content, reply_to, messages, setMessages, chat_id)
+  }
 
   const messagesWithDates = useMemo(() => {
     return [...messages].reverse()
@@ -34,18 +40,30 @@ export default function (chat_id) {
 
   // GET MESSAGES FROM API
   useEffect(() => {
+    if (!mmkv) {
+      return
+    }
+
     getMessagesFromApi(mmkv, setMessages, chat_id)
-  }, [chat_id])
+  }, [mmkv, chat_id])
 
   // GET MESSAGES FROM LOCAL STORAGE
   useEffect(() => {
+    if (!mmkv) {
+      return
+    }
+
     getMessagesFromLocalStorage(mmkv, chat_id, setMessages)
-  }, [chat_id])
+  }, [mmkv, chat_id])
 
   // GET NEW MESSAGES FROM MESSAGE SOCKET
   useEffect(() => {
+    if (!mmkv) {
+      return
+    }
+
     getNewMessagesFromMessageSocket(mmkv, setMessages, newMessages, chat_id, messages, clearNewMessages)
-  }, [newMessages, chat_id, messages])
+  }, [mmkv, newMessages, chat_id, messages])
 
   // GET CHANGES OF SEEN MESSAGES STATUS
   useEffect(() => {

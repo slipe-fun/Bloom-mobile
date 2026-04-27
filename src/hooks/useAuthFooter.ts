@@ -24,7 +24,7 @@ export default function useAuthFooter(): UseAuthFooter {
   const index = useNavigationState((s) => s.index)
   const { t } = useTranslation('auth')
   const { exists, email, emailValid, otp, username, dbUsername, password, setError, setDbUsername, error, setExists } = useAuthStore()
-  const { mmkv } = useStorageStore()
+  const { mmkv, ensureMMKV } = useStorageStore()
   const progress = useSharedValue(0)
   const [loading, setLoading] = useState(false)
 
@@ -48,7 +48,7 @@ export default function useAuthFooter(): UseAuthFooter {
 
   const label = index === 0 ? t('auth:footer.emailBtn') : index === 3 ? t('auth:footer.completeBtn') : t('auth:footer.continueBtn')
   const ERROR_TIMOUT = 10000
-  let timeout: NodeJS.Timeout
+  let timeout: ReturnType<typeof setTimeout> | undefined
 
   const handlePress = useCallback(async () => {
     try {
@@ -78,6 +78,7 @@ export default function useAuthFooter(): UseAuthFooter {
           return
         }
 
+        const storage = mmkv ?? (await ensureMMKV())
         const skid = await getSKID()
         const session_keys = skid.local.generateKeys()
 
@@ -88,25 +89,26 @@ export default function useAuthFooter(): UseAuthFooter {
           return
         }
 
-        mmkv.set(
+        storage.set(
           'session',
           JSON.stringify({
             id: data?.session_id,
             ...session_keys,
           }),
         )
-        mmkv.set('token', data?.token)
-        mmkv.set('user_id', String(data?.user?.id))
-        mmkv.set('session_id', String(data?.session_id))
-        mmkv.set('user', JSON.stringify(data?.user))
+        storage.set('token', data?.token)
+        storage.set('user_id', String(data?.user?.id))
+        storage.set('session_id', String(data?.session_id))
+        storage.set('user', JSON.stringify(data?.user))
         setDbUsername(data?.user?.username)
         router.navigate('/(auth)/signup/Password')
         return
       }
 
       if (index === 3) {
-        const token = mmkv.getString('token')!
-        await authApi.handleUsernameAndPasswordStep(token, dbUsername?.length > 0 && exists ? dbUsername : username, password, mmkv)
+        const storage = mmkv ?? (await ensureMMKV())
+        const token = storage.getString('token')!
+        await authApi.handleUsernameAndPasswordStep(token, dbUsername?.length > 0 && exists ? dbUsername : username, password, storage)
         setLoading(false)
         router.replace('/(app)/(tabs)')
       }
@@ -116,7 +118,7 @@ export default function useAuthFooter(): UseAuthFooter {
 
       timeout = setTimeout(() => setError(null), ERROR_TIMOUT)
     }
-  }, [index, email, otp, username, password, router, setError, mmkv, loading, setLoading])
+  }, [index, email, otp, username, password, router, setError, mmkv, ensureMMKV, loading, setLoading])
 
   useEffect(() => {
     progress.value = withSpring(progressValue, quickSpring)

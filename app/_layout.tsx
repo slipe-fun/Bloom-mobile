@@ -5,7 +5,6 @@ import UserProvider from '@api/providers/UserContext'
 import { WebSocketProvider } from '@api/providers/WebSocketContext'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { PortalProvider } from '@gorhom/portal'
-import { createSecureStorage } from '@lib/storage'
 import LogRocket from '@logrocket/react-native'
 import { SessionProvider } from '@providers/SessionProvider'
 import useStorageStore from '@stores/storage'
@@ -27,7 +26,7 @@ export default function RootLayout() {
     'OpenRunde-Bold': require('@assets/fonts/OpenRunde-Bold.ttf'),
   })
 
-  const { setMMKV } = useStorageStore()
+  const { ensureMMKV } = useStorageStore()
 
   useEffect(() => {
     LogRocket.init('cepguw/bloom', { textSanitizer: 'excluded' })
@@ -36,13 +35,12 @@ export default function RootLayout() {
   useEffect(() => {
     ;(async () => {
       try {
-        const storage = await createSecureStorage('user-storage')
-        setMMKV(storage)
+        await ensureMMKV()
       } catch (error) {
         console.error(error)
       }
     })()
-  }, [])
+  }, [ensureMMKV])
 
   useEffect(() => {
     UnistylesRuntime.setRootViewBackgroundColor(theme.colors.background)

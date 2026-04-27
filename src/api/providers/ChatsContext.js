@@ -128,8 +128,12 @@ export default function ChatsProvider({ children }) {
   }
 
   useEffect(() => {
+    if (!mmkv) {
+      return
+    }
+
     setChats(getChatsFromStorage(mmkv))
-  }, [])
+  }, [mmkv])
 
   useEffect(() => {
     if (ws?.readyState === WebSocket?.OPEN) {
