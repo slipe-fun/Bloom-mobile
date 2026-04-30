@@ -5,7 +5,7 @@ import type { SkImage } from '@shopify/react-native-skia'
 import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader } from '@shopify/react-native-skia'
 import useSettingsScreenStore from '@stores/settings'
 import { useEffect, useRef, useState } from 'react'
-import { AppState, Platform, useWindowDimensions, type View } from 'react-native'
+import { AppState, useWindowDimensions, type View } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated'
 import { gooeyShader } from './shader'
 
@@ -29,7 +29,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const ISLAND_WIDTH = 90
   const ISLAND_HEIGHT = 32
   const IMAGE_BLUR = 20
-  const ISLAND_Y = Platform.OS === 'android' ? -2 : ISLAND_HEIGHT / 2
+  const ISLAND_Y = ISLAND_HEIGHT / 2
   const ISLAND_R = 0
 
   const CARD_SIZE = 100

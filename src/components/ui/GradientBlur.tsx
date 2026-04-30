@@ -4,7 +4,7 @@ import { type BlurTint, BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
 import { useMemo } from 'react'
-import { Easing, Platform, type StyleProp, type ViewStyle } from 'react-native'
+import { Easing, type StyleProp, type ViewStyle } from 'react-native'
 import { easeGradient } from 'react-native-easing-gradient'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -64,19 +64,16 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
   )
   return (
     <>
-      {Platform.OS !== 'android' && (
-        <MaskedView
-          ref={ref}
-          pointerEvents="none"
-          style={gradientStyles}
-          maskElement={
-            <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
-          }
-        >
-          <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
-        </MaskedView>
-      )}
-
+      <MaskedView
+        ref={ref}
+        pointerEvents="none"
+        style={gradientStyles}
+        maskElement={
+          <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
+        }
+      >
+        <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
+      </MaskedView>
       <LinearGradient pointerEvents="none" start={start} end={end} locations={ddd as any} colors={dd as any} style={gradientStyles} />
     </>
   )
