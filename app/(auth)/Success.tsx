@@ -18,7 +18,7 @@ export default function Success() {
   return (
     <View style={styles.container}>
       <Confetti ref={confettiRef} count={150} fadeOutOnEnd />
-      <Avatar size="4xl" userId="123jdN$hDSb" />
+      <Avatar style={styles.avatar} size="4xl" userId="123jdN$hDSb" />
       <View style={styles.textContainer}>
         <Text style={styles.welcome}>{t('auth:success.welcome')}</Text>
         <Text style={styles.name}>Dikiy dikiens</Text>
@@ -50,5 +50,8 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing.xs,
     marginBottom: 120,
     alignItems: 'center',
+  },
+  avatar: {
+    boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
   },
 }))

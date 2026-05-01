@@ -19,11 +19,7 @@ export default function AuthFooter() {
   const text = index === 0 ? t('auth:footer.faceIDBtn') : t('auth:footer.continueBtn')
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.get(),
-      [0, 1, 2],
-      [animatedTheme.value.colors.primary, animatedTheme.value.colors.green, animatedTheme.value.colors.red],
-    ),
+    backgroundColor: interpolateColor(progress.get(), [0, 1], [animatedTheme.value.colors.primary, animatedTheme.value.colors.red]),
   }))
 
   return (

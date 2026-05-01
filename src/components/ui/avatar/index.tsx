@@ -1,5 +1,5 @@
 import { AVATAR_COLORS, DEFAULT_AVATARS } from '@constants/avatars'
-import FastImage, { type FastImageProps, type ImageStyle as FastImageStyle } from '@d11/react-native-fast-image'
+import FastImage, { type FastImageProps } from '@d11/react-native-fast-image'
 import { getHashCode } from '@lib/getHashCode'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useMemo } from 'react'
@@ -12,8 +12,7 @@ type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 interface AvatarProps extends Omit<FastImageProps, 'source'> {
   size?: Size
   square?: boolean
-  style?: StyleProp<FastImageStyle>
-  imageStyle?: StyleProp<FastImageStyle>
+  style?: StyleProp<any>
   image?: string
   userId?: string
   ref?: React.Ref<any>
@@ -29,7 +28,7 @@ export const SIZE_MAP: Record<Size, number> = {
   '4xl': 160,
 }
 
-export default function Avatar({ size = 'md', square = false, style, image, imageStyle, userId = '', ref = null, ...props }: AvatarProps) {
+export default function Avatar({ size = 'md', square = false, style, image, userId = '', ref = null, ...props }: AvatarProps) {
   const dimension = SIZE_MAP[size]
 
   const avatarDefault = useMemo(() => {
@@ -57,7 +56,7 @@ export default function Avatar({ size = 'md', square = false, style, image, imag
   return (
     <View ref={ref} style={!image ? [avatarStyle, style] : undefined}>
       {image ? (
-        <FastImage {...props} source={{ uri: image }} style={[avatarStyle, imageStyle]} />
+        <FastImage {...props} source={{ uri: image }} style={[avatarStyle, style]} />
       ) : (
         <>
           <LinearGradient start={[0.5, 1]} end={[0.5, 0]} colors={avatarDefault.color} style={StyleSheet.absoluteFill} />
