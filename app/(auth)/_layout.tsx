@@ -1,5 +1,4 @@
 import AuthFooter from '@components/auth/footer'
-import AuthHeader from '@components/auth/header'
 import { Stack } from '@layouts/Stack'
 import { screenTransition } from '@layouts/transition'
 import { useSession } from '@providers/SessionProvider'
@@ -16,16 +15,13 @@ export default function AuthLayout() {
       id={undefined}
       layout={({ children }) => (
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <AuthHeader />
           {children}
           <AuthFooter />
         </View>
       )}
     >
       <Stack.Screen name="Welcome" />
-      <Stack.Screen name="signup/Email" options={screenTransition()} />
-      <Stack.Screen name="signup/Otp" options={screenTransition()} />
-      <Stack.Screen name="signup/Password" options={screenTransition()} />
+      <Stack.Screen name="Success" options={screenTransition()} />
     </Stack>
   )
 }

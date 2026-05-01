@@ -4,7 +4,6 @@ import SeenMessagesProvider from '@api/providers/SeenMessagesContext'
 import UserProvider from '@api/providers/UserContext'
 import { WebSocketProvider } from '@api/providers/WebSocketContext'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import { PortalProvider } from '@gorhom/portal'
 import LogRocket from '@logrocket/react-native'
 import { SessionProvider } from '@providers/SessionProvider'
 import useStorageStore from '@stores/storage'
@@ -52,27 +51,25 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <KeyboardProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <PortalProvider>
-              <StatusBar style="auto" />
-              <SessionProvider>
-                <WebSocketProvider>
-                  <UserProvider>
-                    <ChatsProvider>
-                      <MessagesProvider>
-                        <SeenMessagesProvider>
-                          <BottomSheetModalProvider>
-                            <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
-                              <Stack.Screen name="(app)" options={{ headerShown: false }} />
-                              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                            </Stack>
-                          </BottomSheetModalProvider>
-                        </SeenMessagesProvider>
-                      </MessagesProvider>
-                    </ChatsProvider>
-                  </UserProvider>
-                </WebSocketProvider>
-              </SessionProvider>
-            </PortalProvider>
+            <StatusBar style="auto" />
+            <SessionProvider>
+              <WebSocketProvider>
+                <UserProvider>
+                  <ChatsProvider>
+                    <MessagesProvider>
+                      <SeenMessagesProvider>
+                        <BottomSheetModalProvider>
+                          <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
+                            <Stack.Screen name="(app)" options={{ headerShown: false }} />
+                            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                          </Stack>
+                        </BottomSheetModalProvider>
+                      </SeenMessagesProvider>
+                    </MessagesProvider>
+                  </ChatsProvider>
+                </UserProvider>
+              </WebSocketProvider>
+            </SessionProvider>
           </GestureHandlerRootView>
         </KeyboardProvider>
       </SafeAreaProvider>
