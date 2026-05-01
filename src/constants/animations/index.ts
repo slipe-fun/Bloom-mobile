@@ -209,3 +209,17 @@ export const LoaderAnimationIn = (): LayoutAnimResult => {
     },
   }
 }
+
+export const authAnimationIn = (springConfig: WithSpringConfig = quickSpring) => {
+  'worklet'
+  return (): LayoutAnimResult => {
+    'worklet'
+    return {
+      initialValues: { opacity: 0, transform: [{ translateY: '-100%' }] },
+      animations: {
+        opacity: withSpring(1, springConfig),
+        transform: [{ translateY: withSpring('0%', springConfig) }],
+      },
+    }
+  }
+}

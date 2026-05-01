@@ -21,7 +21,7 @@ export default function AuthLayout() {
       )}
     >
       <Stack.Screen name="Welcome" />
-      <Stack.Screen name="Success" options={authScreenTransition()} />
+      <Stack.Screen name="Success" options={authSvcreenTransition()} />
     </Stack>
   )
 }

@@ -1,5 +1,5 @@
 import { ActionText, Button, Icon } from '@components/ui'
-import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
+import { authAnimationIn, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { useAuthFooter } from '@hooks'
 import { useTranslation } from 'react-i18next'
 import Animated from 'react-native-reanimated'
@@ -14,7 +14,7 @@ export default function AuthFooter() {
   const text = t('auth:footer.faceIDBtn')
 
   return (
-    <Animated.View style={styles.footer}>
+    <Animated.View entering={authAnimationIn(springyChar(3, true))} style={styles.footer}>
       <Button
         onPress={handlePress}
         size="xl"
