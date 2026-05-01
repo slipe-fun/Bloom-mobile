@@ -3,28 +3,38 @@ import { authAnimationIn, getFadeIn, getFadeOut, layoutAnimationSpringy, springy
 import { useAuthFooter } from '@hooks'
 import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import Animated from 'react-native-reanimated'
+import Animated, { interpolateColor, useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Footer.styles'
 
 export default function AuthFooter() {
   const { theme } = useUnistyles()
   const index = useNavigationState((state) => state.index)
-  const { handlePress } = useAuthFooter()
+  const { handleFaceIdAuth, progress } = useAuthFooter()
   const { t } = useTranslation('auth')
-  const loading = true
+  const animatedTheme = useAnimatedTheme()
 
+  const loading = false
   const text = index === 0 ? t('auth:footer.faceIDBtn') : t('auth:footer.continueBtn')
+
+  const animatedButtonStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      progress.get(),
+      [0, 1, 2],
+      [animatedTheme.value.colors.primary, animatedTheme.value.colors.green, animatedTheme.value.colors.red],
+    ),
+  }))
 
   return (
     <Animated.View entering={authAnimationIn(springyChar(3, true))} layout={layoutAnimationSpringy} style={styles.footer}>
       <Button
-        onPress={handlePress}
+        onPress={handleFaceIdAuth}
         size="xl"
         elevated={true}
         disabled={loading}
         layout={layoutAnimationSpringy}
-        style={styles.button}
+        style={[styles.button, animatedButtonStyle]}
         variant="textIcon"
         icon={
           index === 0 &&
