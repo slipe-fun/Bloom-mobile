@@ -4,7 +4,6 @@ import { layoutAnimation } from '@constants/animations'
 import { useInsets } from '@hooks'
 import type { Member, Message } from '@interfaces'
 import type { FlashListRef } from '@shopify/flash-list'
-import useChatStore from '@stores/chat'
 import { useCallback, useState } from 'react'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
@@ -27,8 +26,6 @@ export default function Footer({ onSend, footerHeight, listRef, recipient }: Foo
   const { theme } = useUnistyles()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const [inputValue, setInputValue] = useState('')
-  const replyMessage = useChatStore((state) => state.replyMessage)
-  const setReplyMessage = useChatStore((state) => state.setReplyMessage)
 
   const animatedViewStyle = useAnimatedStyle(() => ({
     // paddingHorizontal: withSpring(keyboardProgress.get() > 0.1 ? theme.spacing.lg : theme.spacing.xxxl, quickSpring),
@@ -40,13 +37,10 @@ export default function Footer({ onSend, footerHeight, listRef, recipient }: Foo
     if (!trimmedValue) return
 
     listRef?.prepareForLayoutAnimationRender()
-    onSend(trimmedValue, replyMessage)
+    onSend(trimmedValue, 1)
 
     setInputValue('')
-    if (replyMessage) {
-      setReplyMessage(null)
-    }
-  }, [inputValue, replyMessage, onSend, setReplyMessage])
+  }, [inputValue, onSend])
 
   return (
     <AnimatedKeyboardStickyView

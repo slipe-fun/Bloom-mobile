@@ -1,14 +1,12 @@
-import { Icon, Input } from '@components/ui'
-import { getFadeIn, getFadeOut, layoutAnimation, quickSpring, springy } from '@constants/animations'
+import { Input } from '@components/ui'
+import { layoutAnimation, quickSpring, springy } from '@constants/animations'
 import { PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { Chat } from '@interfaces'
-import useChatStore from '@stores/chat'
 import { useCallback } from 'react'
-import { type LayoutChangeEvent, Pressable, Text } from 'react-native'
+import type { LayoutChangeEvent } from 'react-native'
 import Animated, { type SharedValue, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 
 type MessageInputProps = {
@@ -20,11 +18,8 @@ type MessageInputProps = {
 
 const AnimatedInput = Animated.createAnimatedComponent(Input)
 
-export default function MessageInput({ setValue, value, footerHeight, recipient }: MessageInputProps) {
-  const replyMessage = useChatStore((state) => state.replyMessage)
-  const setReplyMessage = useChatStore((state) => state.setReplyMessage)
+export default function MessageInput({ setValue, value, footerHeight }: MessageInputProps) {
   const insets = useInsets()
-  const { theme } = useUnistyles()
   const scale = useSharedValue(1)
 
   const onInputLayout = useCallback(
@@ -52,19 +47,6 @@ export default function MessageInput({ setValue, value, footerHeight, recipient 
       layout={layoutAnimation}
       style={[styles.messageInputWrapper, animatedStyle]}
     >
-      {replyMessage ? (
-        <Animated.View layout={layoutAnimation} entering={getFadeIn()} exiting={getFadeOut()} style={styles.replyBlockWrapper}>
-          <Pressable style={styles.replyBlock}>
-            <Text numberOfLines={1} style={styles.replyText}>
-              В ответ <Text style={styles.replyRecipient}>{recipient.display_name || recipient.username}</Text>
-            </Text>
-            <Pressable style={styles.replyCancel} onPress={() => setReplyMessage(null)}>
-              <Icon size={16} icon="x" color={theme.colors.secondaryText} />
-            </Pressable>
-          </Pressable>
-        </Animated.View>
-      ) : null}
-
       <AnimatedInput
         basic
         layout={layoutAnimation}

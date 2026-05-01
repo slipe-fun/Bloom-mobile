@@ -1,4 +1,4 @@
-import { randomBytes } from '@noble/hashes/utils.js'
+import { randomBytes } from '@noble/ciphers/utils.js'
 import { Platform } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 import { createMMKV, type MMKV } from 'react-native-mmkv'

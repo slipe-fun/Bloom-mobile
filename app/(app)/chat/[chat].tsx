@@ -6,7 +6,7 @@ import { base } from '@design/base'
 import { useChatController, useInsets } from '@hooks'
 import type { Message as MessageType } from '@interfaces'
 import { FlashList, type FlashListRef } from '@shopify/flash-list'
-import useChatStore from '@stores/chat'
+// import useChatStore from '@stores/chat'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useRef } from 'react'
 import { View } from 'react-native'
@@ -21,7 +21,7 @@ export default function Chat() {
   const listRef = useRef<FlashListRef<MessageType>>(null)
 
   const footerHeight = useSharedValue(0)
-  const replyMessage = useChatStore((state) => state.replyMessage)
+  const replyMessage = 2
 
   const insets = useInsets()
   const { messages, seenID, addMessage, nextPage, _chat } = useChatController({ chat, listRef: listRef.current })
