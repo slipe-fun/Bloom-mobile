@@ -4,6 +4,7 @@ export const styles = StyleSheet.create((theme) => ({
   footer: {
     width: '100%',
     position: 'absolute',
+    gap: theme.spacing.md,
     paddingHorizontal: 36,
     paddingBottom: 36,
   },

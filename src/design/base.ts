@@ -25,7 +25,7 @@ export const base = {
     /** 20px   */ xl: 20,
     /** 28px   */ xxl: 28,
     /** 32px   */ xxxl: 34,
-    /** 56px   */ super: 56,
+    /** 56px   */ super: 64,
   },
   radius: {
     /** 8px    */ xxs: 8,

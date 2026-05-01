@@ -6,33 +6,30 @@ import { UnistylesRuntime } from 'react-native-unistyles'
 
 export const TOP_OFFSET = 4
 
-export const screenTransition = (gestures: boolean = true): BlankStackNavigationOptions => {
+export const authScreenTransition = (): BlankStackNavigationOptions => {
   const color = UnistylesRuntime.getTheme().colors.background
 
   return {
     // experimental_enableHighRefreshRate: true,
-    gestureEnabled: gestures,
+    gestureEnabled: true,
     gestureDirection: ['horizontal'],
     screenStyleInterpolator: ({
       current: {
         layouts: { screen },
       },
       progress,
-      insets,
-      active,
     }) => {
       'worklet'
 
-      const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width / 3.5], 'clamp')
-      const opacity = interpolate(progress, [0, 1, 2], [0, 0.3, 0], 'clamp')
-      const radius = active.progress >= 0.999 ? 0 : insets.top - TOP_OFFSET
+      const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width], 'clamp')
+      const opacity = interpolate(progress, [0, 1, 2], [0, 1, 0], 'clamp')
 
       return {
         content: {
           style: {
             transform: [{ translateX }],
             overflow: 'hidden',
-            borderRadius: radius,
+            borderRadius: 0,
             borderCurve: 'continuous',
             backgroundColor: color,
           },
@@ -40,7 +37,7 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
         backdrop: {
           style: {
             opacity,
-            backgroundColor: staticColors.black,
+            backgroundColor: color,
           },
         },
       }

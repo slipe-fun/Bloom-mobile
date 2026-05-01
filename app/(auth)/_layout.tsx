@@ -1,6 +1,6 @@
 import AuthFooter from '@components/auth/footer'
+import { authScreenTransition } from '@layouts/authTransition'
 import { Stack } from '@layouts/Stack'
-import { screenTransition } from '@layouts/transition'
 import { useSession } from '@providers/SessionProvider'
 import { Redirect } from 'expo-router'
 import { View } from 'react-native'
@@ -21,7 +21,7 @@ export default function AuthLayout() {
       )}
     >
       <Stack.Screen name="Welcome" />
-      <Stack.Screen name="Success" options={screenTransition()} />
+      <Stack.Screen name="Success" options={authScreenTransition()} />
     </Stack>
   )
 }
