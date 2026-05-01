@@ -1,5 +1,4 @@
 import { quickSpring } from '@constants/easings'
-import { staticColors } from '@design/colors'
 import { interpolate } from 'react-native-reanimated'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
 import { UnistylesRuntime } from 'react-native-unistyles'
