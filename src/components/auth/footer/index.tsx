@@ -22,6 +22,7 @@ export default function AuthFooter() {
         onPress={handlePress}
         size="xl"
         elevated={true}
+        disabled={loading}
         layout={layoutAnimationSpringy}
         style={styles.button}
         variant="textIcon"

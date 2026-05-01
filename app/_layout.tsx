@@ -59,7 +59,7 @@ export default function RootLayout() {
                     <MessagesProvider>
                       <SeenMessagesProvider>
                         <BottomSheetModalProvider>
-                          <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content }}>
+                          <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content, animation: 'fade' }}>
                             <Stack.Screen name="(app)" options={{ headerShown: false }} />
                             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                           </Stack>

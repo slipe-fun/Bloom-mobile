@@ -1,12 +1,21 @@
 import { useSession } from '@providers/SessionProvider'
-import { Redirect } from 'expo-router'
+import { useRouter } from 'expo-router'
+import { useLayoutEffect } from 'react'
+import { View } from 'react-native'
 
 export default function Index() {
-  const { token } = useSession()
+  const { token, loading } = useSession()
+  const router = useRouter()
 
-  if (!token) {
-    return <Redirect href="/(auth)/Welcome" />
-  }
+  useLayoutEffect(() => {
+    if (!loading) {
+      if (!token) {
+        router.replace('/(auth)/Welcome')
+      } else {
+        router.replace('/(app)')
+      }
+    }
+  }, [loading, token])
 
-  return <Redirect href="/(app)" />
+  return <View style={{ flex: 1, backgroundColor: 'white' }} />
 }
