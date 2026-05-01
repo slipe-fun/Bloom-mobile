@@ -10,8 +10,8 @@ export const styles = StyleSheet.create((theme) => ({
   }),
   bar: (color: string, size: number) => ({
     position: 'absolute',
-    width: 2 * (size / 6.4),
-    height: 6 * (size / 7),
+    width: 3.5 * (size / 7),
+    aspectRatio: 1,
     borderRadius: theme.radius.full,
     backgroundColor: color ? color : theme.colors.text,
   }),

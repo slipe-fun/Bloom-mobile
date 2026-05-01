@@ -20,7 +20,7 @@ interface Loader {
   ref?: React.Ref<any>
 }
 
-export default function Loader({ interval = 100, size = 26, segments = 8, color, ref }: Loader) {
+export default function Loader({ interval = 85, size = 26, segments = 8, color, ref }: Loader) {
   const [progress, setProgress] = useState(0)
 
   const radius = size / 2.83
@@ -46,12 +46,11 @@ function Bar({ index, progress, radius, segments, color }: Bar) {
   const animationProgress = useSharedValue(0)
 
   const animatedViewStyles = useAnimatedStyle((): ViewStyle => {
-    const scaleY = interpolate(animationProgress.get(), [0, 1], [1, 1.25])
-    const opacity = interpolate(animationProgress.get(), [0, 1], [0.35, 1])
-    const translateY = interpolate(animationProgress.get(), [0, 1], [-radius, -radius - 1])
+    const scale = interpolate(animationProgress.get(), [0, 1], [1, 1.4])
+    const opacity = interpolate(animationProgress.get(), [0, 1], [0.5, 1])
 
     return {
-      transform: [{ rotate: `${(index * 360) / segments}deg` }, { translateY }, { scaleY }],
+      transform: [{ rotate: `${(index * 360) / segments}deg` }, { translateY: -radius }, { scale }],
       opacity,
     }
   }, [progress, index])

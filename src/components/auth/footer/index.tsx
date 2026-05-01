@@ -35,7 +35,7 @@ export default function AuthFooter() {
         }
       >
         {loading ? (
-          <Loader color={theme.colors.white} size={24} />
+          <Loader color={theme.colors.white} size={28} />
         ) : (
           <Animated.View layout={layoutAnimationSpringy} style={styles.partsContainer}>
             {text.split(' ').map((part) => (
