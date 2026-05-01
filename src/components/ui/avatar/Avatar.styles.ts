@@ -5,16 +5,16 @@ type AvatarStyleProps = {
   square: boolean
   image: boolean
   padding: number
-  backgroundColor: string
 }
 
 export const styles = StyleSheet.create((theme) => ({
-  avatar: ({ height, square, image, padding, backgroundColor }: AvatarStyleProps) => ({
+  avatar: ({ height, square, image, padding }: AvatarStyleProps) => ({
     aspectRatio: 1,
     height,
+    overflow: 'hidden',
     borderRadius: square ? theme.radius.md : theme.radius.full,
     padding: image ? 0 : padding,
-    backgroundColor: image ? theme.colors.foreground : backgroundColor,
+    backgroundColor: image ? theme.colors.foreground : 'transparent',
   }),
   emoji: {
     width: '100%',

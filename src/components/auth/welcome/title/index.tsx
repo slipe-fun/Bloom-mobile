@@ -1,9 +1,12 @@
 import { authAnimationIn, springyChar } from '@constants/animations'
+import { useTranslation } from 'react-i18next'
 import { Image, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { styles } from './Title.styles'
 
 export default function AuthTitle() {
+  const { t } = useTranslation('auth')
+
   return (
     <View style={styles.titleContainer}>
       <Animated.View entering={authAnimationIn(springyChar(1, true))} style={styles.bloom}>
@@ -12,7 +15,7 @@ export default function AuthTitle() {
         <Text style={styles.char}>M!</Text>
       </Animated.View>
       <Animated.Text entering={authAnimationIn(springyChar(2, true))} style={styles.description}>
-        🔒 Secured as Bank, ☎️ Simple as SMS and 🏎 Fast as Formula 1
+        {t('auth:welcome.subtitle')}
       </Animated.Text>
     </View>
   )

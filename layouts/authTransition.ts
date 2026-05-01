@@ -21,7 +21,6 @@ export const authScreenTransition = (): BlankStackNavigationOptions => {
       'worklet'
 
       const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width], 'clamp')
-      const opacity = interpolate(progress, [0, 1, 2], [0, 1, 0], 'clamp')
 
       return {
         content: {
@@ -35,7 +34,7 @@ export const authScreenTransition = (): BlankStackNavigationOptions => {
         },
         backdrop: {
           style: {
-            opacity,
+            opacity: 0,
             backgroundColor: color,
           },
         },

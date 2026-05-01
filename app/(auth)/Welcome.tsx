@@ -15,5 +15,6 @@ const styles = StyleSheet.create((theme) => ({
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: theme.colors.background,
+    paddingBottom: 140,
   },
 }))
