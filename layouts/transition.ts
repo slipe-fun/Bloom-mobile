@@ -10,7 +10,7 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
   const color = UnistylesRuntime.getTheme().colors.background
 
   return {
-    experimental_enableHighRefreshRate: true,
+    // experimental_enableHighRefreshRate: true,
     gestureEnabled: gestures,
     gestureDirection: ['horizontal'],
     screenStyleInterpolator: ({ layouts: { screen }, progress, insets, active }) => {

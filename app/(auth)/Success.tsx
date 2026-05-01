@@ -2,7 +2,7 @@ import AuthTitle from '@components/auth/welcome/title'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export default function Welcome() {
+export default function Success() {
   return (
     <View style={styles.container}>
       <AuthTitle />

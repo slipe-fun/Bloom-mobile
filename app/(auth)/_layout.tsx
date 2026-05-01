@@ -8,7 +8,7 @@ import { View } from 'react-native'
 export default function AuthLayout() {
   const { token } = useSession()
 
-  if (token) return <Redirect href="/(app)/(tabs)" />
+  if (token) return <Redirect href="/(app)" />
 
   return (
     <Stack

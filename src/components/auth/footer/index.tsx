@@ -1,85 +1,46 @@
-import { Button, Icon, Loader } from '@components/ui'
+import { Button, Icon } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimationSpringy } from '@constants/animations'
-import { base } from '@design/base'
-import { useAuthFooter, useInsets } from '@hooks'
-import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import Animated, { interpolate, interpolateColor, useAnimatedStyle } from 'react-native-reanimated'
+import { useAuthFooter } from '@hooks'
+import { useTranslation } from 'react-i18next'
+import Animated from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
-import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Footer.styles'
 
-const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
-
 export default function AuthFooter() {
-  const insets = useInsets()
   const { theme } = useUnistyles()
-  const animatedTheme = useAnimatedTheme()
-  const { index, label, isDisabled, progress, loading, handlePress } = useAuthFooter()
-  const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
-
-  const animatedButtonStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 1, 2, 3],
-      [
-        animatedTheme.value.colors.foregroundTransparent,
-        animatedTheme.value.colors.foregroundTransparent,
-        animatedTheme.value.colors.primary,
-        animatedTheme.value.colors.red,
-      ],
-    ),
-  }))
-
-  const animatedLabelStyle = useAnimatedStyle(() => ({
-    color: interpolateColor(
-      progress.value,
-      [0, 1, 2, 3],
-      [
-        animatedTheme.value.colors.text,
-        animatedTheme.value.colors.secondaryText,
-        animatedTheme.value.colors.white,
-        animatedTheme.value.colors.white,
-      ],
-    ),
-  }))
-
-  const animatedViewStyle = useAnimatedStyle(() => ({
-    paddingHorizontal: interpolate(keyboardProgress.get(), [0, 1], [base.spacing.xxxl, base.spacing.lg]),
-  }))
+  const { handlePress } = useAuthFooter()
+  const { t } = useTranslation('auth')
 
   return (
-    <AnimatedKeyboardStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={[styles.footer, animatedViewStyle]}>
+    <Animated.View style={styles.footer}>
       <Button
-        disabled={isDisabled}
         onPress={handlePress}
-        style={animatedButtonStyle}
         size="xl"
-        elevated={false}
+        elevated={true}
+        style={styles.button}
         variant="textIcon"
         icon={
-          index === 0 ? (
-            <Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
-              <Icon key="at-icon" size={26} color={theme.colors.text} icon="at" />
-            </Animated.View>
-          ) : loading ? (
-            <Loader color={theme.colors.white} size={20} />
-          ) : null
+          <Animated.View entering={getFadeIn()} exiting={getFadeOut()}>
+            <Icon key="id" size={24} color={theme.colors.white} icon="id" />
+          </Animated.View>
         }
       >
         <Animated.View layout={layoutAnimationSpringy} style={styles.partsContainer}>
-          {label.split(' ').map((part) => (
-            <Animated.Text
-              key={part}
-              entering={getFadeIn()}
-              exiting={getFadeOut()}
-              layout={layoutAnimationSpringy}
-              style={[styles.buttonLabel, animatedLabelStyle]}
-            >
-              {part}{' '}
-            </Animated.Text>
-          ))}
+          {t('auth:footer.faceIDBtn')
+            .split(' ')
+            .map((part) => (
+              <Animated.Text
+                key={part}
+                entering={getFadeIn()}
+                exiting={getFadeOut()}
+                layout={layoutAnimationSpringy}
+                style={styles.buttonLabel}
+              >
+                {part}{' '}
+              </Animated.Text>
+            ))}
         </Animated.View>
       </Button>
-    </AnimatedKeyboardStickyView>
+    </Animated.View>
   )
 }

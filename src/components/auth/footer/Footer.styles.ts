@@ -4,13 +4,16 @@ export const styles = StyleSheet.create((theme) => ({
   footer: {
     width: '100%',
     position: 'absolute',
-    paddingHorizontal: theme.spacing.lg,
-    bottom: 0,
+    paddingHorizontal: 36,
+    paddingBottom: 36,
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
   },
   buttonLabel: {
     fontSize: theme.fontSize.lg,
     fontFamily: theme.fontFamily.semibold,
-    color: theme.colors.text,
+    color: theme.colors.white,
   },
   partsContainer: {
     flexDirection: 'row',
