@@ -15,7 +15,7 @@ export const styles = StyleSheet.create((theme) => ({
     transformOrigin: 'center bottom 0px',
     color: theme.colors.text,
   },
-  bloom: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -25,5 +25,9 @@ export const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fontFamily.medium,
     color: theme.colors.text,
     textAlign: 'center',
+  },
+  eye: {
+    width: 64,
+    height: 64,
   },
 }))
