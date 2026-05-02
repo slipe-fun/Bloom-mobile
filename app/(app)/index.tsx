@@ -1,5 +1,6 @@
 import { useChatList } from '@api/providers/ChatsContext'
 import Chat from '@components/chats/chat'
+import Footer from '@components/chats/footer'
 import Header from '@components/chats/header'
 import Search from '@components/chats/search'
 import { EmptyModal } from '@components/ui'
@@ -14,7 +15,7 @@ import { useCallback } from 'react'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
-export default function TabChats() {
+export default function Chats() {
   const { height, search } = useTabBarStore()
   const { chats } = useChatList()
   const insets = useInsets()
@@ -40,6 +41,7 @@ export default function TabChats() {
 
   return (
     <>
+      <Footer />
       <Search />
       <Animated.View style={[styles.container, animatedViewStyle]}>
         <FlashList
