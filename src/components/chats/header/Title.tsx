@@ -1,5 +1,5 @@
 import { Icon } from '@components/ui'
-import { getFadeIn, getFadeOut, layoutAnimationSpringy, springy } from '@constants/animations'
+import { charAnimationIn, charAnimationOut, layoutAnimationSpringy, springy, springyChar } from '@constants/animations'
 import { useEffect } from 'react'
 import Animated, {
   cancelAnimation,
@@ -21,6 +21,8 @@ export default function Title({ state }) {
   const color = useSharedValue(0)
   const { theme } = useUnistyles()
   const rotation = useSharedValue(0)
+
+  const title = state === 'connected' ? 'Bloom' : 'Connecting...'
 
   const startRotation = () => {
     rotation.set(withRepeat(withTiming(360, { duration: 2000, easing: Easing.linear }), -1, false))
@@ -44,30 +46,34 @@ export default function Title({ state }) {
   })
 
   useEffect(() => {
-    if (state !== 'connected') {
-      color.set(withSpring(1, springy))
-      startRotation()
-    } else {
+    if (state === 'connected') {
       color.set(withSpring(0, springy))
       stopRotation()
+    } else {
+      color.set(withSpring(1, springy))
+      startRotation()
     }
   }, [state])
 
   return (
     <Animated.View key="connected" layout={layoutAnimationSpringy} style={styles.container}>
       <Animated.View style={animatedStyle} layout={layoutAnimationSpringy}>
-        <Icon color={theme.colors.primary} animatedProps={animatedProps} icon="logo" size={28} />
+        <Icon color={theme.colors.primary} animatedProps={animatedProps} icon="logo" size={30} />
       </Animated.View>
-
-      {state !== 'connecting' ? (
-        <Animated.Text key="connected" layout={layoutAnimationSpringy} entering={getFadeIn()} exiting={getFadeOut()} style={styles.text}>
-          Bloom
-        </Animated.Text>
-      ) : (
-        <Animated.Text key="connecting" layout={layoutAnimationSpringy} entering={getFadeIn()} exiting={getFadeOut()} style={styles.text}>
-          Подкл...
-        </Animated.Text>
-      )}
+      <Animated.View style={styles.row} layout={layoutAnimationSpringy}>
+        {title.split('').map((char, i) => (
+          <Animated.Text
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanaion>
+            key={`${char}-${i}`}
+            entering={charAnimationIn(springyChar(i / 2, true), true)}
+            exiting={charAnimationOut(springyChar(i / 2, true), true)}
+            layout={layoutAnimationSpringy}
+            style={styles.text}
+          >
+            {char}
+          </Animated.Text>
+        ))}
+      </Animated.View>
     </Animated.View>
   )
 }

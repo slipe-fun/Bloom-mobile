@@ -23,8 +23,8 @@ export const base = {
     /** 16px   */ md: 16,
     /** 18px   */ lg: 18,
     /** 20px   */ xl: 20,
-    /** 28px   */ xxl: 28,
-    /** 32px   */ xxxl: 34,
+    /** 28px   */ xxl: 24,
+    /** 32px   */ xxxl: 32,
     /** 56px   */ super: 64,
   },
   radius: {

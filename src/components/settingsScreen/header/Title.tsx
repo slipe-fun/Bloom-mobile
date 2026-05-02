@@ -19,7 +19,7 @@ export default function SettingsTitle({ scrollY, user, onLayout }: UserProps) {
     (): TextStyle => ({
       transform: [
         {
-          scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, theme.fontSize.lg / (theme.fontSize.xxl - 4)], 'clamp'),
+          scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, theme.fontSize.lg / theme.fontSize.xxl], 'clamp'),
         },
         {
           translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, -8], 'clamp'),

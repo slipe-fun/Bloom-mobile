@@ -13,7 +13,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   title: {
     color: theme.colors.text,
-    fontSize: theme.fontSize.xxl - 4,
+    fontSize: theme.fontSize.xxl,
     fontFamily: theme.fontFamily.semibold,
   },
   subTitle: {
