@@ -66,6 +66,7 @@ export default function AuthTitle() {
     .minDistance(0)
     .onBegin((e) => update(e.x, e.y))
     .onChange((e) => update(e.x, e.y))
+    // biome-ignore lint/suspicious/noAssignInExpressions: <explation>
     .onFinalize(() => (hovered.value = -1))
 
   const descStyle = useAnimatedStyle(() => ({

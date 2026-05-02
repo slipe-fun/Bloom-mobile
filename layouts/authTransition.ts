@@ -10,7 +10,7 @@ export const authScreenTransition = (): BlankStackNavigationOptions => {
 
   return {
     // experimental_enableHighRefreshRate: true,
-    gestureEnabled: true,
+    gestureEnabled: false,
     gestureDirection: ['horizontal'],
     screenStyleInterpolator: ({
       current: {
