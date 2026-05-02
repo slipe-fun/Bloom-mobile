@@ -1,6 +1,7 @@
 import { Icon } from '@components/ui'
 import { charAnimationIn, charAnimationOut, layoutAnimationSpringy, springy, springyChar } from '@constants/animations'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import Animated, {
   cancelAnimation,
   Easing,
@@ -21,8 +22,9 @@ export default function Title({ state }) {
   const color = useSharedValue(0)
   const { theme } = useUnistyles()
   const rotation = useSharedValue(0)
+  const { t } = useTranslation('common')
 
-  const title = state === 'connected' ? 'Bloom' : 'Connecting...'
+  const title = state === 'connected' ? 'Bloom' : t('common:chats.header.titleConnecting')
 
   const startRotation = () => {
     rotation.set(withRepeat(withTiming(360, { duration: 2000, easing: Easing.linear }), -1, false))
