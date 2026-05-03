@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import type { TextInput } from 'react-native'
 import { interpolateColor, useAnimatedProps, useSharedValue, withSpring } from 'react-native-reanimated'
 import type { PathProps } from 'react-native-svg'
+import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 
 type FooterSearchProps = {
@@ -13,7 +14,8 @@ type FooterSearchProps = {
 }
 
 export default function FooterSearch({ ref }: FooterSearchProps) {
-  const theme = useAnimatedTheme()
+  const animatedTheme = useAnimatedTheme()
+  const { theme } = useUnistyles()
   const { t } = useTranslation('common')
   const colorValue = useSharedValue(0)
 
@@ -24,7 +26,7 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
 
   const animatedProps = useAnimatedProps(
     (): PathProps => ({
-      fill: interpolateColor(colorValue.get(), [0, 1], [theme.value.colors.secondaryText, theme.value.colors.text]),
+      fill: interpolateColor(colorValue.get(), [0, 1], [animatedTheme.value.colors.secondaryText, animatedTheme.value.colors.text]),
     }),
   )
 
@@ -37,12 +39,13 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
       ref={ref}
       value={searchValue}
       size="lg"
+      viewStyle={{ flex: 1 }}
       elevated={true}
       onChangeText={setSearchValue}
       onFocus={() => setSearchFocused(true)}
       onBlur={() => setSearchFocused(false)}
       placeholder={t('common:chats.footer.search.placeholder')}
-      icon={<Icon size={22} animatedProps={animatedProps} icon="magnifyingglass" />}
+      icon={<Icon size={22} color={theme.colors.secondaryText} animatedProps={animatedProps} icon="magnifyingglass" />}
       submitBehavior="blurAndSubmit"
       returnKeyType="search"
     />

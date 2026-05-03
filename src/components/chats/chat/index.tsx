@@ -74,7 +74,7 @@ export default function Chat({ chat, isLast = false }: ChatProps) {
           </>
         )}
         <Animated.View style={[styles.avatarWrapper, animatedShiftStyle]}>
-          <Avatar size="lg" image={chat?.avatar} username={recipient?.username || recipient?.display_name} />
+          <Avatar size="xl" image={chat?.avatar} username={recipient?.username || recipient?.display_name} />
         </Animated.View>
         <Animated.View style={[styles.content, animatedShiftStyle]}>
           <View style={styles.headerRow}>

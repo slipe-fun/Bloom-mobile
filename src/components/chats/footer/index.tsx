@@ -6,6 +6,7 @@ import { useRef } from 'react'
 import type { TextInput } from 'react-native'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import FooterAvatar from './avatar'
 import { styles } from './Footer.styles'
 import FooterSearch from './search'
 
@@ -26,6 +27,7 @@ export default function Footer() {
     <AnimatedStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={[styles.container, animatedViewStyles]}>
       <GradientBlur keyboard />
       <FooterSearch ref={inputRef} />
+      <FooterAvatar />
     </AnimatedStickyView>
   )
 }

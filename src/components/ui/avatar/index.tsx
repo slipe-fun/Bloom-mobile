@@ -21,8 +21,8 @@ interface AvatarProps extends Omit<FastImageProps, 'source'> {
 export const SIZE_MAP: Record<Size, number> = {
   sm: 40,
   md: 44,
-  lg: 56,
-  xl: 68,
+  lg: 48,
+  xl: 54,
   '2xl': 100,
   '3xl': 128,
   '4xl': 160,
