@@ -6,9 +6,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export default function Settings() {
   return (
     <View style={styles.container}>
-      <Transition.Boundary.View id="avatar">
-        <Avatar style={styles.avatar} size="xl" userId="dk3k293KK" />
-      </Transition.Boundary.View>
+      <Avatar style={styles.avatar} size="xl" userId="dk3k293KK" />
       <Text style={styles.title}>Settings</Text>
     </View>
   )

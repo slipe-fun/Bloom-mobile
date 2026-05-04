@@ -4,7 +4,6 @@ import { ICON_PRESSABLE_SCALE } from '@constants/animations/values'
 import { useRouter } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import Transition from 'react-native-screen-transitions'
 import { styles } from './Avatar.styles'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -20,14 +19,14 @@ export default function FooterAvatar() {
   const animatedAvatarStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.get() }],
   }))
-  // return (
-  //   <AnimatedPressable style={animatedAvatarStyle} onTouchStart={() => handlePress(true)} onTouchEnd={() => handlePress(false)}>
-  //     <Avatar style={styles.avatar} size="lg" userId="dk3k293KK" />
-  //   </AnimatedPressable>
-  // )
   return (
-    <Transition.Boundary.Trigger id="avatar" onPress={() => router.push('/(app)/Settings')}>
+    <AnimatedPressable
+      onPress={() => router.push('/(app)/Settings')}
+      style={animatedAvatarStyle}
+      onTouchStart={() => handlePress(true)}
+      onTouchEnd={() => handlePress(false)}
+    >
       <Avatar style={styles.avatar} size="lg" userId="dk3k293KK" />
-    </Transition.Boundary.Trigger>
+    </AnimatedPressable>
   )
 }
