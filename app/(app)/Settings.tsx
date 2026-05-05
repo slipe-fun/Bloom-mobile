@@ -17,7 +17,7 @@ export default function Settings() {
 const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.grayBackground,
     alignItems: 'center',
     boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
     paddingTop: 80,

@@ -18,14 +18,14 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
         layouts: { screen },
       },
       progress,
+      focused,
       insets,
-      active,
     }) => {
       'worklet'
 
       const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width / 3.5], 'clamp')
       const opacity = interpolate(progress, [0, 1, 2], [0, 0.3, 0], 'clamp')
-      const radius = active.progress >= 0.999 ? 0 : insets.top - TOP_OFFSET
+      const radius = !focused ? 0 : insets.top - TOP_OFFSET
 
       return {
         content: {
