@@ -41,6 +41,7 @@ export default function Chats() {
 
   return (
     <>
+      <Footer />
       <Search />
       <Animated.View style={[styles.container, animatedViewStyle]}>
         <FlashList
@@ -63,7 +64,6 @@ export default function Chats() {
           <EmptyModal text="У вас еще нет ни одного чата! Создайте свой первый чат!" icon="message" color="primary" />
         ) : null}
         <Header />
-        <Footer />
       </Animated.View>
     </>
   )

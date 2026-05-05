@@ -183,8 +183,8 @@ importers:
         specifier: 5.6.2
         version: 5.6.2(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0)
       react-native-screen-transitions:
-        specifier: ^3.4.0
-        version: 3.4.0(eb8c12242e1c5fcc480e7be422570ce9)
+        specifier: ^3.5.0
+        version: 3.5.0(eb8c12242e1c5fcc480e7be422570ce9)
       react-native-screens:
         specifier: 4.19.0
         version: 4.19.0(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0)
@@ -4134,8 +4134,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-screen-transitions@3.4.0:
-    resolution: {integrity: sha512-BtyINZasyTsHp/P4DDqWw8wvWleCab+S9Me30cZv6qZ0OElzmOgJgE3WMUjwJbYBiZN2T0k0m1baDVE+pLml6A==}
+  react-native-screen-transitions@3.5.0:
+    resolution: {integrity: sha512-REtIfXHGNKJz0Wb7Gwd9raDnNrbMX/4nlPQL8YL26oAhv99Ifm0x7N5laZZcFFLQp3lCzv4xQkB9QSiur9EddQ==}
     peerDependencies:
       '@react-navigation/elements': '>=2.0.0'
       '@react-navigation/native': '>=6.0.0'
@@ -9894,7 +9894,7 @@ snapshots:
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0)
 
-  react-native-screen-transitions@3.4.0(eb8c12242e1c5fcc480e7be422570ce9):
+  react-native-screen-transitions@3.5.0(eb8c12242e1c5fcc480e7be422570ce9):
     dependencies:
       '@react-navigation/elements': 2.9.3(@react-native-masked-view/masked-view@0.3.2(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0))(@react-navigation/native@7.1.26(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0)
       '@react-navigation/native': 7.1.26(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0)
