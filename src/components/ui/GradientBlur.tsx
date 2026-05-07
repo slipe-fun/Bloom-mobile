@@ -15,15 +15,22 @@ interface GradientBlurProps {
   ref?: React.Ref<MaskedView>
   style?: StyleProp<ViewStyle>
   keyboard?: boolean
+  gray?: boolean
 }
 
-export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard }: GradientBlurProps) {
+export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard, gray }: GradientBlurProps) {
   const { theme, rt } = useUnistyles()
   const insets = useInsets()
 
   const gradientStyles = [StyleSheet.absoluteFill, keyboard ? styles.gradient(insets.bottom) : null, style]
 
-  const tint: BlurTint = rt.themeName.includes('dark') ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
+  const tint: BlurTint = rt.themeName.includes('dark')
+    ? !gray
+      ? 'systemChromeMaterialDark'
+      : 'dark'
+    : !gray
+      ? 'systemChromeMaterialLight'
+      : 'light'
 
   const { start, end } = useMemo(() => {
     switch (direction) {
@@ -39,24 +46,35 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
   const { colors, locations } = useMemo(
     () =>
       easeGradient({
-        colorStops: {
-          0: { color: theme.colors.gradientBlurEnd },
-          0.25: { color: theme.colors.gradientBlurMiddle },
-          1: { color: theme.colors.gradientBlurStart },
-        },
+        colorStops: !gray
+          ? {
+              0: { color: theme.colors.gradientBlurEnd },
+              0.25: { color: theme.colors.gradientBlurMiddle },
+              1: { color: theme.colors.gradientBlurStart },
+            }
+          : {
+              0: { color: theme.colors.grayGradientBlurEnd },
+              0.25: { color: theme.colors.grayGradientBlurMiddle },
+              1: { color: theme.colors.grayGradientBlurStart },
+            },
         easing: Easing.bezier(0.42, 0, 0.58, 1),
         extraColorStopsPerTransition: 15,
       }),
-    [theme],
+    [theme, gray],
   )
 
-  const { colors: dd, locations: ddd } = useMemo(
+  const { colors: gradientColors, locations: gradientLocations } = useMemo(
     () =>
       easeGradient({
-        colorStops: {
-          0: { color: theme.colors.gradientBlurEnd },
-          0.65: { color: theme.colors.gradientBlurStart },
-        },
+        colorStops: !gray
+          ? {
+              0: { color: theme.colors.gradientBlurEnd },
+              0.65: { color: theme.colors.gradientBlurStart },
+            }
+          : {
+              0: { color: theme.colors.grayGradientBlurEnd },
+              0.65: { color: theme.colors.grayGradientBlurStart },
+            },
         easing: Easing.bezier(0.42, 0, 0.58, 1),
         extraColorStopsPerTransition: 15,
       }),
@@ -72,9 +90,16 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
           <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
         }
       >
-        <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
+        <BlurView style={StyleSheet.absoluteFill} intensity={15} tint={tint} />
       </MaskedView>
-      <LinearGradient pointerEvents="none" start={start} end={end} locations={ddd as any} colors={dd as any} style={gradientStyles} />
+      <LinearGradient
+        pointerEvents="none"
+        start={start}
+        end={end}
+        locations={gradientLocations as any}
+        colors={gradientColors as any}
+        style={gradientStyles}
+      />
     </>
   )
 }

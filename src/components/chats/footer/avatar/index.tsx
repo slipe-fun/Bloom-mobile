@@ -2,12 +2,9 @@ import { Avatar } from '@components/ui'
 import { springy } from '@constants/animations'
 import { ICON_PRESSABLE_SCALE } from '@constants/animations/values'
 import { useRouter } from 'expo-router'
-import { Pressable, View } from 'react-native'
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import Transition from 'react-native-screen-transitions'
 import { styles } from './Avatar.styles'
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function FooterAvatar() {
   const router = useRouter()
@@ -20,14 +17,21 @@ export default function FooterAvatar() {
   const animatedAvatarStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.get() }],
   }))
-  // return (
-  //   <AnimatedPressable style={animatedAvatarStyle} onTouchStart={() => handlePress(true)} onTouchEnd={() => handlePress(false)}>
-  //     <Avatar style={styles.avatar} size="lg" userId="dk3k293KK" />
-  //   </AnimatedPressable>
-  // )
+
   return (
-    <Transition.Boundary.Trigger id="avatar" onPress={() => router.push('/(app)/Settings')}>
-      <Avatar style={styles.avatar} size="lg" userId="dk3k293KK" />
+    <Transition.Boundary.Trigger
+      onTouchStart={() => handlePress(true)}
+      onTouchEnd={() => handlePress(false)}
+      style={animatedAvatarStyle}
+      id="avatar"
+      onPress={() => router.push('/(app)/Settings')}
+    >
+      <Avatar
+        style={styles.avatar}
+        image="https://i.pinimg.com/736x/77/5b/a5/775ba539f6a59d678ee01d0353646e88.jpg"
+        size="lg"
+        userId="dk3k293KK"
+      />
     </Transition.Boundary.Trigger>
   )
 }

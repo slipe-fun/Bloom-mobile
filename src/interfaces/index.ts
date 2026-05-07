@@ -14,10 +14,9 @@ interface ChatLastMessageView extends ChatLastMessage {
 type TabsObject = typeof ROUTES.tabs
 
 export interface User {
-  date: Date
   display_name: string
-  id: number
-  username: string
+  id: string
+  username?: string
   description: string
   avatar: string
   friends_count?: number

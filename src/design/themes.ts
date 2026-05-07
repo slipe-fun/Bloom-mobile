@@ -15,12 +15,14 @@ export const lightTheme = {
     foregroundTransparent: '#70708f1a',
     indicator: '#0000001a',
     shadow: 'rgba(0, 0, 0, 0.06)',
-    // gradientBlurStart: '#ffffffd6',
-    // gradientBlurMiddle: '#ffffffd9',
-    // gradientBlurEnd: '#ffffff00',
+    // Default gradient
     gradientBlurStart: '#ffffffe6',
     gradientBlurMiddle: '#fffffff2',
     gradientBlurEnd: '#ffffff00',
+    // Gray gradient
+    grayGradientBlurStart: '#f1f1f4e6',
+    grayGradientBlurMiddle: '#f1f1f4f2',
+    grayGradientBlurEnd: '#f1f1f400',
     border: '#0000000d',
     ...staticColors,
   },
@@ -31,7 +33,7 @@ export const darkTheme = {
   colors: {
     background: '#000000',
     text: '#ffffff',
-    grayBackground: '#000000',
+    grayBackground: '#0f0f10ff',
     secondaryText: '#ffffff59',
     contentText: '#ffffff80',
     switcher: '#595959',
@@ -41,9 +43,14 @@ export const darkTheme = {
     foregroundTransparent: '#ffffff1c',
     indicator: '#ffffff26',
     shadow: '#00000000',
+    // Default gradient
     gradientBlurStart: '#000000e6',
     gradientBlurMiddle: '#000000f2',
     gradientBlurEnd: '#00000000',
+    // Gray gradient
+    grayGradientBlurStart: '#0f0f10e6',
+    grayGradientBlurMiddle: '#0f0f10f2',
+    grayGradientBlurEnd: '#0f0f1000',
     border: '#ffffff17',
     ...staticColors,
   },

@@ -23,9 +23,9 @@ export const base = {
     /** 16px   */ md: 16,
     /** 18px   */ lg: 18,
     /** 20px   */ xl: 20,
-    /** 28px   */ xxl: 24,
+    /** 24px   */ xxl: 24,
     /** 32px   */ xxxl: 32,
-    /** 56px   */ super: 64,
+    /** 64px   */ super: 64,
   },
   radius: {
     /** 8px    */ xxs: 8,
@@ -44,7 +44,7 @@ export const base = {
     /** 75%    */ overlayText: 0.75,
   },
   borderWidth: {
-    /** 1px    */ md: 0.85,
+    /** 0.85px    */ md: 0.85,
   },
   fontFamily: {
     /** Regular  */ regular: 'OpenRunde-Regular',

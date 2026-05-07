@@ -1,3 +1,4 @@
+import { styles } from '@components/settingsScreen/Header.styles'
 import { Avatar } from '@components/ui'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
@@ -7,6 +8,7 @@ import useSettingsScreenStore from '@stores/settings'
 import { useEffect, useRef, useState } from 'react'
 import { AppState, useWindowDimensions, type View } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated'
+import Transition from 'react-native-screen-transitions'
 import { gooeyShader } from './shader'
 
 interface HeaderAvatarProps {
@@ -77,6 +79,8 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
     opacity: scrollY.value > 0.01 ? 0 : 1,
     top: START_Y,
     position: 'absolute',
+    width: 100,
+    height: 100,
   }))
 
   const captureAvatar = async () => {
@@ -129,10 +133,10 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
           )}
         </Canvas>
       </Animated.View>
-
-      <Animated.View ref={avatarRef} collapsable={false} style={avatarAnimatedStyle}>
-        <Avatar onLoadEnd={captureAvatar} size="2xl" image={user?.avatar} username={user?.username || user?.display_name} />
-      </Animated.View>
+      {/* @ts-ignore */}
+      <Transition.Boundary.View ref={avatarRef} style={avatarAnimatedStyle} id="avatar">
+        <Avatar size="2xl" onLoadEnd={captureAvatar} style={styles.avatar} image={user.avatar} userId={user.id} />
+      </Transition.Boundary.View>
     </>
   )
 }

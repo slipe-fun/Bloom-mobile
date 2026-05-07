@@ -1,4 +1,5 @@
 import { GradientBlur } from '@components/ui'
+import { SIZE_MAP } from '@components/ui/button/constats'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { User as UserType } from '@interfaces'
@@ -20,16 +21,14 @@ interface HeaderProps {
 export default function Header({ scrollY, user, loading }: HeaderProps) {
   const insets = useInsets()
   const [gradientHeight, setGradientHeight] = useState(0)
-  const { setSnapEndPosition, setHeaderHeight, snapEndPosition, headerHeight } = useSettingsScreenStore()
+  const { setSnapEndPosition, setHeaderHeight, snapEndPosition } = useSettingsScreenStore()
 
   const onHeaderLayout = (event: LayoutChangeEvent) => {
-    setHeaderHeight(event.nativeEvent.layout.height)
-  }
-
-  const onTitleLayout = (event: LayoutChangeEvent) => {
-    const h = event.nativeEvent.layout.height + insets.top + base.spacing.xxl
-    setSnapEndPosition(headerHeight - h)
-    setGradientHeight(h)
+    const gradient = SIZE_MAP.md + insets.top + base.spacing.xxl
+    const header = event.nativeEvent.layout.height
+    setSnapEndPosition(header - gradient)
+    setGradientHeight(gradient)
+    setHeaderHeight(header)
   }
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -43,11 +42,11 @@ export default function Header({ scrollY, user, loading }: HeaderProps) {
   return (
     <>
       <View pointerEvents="none" style={styles.gradientWrapper(gradientHeight)}>
-        <GradientBlur direction="top-to-bottom" />
+        <GradientBlur gray direction="top-to-bottom" />
       </View>
       <Animated.View pointerEvents="box-only" onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>
         <HeaderAvatar user={user} scrollY={scrollY} loading={loading} />
-        <SettingsTitle onLayout={onTitleLayout} scrollY={scrollY} user={user} />
+        <SettingsTitle scrollY={scrollY} user={user} />
       </Animated.View>
     </>
   )

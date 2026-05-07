@@ -9,7 +9,7 @@ interface FloatingHeaderProps {
   user: User
 }
 
-export default function UserEmail({ scrollY, user }: FloatingHeaderProps) {
+export default function UserId({ scrollY, user }: FloatingHeaderProps) {
   const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
 
   const animatedStyle = useAnimatedStyle(
@@ -18,5 +18,5 @@ export default function UserEmail({ scrollY, user }: FloatingHeaderProps) {
       transform: [{ scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0.85], 'clamp') }],
     }),
   )
-  return <Animated.Text style={[styles.subTitle, animatedStyle]}>{user?.email}</Animated.Text>
+  return <Animated.Text style={[styles.subTitle, animatedStyle]}>ID: {user?.id}</Animated.Text>
 }

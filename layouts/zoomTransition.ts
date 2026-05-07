@@ -27,8 +27,8 @@ export const zoomTransition = (): BlankStackNavigationOptions => {
         target: 'bound',
         borderRadius: radius,
         backgroundScale: 1,
-        horizontalDragScale: [0.75, 1.3, 1.5],
-        verticalDragScale: [0.75, 1.3, 1.5],
+        horizontalDragScale: [0.7, 1.3, 1.5],
+        verticalDragScale: [0.7, 1.3, 1.5],
         horizontalDragTranslation: [1, 1, 0],
         verticalDragTranslation: [1, 1, 0],
       })

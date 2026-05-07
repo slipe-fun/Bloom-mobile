@@ -1,15 +1,45 @@
-import { Avatar } from '@components/ui'
-import { Text, View } from 'react-native'
+import Header from '@components/settingsScreen'
+import UserId from '@components/settingsScreen/UserId'
+import type { User } from '@interfaces'
+import useSettingsScreenStore from '@stores/settings'
+import { View } from 'react-native'
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 import Transition from 'react-native-screen-transitions'
 import { StyleSheet } from 'react-native-unistyles'
 
+const AnimatedScrollView = Transition.createTransitionAwareComponent(Animated.ScrollView, { isScrollable: true })
+
+const user: User = {
+  display_name: 'FORTUNA 812',
+  id: 'dk3k293KK',
+  description: '',
+  avatar: 'https://i.pinimg.com/736x/77/5b/a5/775ba539f6a59d678ee01d0353646e88.jpg',
+}
+
 export default function Settings() {
+  const scrollY = useSharedValue(0)
+  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (e) => {
+      scrollY.set(e.contentOffset.y)
+    },
+  })
   return (
     <View style={styles.container}>
-      <Transition.Boundary.View style={{ width: 100, height: 100 }} id="avatar">
-        <Avatar style={styles.avatar} size="2xl" userId="dk3k293KK" />
-      </Transition.Boundary.View>
-      <Text style={styles.title}>Settings</Text>
+      <Header scrollY={scrollY} user={user} loading={false} />
+      <AnimatedScrollView
+        contentContainerStyle={{ paddingTop: headerHeight, paddingHorizontal: 16, gap: 16, paddingBottom: 16 }}
+        onScroll={scrollHandler}
+        showsVerticalScrollIndicator={false}
+        style={styles.scroll}
+      >
+        <UserId user={user} scrollY={scrollY} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
+      </AnimatedScrollView>
     </View>
   )
 }
@@ -18,18 +48,8 @@ const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.grayBackground,
-    alignItems: 'center',
-    boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
-    paddingTop: 80,
   },
-  title: {
-    fontSize: theme.fontSize.lg,
-    textAlign: 'center',
+  scroll: {
     flex: 1,
-    fontFamily: theme.fontFamily.semibold,
-    color: theme.colors.text,
-  },
-  avatar: {
-    boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
   },
 }))
