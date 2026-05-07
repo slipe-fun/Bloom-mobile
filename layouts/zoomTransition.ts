@@ -12,7 +12,7 @@ export const zoomTransition = (): BlankStackNavigationOptions => {
     experimental_enableHighRefreshRate: true,
     gestureEnabled: true,
     gestureDrivesProgress: false,
-    gestureDirection: 'bidirectional',
+    gestureDirection: 'vertical',
     gestureReleaseVelocityScale: 1.3,
     navigationMaskEnabled: Platform.OS === 'ios',
     screenStyleInterpolator: ({ bounds, insets, progress, focused }) => {
