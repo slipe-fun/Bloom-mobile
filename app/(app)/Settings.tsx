@@ -1,5 +1,6 @@
 import Header from '@components/settings'
 import UserId from '@components/settings/UserId'
+import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
 import { View } from 'react-native'
@@ -18,6 +19,7 @@ const user: User = {
 
 export default function Settings() {
   const scrollY = useSharedValue(0)
+  const insets = useInsets()
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -29,10 +31,9 @@ export default function Settings() {
     <View style={styles.container}>
       <Header scrollY={scrollY} user={user} loading={false} />
       <AnimatedScrollView
-        contentContainerStyle={{ paddingTop: headerHeight, paddingHorizontal: 16, gap: 16, paddingBottom: 16 }}
+        contentContainerStyle={styles.list(headerHeight, insets.bottom)}
         onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
-        style={styles.scroll}
       >
         <UserId user={user} scrollY={scrollY} />
         <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
@@ -49,7 +50,9 @@ const styles = StyleSheet.create((theme) => ({
     flex: 1,
     backgroundColor: theme.colors.grayBackground,
   },
-  scroll: {
-    flex: 1,
-  },
+  list: (paddingTop: number, paddingBottom: number) => ({
+    paddingBottom,
+    paddingTop,
+    paddingHorizontal: theme.spacing.lg,
+  }),
 }))
