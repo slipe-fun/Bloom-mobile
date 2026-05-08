@@ -69,11 +69,11 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         colorStops: !gray
           ? {
               0: { color: theme.colors.gradientBlurEnd },
-              0.65: { color: theme.colors.gradientBlurStart },
+              0.5: { color: theme.colors.gradientBlurStart },
             }
           : {
               0: { color: theme.colors.grayGradientBlurEnd },
-              0.65: { color: theme.colors.grayGradientBlurStart },
+              0.5: { color: theme.colors.grayGradientBlurStart },
             },
         easing: Easing.bezier(0.42, 0, 0.58, 1),
         extraColorStopsPerTransition: 15,
@@ -90,7 +90,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
           <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
         }
       >
-        <BlurView style={StyleSheet.absoluteFill} intensity={15} tint={tint} />
+        <BlurView style={StyleSheet.absoluteFill} intensity={20} tint={tint} />
       </MaskedView>
       <LinearGradient
         pointerEvents="none"

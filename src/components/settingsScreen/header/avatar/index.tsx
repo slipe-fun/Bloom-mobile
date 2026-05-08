@@ -22,6 +22,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const START_Y = insets.top + 15
 
   const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
+  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
   const { width } = useWindowDimensions()
   const avatarRef = useRef<View>(null)
   const [capturedImage, setCapturedImage] = useState<SkImage | null>(null)
@@ -72,7 +73,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
 
   const canvasAnimatedStyle = useAnimatedStyle(() => ({
     opacity: scrollY.value > 0.01 && isFocused.value ? 1 : 0,
-    transform: [{ translateY: interpolate(scrollY.value, [0, snapEndPosition], [0, snapEndPosition], 'clamp') }],
+    transform: [{ translateY: interpolate(scrollY.value, [0, headerHeight / 1.62], [0, snapEndPosition], 'clamp') }],
   }))
 
   const avatarAnimatedStyle = useAnimatedStyle(() => ({

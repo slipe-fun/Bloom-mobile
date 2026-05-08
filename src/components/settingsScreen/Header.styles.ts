@@ -9,7 +9,7 @@ export const styles = StyleSheet.create((theme) => ({
     zIndex: 2,
     position: 'absolute',
     gap: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
   title: {
     color: theme.colors.text,
@@ -28,6 +28,7 @@ export const styles = StyleSheet.create((theme) => ({
     position: 'absolute',
     zIndex: 1,
     height,
+    // backgroundColor: 'red',
   }),
   avatar: {
     boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,

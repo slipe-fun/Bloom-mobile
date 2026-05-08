@@ -35,10 +35,10 @@ export default function Settings() {
         style={styles.scroll}
       >
         <UserId user={user} scrollY={scrollY} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 0.1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
+        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
       </AnimatedScrollView>
     </View>
   )

@@ -21,7 +21,7 @@ interface HeaderProps {
 export default function Header({ scrollY, user, loading }: HeaderProps) {
   const insets = useInsets()
   const [gradientHeight, setGradientHeight] = useState(0)
-  const { setSnapEndPosition, setHeaderHeight, snapEndPosition } = useSettingsScreenStore()
+  const { setSnapEndPosition, setHeaderHeight, snapEndPosition, headerHeight } = useSettingsScreenStore()
 
   const onHeaderLayout = (event: LayoutChangeEvent) => {
     const gradient = SIZE_MAP.md + insets.top + base.spacing.xxl
@@ -34,7 +34,7 @@ export default function Header({ scrollY, user, loading }: HeaderProps) {
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateY: interpolate(scrollY.get(), [-1000, 0, snapEndPosition], [1000, 0, -snapEndPosition], 'clamp'),
+        translateY: interpolate(scrollY.get(), [-1000, 0, headerHeight / 1.62], [1000, 0, -snapEndPosition], 'clamp'),
       },
     ],
   }))
@@ -44,7 +44,7 @@ export default function Header({ scrollY, user, loading }: HeaderProps) {
       <View pointerEvents="none" style={styles.gradientWrapper(gradientHeight)}>
         <GradientBlur gray direction="top-to-bottom" />
       </View>
-      <Animated.View pointerEvents="box-only" onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>
+      <Animated.View pointerEvents="none" onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>
         <HeaderAvatar user={user} scrollY={scrollY} loading={loading} />
         <SettingsTitle scrollY={scrollY} user={user} />
       </Animated.View>

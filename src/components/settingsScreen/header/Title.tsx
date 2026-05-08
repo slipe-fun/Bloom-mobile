@@ -11,16 +11,16 @@ interface UserProps {
 }
 
 export default function SettingsTitle({ scrollY, user }: UserProps) {
-  const { snapEndPosition } = useSettingsScreenStore()
+  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
 
   const animatedStyle = useAnimatedStyle(
     (): TextStyle => ({
       transform: [
         {
-          scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, base.fontSize.md / base.fontSize.xxl], 'clamp'),
+          scale: interpolate(scrollY.get(), [0, headerHeight / 1.62], [1, base.fontSize.md / base.fontSize.xxl], 'clamp'),
         },
         {
-          translateY: interpolate(scrollY.get(), [0, snapEndPosition], [0, -48], 'clamp'),
+          translateY: interpolate(scrollY.get(), [0, headerHeight / 1.62], [0, -48], 'clamp'),
         },
       ],
     }),

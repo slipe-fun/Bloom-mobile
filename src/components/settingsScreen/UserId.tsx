@@ -10,12 +10,12 @@ interface FloatingHeaderProps {
 }
 
 export default function UserId({ scrollY, user }: FloatingHeaderProps) {
-  const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
+  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
 
   const animatedStyle = useAnimatedStyle(
     (): TextStyle => ({
-      opacity: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0], 'clamp'),
-      transform: [{ scale: interpolate(scrollY.get(), [0, snapEndPosition], [1, 0.85], 'clamp') }],
+      opacity: interpolate(scrollY.get(), [0, headerHeight], [1, 0], 'clamp'),
+      transform: [{ scale: interpolate(scrollY.get(), [0, headerHeight], [1, 1], 'clamp') }],
     }),
   )
   return <Animated.Text style={[styles.subTitle, animatedStyle]}>ID: {user?.id}</Animated.Text>
