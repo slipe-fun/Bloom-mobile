@@ -8,6 +8,7 @@ import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader } fr
 import useSettingsScreenStore from '@stores/settings'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AppState, useWindowDimensions, type View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated'
 import Transition from 'react-native-screen-transitions'
 import { gooeyShader } from './shader'
@@ -22,13 +23,14 @@ const ISLAND_WIDTH = 90
 const ISLAND_HEIGHT = 32
 const IMAGE_BLUR = 20
 const ISLAND_Y = ISLAND_HEIGHT / 2
-const ISLAND_R = 0
+const ISLAND_R = ISLAND_HEIGHT / 2
 const CARD_SIZE = SIZE_MAP['2xl']
 const CARD_R = CARD_SIZE / 2
 
 export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarProps) {
   const insets = useInsets()
   const { width } = useWindowDimensions()
+  const hasIsland = !DeviceInfo.hasDynamicIsland()
 
   const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
@@ -56,7 +58,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
 
   const uniforms = useDerivedValue(() => {
     return {
-      islandCenter: [CENTER_X, ISLAND_Y],
+      islandCenter: [CENTER_X, hasIsland ? ISLAND_Y + insets.realTop / 4 : ISLAND_Y],
       islandHalfSize: [ISLAND_WIDTH / 2, ISLAND_Y],
       islandRadius: ISLAND_R,
       ballCenter: [CENTER_X, cardY.value + CARD_R],

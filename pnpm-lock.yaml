@@ -134,6 +134,9 @@ importers:
       react-native:
         specifier: 0.81.5
         version: 0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0)
+      react-native-device-info:
+        specifier: ^15.0.2
+        version: 15.0.2(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))
       react-native-easing-gradient:
         specifier: ^1.1.1
         version: 1.1.1(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0)
@@ -4013,6 +4016,11 @@ packages:
 
   react-is@19.2.3:
     resolution: {integrity: sha512-qJNJfu81ByyabuG7hPFEbXqNcWSU3+eVus+KJs+0ncpGfMyYdvSmxiJxbWR65lYi1I+/0HBcliO029gc4F+PnA==}
+
+  react-native-device-info@15.0.2:
+    resolution: {integrity: sha512-dd71eXG2l3Cwp66IvKNadMTB8fhU3PEjyVddI97sYan+D4bgIAUmgGDhbSOFvHcGavksb2U17kiQYaDiK2WK2g==}
+    peerDependencies:
+      react-native: '*'
 
   react-native-easing-gradient@1.1.1:
     resolution: {integrity: sha512-KrGU97kPTMrLNzVXxFirFMgl65uo70gVNoKw2OngDzcDfoswb648I3ggeCnoY+JgMWkPyx4LlG7n3ZNgSPFnLw==}
@@ -9787,6 +9795,10 @@ snapshots:
   react-is@18.3.1: {}
 
   react-is@19.2.3: {}
+
+  react-native-device-info@15.0.2(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0)):
+    dependencies:
+      react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0)
 
   react-native-easing-gradient@1.1.1(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0):
     dependencies:

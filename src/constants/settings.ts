@@ -1,75 +1,19 @@
 import type { SettingsSection } from '@interfaces'
 
 type SettingsSectionProps = {
-  username: string
-  description: string
-  friends: number
   theme: string
   language: string
 }
 
-export const SETTINGS_SECTIONS = ({ username, description, friends, theme, language }: SettingsSectionProps): SettingsSection[] => [
+export const SETTINGS_SECTIONS = ({ theme, language }: SettingsSectionProps): SettingsSection[] => [
   {
-    id: 'userInfo',
-    items: [
-      {
-        icon: 'at',
-        iconType: 'transparent',
-        label: username,
-        color: null,
-        badgeIcon: 'file',
-      },
-      {
-        icon: 'person',
-        iconType: 'transparent',
-        label: description,
-        color: null,
-      },
-    ],
-  },
-  {
-    id: 'profileMain',
+    id: 'Account',
     items: [
       {
         icon: 'person.circle',
         iconType: 'gradient',
         label: 'Мой профиль',
         color: 'orange',
-      },
-    ],
-  },
-  {
-    id: 'security',
-    items: [
-      {
-        icon: 'person.circle',
-        iconType: 'gradient',
-        label: 'Аккаунт',
-        color: 'primary',
-      },
-      {
-        icon: 'key',
-        iconType: 'gradient',
-        label: 'Ключи шифрования',
-        color: 'purple',
-      },
-      {
-        icon: 'lock',
-        iconType: 'gradient',
-        label: 'Приватность',
-        color: 'green',
-      },
-    ],
-  },
-  {
-    id: 'activities',
-    items: [
-      {
-        icon: 'person',
-        iconType: 'gradient',
-        label: 'Друзья',
-        badgeLabel: friends,
-        color: 'primary',
       },
     ],
   },
@@ -90,23 +34,16 @@ export const SETTINGS_SECTIONS = ({ username, description, friends, theme, langu
         badgeLabel: language,
         color: 'primary',
       },
+    ],
+  },
+  {
+    id: 'security',
+    items: [
       {
-        icon: 'message',
+        icon: 'key',
         iconType: 'gradient',
-        label: 'Чаты',
-        color: 'green',
-      },
-      {
-        icon: 'bell',
-        iconType: 'gradient',
-        label: 'Уведомления и звуки',
-        color: 'orange',
-      },
-      {
-        icon: 'phone',
-        iconType: 'gradient',
-        label: 'Устройства',
-        color: 'gray',
+        label: 'Ключи шифрования',
+        color: 'purple',
       },
     ],
   },
