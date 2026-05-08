@@ -1,4 +1,4 @@
-import { styles } from '@components/settingsScreen/Header.styles'
+import { styles } from '@components/settings/Header.styles'
 import { Avatar } from '@components/ui'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'

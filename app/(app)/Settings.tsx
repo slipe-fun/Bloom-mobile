@@ -1,5 +1,5 @@
-import Header from '@components/settingsScreen'
-import UserId from '@components/settingsScreen/UserId'
+import Header from '@components/settings'
+import UserId from '@components/settings/UserId'
 import type { User } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
 import { View } from 'react-native'
