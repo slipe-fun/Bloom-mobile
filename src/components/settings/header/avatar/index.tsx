@@ -1,11 +1,12 @@
 import { styles } from '@components/settings/Header.styles'
 import { Avatar } from '@components/ui'
+import { SIZE_MAP } from '@components/ui/avatar'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
 import type { SkImage } from '@shopify/react-native-skia'
 import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader } from '@shopify/react-native-skia'
 import useSettingsScreenStore from '@stores/settings'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AppState, useWindowDimensions, type View } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated'
 import Transition from 'react-native-screen-transitions'
@@ -17,27 +18,33 @@ interface HeaderAvatarProps {
   loading: boolean
 }
 
+const ISLAND_WIDTH = 90
+const ISLAND_HEIGHT = 32
+const IMAGE_BLUR = 20
+const ISLAND_Y = ISLAND_HEIGHT / 2
+const ISLAND_R = 0
+const CARD_SIZE = SIZE_MAP['2xl']
+const CARD_R = CARD_SIZE / 2
+
 export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarProps) {
   const insets = useInsets()
-  const START_Y = insets.top + 15
+  const { width } = useWindowDimensions()
 
   const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
-  const { width } = useWindowDimensions()
+
   const avatarRef = useRef<View>(null)
   const [capturedImage, setCapturedImage] = useState<SkImage | null>(null)
   const isFocused = useSharedValue(AppState.currentState === 'active')
 
-  const CENTER_X = width / 2
-  const ISLAND_WIDTH = 90
-  const ISLAND_HEIGHT = 32
-  const IMAGE_BLUR = 20
-  const ISLAND_Y = ISLAND_HEIGHT / 2
-  const ISLAND_R = 0
-
-  const CARD_SIZE = 100
-  const CARD_R = CARD_SIZE / 2
-  const CANVAS_HEIGHT = CARD_SIZE + START_Y
+  const { START_Y, CENTER_X, CANVAS_HEIGHT } = useMemo(() => {
+    const startY = insets.top + 15
+    return {
+      START_Y: startY,
+      CENTER_X: width / 2,
+      CANVAS_HEIGHT: CARD_SIZE + startY,
+    }
+  }, [insets.top, width])
 
   const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.value))
 
@@ -71,10 +78,13 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
     return interpolate(scrollY.value, [0, CANVAS_HEIGHT / 1.5], [0, IMAGE_BLUR], 'clamp')
   })
 
-  const canvasAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: scrollY.value > 0.01 && isFocused.value ? 1 : 0,
-    transform: [{ translateY: interpolate(scrollY.value, [0, headerHeight / 1.62], [0, snapEndPosition], 'clamp') }],
-  }))
+  const canvasAnimatedStyle = useAnimatedStyle(
+    () => ({
+      opacity: scrollY.value > 0.01 && isFocused.value ? 1 : 0,
+      transform: [{ translateY: interpolate(scrollY.value, [0, headerHeight / 1.62], [0, snapEndPosition], 'clamp') }],
+    }),
+    [headerHeight, snapEndPosition],
+  )
 
   const avatarAnimatedStyle = useAnimatedStyle(() => ({
     opacity: scrollY.value > 0.01 ? 0 : 1,
@@ -86,12 +96,18 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
 
   const captureAvatar = async () => {
     await new Promise(requestAnimationFrame)
-    if (avatarRef.current && capturedImage === null && !loading) {
+
+    if (avatarRef.current && !loading) {
       try {
         const snapshot = await makeImageFromView(avatarRef)
-        setCapturedImage(snapshot)
+        setCapturedImage((prevImage) => {
+          if (prevImage) {
+            prevImage.dispose()
+          }
+          return snapshot
+        })
       } catch (error) {
-        console.warn('Failed to capture avatar imag:', error)
+        console.warn('Failed to capture avatar img:', error)
       }
     }
   }
@@ -104,7 +120,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
-      isFocused.value = nextAppState === 'active'
+      isFocused.set(nextAppState === 'active')
     })
 
     return () => {
@@ -134,8 +150,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
           )}
         </Canvas>
       </Animated.View>
-      {/* @ts-ignore */}
-      <Transition.Boundary.View ref={avatarRef} style={avatarAnimatedStyle} id="avatar">
+      <Transition.Boundary.View ref={avatarRef as any} style={avatarAnimatedStyle} id="avatar">
         <Avatar size="2xl" onLoadEnd={captureAvatar} style={styles.avatar} image={user.avatar} userId={user.id} />
       </Transition.Boundary.View>
     </>

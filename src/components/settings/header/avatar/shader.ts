@@ -33,7 +33,7 @@ vec4 main(vec2 pos) {
     float d2 = sdCircle(pos - ballCenter, ballRadius);
     float d = smin(d1, d2, gooeyness);
     
-    float alpha = clamp(0.0 - d, 0.0, 1.0);
+    float alpha = clamp(0.5 - d, 0.0, 1.0);
     
     // Skia requires Premultiplied Alpha! 
     // Multiply your RGB values by the alpha channel.

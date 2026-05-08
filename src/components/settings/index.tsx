@@ -4,12 +4,12 @@ import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { User as UserType } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { type LayoutChangeEvent, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { styles } from './Header.styles'
-import HeaderAvatar from './header/avatar/index'
+import HeaderAvatar from './header/avatar'
 import SettingsTitle from './header/Title'
 
 interface HeaderProps {
@@ -18,30 +18,43 @@ interface HeaderProps {
   loading: boolean
 }
 
+const SCROLL_OVERSHOOT = 1000
+const POSITION_RATIO = 1.62
+
 export default function Header({ scrollY, user, loading }: HeaderProps) {
   const insets = useInsets()
-  const [gradientHeight, setGradientHeight] = useState(0)
   const { setSnapEndPosition, setHeaderHeight, snapEndPosition, headerHeight } = useSettingsScreenStore()
 
-  const onHeaderLayout = (event: LayoutChangeEvent) => {
-    const gradient = SIZE_MAP.md + insets.top + base.spacing.xxl
-    const header = event.nativeEvent.layout.height
-    setSnapEndPosition(header - gradient)
-    setGradientHeight(gradient)
-    setHeaderHeight(header)
-  }
+  const gradient = SIZE_MAP.md + insets.top + base.spacing.xxl
+
+  const onHeaderLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const header = event.nativeEvent.layout.height
+
+      if (header !== headerHeight) {
+        setSnapEndPosition(header - gradient)
+        setHeaderHeight(header)
+      }
+    },
+    [headerHeight, gradient, setSnapEndPosition, setHeaderHeight],
+  )
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateY: interpolate(scrollY.get(), [-1000, 0, headerHeight / 1.62], [1000, 0, -snapEndPosition], 'clamp'),
+        translateY: interpolate(
+          scrollY.get(),
+          [-SCROLL_OVERSHOOT, 0, headerHeight / POSITION_RATIO],
+          [SCROLL_OVERSHOOT, 0, -snapEndPosition],
+          'clamp',
+        ),
       },
     ],
   }))
 
   return (
     <>
-      <View pointerEvents="none" style={styles.gradientWrapper(gradientHeight)}>
+      <View pointerEvents="none" style={styles.gradientWrapper(gradient)}>
         <GradientBlur gray direction="top-to-bottom" />
       </View>
       <Animated.View pointerEvents="none" onLayout={onHeaderLayout} style={[styles.header, animatedStyle]}>

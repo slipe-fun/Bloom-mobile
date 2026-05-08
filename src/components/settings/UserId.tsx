@@ -9,13 +9,15 @@ interface FloatingHeaderProps {
   user: User
 }
 
+const POSITION_RATIO = 1.62
+
 export default function UserId({ scrollY, user }: FloatingHeaderProps) {
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
 
   const animatedStyle = useAnimatedStyle(
     (): TextStyle => ({
-      opacity: interpolate(scrollY.get(), [0, headerHeight / 1.62], [1, 0], 'clamp'),
-      transform: [{ scale: interpolate(scrollY.get(), [0, headerHeight / 1.62], [1, 0.85], 'clamp') }],
+      opacity: interpolate(scrollY.get(), [0, headerHeight / POSITION_RATIO], [1, 0], 'clamp'),
+      transform: [{ scale: interpolate(scrollY.get(), [0, headerHeight / POSITION_RATIO], [1, 0.85], 'clamp') }],
     }),
   )
   return <Animated.Text style={[styles.subTitle, animatedStyle]}>ID: {user?.id}</Animated.Text>
