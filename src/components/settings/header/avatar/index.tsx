@@ -30,7 +30,7 @@ const CARD_R = CARD_SIZE / 2
 export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarProps) {
   const insets = useInsets()
   const { width } = useWindowDimensions()
-  const hasIsland = !DeviceInfo.hasDynamicIsland()
+  const hasIsland = DeviceInfo.hasDynamicIsland()
 
   const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)

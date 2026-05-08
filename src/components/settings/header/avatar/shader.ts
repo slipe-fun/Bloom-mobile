@@ -31,7 +31,13 @@ float sdCircle(vec2 p, float r) {
 vec4 main(vec2 pos) {
     float d1 = sdRoundRect(pos - islandCenter, islandHalfSize, islandRadius);
     float d2 = sdCircle(pos - ballCenter, ballRadius);
-    float d = smin(d1, d2, gooeyness);
+
+    // 6 used because some positioning troubles yk
+    float clipPlane = islandCenter.y - pos.y + 6;
+    float d2_clipped = max(d2, clipPlane);
+
+
+    float d = smin(d1, d2_clipped, gooeyness);
     
     float alpha = clamp(0.5 - d, 0.0, 1.0);
     
