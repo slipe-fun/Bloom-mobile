@@ -19,7 +19,7 @@ interface HeaderAvatarProps {
   loading: boolean
 }
 
-const ISLAND_WIDTH = 90
+const ISLAND_WIDTH = 105
 const IMAGE_BLUR = 20
 const CARD_SIZE = SIZE_MAP['2xl']
 const CARD_R = CARD_SIZE / 2
@@ -36,9 +36,9 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const [capturedImage, setCapturedImage] = useState<SkImage | null>(null)
   const isFocused = useSharedValue(AppState.currentState === 'active')
 
-  const ISLAND_HEIGHT = hasIsland ? 34 : 32
+  const ISLAND_HEIGHT = 32
   const ISLAND_Y = ISLAND_HEIGHT / 2
-  const ISLAND_R = ISLAND_HEIGHT / 2
+  const ISLAND_R = 0
 
   const { START_Y, CENTER_X, CANVAS_HEIGHT } = useMemo(() => {
     const startY = insets.top + 15
