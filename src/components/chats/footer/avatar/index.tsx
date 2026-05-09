@@ -7,7 +7,7 @@ import Transition from 'react-native-screen-transitions'
 import { styles } from './Avatar.styles'
 
 export default function FooterAvatar() {
-  const router = useRouter()
+  const { push } = useRouter()
   const scale = useSharedValue(1)
 
   const handlePress = (inn: boolean = true) => {
@@ -24,7 +24,7 @@ export default function FooterAvatar() {
       onTouchEnd={() => handlePress(false)}
       style={animatedAvatarStyle}
       id="avatar"
-      onPress={() => router.push('/(app)/Settings')}
+      onPress={() => push('/(app)/Settings')}
     >
       <Avatar
         style={styles.avatar}

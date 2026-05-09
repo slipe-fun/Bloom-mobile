@@ -1,5 +1,4 @@
 import type { ICONS } from '@constants/icons'
-import type { ROUTES } from '@constants/routes'
 import type { staticColors } from '@design/colors'
 
 interface ChatLastMessage {
@@ -10,8 +9,6 @@ interface ChatLastMessage {
 interface ChatLastMessageView extends ChatLastMessage {
   time?: string
 }
-
-type TabsObject = typeof ROUTES.tabs
 
 export interface User {
   display_name: string
@@ -53,12 +50,6 @@ export interface ChatView extends Chat {
   lastMessage?: ChatLastMessageView
 }
 
-export interface Position {
-  top: number
-  left: number
-  width: number
-}
-
 export interface DateHeader {
   _id: string
   type: string
@@ -73,8 +64,6 @@ export interface Option {
   color?: string
   separator?: boolean
 }
-
-export type TabValue = TabsObject[keyof TabsObject]
 
 export type IconType = 'transparent' | 'gradient'
 export type ColorKey = keyof typeof staticColors | null

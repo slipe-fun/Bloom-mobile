@@ -7,14 +7,14 @@ import { useUnistyles } from 'react-native-unistyles'
 export default function Index() {
   const { token, loading } = useSession()
   const { theme } = useUnistyles()
-  const router = useRouter()
+  const { replace } = useRouter()
 
   useLayoutEffect(() => {
     if (!loading) {
       if (!token) {
-        router.replace('/(auth)/Welcome')
+        replace('/(auth)/Welcome')
       } else {
-        router.replace('/(app)')
+        replace('/(app)')
       }
     }
   }, [loading, token])

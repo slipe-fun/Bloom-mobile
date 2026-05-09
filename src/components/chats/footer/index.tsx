@@ -8,7 +8,7 @@ import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import FooterAvatar from './avatar'
 import { styles } from './Footer.styles'
-import FooterSearch from './search'
+import FooterSearch from './Search'
 
 export const TAB_BAR_HEIGHT = SIZE_MAP.lg
 
