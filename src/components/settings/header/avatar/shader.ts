@@ -33,11 +33,14 @@ vec4 main(vec2 pos) {
     float dBallClipped = max(dBall, clipPlane);
 
     float dMerged = smin(dIsland, dBallClipped, gooeyness);
-    
     float alphaMerged = smoothstep(0.5, -0.5, dMerged);
-    float alphaIsland = smoothstep(0.5, -0.5, dIsland);
-
-    float finalAlpha = clamp(alphaMerged - alphaIsland, 0.0, 1.0);
+    
+    vec2 cutoutHalfSize = islandHalfSize + vec2(6.0, 0.0);
+    
+    float dIslandCutout = sdRoundRect(pos - islandCenter, cutoutHalfSize, islandRadius);
+    float alphaIslandCutout = smoothstep(0.5, -0.5, dIslandCutout);
+    
+    float finalAlpha = clamp(alphaMerged - alphaIslandCutout, 0.0, 1.0);
     
     vec3 color = vec3(0.0, 0.0, 0.0);
     return vec4(color * finalAlpha, finalAlpha);
