@@ -6,7 +6,7 @@
 
   <!-- Badges -->
   <a href="https://github.com/slipe-fun/Bloom-mobile/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License">
+    <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License">
   </a>
   <img src="https://img.shields.io/badge/Platform-iOS_16%2B_%7C_Android_(WIP)-lightgrey" alt="Platforms">
   <img src="https://img.shields.io/badge/Status-In_Active_Development-orange" alt="Status">
@@ -116,7 +116,7 @@ pnpm run icons:generate
 Contributions, issues, and feature requests are welcome! Feel free to check the[issues page](https://github.com/slipe-fun/Bloom-mobile/issues) if you want to contribute.
 
 ## 📜 License
-This project is licensed under the **Apache-2.0 License**. See the[LICENSE](LICENSE) file for more details.
+This project is licensed under the **GNU General Public License v3.0**. See the[LICENSE](LICENSE) file for more details.
 
 ---
 <div align="center">
