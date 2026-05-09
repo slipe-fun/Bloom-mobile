@@ -19,7 +19,7 @@ interface HeaderAvatarProps {
   loading: boolean
 }
 
-const ISLAND_WIDTH = 105
+const ISLAND_WIDTH = 95
 const IMAGE_BLUR = 20
 const CARD_SIZE = SIZE_MAP['2xl']
 const CARD_R = CARD_SIZE / 2
