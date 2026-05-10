@@ -1,3 +1,4 @@
+export { default as AnimatedIcon } from './AnimatedIcon'
 export { default as ActionText } from './actionText/index'
 export { default as Avatar } from './avatar/index'
 export { default as Button } from './button/index'
