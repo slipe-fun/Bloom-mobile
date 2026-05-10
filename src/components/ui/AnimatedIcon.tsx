@@ -7,12 +7,12 @@ export type AnimatedIconRef = {
 }
 
 interface AnimatedIconProps {
-  source: string
+  source: any
   size?: number
   loop?: boolean
   autoPlay?: boolean
   color?: string
-  ref: any
+  ref?: any
 }
 
 export default function AnimatedIcon({ source, size = 28, loop = false, autoPlay = false, color = '#ffffff', ref }: AnimatedIconProps) {

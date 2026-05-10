@@ -1,4 +1,5 @@
-import { ActionText, Button, Icon, Loader } from '@components/ui'
+import likeAnimation from '@assets/lottie/faceId.json'
+import { ActionText, AnimatedIcon, Button, Loader } from '@components/ui'
 import { authAnimationIn, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { useAuthFooter } from '@hooks'
 import { useNavigationState } from '@react-navigation/native'
@@ -36,7 +37,7 @@ export default function AuthFooter() {
           index === 0 &&
           !loading && (
             <Animated.View layout={layoutAnimationSpringy} entering={getFadeIn()} exiting={getFadeOut()}>
-              <Icon key="id" size={24} color={theme.colors.white} icon="id" />
+              <AnimatedIcon color={theme.colors.white} size={26} source={likeAnimation} />
             </Animated.View>
           )
         }
