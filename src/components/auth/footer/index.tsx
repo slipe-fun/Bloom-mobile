@@ -37,7 +37,7 @@ export default function AuthFooter() {
           index === 0 &&
           !loading && (
             <Animated.View layout={layoutAnimationSpringy} entering={getFadeIn()} exiting={getFadeOut()}>
-              <AnimatedIcon color={theme.colors.white} size={26} source={likeAnimation} />
+              <AnimatedIcon loop autoPlay color={theme.colors.white} size={26} source={likeAnimation} />
             </Animated.View>
           )
         }
