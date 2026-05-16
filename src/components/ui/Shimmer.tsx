@@ -1,14 +1,13 @@
-import { quickSpring } from '@constants/easings'
 import MaskedView from '@react-native-masked-view/masked-view'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import { View } from 'react-native'
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
 export interface ShimmerRef {
-  play: () => void
+  play?: () => void
 }
 
 export interface ShimmerDropInProps {
@@ -19,7 +18,7 @@ export interface ShimmerDropInProps {
   ref?: ShimmerRef
 }
 
-export default function Shimmer({ borderRadius = 12, borderWidth = 2, autoPlay = true, delay = 2000, ref }) {
+export default function Shimmer({ borderRadius = 12, borderWidth = 2, autoPlay = true, delay = 2500, ref }) {
   const progress = useSharedValue(0)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -29,7 +28,7 @@ export default function Shimmer({ borderRadius = 12, borderWidth = 2, autoPlay =
     progress.set(0)
 
     progress.set(
-      withSpring(1, quickSpring, (finished) => {
+      withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.linear) }, (finished) => {
         if (finished && autoPlay) {
           scheduleOnRN(scheduleNext)
         }

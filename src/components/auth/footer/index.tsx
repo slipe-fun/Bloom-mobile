@@ -1,5 +1,6 @@
 import likeAnimation from '@assets/lottie/faceId.json'
 import { ActionText, AnimatedIcon, Button, Loader } from '@components/ui'
+import Shimmer from '@components/ui/Shimmer'
 import { authAnimationIn, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
 import { useAuthFooter } from '@hooks'
 import { useNavigationState } from '@react-navigation/native'
@@ -42,6 +43,7 @@ export default function AuthFooter() {
           )
         }
       >
+        <Shimmer borderWidth={1.35} borderRadius={99} />
         {loading ? (
           <Loader color={theme.colors.white} size={28} />
         ) : (

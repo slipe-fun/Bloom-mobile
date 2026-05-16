@@ -10,6 +10,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   button: {
     backgroundColor: theme.colors.primary,
+    borderWidth: 0,
   },
   buttonLabel: {
     fontSize: theme.fontSize.lg,
