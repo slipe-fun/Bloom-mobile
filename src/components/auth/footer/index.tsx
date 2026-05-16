@@ -43,7 +43,7 @@ export default function AuthFooter() {
           )
         }
       >
-        <Shimmer borderWidth={1.35} borderRadius={99} />
+        {index === 0 && <Shimmer borderWidth={1.35} borderRadius={99} />}
         {loading ? (
           <Loader color={theme.colors.white} size={28} />
         ) : (
