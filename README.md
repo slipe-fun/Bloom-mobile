@@ -1,6 +1,6 @@
 
 <div align="center">
-  <!-- <img src="bloom.png" width="128" alt="Bloom Logo" /> -->
+  <img width="1800" height="600" alt="Image" src="https://github.com/user-attachments/assets/e0c82437-510c-4933-9da0-efaa848bb8ef" alt="Bloom-banner" />
   <h1>🌸 Bloom Messenger</h1>
   <p><b>An open-source, end‑to‑end encrypted mobile messenger.</b></p>
 
