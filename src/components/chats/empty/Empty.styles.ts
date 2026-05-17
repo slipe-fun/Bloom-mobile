@@ -13,7 +13,6 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     height: 115,
     position: 'relative',
-    // backgroundColor: 'pink',
     overflow: 'visible',
     justifyContent: 'flex-end',
   },
@@ -22,6 +21,10 @@ export const styles = StyleSheet.create((theme) => ({
     height: 68,
     overflow: 'hidden',
     position: 'absolute',
+    padding: theme.spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.md - 2,
     borderRadius: theme.radius.md,
     borderCurve: 'continuous',
     backgroundColor: theme.colors.foreground,
@@ -30,5 +33,24 @@ export const styles = StyleSheet.create((theme) => ({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: theme.colors.background,
     zIndex: 1,
+  },
+  avatar: {
+    height: 44,
+    width: 44,
+    borderRadius: theme.radius.full,
+  },
+  textContainer: {
+    flex: 1,
+    gap: theme.spacing.md / 2,
+  },
+  namePlaceholder: {
+    height: 15,
+    borderRadius: theme.radius.sm,
+    backgroundColor: theme.colors.switcher,
+  },
+  messagePlaceholder: {
+    height: 15,
+    borderRadius: theme.radius.sm,
+    backgroundColor: theme.colors.switcher,
   },
 }))

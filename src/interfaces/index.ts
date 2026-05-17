@@ -98,3 +98,9 @@ export interface SearchUser {
   username: string | null
   avatar: string
 }
+
+export interface ChatsEmptyCardData {
+  avatar: any
+  nameWidth: number
+  messageWidth: number
+}
