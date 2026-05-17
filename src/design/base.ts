@@ -53,6 +53,6 @@ export const base = {
     /** Bold     */ bold: 'OpenRunde-Bold',
   },
   shadows: {
-    pressable: '0px 4px 12px 4px',
+    pressable: '0px 0px 24px 4px',
   },
 }
