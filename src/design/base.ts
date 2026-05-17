@@ -8,6 +8,7 @@ export const base = {
     /** 20px   */ xl: 20,
     /** 24px   */ xxl: 24,
     /** 28px   */ xxxl: 28,
+    /** 50px   */ modal: 40,
   },
   lineHeight: {
     /** 15px   */ xs: 15,

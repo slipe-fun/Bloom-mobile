@@ -1,9 +1,9 @@
 import { useChatList } from '@api/providers/ChatsContext'
 import Chat from '@components/chats/chat'
+import Empty from '@components/chats/empty'
 import Footer from '@components/chats/footer'
 import Header from '@components/chats/header'
 import Search from '@components/chats/search'
-import { EmptyModal } from '@components/ui'
 import { SIZE_MAP } from '@components/ui/button/constats'
 import { fastSpring } from '@constants/easings'
 import { base } from '@design/base'
@@ -60,9 +60,7 @@ export default function Chats() {
             bottom: height,
           }}
         />
-        {chats?.length === 0 ? (
-          <EmptyModal text="У вас еще нет ни одного чата! Создайте свой первый чат!" icon="message" color="primary" />
-        ) : null}
+        {chats?.length === 0 ? <Empty /> : null}
         <Header />
       </Animated.View>
     </>
