@@ -3,77 +3,97 @@ import { data } from '@constants/emptyStates'
 import type { ChatsEmptyCardData } from '@interfaces'
 import { useEffect } from 'react'
 import { Image, View, type ViewStyle } from 'react-native'
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import Animated, {
+  interpolate,
+  type SharedValue,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withRepeat,
+  withSequence,
+  withSpring,
+} from 'react-native-reanimated'
 import { styles } from './Empty.styles'
 
-interface ListCard {
-  style: ViewStyle
-  overlayStyle: ViewStyle
+interface ListCardProps {
   data: ChatsEmptyCardData
+  index: number
+  progress: SharedValue<number>
 }
 
+const CARDS_ANIMATION_CONFIG = [
+  {
+    opacity: [0, 0, 0, 1],
+    translateY: [24, 24, 24, 0],
+    scale: [1, 1, 1, 1],
+    overlayOpacity: [1, 1, 1, 0],
+  },
+  {
+    opacity: [0, 0, 1, 1],
+    translateY: [24, 24, 0, -28],
+    scale: [1, 1, 1, 0.9],
+    overlayOpacity: [1, 1, 0, 0.4],
+  },
+  {
+    opacity: [0, 1, 1, 1],
+    translateY: [24, 0, -28, -54],
+    scale: [1, 1, 0.9, 0.8],
+    overlayOpacity: [1, 0, 0.4, 0.8],
+  },
+]
+
 export default function ListShuffle() {
-  const progress = useSharedValue(0)
-
-  const animatedFrontStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.get(), [0, 1, 2, 3], [0, 0, 0, 1], 'clamp'),
-    transform: [{ translateY: interpolate(progress.get(), [2, 3], [24, 0]) }],
-  }))
-
-  const animatedMiddleStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      opacity: interpolate(progress.get(), [0, 1, 2, 3], [0, 0, 1, 1], 'clamp'),
-      transform: [
-        { translateY: interpolate(progress.get(), [1, 2, 3], [24, 0, -28]) },
-        { scale: interpolate(progress.get(), [2, 3], [1, 0.9], 'clamp') },
-      ],
-    }),
-  )
-
-  const animatedBackStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      opacity: interpolate(progress.get(), [0, 1, 2, 3], [0, 1, 1, 1], 'clamp'),
-      transform: [
-        { translateY: interpolate(progress.get(), [0, 1, 2, 3], [24, 0, -28, -54]) },
-        { scale: interpolate(progress.get(), [1, 2, 3], [1, 0.9, 0.8], 'clamp') },
-      ],
-    }),
-  )
-
-  const animatedFrontOverlayStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.get(), [0, 1, 2, 3], [1, 1, 1, 0], 'clamp'),
-  }))
-
-  const animatedMiddleOverlayStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.get(), [0, 1, 2, 3], [1, 1, 0, 0.4], 'clamp'),
-  }))
-
-  const animatedBackOverlayStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.get(), [0, 1, 2, 3], [1, 0, 0.4, 0.8]),
-  }))
+  const progress = useSharedValue(1)
 
   useEffect(() => {
-    progress.set(withSpring(3, quickSpring))
-  })
+    progress.set(
+      withRepeat(
+        withSequence(
+          withDelay(1500, withSpring(1, quickSpring)),
+          withDelay(1500, withSpring(2, quickSpring)),
+          withDelay(1500, withSpring(3, quickSpring)),
+        ),
+        -1,
+      ),
+    )
+  }, [])
 
   return (
     <View style={styles.shuffleContainer}>
-      {/* <ListCard /> */}
-      <ListCard data={data[2]} style={animatedBackStyle} overlayStyle={animatedBackOverlayStyle} />
-      <ListCard data={data[1]} style={animatedMiddleStyle} overlayStyle={animatedMiddleOverlayStyle} />
-      <ListCard data={data[0]} style={animatedFrontStyle} overlayStyle={animatedFrontOverlayStyle} />
+      {[2, 1, 0].map((index) => (
+        <ListCard key={index} data={data[index]} index={index} progress={progress} />
+      ))}
     </View>
   )
 }
 
-function ListCard({ style, overlayStyle, data }: ListCard) {
+function ListCard({ data, index, progress }: ListCardProps) {
+  const config = CARDS_ANIMATION_CONFIG[index]
+
+  const animatedStyle = useAnimatedStyle(
+    (): ViewStyle => ({
+      opacity: interpolate(progress.get(), [0, 1, 2, 3], config.opacity, 'clamp'),
+      transform: [
+        { translateY: interpolate(progress.get(), [0, 1, 2, 3], config.translateY, 'clamp') },
+        { scale: interpolate(progress.get(), [0, 1, 2, 3], config.scale, 'clamp') },
+      ],
+    }),
+  )
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(progress.get(), [0, 1, 2, 3], config.overlayOpacity, 'clamp'),
+  }))
+
+  const nameWidth = (data.nameWidth ?? 0) * 13
+  const messageWidth = (data.messageWidth ?? 0) * 13
+
   return (
-    <Animated.View style={[styles.shuffleCard, style]}>
+    <Animated.View style={[styles.shuffleCard, animatedStyle]}>
       <Animated.View style={[styles.cardOverlay, overlayStyle]} />
-      <Image source={data?.avatar} style={styles.avatar} />
+      {data?.avatar && <Image source={data.avatar} style={styles.avatar} />}
       <View style={styles.textContainer}>
-        <View style={[styles.namePlaceholder, { width: `${data?.nameWidth * 13}%` }]} />
-        <View style={[styles.messagePlaceholder, { width: `${data?.messageWidth * 13}%` }]} />
+        <View style={[styles.namePlaceholder, { width: `${nameWidth}%` }]} />
+        <View style={[styles.messagePlaceholder, { width: `${messageWidth}%` }]} />
       </View>
     </Animated.View>
   )

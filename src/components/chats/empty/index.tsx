@@ -1,11 +1,18 @@
-import { View } from 'react-native'
+import { getFadeOut, reversedZoomAnimationIn } from '@constants/animations'
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { styles } from './Empty.styles'
 import ListShuffle from './ListShuffle'
 
 export default function Empty() {
+  const keyboard = useReanimatedKeyboardAnimation()
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return { transform: [{ translateY: keyboard.height.value / 2 }] }
+  })
   return (
-    <View style={styles.container}>
+    <Animated.View entering={reversedZoomAnimationIn} exiting={getFadeOut()} style={[styles.container, animatedStyle]}>
       <ListShuffle />
-    </View>
+    </Animated.View>
   )
 }
