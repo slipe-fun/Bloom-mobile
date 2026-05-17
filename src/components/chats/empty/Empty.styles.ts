@@ -9,7 +9,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
   },
   shuffleContainer: {
-    maxWidth: 305,
+    maxWidth: 275,
     width: '100%',
     height: 115,
     position: 'relative',

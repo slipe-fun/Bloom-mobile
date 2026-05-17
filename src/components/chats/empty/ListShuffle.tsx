@@ -14,22 +14,22 @@ export default function ListShuffle() {
   const progress = useSharedValue(0)
 
   const animatedFrontStyle = useAnimatedStyle(() => ({
-    backgroundColor: 'yellow',
+    opacity: interpolate(progress.get(), [0, 1, 2, 3], [0, 0, 0, 1], 'clamp'),
     transform: [{ translateY: interpolate(progress.get(), [2, 3], [24, 0]) }],
   }))
 
   const animatedMiddleStyle = useAnimatedStyle(() => ({
-    backgroundColor: 'red',
+    opacity: interpolate(progress.get(), [0, 1, 2, 3], [0, 0, 1, 1], 'clamp'),
     transform: [
-      { translateY: interpolate(progress.get(), [1, 2], [24, 0]) },
+      { translateY: interpolate(progress.get(), [1, 2, 3], [24, 0, -28]) },
       { scale: interpolate(progress.get(), [2, 3], [1, 0.9], 'clamp') },
     ],
   }))
 
   const animatedBackStyle = useAnimatedStyle(() => ({
-    backgroundColor: 'green',
+    opacity: interpolate(progress.get(), [0, 1, 2, 3], [0, 1, 1, 1], 'clamp'),
     transform: [
-      { translateY: interpolate(progress.get(), [0, 1], [24, 0]) },
+      { translateY: interpolate(progress.get(), [0, 1, 2, 3], [24, 0, -28, -54]) },
       { scale: interpolate(progress.get(), [1, 2, 3], [1, 0.9, 0.8], 'clamp') },
     ],
   }))
@@ -47,7 +47,7 @@ export default function ListShuffle() {
   }))
 
   useEffect(() => {
-    progress.set(withSpring(0, quickSpring))
+    progress.set(withSpring(3, quickSpring))
   })
 
   return (
