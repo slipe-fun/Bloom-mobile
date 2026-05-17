@@ -13,7 +13,7 @@ import Animated, {
   withSequence,
   withSpring,
 } from 'react-native-reanimated'
-import { styles } from './Empty.styles'
+import { styles } from './ListShuffle.styles'
 
 interface ListCardProps {
   data: ChatsEmptyCardData
