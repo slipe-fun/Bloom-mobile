@@ -3,6 +3,10 @@
     "header": {
       "titleConnecting": "Connecting..."
     },
+    "empty": {
+      "title": "It's quiet here",
+      "subTitle": "Start a conversation with your friends here!"
+    },
     "footer": {
       "search": {
         "placeholder": "Search in chats"
