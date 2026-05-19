@@ -5,8 +5,8 @@ export const styles = StyleSheet.create((theme) => ({
     paddingTop,
     zIndex: 1,
     width: '100%',
-    paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    paddingHorizontal: theme.spacing.xxl,
+    paddingBottom: theme.spacing.lg,
     alignItems: 'flex-start',
   }),
   title: (large: boolean = false) => ({
@@ -22,6 +22,6 @@ export const styles = StyleSheet.create((theme) => ({
     paddingTop,
     position: 'absolute',
     alignItems: 'center',
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.xxl,
   }),
 }))

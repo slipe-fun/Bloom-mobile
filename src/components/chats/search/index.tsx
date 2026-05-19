@@ -5,6 +5,7 @@ import type { SearchUser as SearchUserType } from '@interfaces'
 import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback, useMemo, useState } from 'react'
+import { View } from 'react-native'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { FOOTER_HEIGHT } from '../footer'
@@ -20,20 +21,21 @@ export default function Search() {
   const searchValue = useTabBarStore((state) => state.searchValue)
   const scrollY = useSharedValue<number>(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
-  const { users, status, loadMore } = useUsersSearch(searchValue)
+  // const { users, status, loadMore } = useUsersSearch(searchValue)
   const keyboard = useReanimatedKeyboardAnimation()
   const insets = useInsets()
 
   const footerHeight = FOOTER_HEIGHT + insets.bottom
-  const lastIndex = users.length - 1
-  const isInitialLoading = status === 'loading' && users.length === 0
-  const isNotFound = (status === 'empty' || status === 'error') && users.length === 0
-  const isHistoryEmpty = !searchValue && search
+  const lastIndex = [].length - 1
+  // const isInitialLoading = status === 'loading' && users.length === 0
+  // const isNotFound = (status === 'empty' || status === 'error') && users.length === 0
+  // const isHistoryEmpty = !searchValue && search
 
   const keyExtractor = useCallback((item: SearchUserType) => String(item.id), [])
 
   const renderItem: ListRenderItem<SearchUserType> = useCallback(
-    ({ item, index }) => <SearchUser user={item} isLast={index === lastIndex} />,
+    // ({ item, index }) => <SearchUser user={item} isLast={index === lastIndex} />,
+    ({ item, index }) => <View style={{ height: 150, width: '100%', backgroundColor: 'white', marginBottom: 24 }} />,
     [lastIndex],
   )
 
@@ -58,34 +60,34 @@ export default function Search() {
     <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.container}>
       <FloatingHeader scrollY={scrollY} headerHeight={headerHeight} />
 
-      {!isInitialLoading && (
-        <AnimatedFlashList
-          key="search"
-          onScroll={scrollHandler}
-          onEndReached={loadMore}
-          ListHeaderComponent={listHeader}
-          keyExtractor={keyExtractor}
-          style={styles.list}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: footerHeight }}
-          data={users}
-          renderItem={renderItem}
-        />
-      )}
+      {/* {!isInitialLoading && ( */}
+      <AnimatedFlashList
+        key="search"
+        onScroll={scrollHandler}
+        // onEndReached={loadMore}
+        ListHeaderComponent={listHeader}
+        // keyExtractor={keyExtractor}
+        style={styles.list}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: footerHeight }}
+        data={[1, 2, 3, 4, 5, 6]}
+        renderItem={renderItem}
+      />
+      {/* )} */}
 
-      {isInitialLoading && (
-        <Animated.View style={[styles.loaderWrapper, animatedStyles]}>
-          <Loader size={32} />
-        </Animated.View>
-      )}
+      {/* {isInitialLoading && ( */}
+      {/* <Animated.View style={[styles.loaderWrapper, animatedStyles]}>
+        <Loader size={32} />
+      </Animated.View> */}
+      {/* )} */}
 
-      {isHistoryEmpty ? (
+      {/* {isHistoryEmpty ? (
         <EmptyModal key="emptyStory" text="В истории поиска пусто... Введите свой первый запрос!" icon="magnifyingglass" color="primary" />
       ) : isNotFound ? (
         <EmptyModal key="emptyResult" text={`К сожалению, по запросу "${searchValue}" ничего не найдено.`} icon="eye.slashed" color="red" />
-      ) : null}
+      ) : null} */}
     </Animated.View>
   )
 }

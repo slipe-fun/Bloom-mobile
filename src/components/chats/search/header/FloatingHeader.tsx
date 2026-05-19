@@ -1,8 +1,10 @@
 import { GradientBlur } from '@components/ui'
+import { springy } from '@constants/animations'
+import { quickSpring } from '@constants/easings'
+import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type React from 'react'
-import type { TextStyle, ViewStyle } from 'react-native'
-import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import Animated, { type SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Header.styles'
 
 type FloatingHeaderProps = {
@@ -10,24 +12,23 @@ type FloatingHeaderProps = {
   headerHeight: number
 }
 
-export default function FloatingHeader({ scrollY, headerHeight }: FloatingHeaderProps): React.JSX.Element {
+export default function FloatingHeader({ scrollY }: FloatingHeaderProps): React.JSX.Element {
   const insets = useInsets()
 
-  const scrollTarget = headerHeight - insets.top
+  const topInset = insets.top + base.spacing.xl
 
   const animatedViewStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      opacity: interpolate(scrollY.get(), [0, 8], [0, 1]),
+    () => ({
+      opacity: withSpring(scrollY.get() >= topInset / 2 ? 1 : 0, quickSpring),
     }),
-    [scrollTarget],
+    [topInset],
   )
 
   const animatedTextStyle = useAnimatedStyle(
-    (): TextStyle => ({
-      opacity: interpolate(scrollY.get(), [0, scrollTarget], [0, 1]),
-      transform: [{ translateY: interpolate(scrollY.get(), [0, scrollTarget], [12, 0], 'clamp') }],
+    () => ({
+      transform: [{ translateY: withSpring(scrollY.get() >= topInset / 2 ? 0 : 20, springy) }],
     }),
-    [scrollTarget],
+    [topInset],
   )
 
   return (

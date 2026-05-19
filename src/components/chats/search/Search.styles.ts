@@ -14,7 +14,7 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
   },
   loaderWrapper: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
   },

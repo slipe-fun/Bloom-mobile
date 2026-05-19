@@ -1,7 +1,9 @@
+import { quickSpring } from '@constants/easings'
+import { base } from '@design/base'
 import { useInsets } from '@hooks'
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 import { type LayoutChangeEvent, Text } from 'react-native'
-import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import Animated, { type SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Header.styles'
 
 type SearchHeaderProps = {
@@ -13,30 +15,24 @@ type SearchHeaderProps = {
 export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }: SearchHeaderProps) {
   const insets = useInsets()
 
-  const lastHeight = useRef(headerHeight)
+  const topInset = insets.top + base.spacing.xl
 
-  const onLayout = useCallback(
-    (event: LayoutChangeEvent) => {
-      const { height } = event.nativeEvent.layout
+  const onLayout = useCallback((event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout
 
-      if (height > 0 && height !== lastHeight.current) {
-        lastHeight.current = height
-        if (height !== headerHeight) {
-          setHeaderHeight(height)
-        }
-      }
-    },
-    [headerHeight, setHeaderHeight],
-  )
+    if (headerHeight === 0) {
+      setHeaderHeight(height)
+    }
+  }, [])
 
   const animatedViewStyle = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(scrollY.get(), [0, insets.top], [1, 0], 'clamp'),
+      opacity: withSpring(scrollY.get() >= topInset / 2 ? 0 : 1, quickSpring),
     }
-  }, [headerHeight, insets.top])
+  }, [headerHeight, topInset])
 
   return (
-    <Animated.View onLayout={onLayout} style={[animatedViewStyle, styles.header(insets.top + 16)]}>
+    <Animated.View onLayout={onLayout} style={[animatedViewStyle, styles.header(topInset)]}>
       <Text style={styles.title(true)}>Поиск</Text>
     </Animated.View>
   )

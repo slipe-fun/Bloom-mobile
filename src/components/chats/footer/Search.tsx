@@ -43,7 +43,7 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
       elevated={true}
       onChangeText={setSearchValue}
       onFocus={() => setSearch(true)}
-      onBlur={() => setSearch(false)}
+      onBlur={() => !searchValue && setSearch(false)}
       placeholder={t('common:chats.footer.search.placeholder')}
       icon={<Icon size={22} color={theme.colors.secondaryText} animatedProps={animatedProps} icon="magnifyingglass" />}
       submitBehavior="blurAndSubmit"
