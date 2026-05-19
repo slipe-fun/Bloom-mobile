@@ -49,12 +49,12 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         colorStops: !gray
           ? {
               0: { color: theme.colors.gradientBlurEnd },
-              0.5: { color: theme.colors.gradientBlurMiddle },
+              0.4: { color: theme.colors.gradientBlurMiddle },
               1: { color: theme.colors.gradientBlurStart },
             }
           : {
               0: { color: theme.colors.grayGradientBlurEnd },
-              0.5: { color: theme.colors.grayGradientBlurMiddle },
+              0.4: { color: theme.colors.grayGradientBlurMiddle },
               1: { color: theme.colors.grayGradientBlurStart },
             },
         easing: Easing.bezier(0.42, 0, 0.58, 1),
