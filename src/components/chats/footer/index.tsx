@@ -10,7 +10,7 @@ import FooterAvatar from './avatar'
 import { styles } from './Footer.styles'
 import FooterSearch from './Search'
 
-export const TAB_BAR_HEIGHT = SIZE_MAP.lg
+export const FOOTER_HEIGHT = SIZE_MAP.lg
 
 const AnimatedStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 

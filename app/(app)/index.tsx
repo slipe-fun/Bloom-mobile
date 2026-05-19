@@ -1,7 +1,7 @@
 import { useChatList } from '@api/providers/ChatsContext'
 import Chat from '@components/chats/chat'
 import Empty from '@components/chats/empty'
-import Footer from '@components/chats/footer'
+import Footer, { FOOTER_HEIGHT } from '@components/chats/footer'
 import Header from '@components/chats/header'
 import Search from '@components/chats/search'
 import { SIZE_MAP } from '@components/ui/button/constats'
@@ -12,19 +12,23 @@ import type { Chat as ChatType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback } from 'react'
+import { useWindowDimensions } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Chats() {
-  const { height, search } = useTabBarStore()
+  const search = useTabBarStore((state) => state.search)
   const { chats } = useChatList()
+  const { height } = useWindowDimensions()
   const insets = useInsets()
 
+  const footerHeight = FOOTER_HEIGHT + insets.bottom
   const lastIndex = chats?.length - 1
 
   const headerHeight = insets.top + base.spacing.md + SIZE_MAP.md
 
   const animatedViewStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: withSpring(search ? -height / 10 : 0, fastSpring) }],
     opacity: withSpring(search ? 0 : 1, fastSpring),
   }))
 
@@ -53,11 +57,11 @@ export default function Chats() {
           automaticallyAdjustsScrollIndicatorInsets={false}
           contentContainerStyle={{
             paddingTop: headerHeight,
-            paddingBottom: height,
+            paddingBottom: footerHeight,
           }}
           scrollIndicatorInsets={{
             top: headerHeight,
-            bottom: height,
+            bottom: footerHeight,
           }}
         />
         {chats?.length === 0 ? <Empty /> : null}

@@ -20,9 +20,9 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
   const colorValue = useSharedValue(0)
 
   const searchValue = useTabBarStore((state) => state.searchValue)
-  const searchFocused = useTabBarStore((state) => state.searchFocused)
+  const search = useTabBarStore((state) => state.search)
   const setSearchValue = useTabBarStore((state) => state.setSearchValue)
-  const setSearchFocused = useTabBarStore((state) => state.setSearchFocused)
+  const setSearch = useTabBarStore((state) => state.setSearch)
 
   const animatedProps = useAnimatedProps(
     (): PathProps => ({
@@ -31,8 +31,8 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
   )
 
   useEffect(() => {
-    colorValue.set(withSpring(searchFocused ? 1 : 0, quickSpring))
-  }, [searchFocused])
+    colorValue.set(withSpring(search ? 1 : 0, quickSpring))
+  }, [search])
 
   return (
     <Input
@@ -42,8 +42,8 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
       viewStyle={{ flex: 1 }}
       elevated={true}
       onChangeText={setSearchValue}
-      onFocus={() => setSearchFocused(true)}
-      onBlur={() => setSearchFocused(false)}
+      onFocus={() => setSearch(true)}
+      onBlur={() => setSearch(false)}
       placeholder={t('common:chats.footer.search.placeholder')}
       icon={<Icon size={22} color={theme.colors.secondaryText} animatedProps={animatedProps} icon="magnifyingglass" />}
       submitBehavior="blurAndSubmit"

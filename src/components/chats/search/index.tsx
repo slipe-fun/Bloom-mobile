@@ -1,12 +1,13 @@
 import { EmptyModal, Loader } from '@components/ui'
 import { getFadeIn, getFadeOut } from '@constants/animations'
-import { useUsersSearch } from '@hooks'
+import { useInsets, useUsersSearch } from '@hooks'
 import type { SearchUser as SearchUserType } from '@interfaces'
 import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useTabBarStore from '@stores/tabBar'
 import { useCallback, useMemo, useState } from 'react'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import { FOOTER_HEIGHT } from '../footer'
 import SearchHeader from './header'
 import FloatingHeader from './header/FloatingHeader'
 import { styles } from './Search.styles'
@@ -17,12 +18,13 @@ const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 export default function Search() {
   const search = useTabBarStore((state) => state.search)
   const searchValue = useTabBarStore((state) => state.searchValue)
-  const height = useTabBarStore((state) => state.height)
   const scrollY = useSharedValue<number>(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const { users, status, loadMore } = useUsersSearch(searchValue)
   const keyboard = useReanimatedKeyboardAnimation()
+  const insets = useInsets()
 
+  const footerHeight = FOOTER_HEIGHT + insets.bottom
   const lastIndex = users.length - 1
   const isInitialLoading = status === 'loading' && users.length === 0
   const isNotFound = (status === 'empty' || status === 'error') && users.length === 0
@@ -67,7 +69,7 @@ export default function Search() {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: height }}
+          contentContainerStyle={{ paddingBottom: footerHeight }}
           data={users}
           renderItem={renderItem}
         />
