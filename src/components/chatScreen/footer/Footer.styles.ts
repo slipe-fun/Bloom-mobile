@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export const styles = StyleSheet.create((theme) => ({
   footer: {
     width: '100%',
-    paddingTop: theme.spacing.md,
+    paddingTop: theme.spacing.xxl,
     flexDirection: 'row',
     position: 'absolute',
     alignItems: 'flex-end',

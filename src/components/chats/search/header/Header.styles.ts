@@ -1,3 +1,4 @@
+import { SIZE_MAP } from '@components/ui/button/constats'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -20,6 +21,7 @@ export const styles = StyleSheet.create((theme) => ({
     top: 0,
     zIndex: 1,
     paddingTop,
+    height: paddingTop + theme.spacing.xxl + SIZE_MAP.md,
     position: 'absolute',
     alignItems: 'center',
     paddingBottom: theme.spacing.xxl,
