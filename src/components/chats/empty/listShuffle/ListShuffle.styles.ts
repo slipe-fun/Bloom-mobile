@@ -40,10 +40,12 @@ export const styles = StyleSheet.create((theme) => ({
     height: 15,
     borderRadius: theme.radius.sm,
     backgroundColor: theme.colors.switcher,
+    borderCurve: 'continuous',
   },
   messagePlaceholder: {
     height: 15,
     borderRadius: theme.radius.sm,
     backgroundColor: theme.colors.switcher,
+    borderCurve: 'continuous',
   },
 }))
