@@ -58,6 +58,7 @@ export default function FooterAvatar({ inputRef = null }: FooterAvatarProps) {
       onPress={() => {
         setSearch(false)
         inputRef.current.blur()
+        inputRef.current.clear()
       }}
     />
   )

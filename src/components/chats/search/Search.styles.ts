@@ -36,4 +36,8 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.xxxl,
     fontFamily: theme.fontFamily.semibold,
   },
+  emptyWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }))

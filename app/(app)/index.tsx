@@ -13,7 +13,7 @@ import { FlashList } from '@shopify/flash-list'
 import useFooterStore from '@stores/footer'
 import { useCallback } from 'react'
 import { useWindowDimensions } from 'react-native'
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
+import Animated, { LayoutAnimationConfig, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Chats() {
@@ -64,7 +64,9 @@ export default function Chats() {
             bottom: footerHeight,
           }}
         />
-        {chats?.length === 0 ? <Empty /> : null}
+        <LayoutAnimationConfig skipEntering skipExiting>
+          {chats?.length === 0 ? <Empty /> : null}
+        </LayoutAnimationConfig>
         <Header />
       </Animated.View>
     </>

@@ -1,11 +1,24 @@
 import { useEffect, useMemo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { type ColorValue, StyleSheet, View } from 'react-native'
 import Animated, { Easing, useAnimatedProps, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'
 import Svg, { Rect } from 'react-native-svg'
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect)
 
-export default function SeamlessDashedBorder({
+interface DashedBoxProps {
+  width: number
+  height: number
+  borderRadius?: number
+  dashLength?: number
+  gapLength?: number
+  strokeWidth?: number
+  strokeColor?: ColorValue
+  duration?: number
+  ref?: React.Ref<View>
+  children?: React.ReactNode
+}
+
+export default function DashedBox({
   children,
   width,
   height,
@@ -15,7 +28,8 @@ export default function SeamlessDashedBorder({
   strokeWidth = 4,
   strokeColor = '#000',
   duration = 1500,
-}) {
+  ref,
+}: DashedBoxProps) {
   const dashOffset = useSharedValue(0)
 
   const inset = strokeWidth / 2
@@ -58,7 +72,7 @@ export default function SeamlessDashedBorder({
   }, [actualPattern, duration])
 
   return (
-    <View style={[{ width, height }, styles.container]}>
+    <View ref={ref} style={[{ width, height }, styles.container]}>
       <View style={styles.svgWrapper}>
         <Svg width="100%" height="100%">
           <AnimatedRect

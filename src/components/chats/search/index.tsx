@@ -5,7 +5,7 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useFooterStore from '@stores/footer'
 import { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
-import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
+import Animated, { LayoutAnimationConfig, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 import { FOOTER_HEIGHT } from '../footer'
 import Empty from './Empty'
 import SearchHeader from './header'
@@ -64,7 +64,9 @@ export default function Search() {
         data={[1, 2, 3, 4, 5, 6]}
         renderItem={renderItem}
       />
-      <Empty status={status} />
+      <LayoutAnimationConfig skipEntering skipExiting>
+        <Empty status={status} />
+      </LayoutAnimationConfig>
     </Animated.View>
   )
 }
