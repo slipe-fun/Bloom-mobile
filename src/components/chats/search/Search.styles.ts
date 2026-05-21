@@ -38,6 +38,8 @@ export const styles = StyleSheet.create((theme) => ({
   },
   emptyWrapper: {
     justifyContent: 'center',
+    maxWidth: 275,
+    width: '100%',
     alignItems: 'center',
   },
 }))
