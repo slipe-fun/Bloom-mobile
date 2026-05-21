@@ -6,8 +6,10 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Search.styles'
 
+export type SearchStatus = 'notFound' | 'loading' | 'emptyHistory' | 'default' | 'success'
+
 interface EmptyProps {
-  status: 'notFound' | 'loading' | 'emptyHistory'
+  status: SearchStatus
 }
 
 export default function Empty({ status }: EmptyProps) {

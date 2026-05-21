@@ -1,9 +1,8 @@
+import type { SearchStatus } from '@components/chats/search/Empty'
 import { API_URL } from '@constants/api'
 import type { SearchUser } from '@interfaces'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-
-type SearchStatus = 'idle' | 'loading' | 'success' | 'empty' | 'error'
 
 interface useUserSearch {
   users: SearchUser[]
@@ -13,7 +12,7 @@ interface useUserSearch {
 }
 
 export default function useUsersSearch(query: string = ''): useUserSearch {
-  const [status, setStatus] = useState<SearchStatus>('idle')
+  const [status, setStatus] = useState<SearchStatus>('emptyHistory')
   const [users, setUsers] = useState<SearchUser[]>([])
   const [page, setPage] = useState(1)
   const [error, setError] = useState<string>('')
@@ -23,11 +22,11 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
 
     if (!query.trim()) {
       setUsers((prev) => (prev.length ? [] : prev))
-      setStatus((prev) => (prev !== 'idle' ? 'idle' : prev))
+      setStatus((prev) => (prev !== 'emptyHistory' ? 'emptyHistory' : prev))
       return
     }
 
-    if (page === 1) setStatus('loading')
+    if (page === 1 && users.length === 0) setStatus('loading')
 
     async function fetchUsers() {
       try {
@@ -38,11 +37,11 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
         const data = response?.data ?? []
 
         setUsers((prev) => (page === 1 ? data : [...prev, ...data]))
-        setStatus(data.length === 0 && page === 1 ? 'empty' : 'success')
+        setStatus(data.length === 0 && page === 1 ? 'notFound' : 'success')
       } catch (err: any) {
         if (!ignore) {
           setError(err?.message || 'Error')
-          setStatus('error')
+          setStatus('notFound')
         }
       }
     }
@@ -64,7 +63,7 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
     status,
     error,
     loadMore: () => {
-      if (status !== 'loading' && status !== 'empty') {
+      if (status !== 'loading' && status !== 'notFound') {
         setPage((p) => p + 1)
       }
     },

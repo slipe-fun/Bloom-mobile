@@ -20,20 +20,17 @@ export default function Search() {
   const searchValue = useFooterStore((state) => state.searchValue)
   const scrollY = useSharedValue<number>(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
-  // const { users, status, loadMore } = useUsersSearch(searchValue)
+  const { users, status, loadMore } = useUsersSearch(searchValue)
   const insets = useInsets()
 
   const footerHeight = FOOTER_HEIGHT + insets.bottom
   const lastIndex = [].length - 1
-  // const isInitialLoading = status === 'loading' && users.length === 0
-  // const isNotFound = (status === 'empty' || status === 'error') && users.length === 0
-  // const isHistoryEmpty = !searchValue && search
 
   const keyExtractor = useCallback((item: SearchUserType) => String(item.id), [])
 
   const renderItem: ListRenderItem<SearchUserType> = useCallback(
     // ({ item, index }) => <SearchUser user={item} isLast={index === lastIndex} />,
-    ({ item, index }) => <View style={{ height: 150, width: '100%', backgroundColor: 'white', marginBottom: 24 }} />,
+    ({ item, index }) => <View style={{ height: 150, width: '100%', backgroundColor: 'transparent', marginBottom: 24 }} />,
     [lastIndex],
   )
 
@@ -67,7 +64,7 @@ export default function Search() {
         data={[1, 2, 3, 4, 5, 6]}
         renderItem={renderItem}
       />
-      <Empty status="emptyHistory" />
+      <Empty status={status} />
     </Animated.View>
   )
 }
