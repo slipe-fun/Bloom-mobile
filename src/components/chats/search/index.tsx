@@ -3,7 +3,7 @@ import { getFadeIn, getFadeOut } from '@constants/animations'
 import { useInsets, useUsersSearch } from '@hooks'
 import type { SearchUser as SearchUserType } from '@interfaces'
 import { FlashList, type ListRenderItem } from '@shopify/flash-list'
-import useTabBarStore from '@stores/tabBar'
+import useFooterStore from '@stores/footer'
 import { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
@@ -17,8 +17,8 @@ import SearchUser from './SearchUser'
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 export default function Search() {
-  const search = useTabBarStore((state) => state.search)
-  const searchValue = useTabBarStore((state) => state.searchValue)
+  const search = useFooterStore((state) => state.search)
+  const searchValue = useFooterStore((state) => state.searchValue)
   const scrollY = useSharedValue<number>(0)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   // const { users, status, loadMore } = useUsersSearch(searchValue)

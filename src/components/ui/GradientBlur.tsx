@@ -16,70 +16,56 @@ interface GradientBlurProps {
   style?: StyleProp<ViewStyle>
   keyboard?: boolean
   gray?: boolean
+  behindKeyboard?: boolean
 }
 
-export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard, gray }: GradientBlurProps) {
+const DIRECTIONS: Record<GradientDirection, { start: { x: number; y: number }; end: { x: number; y: number } }> = {
+  'top-to-bottom': { start: { x: 0.5, y: 1 }, end: { x: 0.5, y: 0 } },
+  'bottom-left-to-top-right': { start: { x: 0.5, y: 0 }, end: { x: 1, y: 1 } },
+  'bottom-to-top': { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 1 } },
+}
+
+export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard, gray, behindKeyboard }: GradientBlurProps) {
   const { theme, rt } = useUnistyles()
   const insets = useInsets()
 
-  const gradientStyles = [StyleSheet.absoluteFill, keyboard ? styles.gradient(insets.bottom) : null, style]
+  const isDark = rt.themeName.includes('dark')
+  const tint: BlurTint = gray ? (isDark ? 'dark' : 'light') : isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
 
-  const tint: BlurTint = rt.themeName.includes('dark')
-    ? !gray
-      ? 'systemChromeMaterialDark'
-      : 'dark'
-    : !gray
-      ? 'systemChromeMaterialLight'
-      : 'light'
+  const { mask, grad } = useMemo(() => {
+    const c = theme.colors
+    const [cEnd, cMid, cStart] = gray
+      ? [c.grayGradientBlurEnd, c.grayGradientBlurMiddle, c.grayGradientBlurStart]
+      : [c.gradientBlurEnd, c.gradientBlurMiddle, c.gradientBlurStart]
 
-  const { start, end } = useMemo(() => {
-    switch (direction) {
-      case 'top-to-bottom':
-        return { start: { x: 0.5, y: 1 }, end: { x: 0.5, y: 0 } }
-      case 'bottom-left-to-top-right':
-        return { start: { x: 0.5, y: 0 }, end: { x: 1, y: 1 } }
-      default:
-        return { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 1 } }
+    const easing = Easing.bezier(0.42, 0, 0.58, 1)
+    const extraColorStopsPerTransition = 20
+
+    return {
+      mask: easeGradient({
+        colorStops: {
+          0: { color: cEnd },
+          [behindKeyboard ? 0.085 : 0.4]: { color: cMid },
+          1: { color: cStart },
+        },
+        easing,
+        extraColorStopsPerTransition,
+      }),
+      grad: easeGradient({
+        colorStops: {
+          0: { color: cEnd },
+          [behindKeyboard ? 0.2 : 0.85]: { color: cStart },
+        },
+        easing,
+        extraColorStopsPerTransition,
+      }),
     }
-  }, [direction])
+  }, [theme, gray, behindKeyboard])
 
-  const { colors, locations } = useMemo(
-    () =>
-      easeGradient({
-        colorStops: !gray
-          ? {
-              0: { color: theme.colors.gradientBlurEnd },
-              0.4: { color: theme.colors.gradientBlurMiddle },
-              1: { color: theme.colors.gradientBlurStart },
-            }
-          : {
-              0: { color: theme.colors.grayGradientBlurEnd },
-              0.4: { color: theme.colors.grayGradientBlurMiddle },
-              1: { color: theme.colors.grayGradientBlurStart },
-            },
-        easing: Easing.bezier(0.42, 0, 0.58, 1),
-        extraColorStopsPerTransition: 20,
-      }),
-    [theme, gray],
-  )
+  const gradientStyles = [StyleSheet.absoluteFill, keyboard && { transform: [{ translateY: insets.bottom }] }, style]
 
-  const { colors: gradientColors, locations: gradientLocations } = useMemo(
-    () =>
-      easeGradient({
-        colorStops: !gray
-          ? {
-              0: { color: theme.colors.gradientBlurEnd },
-              0.85: { color: theme.colors.gradientBlurStart },
-            }
-          : {
-              0: { color: theme.colors.grayGradientBlurEnd },
-              0.85: { color: theme.colors.grayGradientBlurStart },
-            },
-        easing: Easing.bezier(0.42, 0, 0.58, 1),
-        extraColorStopsPerTransition: 20,
-      }),
-    [theme],
-  )
+  const { start, end } = DIRECTIONS[direction]
+
   return (
     <>
       <MaskedView
@@ -87,7 +73,13 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         pointerEvents="none"
         style={gradientStyles}
         maskElement={
-          <LinearGradient start={start} end={end} locations={locations as any} colors={colors as any} style={StyleSheet.absoluteFill} />
+          <LinearGradient
+            start={start}
+            end={end}
+            locations={mask.locations as any}
+            colors={mask.colors as any}
+            style={StyleSheet.absoluteFill}
+          />
         }
       >
         <BlurView style={StyleSheet.absoluteFill} intensity={25} tint={tint} />
@@ -96,17 +88,10 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         pointerEvents="none"
         start={start}
         end={end}
-        // onLayout={(e) => console.log(e.nativeEvent.layout)}
-        locations={gradientLocations as any}
-        colors={gradientColors as any}
+        locations={grad.locations as any}
+        colors={grad.colors as any}
         style={gradientStyles}
       />
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  gradient: (bottom: number) => ({
-    transform: [{ translateY: bottom }],
-  }),
-})

@@ -10,14 +10,14 @@ import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { Chat as ChatType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
-import useTabBarStore from '@stores/tabBar'
+import useFooterStore from '@stores/footer'
 import { useCallback } from 'react'
 import { useWindowDimensions } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Chats() {
-  const search = useTabBarStore((state) => state.search)
+  const search = useFooterStore((state) => state.search)
   const { chats } = useChatList()
   const { height } = useWindowDimensions()
   const insets = useInsets()

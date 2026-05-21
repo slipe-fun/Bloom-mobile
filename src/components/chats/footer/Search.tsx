@@ -1,6 +1,6 @@
 import { Icon, Input } from '@components/ui'
 import { quickSpring } from '@constants/easings'
-import useTabBarStore from '@stores/tabBar'
+import useFooterStore from '@stores/footer'
 import { type Ref, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TextInput } from 'react-native'
@@ -19,10 +19,10 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
   const { t } = useTranslation('common')
   const colorValue = useSharedValue(0)
 
-  const searchValue = useTabBarStore((state) => state.searchValue)
-  const search = useTabBarStore((state) => state.search)
-  const setSearchValue = useTabBarStore((state) => state.setSearchValue)
-  const setSearch = useTabBarStore((state) => state.setSearch)
+  const searchValue = useFooterStore((state) => state.searchValue)
+  const search = useFooterStore((state) => state.search)
+  const setSearchValue = useFooterStore((state) => state.setSearchValue)
+  const setSearch = useFooterStore((state) => state.setSearch)
 
   const animatedProps = useAnimatedProps(
     (): PathProps => ({
@@ -43,7 +43,6 @@ export default function FooterSearch({ ref }: FooterSearchProps) {
       elevated={true}
       onChangeText={setSearchValue}
       onFocus={() => setSearch(true)}
-      onBlur={() => !searchValue && setSearch(false)}
       placeholder={t('common:chats.footer.search.placeholder')}
       icon={<Icon size={22} color={theme.colors.secondaryText} animatedProps={animatedProps} icon="magnifyingglass" />}
       submitBehavior="blurAndSubmit"

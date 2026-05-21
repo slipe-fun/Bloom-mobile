@@ -38,7 +38,7 @@ export const styles = StyleSheet.create((theme) => ({
   iconWrapper: {
     height: '100%',
     paddingLeft: theme.spacing.lg - 2,
-    paddingRight: theme.spacing.sm,
+    paddingRight: theme.spacing.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
