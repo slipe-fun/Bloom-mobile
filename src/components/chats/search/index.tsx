@@ -1,4 +1,4 @@
-import { EmptyModal, Loader } from '@components/ui'
+import { DashedBox, EmptyModal, Icon, Loader } from '@components/ui'
 import { getFadeIn, getFadeOut } from '@constants/animations'
 import { useInsets, useUsersSearch } from '@hooks'
 import type { SearchUser as SearchUserType } from '@interfaces'
@@ -8,6 +8,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 import { FOOTER_HEIGHT } from '../footer'
 import SearchHeader from './header'
 import FloatingHeader from './header/FloatingHeader'
@@ -17,6 +18,7 @@ import SearchUser from './SearchUser'
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 export default function Search() {
+  const { theme } = useUnistyles()
   const search = useFooterStore((state) => state.search)
   const searchValue = useFooterStore((state) => state.searchValue)
   const scrollY = useSharedValue<number>(0)
@@ -35,7 +37,7 @@ export default function Search() {
 
   const renderItem: ListRenderItem<SearchUserType> = useCallback(
     // ({ item, index }) => <SearchUser user={item} isLast={index === lastIndex} />,
-    ({ item, index }) => <View style={{ height: 150, width: '100%', backgroundColor: 'white', marginBottom: 24 }} />,
+    ({ item, index }) => <View style={{ height: 150, width: '100%', backgroundColor: 'gray', marginBottom: 24 }} />,
     [lastIndex],
   )
 
@@ -78,9 +80,12 @@ export default function Search() {
       {/* )} */}
 
       {/* {isInitialLoading && ( */}
-      {/* <Animated.View style={[styles.loaderWrapper, animatedStyles]}>
-        <Loader size={32} />
-      </Animated.View> */}
+      <Animated.View style={[styles.loaderWrapper, animatedStyles]}>
+        {/* <Loader size={34} /> */}
+        <DashedBox strokeColor={theme.colors.switcher} dashLength={12} gapLength={12} width={100} height={100} borderRadius={28}>
+          <Icon size={58} color={theme.colors.switcher} icon="magnifyingglass" />
+        </DashedBox>
+      </Animated.View>
       {/* )} */}
 
       {/* {isHistoryEmpty ? (

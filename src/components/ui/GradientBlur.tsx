@@ -45,7 +45,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
       mask: easeGradient({
         colorStops: {
           0: { color: cEnd },
-          [behindKeyboard ? 0.085 : 0.4]: { color: cMid },
+          0.4: { color: cMid },
           1: { color: cStart },
         },
         easing,
@@ -68,22 +68,25 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
 
   return (
     <>
-      <MaskedView
-        ref={ref}
-        pointerEvents="none"
-        style={gradientStyles}
-        maskElement={
-          <LinearGradient
-            start={start}
-            end={end}
-            locations={mask.locations as any}
-            colors={mask.colors as any}
-            style={StyleSheet.absoluteFill}
-          />
-        }
-      >
-        <BlurView style={StyleSheet.absoluteFill} intensity={25} tint={tint} />
-      </MaskedView>
+      {!behindKeyboard && (
+        <MaskedView
+          ref={ref}
+          pointerEvents="none"
+          style={gradientStyles}
+          maskElement={
+            <LinearGradient
+              start={start}
+              end={end}
+              locations={mask.locations as any}
+              colors={mask.colors as any}
+              style={StyleSheet.absoluteFill}
+            />
+          }
+        >
+          <BlurView style={StyleSheet.absoluteFill} intensity={25} tint={tint} />
+        </MaskedView>
+      )}
+
       <LinearGradient
         pointerEvents="none"
         start={start}
