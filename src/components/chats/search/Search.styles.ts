@@ -18,4 +18,22 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emptyTitle: {
+    color: theme.colors.text,
+    fontSize: theme.fontSize.xxl,
+    fontFamily: theme.fontFamily.semibold,
+    marginTop: theme.spacing.lg,
+  },
+  emptySubTitle: {
+    color: theme.colors.secondaryText,
+    fontSize: theme.fontSize.md,
+    fontFamily: theme.fontFamily.medium,
+    marginTop: theme.spacing.sm,
+    textAlign: 'center',
+  },
+  emptyNotFound: {
+    color: theme.colors.switcher,
+    fontSize: theme.fontSize.xxxl,
+    fontFamily: theme.fontFamily.semibold,
+  },
 }))
