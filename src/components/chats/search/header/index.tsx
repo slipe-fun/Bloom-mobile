@@ -2,6 +2,7 @@ import { quickSpring } from '@constants/easings'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { type LayoutChangeEvent, Text } from 'react-native'
 import Animated, { type SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Header.styles'
@@ -14,6 +15,7 @@ type SearchHeaderProps = {
 
 export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }: SearchHeaderProps) {
   const insets = useInsets()
+  const { t } = useTranslation('common')
 
   const topInset = insets.top + base.spacing.xl
 
@@ -33,7 +35,7 @@ export default function SearchHeader({ scrollY, headerHeight, setHeaderHeight }:
 
   return (
     <Animated.View onLayout={onLayout} style={[animatedViewStyle, styles.header(topInset)]}>
-      <Text style={styles.title(true)}>Поиск</Text>
+      <Text style={styles.title(true)}>{t('common:chats.search.title')}</Text>
     </Animated.View>
   )
 }

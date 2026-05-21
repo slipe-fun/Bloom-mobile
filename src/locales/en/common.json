@@ -11,6 +11,17 @@
       "search": {
         "placeholder": "Search in chats"
       }
+    },
+    "search": {
+      "title": "Search",
+      "emptyHistory": {
+        "title": "No search history",
+        "subTitle": "Do your first search to see it in history"
+      },
+      "notFound": {
+        "title": "No results yet.",
+        "subTitle": "No result found for your request"
+      }
     }
   }
 }

@@ -4,6 +4,7 @@ import { quickSpring } from '@constants/easings'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import Animated, { type SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Header.styles'
 
@@ -14,6 +15,7 @@ type FloatingHeaderProps = {
 
 export default function FloatingHeader({ scrollY }: FloatingHeaderProps): React.JSX.Element {
   const insets = useInsets()
+  const { t } = useTranslation('common')
 
   const topInset = insets.top + base.spacing.xl
 
@@ -34,7 +36,7 @@ export default function FloatingHeader({ scrollY }: FloatingHeaderProps): React.
   return (
     <Animated.View pointerEvents="none" style={[styles.floatingHeader(insets.top), animatedViewStyle]}>
       <GradientBlur direction="top-to-bottom" />
-      <Animated.Text style={[styles.title(false), animatedTextStyle]}>Поиск</Animated.Text>
+      <Animated.Text style={[styles.title(false), animatedTextStyle]}>{t('common:chats.search.title')}</Animated.Text>
     </Animated.View>
   )
 }
