@@ -41,7 +41,6 @@ export default function useUsersSearch(query: string = ''): useUserSearch {
       } catch (err: any) {
         if (!ignore) {
           setError(err?.message || 'Error')
-          setStatus('notFound')
         }
       }
     }

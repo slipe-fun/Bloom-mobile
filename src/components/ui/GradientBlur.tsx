@@ -34,9 +34,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
 
   const { mask, grad } = useMemo(() => {
     const c = theme.colors
-    const [cEnd, cMid, cStart] = gray
-      ? [c.grayGradientBlurEnd, c.grayGradientBlurMiddle, c.grayGradientBlurStart]
-      : [c.gradientBlurEnd, c.gradientBlurMiddle, c.gradientBlurStart]
+    const [cEnd, cStart] = gray ? [c.grayGradientBlurEnd, c.grayGradientBlurStart] : [c.gradientBlurEnd, c.gradientBlurStart]
 
     const easing = Easing.bezier(0.42, 0, 0.58, 1)
     const extraColorStopsPerTransition = 20
@@ -44,9 +42,8 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
     return {
       mask: easeGradient({
         colorStops: {
-          0: { color: cEnd },
-          0.4: { color: cMid },
-          1: { color: cStart },
+          0: { color: '#00000000' },
+          0.4: { color: '#000000' },
         },
         easing,
         extraColorStopsPerTransition,
@@ -83,7 +80,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
             />
           }
         >
-          <BlurView style={StyleSheet.absoluteFill} intensity={25} tint={tint} />
+          <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
         </MaskedView>
       )}
 

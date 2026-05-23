@@ -17,11 +17,9 @@ export const lightTheme = {
     shadow: 'rgba(0, 0, 0, 0.06)',
     // Default gradient
     gradientBlurStart: '#ffffffe6',
-    gradientBlurMiddle: '#fffffff2',
     gradientBlurEnd: '#ffffff00',
     // Gray gradient
     grayGradientBlurStart: '#f1f1f4e6',
-    grayGradientBlurMiddle: '#f1f1f4f2',
     grayGradientBlurEnd: '#f1f1f400',
     border: '#0000000d',
     ...staticColors,
@@ -45,11 +43,9 @@ export const darkTheme = {
     shadow: '#00000000',
     // Default gradient
     gradientBlurStart: '#000000e6',
-    gradientBlurMiddle: '#000000f2',
     gradientBlurEnd: '#00000000',
     // Gray gradient
     grayGradientBlurStart: '#0f0f10e6',
-    grayGradientBlurMiddle: '#0f0f10f2',
     grayGradientBlurEnd: '#0f0f1000',
     border: '#ffffff17',
     ...staticColors,
