@@ -4,14 +4,13 @@ import type { SearchUser as SearchUserType } from '@interfaces'
 import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useFooterStore from '@stores/footer'
 import { useCallback, useMemo, useState } from 'react'
-import { View } from 'react-native'
 import Animated, { LayoutAnimationConfig, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 import { FOOTER_HEIGHT } from '../footer'
 import Empty from './Empty'
 import SearchHeader from './header'
 import FloatingHeader from './header/FloatingHeader'
 import { styles } from './Search.styles'
-import SearchUser from './SearchUser'
+import SearchUser from './searchUser'
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
@@ -24,14 +23,13 @@ export default function Search() {
   const insets = useInsets()
 
   const footerHeight = FOOTER_HEIGHT + insets.bottom
-  const lastIndex = [].length - 1
 
   const keyExtractor = useCallback((item: SearchUserType) => String(item.id), [])
 
   const renderItem: ListRenderItem<SearchUserType> = useCallback(
-    // ({ item, index }) => <SearchUser user={item} isLast={index === lastIndex} />,
-    ({ item, index }) => <View style={{ height: 150, width: '100%', backgroundColor: 'transparent', marginBottom: 24 }} />,
-    [lastIndex],
+    ({ item }) => <SearchUser user={item} />,
+
+    [],
   )
 
   const listHeader = useMemo(
@@ -51,17 +49,16 @@ export default function Search() {
     <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.container}>
       <FloatingHeader scrollY={scrollY} headerHeight={headerHeight} />
       <AnimatedFlashList
-        key="search"
         onScroll={scrollHandler}
-        // onEndReached={loadMore}
+        onEndReached={loadMore}
         ListHeaderComponent={listHeader}
-        // keyExtractor={keyExtractor}
+        keyExtractor={keyExtractor}
         style={styles.list}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: footerHeight }}
-        data={[1, 2, 3, 4, 5, 6]}
+        data={users}
         renderItem={renderItem}
       />
       <LayoutAnimationConfig skipEntering skipExiting>

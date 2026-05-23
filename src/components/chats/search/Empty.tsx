@@ -25,7 +25,7 @@ export default function Empty({ status }: EmptyProps) {
   }, [insets])
 
   return (
-    <Animated.View style={[styles.loaderWrapper, animatedStyle]}>
+    <Animated.View pointerEvents="none" style={[styles.loaderWrapper, animatedStyle]}>
       {status === 'emptyHistory' ? (
         <Animated.View entering={getFadeIn()} exiting={getFadeOut()} style={styles.emptyWrapper}>
           <DashedBox strokeColor={theme.colors.switcher} dashLength={12} gapLength={12} width={100} height={100} borderRadius={28}>

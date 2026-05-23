@@ -1,4 +1,4 @@
-import SearchUser from '@components/chats/search/SearchUser'
+import SearchUser from '@components/chats/search/searchUser'
 import { Button, GradientBlur, Icon } from '@components/ui'
 import { API_URL } from '@constants/api'
 import { base } from '@design/base'
@@ -18,16 +18,11 @@ export default function NewMessage() {
   const { theme } = useUnistyles()
   const router = useRouter()
 
-  const lastIndex = users?.length - 1
-
   const headerHeight = base.spacing.lg + base.spacing.md + 44
 
-  const renderItem: ListRenderItem<SearchUserType> = useCallback(
-    ({ item, index }) => {
-      return <SearchUser user={item} isLast={index === lastIndex} />
-    },
-    [lastIndex],
-  )
+  const renderItem: ListRenderItem<SearchUserType> = useCallback(({ item }) => {
+    return <SearchUser user={item} />
+  }, [])
 
   const keyExtractor = useCallback((item: User) => {
     return String(item?.id)
