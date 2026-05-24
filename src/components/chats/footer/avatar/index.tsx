@@ -21,6 +21,7 @@ export default function FooterAvatar({ inputRef = null }: FooterAvatarProps) {
   const search = useFooterStore((state) => state.search)
   const { theme } = useUnistyles()
   const setSearch = useFooterStore((state) => state.setSearch)
+  const setSearchValue = useFooterStore((state) => state.setSearchValue)
   const scale = useSharedValue(1)
 
   const handlePress = (inn: boolean = true) => {
@@ -59,6 +60,7 @@ export default function FooterAvatar({ inputRef = null }: FooterAvatarProps) {
         setSearch(false)
         inputRef.current.blur()
         inputRef.current.clear()
+        setSearchValue('')
       }}
     />
   )
