@@ -1,10 +1,10 @@
 import { springy } from '@constants/animations'
 import { ICON_PRESSABLE_SCALE, PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
+import { base } from '@design/base'
 import type React from 'react'
 import type { ComponentProps } from 'react'
 import { Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Button.styles'
 import { SIZE_MAP, type Size } from './constats'
 
@@ -36,7 +36,6 @@ export default function Button({
   elevated = true,
   ...props
 }: ButtonProps) {
-  const { theme } = useUnistyles()
   const scale = useSharedValue(1)
 
   let paddingHorizontal = 0
@@ -44,14 +43,14 @@ export default function Button({
     switch (size) {
       case 'sm':
       case 'md':
-        paddingHorizontal = theme.spacing.lg
+        paddingHorizontal = base.spacing.lg
         break
       case 'lg':
       case 'xl':
-        paddingHorizontal = theme.spacing.xl
+        paddingHorizontal = base.spacing.xl
         break
       default:
-        paddingHorizontal = theme.spacing.lg
+        paddingHorizontal = base.spacing.lg
     }
   }
 

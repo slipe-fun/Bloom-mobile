@@ -1,9 +1,11 @@
 import { Avatar } from '@components/ui'
 import Icon from '@components/ui/Icon'
+import { quickSpring } from '@constants/easings'
 import type { SearchUser as SearchUserType } from '@interfaces'
 import { Pressable, Text, View } from 'react-native'
-import Animated from 'react-native-reanimated'
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
+import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './SearchUser.styles'
 
 interface ChatProps {
@@ -14,13 +16,25 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function SearchUser({ user }: ChatProps) {
   const { theme } = useUnistyles()
+  const animatedTheme = useAnimatedTheme()
+  const progress = useSharedValue(1)
+
+  const handlePress = (inn: boolean = true) => {
+    progress.set(withSpring(inn ? 0.8 : 1, quickSpring))
+  }
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: progress.get(),
+    backgroundColor: interpolateColor(progress.get(), [1, 0.8], ['transparent', animatedTheme.get().colors.foregroundTransparent]),
+  }))
 
   return (
     <AnimatedPressable
-      //   onPressIn={() => handlePress(true)}
-      //   onPressOut={() => handlePress(false)}
+      onTouchStart={() => handlePress(true)}
+      onTouchMove={() => handlePress(false)}
+      onTouchEnd={() => handlePress(false)}
       //   onPress={onPressHandler}
-      style={[styles.chat]}
+      style={[styles.chat, animatedStyle]}
     >
       <Avatar style={styles.avatar} size="md" image={user?.avatar} userId={user?.username || user?.display_name} />
       <View style={styles.content}>
