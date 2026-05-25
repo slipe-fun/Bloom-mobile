@@ -24,8 +24,6 @@ export default function Chat({ chat }: ChatProps) {
     progress.set(withSpring(inn ? 0 : 1, quickSpring))
   }
 
-  console.log(chat)
-
   const animatedStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(progress.get(), [1, 0], ['transparent', animatedTheme.get().colors.foregroundTransparent]),
   }))
