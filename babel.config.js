@@ -36,7 +36,7 @@ module.exports = (api) => {
       ],
 
       // MUST be last
-      'react-native-reanimated/plugin',
+      'react-native-worklets/plugin',
     ],
   }
 }

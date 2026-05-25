@@ -1,70 +1,58 @@
 import type { SearchStatus } from '@components/chats/search/Empty'
 import { API_URL } from '@constants/api'
 import type { SearchUser } from '@interfaces'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-interface useUserSearch {
-  users: SearchUser[]
-  status: SearchStatus
-  error: string
-  loadMore: () => void
-}
-
-export default function useUsersSearch(query: string = ''): useUserSearch {
-  const [status, setStatus] = useState<SearchStatus>('emptyHistory')
-  const [users, setUsers] = useState<SearchUser[]>([])
-  const [page, setPage] = useState(1)
-  const [error, setError] = useState<string>('')
-
+export default function useUsersSearch(query: string = '') {
+  const [q, setQ] = useState(query)
   useEffect(() => {
-    let ignore = false
+    const trimmed = query.trim()
 
-    if (!query.trim()) {
-      setUsers((prev) => (prev.length ? [] : prev))
-      setStatus((prev) => (prev !== 'emptyHistory' ? 'emptyHistory' : prev))
+    if (trimmed === q) return
+
+    if (!trimmed) {
+      setQ('')
       return
     }
 
-    if (page === 1 && users.length === 0) setStatus('loading')
-
-    async function fetchUsers() {
-      try {
-        const response = await axios.get(`${API_URL}/user/search?q=${query}&offset=${(page - 1) * 12}&limit=12`)
-
-        if (ignore) return
-
-        const data = response?.data ?? []
-
-        setUsers((prev) => (page === 1 ? data : [...prev, ...data]))
-        setStatus(data.length === 0 && page === 1 ? 'notFound' : 'success')
-      } catch (err: any) {
-        if (!ignore) {
-          setError(err?.message || 'Error')
-        }
-      }
+    if (!q) {
+      setQ(trimmed)
+      return
     }
 
-    const timeOut = setTimeout(fetchUsers, 600)
-
-    return () => {
-      ignore = true
-      clearTimeout(timeOut)
-    }
-  }, [query, page])
-
-  useEffect(() => {
-    setPage((prev) => (prev !== 1 ? 1 : prev))
+    const t = setTimeout(() => setQ(trimmed), 400)
+    return () => clearTimeout(t)
   }, [query])
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = useInfiniteQuery({
+    queryKey: ['users-search', q],
+    queryFn: async ({ pageParam, signal }) => {
+      const res = await axios.get<SearchUser[]>(`${API_URL}/user/search`, {
+        params: { q, offset: pageParam, limit: 12 },
+        signal,
+      })
+      return res.data ?? []
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => (lastPage.length === 12 ? allPages.length * 12 : undefined),
+    enabled: !!q,
+  })
+
+  const users = useMemo(() => data?.pages.flat() ?? [], [data])
+
+  let status: SearchStatus = 'success'
+  if (!q) status = 'emptyHistory'
+  else if (isLoading) status = 'loading'
+  else if (isError) status = 'notFound'
+  else if (users.length === 0) status = 'notFound'
 
   return {
     users,
     status,
-    error,
     loadMore: () => {
-      if (status !== 'loading' && status !== 'notFound') {
-        setPage((p) => p + 1)
-      }
+      if (hasNextPage && !isFetchingNextPage) fetchNextPage()
     },
   }
 }

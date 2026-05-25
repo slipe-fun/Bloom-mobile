@@ -7,6 +7,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import LogRocket from '@logrocket/react-native'
 import { SessionProvider } from '@providers/SessionProvider'
 import useStorageStore from '@stores/storage'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -14,10 +15,10 @@ import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { StyleSheet, UnistylesRuntime, useUnistyles } from 'react-native-unistyles'
+import { StyleSheet } from 'react-native-unistyles'
 
 export default function RootLayout() {
-  const { theme } = useUnistyles()
+  const { ensureMMKV } = useStorageStore()
   const [fontsLoaded, fontError] = useFonts({
     'OpenRunde-Regular': require('@assets/fonts/OpenRunde-Regular.ttf'),
     'OpenRunde-Medium': require('@assets/fonts/OpenRunde-Medium.ttf'),
@@ -25,7 +26,15 @@ export default function RootLayout() {
     'OpenRunde-Bold': require('@assets/fonts/OpenRunde-Bold.ttf'),
   })
 
-  const { ensureMMKV } = useStorageStore()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 2,
+      },
+    },
+  })
 
   useEffect(() => {
     LogRocket.init('cepguw/bloom', { textSanitizer: 'excluded' })
@@ -41,10 +50,6 @@ export default function RootLayout() {
     })()
   }, [ensureMMKV])
 
-  useEffect(() => {
-    UnistylesRuntime.setRootViewBackgroundColor(theme.colors.background)
-  }, [theme])
-
   return (
     fontsLoaded &&
     !fontError && (
@@ -52,24 +57,26 @@ export default function RootLayout() {
         <KeyboardProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <StatusBar style="auto" />
-            <SessionProvider>
-              <WebSocketProvider>
-                <UserProvider>
-                  <ChatsProvider>
-                    <MessagesProvider>
-                      <SeenMessagesProvider>
-                        <BottomSheetModalProvider>
-                          <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content, animation: 'fade' }}>
-                            <Stack.Screen name="(app)" options={{ headerShown: false }} />
-                            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                          </Stack>
-                        </BottomSheetModalProvider>
-                      </SeenMessagesProvider>
-                    </MessagesProvider>
-                  </ChatsProvider>
-                </UserProvider>
-              </WebSocketProvider>
-            </SessionProvider>
+            <QueryClientProvider client={queryClient}>
+              <SessionProvider>
+                <WebSocketProvider>
+                  <UserProvider>
+                    <ChatsProvider>
+                      <MessagesProvider>
+                        <SeenMessagesProvider>
+                          <BottomSheetModalProvider>
+                            <Stack id={undefined} screenOptions={{ headerShown: false, contentStyle: styles.content, animation: 'fade' }}>
+                              <Stack.Screen name="(app)" options={{ headerShown: false }} />
+                              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                            </Stack>
+                          </BottomSheetModalProvider>
+                        </SeenMessagesProvider>
+                      </MessagesProvider>
+                    </ChatsProvider>
+                  </UserProvider>
+                </WebSocketProvider>
+              </SessionProvider>
+            </QueryClientProvider>
           </GestureHandlerRootView>
         </KeyboardProvider>
       </SafeAreaProvider>
@@ -79,6 +86,6 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create((theme) => ({
   content: {
-    backgroundColor: theme.colors.black,
+    backgroundColor: theme.colors.background,
   },
 }))
