@@ -22,7 +22,7 @@ export const SIZE_MAP: Record<Size, number> = {
   sm: 40,
   md: 44,
   lg: 48,
-  xl: 54,
+  xl: 58,
   '2xl': 100,
   '3xl': 128,
   '4xl': 160,

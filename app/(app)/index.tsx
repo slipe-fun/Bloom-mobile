@@ -47,8 +47,8 @@ export default function Chats() {
 
   const renderItem = useCallback(
     ({ item, index }: { item: ChatType; index: number }) => {
-      // return <Chat chat={item} isLast={index === lastIndex} />
-      return <View style={{ height: 100, backgroundColor: 'rgba(255,255,255, 0.1)', marginBottom: 16 }} />
+      return <Chat chat={item} isLast={index === lastIndex} />
+      // return <View style={{ height: 100, backgroundColor: 'rgba(255,255,255, 0.1)', marginBottom: 16 }} />
     },
     [lastIndex],
   )

@@ -4,69 +4,45 @@ import { StyleSheet } from 'react-native-unistyles'
 export const styles = StyleSheet.create((theme) => ({
   chat: {
     flexDirection: 'row',
-    paddingRight: theme.spacing.lg,
-    paddingLeft: theme.spacing.md,
-    gap: theme.spacing.md,
     alignItems: 'center',
+    width: '100%',
   },
-  avatarWrapper: {
-    padding: theme.spacing.lg,
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  charStack: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  avatar: {
+    marginHorizontal: theme.spacing.lg,
+    marginVertical: theme.spacing.md,
   },
   content: {
     flex: 1,
-    paddingTop: theme.spacing.lg,
-    gap: theme.spacing.xs + 2,
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm - 2,
     height: '100%',
-    paddingBottom: theme.spacing.lg,
+    paddingRight: theme.spacing.lg,
   },
   headerRow: {
     flexDirection: 'row',
-    gap: theme.spacing.sm,
+    gap: theme.spacing.xs,
     alignItems: 'center',
   },
   name: {
     fontSize: theme.fontSize.md,
     color: theme.colors.text,
+    marginRight: theme.spacing.md,
     flex: 1,
     fontFamily: theme.fontFamily.semibold,
   },
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-  },
-  secondary: (edit: boolean) => ({
+  secondary: {
     fontSize: theme.fontSize.sm,
     color: theme.colors.secondaryText,
     fontFamily: theme.fontFamily.medium,
-    marginRight: edit ? 100 : 0,
-  }),
+  },
   separator: (size: string = 'lg') => ({
     left: 0,
     right: 0,
-    marginLeft: SIZE_MAP[size] + theme.spacing.md * 2,
+    marginLeft: SIZE_MAP[size] + theme.spacing.lg * 2,
     height: 1,
     bottom: 0,
     marginRight: theme.spacing.lg,
     position: 'absolute',
     backgroundColor: theme.colors.foreground,
   }),
-  pinButton: (pinned: boolean) => ({
-    backgroundColor: pinned ? theme.colors.redBackdrop : theme.colors.yellowBackdrop,
-  }),
-  checkbox: {
-    position: 'absolute',
-    left: theme.spacing.md,
-  },
-  pinButtonWrapper: {
-    position: 'absolute',
-    right: theme.spacing.md,
-    zIndex: 1,
-  },
 }))
