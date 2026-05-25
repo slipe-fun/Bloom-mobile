@@ -20,12 +20,11 @@ export default function SearchUser({ user }: ChatProps) {
   const progress = useSharedValue(1)
 
   const handlePress = (inn: boolean = true) => {
-    progress.set(withSpring(inn ? 0.8 : 1, quickSpring))
+    progress.set(withSpring(inn ? 0 : 1, quickSpring))
   }
 
   const animatedStyle = useAnimatedStyle(() => ({
-    opacity: progress.get(),
-    backgroundColor: interpolateColor(progress.get(), [1, 0.8], ['transparent', animatedTheme.get().colors.foregroundTransparent]),
+    backgroundColor: interpolateColor(progress.get(), [1, 0], ['transparent', animatedTheme.get().colors.foregroundTransparent]),
   }))
 
   return (
