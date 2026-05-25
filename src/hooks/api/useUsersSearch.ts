@@ -7,24 +7,6 @@ import { useEffect, useMemo, useState } from 'react'
 
 export default function useUsersSearch(query: string = '') {
   const [q, setQ] = useState(query)
-  useEffect(() => {
-    const trimmed = query.trim()
-
-    if (trimmed === q) return
-
-    if (!trimmed) {
-      setQ('')
-      return
-    }
-
-    if (!q) {
-      setQ(trimmed)
-      return
-    }
-
-    const t = setTimeout(() => setQ(trimmed), 400)
-    return () => clearTimeout(t)
-  }, [query])
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: ['users-search', q],
@@ -47,6 +29,25 @@ export default function useUsersSearch(query: string = '') {
   else if (isLoading) status = 'loading'
   else if (isError) status = 'notFound'
   else if (users.length === 0) status = 'notFound'
+
+  useEffect(() => {
+    const trimmed = query.trim()
+
+    if (trimmed === q) return
+
+    if (!trimmed) {
+      setQ('')
+      return
+    }
+
+    if (!q) {
+      setQ(trimmed)
+      return
+    }
+
+    const t = setTimeout(() => setQ(trimmed), 400)
+    return () => clearTimeout(t)
+  }, [query])
 
   return {
     users,

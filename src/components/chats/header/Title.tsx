@@ -6,6 +6,7 @@ import Animated, {
   cancelAnimation,
   Easing,
   interpolateColor,
+  type SharedValue,
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
@@ -15,29 +16,41 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
+import type { Status } from '.'
 import { styles } from './header.styles'
 
-export default function Title({ state }) {
+interface TitleProps {
+  state: Status
+  scrollY: SharedValue<number>
+}
+
+export default function Title({ state, scrollY }: TitleProps) {
   const animatedTheme = useAnimatedTheme()
   const color = useSharedValue(0)
   const { theme } = useUnistyles()
   const rotation = useSharedValue(0)
   const { t } = useTranslation('common')
+  const rotating = useSharedValue(false)
 
   const title = state === 'connected' ? 'Bloom' : t('common:chats.header.titleConnecting')
 
   const startRotation = () => {
+    rotating.set(true)
+    color.set(withSpring(1, springy))
     rotation.set(withRepeat(withTiming(360, { duration: 2000, easing: Easing.linear }), -1, false))
   }
 
   const stopRotation = () => {
+    color.set(withSpring(0, springy))
+    rotating.set(false)
     cancelAnimation(rotation)
     rotation.set(withSpring(0, springy))
   }
 
   const animatedStyle = useAnimatedStyle(() => {
+    const degress = rotating.get() ? rotation.get() : Math.min(0, scrollY.get() / 3)
     return {
-      transform: [{ rotate: `${rotation.get()}deg` }],
+      transform: [{ rotate: `${degress}deg` }],
     }
   })
 
@@ -49,12 +62,12 @@ export default function Title({ state }) {
 
   useEffect(() => {
     if (state === 'connected') {
-      color.set(withSpring(0, springy))
       stopRotation()
     } else {
-      color.set(withSpring(1, springy))
       startRotation()
     }
+
+    return () => cancelAnimation(rotation)
   }, [state])
 
   return (
