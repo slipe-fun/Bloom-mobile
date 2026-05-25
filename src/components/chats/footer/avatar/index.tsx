@@ -35,6 +35,7 @@ export default function FooterAvatar({ inputRef = null }: FooterAvatarProps) {
   return !search ? (
     <Transition.Boundary.Trigger
       onTouchStart={() => handlePress(true)}
+      onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       // @ts-expect-error
       entering={getFadeIn()}

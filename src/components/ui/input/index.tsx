@@ -57,6 +57,7 @@ export default function Input({
     <TextInput
       ref={ref}
       onTouchStart={() => handlePress(true)}
+      onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       cursorColor={theme.colors.secondaryText}
       selectionColor={theme.colors.secondaryText}

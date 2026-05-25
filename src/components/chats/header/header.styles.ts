@@ -6,7 +6,7 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     paddingHorizontal: theme.spacing.xxl,
     paddingLeft: theme.spacing.xxl - theme.spacing.xxs,
-    paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.xxl,
     paddingTop,
     alignItems: 'center',
     flexDirection: 'row',

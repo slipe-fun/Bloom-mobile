@@ -33,7 +33,7 @@ export default function Chats() {
 
   const footerHeight = FOOTER_HEIGHT + insets.bottom
 
-  const headerHeight = insets.top + base.spacing.md + SIZE_MAP.md
+  const headerHeight = insets.top + base.spacing.lg + SIZE_MAP.md
 
   const animatedViewStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: withSpring(search ? -height / 10 : 0, fastSpring) }],

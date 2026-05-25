@@ -42,6 +42,7 @@ export default function MessageInput({ setValue, value, footerHeight }: MessageI
   return (
     <Animated.View
       onTouchStart={() => handlePress(true)}
+      onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       onLayout={onInputLayout}
       layout={layoutAnimation}
