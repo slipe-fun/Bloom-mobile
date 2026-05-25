@@ -59,6 +59,7 @@ export default function Avatar({ size = 'md', square = false, style, image, user
         <FastImage {...props} source={{ uri: image }} style={[avatarStyle, style]} />
       ) : (
         <>
+          {/* @ts-expect-error */}
           <LinearGradient start={[0.5, 1]} end={[0.5, 0]} colors={avatarDefault.color} style={StyleSheet.absoluteFill} />
           <FastImage {...props} source={avatarDefault?.icon} style={styles.emoji} />
         </>

@@ -11,12 +11,11 @@ import { styles } from './Chat.styles'
 
 interface ChatProps {
   chat: ChatType
-  isLast?: boolean
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export default function Chat({ chat, isLast = false }: ChatProps) {
+export default function Chat({ chat }: ChatProps) {
   const { theme } = useUnistyles()
   const animatedTheme = useAnimatedTheme()
   const progress = useSharedValue(1)

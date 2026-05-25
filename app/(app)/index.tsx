@@ -1,4 +1,4 @@
-import { useChatList } from '@api/providers/ChatsContext'
+// import { useChatList } from '@api/providers/ChatsContext'
 import Chat from '@components/chats/chat'
 import Empty from '@components/chats/empty'
 import Footer, { FOOTER_HEIGHT } from '@components/chats/footer'
@@ -12,7 +12,7 @@ import type { Chat as ChatType } from '@interfaces'
 import { FlashList } from '@shopify/flash-list'
 import useFooterStore from '@stores/footer'
 import { useCallback } from 'react'
-import { useWindowDimensions, View } from 'react-native'
+import { useWindowDimensions } from 'react-native'
 import Animated, {
   LayoutAnimationConfig,
   useAnimatedScrollHandler,
@@ -32,7 +32,6 @@ export default function Chats() {
   const scrollY = useSharedValue(0)
 
   const footerHeight = FOOTER_HEIGHT + insets.bottom
-  const lastIndex = chats?.length - 1
 
   const headerHeight = insets.top + base.spacing.md + SIZE_MAP.md
 
@@ -42,16 +41,12 @@ export default function Chats() {
   }))
 
   const keyExtractor = useCallback((item: ChatType) => {
-    return String(item?.id)
+    return String(item)
   }, [])
 
-  const renderItem = useCallback(
-    ({ item, index }: { item: ChatType; index: number }) => {
-      return <Chat chat={item} isLast={index === lastIndex} />
-      // return <View style={{ height: 100, backgroundColor: 'rgba(255,255,255, 0.1)', marginBottom: 16 }} />
-    },
-    [lastIndex],
-  )
+  const renderItem = useCallback(({ item }: { item: ChatType }) => {
+    return <Chat chat={item} />
+  }, [])
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (e) => {
@@ -69,7 +64,7 @@ export default function Chats() {
           style={styles.list}
           onScroll={onScroll}
           renderItem={renderItem}
-          // keyExtractor={keyExtractor}
+          keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingTop: headerHeight,
