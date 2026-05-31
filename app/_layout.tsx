@@ -17,6 +17,16 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 2,
+    },
+  },
+})
+
 export default function RootLayout() {
   const { ensureMMKV } = useStorageStore()
   const [fontsLoaded, fontError] = useFonts({
@@ -24,16 +34,6 @@ export default function RootLayout() {
     'OpenRunde-Medium': require('@assets/fonts/OpenRunde-Medium.ttf'),
     'OpenRunde-Semibold': require('@assets/fonts/OpenRunde-Semibold.ttf'),
     'OpenRunde-Bold': require('@assets/fonts/OpenRunde-Bold.ttf'),
-  })
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: 1,
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 2,
-      },
-    },
   })
 
   useEffect(() => {

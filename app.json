@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "pw.bloom.app",
-      "jsEngine": "jsc"
+      "jsEngine": "hermes"
     },
     "android": {
       "adaptiveIcon": {
