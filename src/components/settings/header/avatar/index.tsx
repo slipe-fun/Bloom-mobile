@@ -49,48 +49,48 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
     }
   }, [insets.top, width])
 
-  const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.value))
+  const cardY = useDerivedValue(() => Math.min(START_Y, START_Y - scrollY.get()))
 
   const animationProgress = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, CANVAS_HEIGHT / 1.5], [1, 0.1], 'clamp')
+    return interpolate(scrollY.get(), [0, CANVAS_HEIGHT / 1.5], [1, 0.1], 'clamp')
   })
 
-  const currentRadius = useDerivedValue(() => CARD_R * animationProgress.value)
+  const currentRadius = useDerivedValue(() => CARD_R * animationProgress.get())
 
   const uniforms = useDerivedValue(() => {
     return {
       islandCenter: [CENTER_X, hasIsland ? ISLAND_Y + insets.realTop / 4 : ISLAND_Y],
       islandHalfSize: [ISLAND_WIDTH / 2, ISLAND_Y],
       islandRadius: ISLAND_R,
-      ballCenter: [CENTER_X, cardY.value + CARD_R],
-      ballRadius: currentRadius.value,
+      ballCenter: [CENTER_X, cardY.get() + CARD_R],
+      ballRadius: currentRadius.get(),
       gooeyness: 35.0,
     }
   })
 
   const clipRRect = useDerivedValue(() => {
-    const r = currentRadius.value
+    const r = currentRadius.get()
     return {
-      rect: { x: CENTER_X - r, y: cardY.value + CARD_R - r, width: r * 2, height: r * 2 },
+      rect: { x: CENTER_X - r, y: cardY.get() + CARD_R - r, width: r * 2, height: r * 2 },
       rx: r,
       ry: r,
     }
   })
 
   const imageBlur = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, CANVAS_HEIGHT / 1.5], [0, IMAGE_BLUR], 'clamp')
+    return interpolate(scrollY.get(), [0, CANVAS_HEIGHT / 1.5], [0, IMAGE_BLUR], 'clamp')
   })
 
   const canvasAnimatedStyle = useAnimatedStyle(
     () => ({
-      opacity: scrollY.value > 0.01 && isFocused.value ? 1 : 0,
-      transform: [{ translateY: interpolate(scrollY.value, [0, headerHeight / 1.62], [0, snapEndPosition], 'clamp') }],
+      opacity: scrollY.get() > 0.01 && isFocused.get() ? 1 : 0,
+      transform: [{ translateY: interpolate(scrollY.get(), [0, headerHeight / 1.62], [0, snapEndPosition], 'clamp') }],
     }),
     [headerHeight, snapEndPosition],
   )
 
   const avatarAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: scrollY.value > 0.01 ? 0 : 1,
+    opacity: scrollY.get() > 0.01 ? 0 : 1,
     top: START_Y,
     position: 'absolute',
     width: 100,

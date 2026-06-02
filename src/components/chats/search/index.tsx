@@ -39,7 +39,7 @@ export default function Search() {
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollY.value = event.contentOffset.y
+      scrollY.set(event.contentOffset.y)
     },
   })
 

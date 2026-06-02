@@ -2,7 +2,7 @@ import MaskedView from '@react-native-masked-view/masked-view'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import { View } from 'react-native'
-import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import Animated, { Easing, interpolate, type SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
@@ -16,6 +16,29 @@ export interface ShimmerDropInProps {
   autoPlay?: boolean
   delay?: number
   ref?: ShimmerRef
+}
+
+function MovingGradient({ opacity, progress }: { opacity: number; progress: SharedValue<number> }) {
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: `${interpolate(progress.get(), [0, 1], [-100, 100])}%` as any,
+        },
+      ],
+    }
+  })
+  return (
+    <Animated.View style={[StyleSheet.absoluteFill, animatedStyle, { width: '200%', left: '-50%', opacity }]}>
+      <LinearGradient
+        colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)', 'rgba(255,255,255,0)']}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 0 }}
+        locations={[0.4, 0.5, 0.6]}
+        style={StyleSheet.absoluteFill}
+      />
+    </Animated.View>
+  )
 }
 
 export default function Shimmer({ borderRadius = 12, borderWidth = 2, autoPlay = true, delay = 2500, ref }) {
@@ -47,16 +70,6 @@ export default function Shimmer({ borderRadius = 12, borderWidth = 2, autoPlay =
     play: triggerShimmer,
   }))
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: `${interpolate(progress.get(), [0, 1], [-100, 100])}%` as any,
-        },
-      ],
-    }
-  })
-
   useEffect(() => {
     if (autoPlay) {
       triggerShimmer()
@@ -66,28 +79,16 @@ export default function Shimmer({ borderRadius = 12, borderWidth = 2, autoPlay =
     }
   }, [autoPlay, triggerShimmer])
 
-  const MovingGradient = ({ opacity }: { opacity: number }) => (
-    <Animated.View style={[StyleSheet.absoluteFill, animatedStyle, { width: '200%', left: '-50%', opacity }]}>
-      <LinearGradient
-        colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)', 'rgba(255,255,255,0)']}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 1, y: 0 }}
-        locations={[0.4, 0.5, 0.6]}
-        style={StyleSheet.absoluteFill}
-      />
-    </Animated.View>
-  )
-
   return (
     <View style={[StyleSheet.absoluteFill, { borderRadius, borderCurve: 'continuous', overflow: 'hidden' }]} pointerEvents="none">
-      <MovingGradient opacity={0.2} />
+      <MovingGradient progress={progress} opacity={0.2} />
       <MaskedView
         style={StyleSheet.absoluteFill}
         maskElement={
           <View style={[StyleSheet.absoluteFill, { borderWidth, borderColor: 'white', borderRadius, borderCurve: 'continuous' }]} />
         }
       >
-        <MovingGradient opacity={1} />
+        <MovingGradient progress={progress} opacity={1} />
       </MaskedView>
     </View>
   )

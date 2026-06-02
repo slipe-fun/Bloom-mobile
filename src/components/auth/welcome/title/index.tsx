@@ -11,8 +11,8 @@ const ITEMS = ['B', 'L', 'img', 'M', '!'] as const
 const Hoverable = ({ i, hovered, onLayout, children }) => {
   const style = useAnimatedStyle(() => {
     'worklet'
-    const h = hovered.value === i
-    const any = hovered.value !== -1
+    const h = hovered.get() === i
+    const any = hovered.get() !== -1
 
     return {
       transform: [{ scale: withSpring(h ? 1.35 : 1, springy) }],
@@ -38,9 +38,9 @@ export default function AuthTitle() {
     scheduleOnUI(
       (index, layout) => {
         'worklet'
-        const next = [...layouts.value]
+        const next = [...layouts.get()]
         next[index] = layout
-        layouts.value = next
+        layouts.set(next)
       },
       i,
       l,
@@ -49,28 +49,27 @@ export default function AuthTitle() {
 
   const update = (x, y) => {
     'worklet'
-    const arr = layouts.value
+    const arr = layouts.get()
 
     for (let i = 0; i < arr.length; i++) {
       const l = arr[i]
       if (l && x >= l.x && x <= l.x + l.width && y >= l.y && y <= l.y + l.height) {
-        hovered.value = i
+        hovered.set(i)
         return
       }
     }
 
-    hovered.value = -1
+    hovered.set(-1)
   }
 
   const gesture = Gesture.Pan()
     .minDistance(0)
     .onBegin((e) => update(e.x, e.y))
     .onChange((e) => update(e.x, e.y))
-    // biome-ignore lint/suspicious/noAssignInExpressions: <explation>
-    .onFinalize(() => (hovered.value = -1))
+    .onFinalize(() => hovered.set(-1))
 
   const descStyle = useAnimatedStyle(() => ({
-    opacity: withSpring(hovered.value !== -1 ? 0.35 : 1, quickSpring),
+    opacity: withSpring(hovered.get() !== -1 ? 0.35 : 1, quickSpring),
   }))
 
   return (
