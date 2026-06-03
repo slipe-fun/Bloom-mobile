@@ -1,6 +1,6 @@
-import { quickSpring } from '@constants/easings'
 import { staticColors } from '@design/colors'
 import { interpolate } from 'react-native-reanimated'
+import Transition from 'react-native-screen-transitions'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
 import { UnistylesRuntime } from 'react-native-unistyles'
 
@@ -18,21 +18,20 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
         layouts: { screen },
       },
       progress,
-      focused,
+      active,
       insets,
     }) => {
       'worklet'
 
       const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width / 3.5], 'clamp')
       const opacity = interpolate(progress, [0, 1, 2], [0, 0.3, 0], 'clamp')
-      const radius = !focused ? 0 : insets.top - TOP_OFFSET
 
       return {
         content: {
           style: {
             transform: [{ translateX }],
             overflow: 'hidden',
-            borderRadius: radius,
+            borderRadius: active.settled ? 0 : insets.top - TOP_OFFSET,
             borderCurve: 'continuous',
             backgroundColor: color,
           },
@@ -46,8 +45,8 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
       }
     },
     transitionSpec: {
-      open: quickSpring,
-      close: quickSpring,
+      open: Transition.Specs.DefaultSpec,
+      close: Transition.Specs.DefaultSpec,
     },
   }
 }

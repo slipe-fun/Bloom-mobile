@@ -70,9 +70,8 @@ export type ColorKey = keyof typeof staticColors | null
 
 export interface SettingsItem {
   icon?: keyof typeof ICONS
-  iconType?: IconType
   label: string
-  color: ColorKey
+  color?: ColorKey
   badgeLabel?: string | number
   badgeIcon?: keyof typeof ICONS
   type?: 'link' | 'toggle' | 'button'
@@ -81,6 +80,7 @@ export interface SettingsItem {
 export interface SettingsSection {
   id: string
   description?: string
+  title?: string
   items: SettingsItem[]
 }
 

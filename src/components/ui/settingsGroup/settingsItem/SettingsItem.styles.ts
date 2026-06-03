@@ -6,11 +6,11 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing.md - theme.spacing.xxs,
-    gap: theme.spacing.md,
+    gap: theme.spacing.sm,
     borderCurve: 'continuous',
     borderRadius: theme.radius.full,
     minHeight: 52,
-    backgroundColor: theme.colors.foreground,
+    backgroundColor: theme.colors.foregroundTransparent,
   },
   label: (button: boolean, color: string) => ({
     fontSize: button ? theme.fontSize.lg : theme.fontSize.md,

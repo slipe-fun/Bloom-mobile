@@ -35,4 +35,7 @@ export const styles = StyleSheet.create((theme) => ({
   row: {
     flexDirection: 'row',
   },
+  avatar: {
+    boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
+  },
 }))

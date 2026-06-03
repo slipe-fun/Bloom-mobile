@@ -7,7 +7,7 @@ import type { TextInput } from 'react-native'
 import { KeyboardStickyView, useKeyboardHandler, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
-import FooterAvatar from './avatar'
+import FooterAvatar from './Avatar'
 import { styles } from './Footer.styles'
 import FooterSearch from './Search'
 

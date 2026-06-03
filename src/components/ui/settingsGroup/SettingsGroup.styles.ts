@@ -4,15 +4,16 @@ export const styles = StyleSheet.create((theme) => ({
   container: {
     marginBottom: theme.spacing.xxl,
     gap: theme.spacing.md,
+    overflow: 'visible',
   },
   group: {
     gap: theme.spacing.sm,
     borderCurve: 'continuous',
-    overflow: 'hidden',
+    overflow: 'visible',
   },
-  description: {
+  title: {
     marginHorizontal: theme.radius.xxl / 2,
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.md,
     color: theme.colors.secondaryText,
     fontFamily: theme.fontFamily.medium,
   },

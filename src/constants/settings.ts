@@ -8,52 +8,48 @@ type SettingsSectionProps = {
 export const SETTINGS_SECTIONS = ({ theme, language }: SettingsSectionProps): SettingsSection[] => [
   {
     id: 'Account',
+    title: 'settings.profile.title',
+
     items: [
       {
         icon: 'person.circle',
-        iconType: 'gradient',
-        label: 'Мой профиль',
-        color: 'orange',
+        label: 'settings.profile.myProfile',
       },
     ],
   },
   {
     id: 'appSettings',
+    title: 'settings.app.title',
+
     items: [
       {
         icon: 'sun',
-        iconType: 'gradient',
-        label: 'Оформление',
+        label: 'settings.app.appearance',
         badgeLabel: theme,
-        color: 'yellow',
       },
       {
         icon: 'globe',
-        iconType: 'gradient',
-        label: 'Язык',
+        label: 'settings.app.language',
         badgeLabel: language,
-        color: 'primary',
       },
     ],
   },
   {
     id: 'security',
+    title: 'settings.privacy.title',
     items: [
       {
         icon: 'key',
-        iconType: 'gradient',
-        label: 'Ключи шифрования',
-        color: 'purple',
+        label: 'settings.privacy.keyPassword',
       },
     ],
   },
   {
     id: 'dangerZone',
-    description: 'При выходе из аккаунта все ваши ключи будут сброшены. Чтобы восстановить их, потребуется снова ввести пароль',
+    title: 'settings.account.title',
     items: [
       {
-        iconType: 'gradient',
-        label: 'Выйти из аккаунта',
+        label: 'settings.account.logout',
         color: 'red',
         type: 'button',
       },

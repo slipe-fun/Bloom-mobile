@@ -1,5 +1,7 @@
 import Header from '@components/settings'
 import UserId from '@components/settings/UserId'
+import { SettingsGroup } from '@components/ui'
+import { SETTINGS_SECTIONS } from '@constants/settings'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
@@ -27,6 +29,9 @@ export default function Settings() {
       scrollY.set(e.contentOffset.y)
     },
   })
+
+  const settingsList = SETTINGS_SECTIONS({ theme: 'Dark', language: 'English' })
+
   return (
     <View style={styles.container}>
       <Header scrollY={scrollY} user={user} loading={false} />
@@ -36,10 +41,9 @@ export default function Settings() {
         showsVerticalScrollIndicator={false}
       >
         <UserId user={user} scrollY={scrollY} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
-        <View style={{ height: 220, width: '100%', backgroundColor: 'white', opacity: 1, borderRadius: 34, borderCurve: 'continuous' }} />
+        {settingsList.map((item, _i) => (
+          <SettingsGroup section={item} key={item.id} />
+        ))}
       </AnimatedScrollView>
     </View>
   )

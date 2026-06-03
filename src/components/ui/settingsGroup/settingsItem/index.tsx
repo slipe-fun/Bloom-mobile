@@ -1,8 +1,8 @@
-import { quickSpring } from '@constants/easings'
+import { springy } from '@constants/animations'
 import type { SettingsItem as SettingsItemType } from '@interfaces'
-import { lightenColor } from '@lib/lightenColor'
-import { Pressable, Text, View, type ViewStyle } from 'react-native'
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useTranslation } from 'react-i18next'
+import { Pressable, Text, View } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useUnistyles } from 'react-native-unistyles'
 import Icon from '../../Icon'
 import SettingsIcon from '../settingsIcon'
@@ -16,30 +16,29 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function SettingsItem({ item }: SettingsItemProps) {
   const { theme } = useUnistyles()
-  const color = useSharedValue<number>(0)
+  const { t } = useTranslation('common')
+  const scale = useSharedValue(1)
 
-  const iconColor: string = theme.colors[item.color] ?? theme.colors.primary
-  const brighterForeground: string = lightenColor(theme.colors.foreground, 10)
+  const iconColor: string = theme.colors[item.color] ?? theme.colors.secondaryText
 
-  const pressableColor = (out: boolean = false) => {
-    color.set(withSpring(out ? 0 : 1, quickSpring))
+  const handlePress = (inn: boolean = true) => {
+    scale.set(withSpring(inn ? 1.03 : 1, springy))
   }
 
-  const animatedPressableStyle = useAnimatedStyle(
-    (): ViewStyle => ({
-      backgroundColor: interpolateColor(color.get(), [0, 1], [theme.colors.foreground, brighterForeground]),
-    }),
-  )
+  const animatedPressableStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.get() }],
+  }))
 
   return (
     <AnimatedPressable
-      onPressIn={() => pressableColor(false)}
-      onPressOut={() => pressableColor(true)}
+      onTouchStart={() => handlePress(true)}
+      onTouchMove={() => handlePress(false)}
+      onTouchEnd={() => handlePress(false)}
       style={[styles.container, animatedPressableStyle]}
     >
-      {item.type !== 'button' && <SettingsIcon icon={item.icon} type={item.iconType} color={iconColor} />}
-
-      <Text style={styles.label(item.type === 'button', item.color)}>{item.label}</Text>
+      {item.type !== 'button' && <SettingsIcon icon={item.icon} color={iconColor} />}
+      {/* @ts-expect-error */}
+      <Text style={styles.label(item.type === 'button', item.color)}>{t(item.label)}</Text>
 
       {item.type !== 'button' && (
         <View style={styles.rightSide}>

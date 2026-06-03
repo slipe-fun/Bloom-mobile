@@ -23,5 +23,24 @@
         "subTitle": "No result found for your request"
       }
     }
+  },
+  "settings": {
+    "profile": {
+      "title": "Profile",
+      "myProfile": "My profile"
+    },
+    "app": {
+      "title": "App",
+      "appearance": "Apperance",
+      "language": "Language"
+    },
+    "privacy": {
+      "title": "Privacy & security",
+      "keyPassword": "Key password"
+    },
+    "account": {
+      "title": "Account & data",
+      "logout": "Wipe data and log out"
+    }
   }
 }
