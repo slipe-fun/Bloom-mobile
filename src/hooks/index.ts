@@ -1,6 +1,6 @@
-export { default as useMe } from './api/useMe'
-export { default as useUsersSearch } from './api/useUsersSearch'
 export { default as useAuthFooter } from './useAuthFooter'
 export { default as useChatController } from './useChatController'
 export { default as useInsets } from './useInsets'
+export { default as useMe } from './useMe'
 export { default as useTokenCheck } from './useTokenCheck'
+export { default as useUsersSearch } from './useUsersSearch'

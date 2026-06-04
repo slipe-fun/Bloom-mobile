@@ -17,6 +17,7 @@ interface GradientBlurProps {
   keyboard?: boolean
   gray?: boolean
   behindKeyboard?: boolean
+  blur?: boolean
 }
 
 const DIRECTIONS: Record<GradientDirection, { start: { x: number; y: number }; end: { x: number; y: number } }> = {
@@ -25,7 +26,15 @@ const DIRECTIONS: Record<GradientDirection, { start: { x: number; y: number }; e
   'bottom-to-top': { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 1 } },
 }
 
-export default function GradientBlur({ direction = 'bottom-to-top', ref, style, keyboard, gray, behindKeyboard }: GradientBlurProps) {
+export default function GradientBlur({
+  direction = 'bottom-to-top',
+  ref,
+  style,
+  keyboard,
+  gray,
+  behindKeyboard,
+  blur = true,
+}: GradientBlurProps) {
   const { theme, rt } = useUnistyles()
   const insets = useInsets()
 
@@ -65,7 +74,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
 
   return (
     <>
-      {!behindKeyboard && (
+      {!behindKeyboard || blur ? (
         <MaskedView
           ref={ref}
           pointerEvents="none"
@@ -82,7 +91,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         >
           <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
         </MaskedView>
-      )}
+      ) : null}
 
       <LinearGradient
         pointerEvents="none"

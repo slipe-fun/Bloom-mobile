@@ -5,6 +5,9 @@ import { SETTINGS_SECTIONS } from '@constants/settings'
 import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
 import useSettingsScreenStore from '@stores/settings'
+import useStorageStore from '@stores/storage'
+import { useRouter } from 'expo-router'
+import { useMemo } from 'react'
 import { View } from 'react-native'
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 import Transition from 'react-native-screen-transitions'
@@ -22,15 +25,20 @@ const user: User = {
 export default function Settings() {
   const scrollY = useSharedValue(0)
   const insets = useInsets()
+  const { push } = useRouter()
+  const mmkv = useStorageStore((state) => state.mmkv)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+
+  const settingsList = useMemo(
+    () => SETTINGS_SECTIONS({ theme: 'Dark', language: 'English', push, storage: mmkv }),
+    [push, mmkv, SETTINGS_SECTIONS],
+  )
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (e) => {
       scrollY.set(e.contentOffset.y)
     },
   })
-
-  const settingsList = SETTINGS_SECTIONS({ theme: 'Dark', language: 'English' })
 
   return (
     <View style={styles.container}>

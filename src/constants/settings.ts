@@ -1,17 +1,21 @@
 import type { SettingsSection } from '@interfaces'
+import type { Route } from 'expo-router'
+import type { MMKV } from 'react-native-mmkv'
 
 type SettingsSectionProps = {
   theme: string
   language: string
+  storage: MMKV
+  push: (path: Route) => void
 }
 
-export const SETTINGS_SECTIONS = ({ theme, language }: SettingsSectionProps): SettingsSection[] => [
+export const SETTINGS_SECTIONS = ({ theme, language, push, storage }: SettingsSectionProps): SettingsSection[] => [
   {
     id: 'Account',
     title: 'settings.profile.title',
-
     items: [
       {
+        action: () => push('/(app)/chat/[chat]'),
         icon: 'person.circle',
         label: 'settings.profile.myProfile',
       },
@@ -52,6 +56,18 @@ export const SETTINGS_SECTIONS = ({ theme, language }: SettingsSectionProps): Se
         label: 'settings.account.logout',
         color: 'red',
         type: 'button',
+      },
+    ],
+  },
+  {
+    id: 'dev',
+    title: 'Developer options',
+    items: [
+      {
+        color: 'red',
+        type: 'button',
+        action: () => storage.clearAll(),
+        label: 'Clear MMKV (Reload)',
       },
     ],
   },

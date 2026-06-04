@@ -2,9 +2,8 @@ import { API_URL } from '@constants/api'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import { createSecureStorage } from '@lib/storage'
 import axios from 'axios'
-import addKeysToDump from '../keys/addKeysToDump.js'
 
-export default async function getChats(ws) {
+export default async function getChats() {
   try {
     // mmkv storage
     const Storage = await createSecureStorage('user-storage')
@@ -43,9 +42,6 @@ export default async function getChats(ws) {
               key: chatInStorage?.key,
               members: [...(chat?.members || [])],
             }
-
-            // send dump
-            addKeysToDump(Storage, chats[chatIndex])
           }
         } else {
           // IF CHAT IS NOT EXISTS IN MMKV STORAGE

@@ -21,6 +21,7 @@
       "@app/*": ["app/*"],
       "@layouts/*": ["layouts/*"],
       "@providers/*": ["src/providers/*"],
+      "@services/*": ["src/services/*"],
       "@design/*": ["src/design/*"]
     },
     "isolatedModules": true,

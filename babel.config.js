@@ -19,6 +19,7 @@ module.exports = (api) => {
             '@lib': './src/lib',
             '@api': './src/api',
             '@interfaces': './src/interfaces',
+            '@services': './src/services',
             '@assets': './assets',
             '@app': './app',
             '@layouts': './layouts',

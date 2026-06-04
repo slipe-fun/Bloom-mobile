@@ -11,16 +11,12 @@ interface ChatLastMessageView extends ChatLastMessage {
 }
 
 export interface User {
-  id: number
-
+  id: string
   username?: string
-
   display_name?: string | null
   description?: string | null
   avatar?: string | null
-
   date?: string
-
   ml_kem_public_key?: string
   ecdh_public_key?: string
   ed_public_key?: string
@@ -81,6 +77,7 @@ export interface SettingsItem {
   badgeLabel?: string | number
   badgeIcon?: keyof typeof ICONS
   type?: 'link' | 'toggle' | 'button'
+  action?: () => void
 }
 
 export interface SettingsSection {

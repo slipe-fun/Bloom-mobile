@@ -34,6 +34,7 @@ export default function SettingsItem({ item }: SettingsItemProps) {
       onTouchStart={() => handlePress(true)}
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
+      onPress={item.action}
       style={[styles.container, animatedPressableStyle]}
     >
       {item.type !== 'button' && <SettingsIcon icon={item.icon} color={iconColor} />}
