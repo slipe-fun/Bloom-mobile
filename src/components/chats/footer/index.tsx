@@ -7,7 +7,9 @@ import type { TextInput } from 'react-native'
 import { KeyboardStickyView, useKeyboardHandler, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
-import FooterAvatar from './Avatar'
+f
+
+import FooterButton from './Button'
 import { styles } from './Footer.styles'
 import FooterSearch from './Search'
 
@@ -37,7 +39,7 @@ export default function Footer() {
     <AnimatedStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={[styles.container, animatedViewStyles]}>
       <GradientBlur style={{ height: height }} keyboard behindKeyboard={height > calculatedFooter} />
       <FooterSearch ref={inputRef} />
-      <FooterAvatar inputRef={inputRef} />
+      <FooterButton inputRef={inputRef} />
     </AnimatedStickyView>
   )
 }

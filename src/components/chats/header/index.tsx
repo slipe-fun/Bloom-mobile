@@ -2,7 +2,7 @@ import { useWebSocket } from '@api/providers/WebSocketContext'
 import { Avatar, GradientBlur } from '@components/ui'
 import { getFadeIn, getFadeOut, springy } from '@constants/animations'
 import { ICON_PRESSABLE_SCALE } from '@constants/animations/values'
-import { useInsets } from '@hooks'
+import { useInsets, useMe } from '@hooks'
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import Animated, { type SharedValue, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -22,6 +22,7 @@ export default function Header({ scrollY }: HeaderProps) {
   const ws = useWebSocket()
   const insets = useInsets()
   const { push } = useRouter()
+  const { user } = useMe()
   const [status, setStatus] = useState<Status>('connecting')
   const scale = useSharedValue(1)
 
@@ -59,12 +60,7 @@ export default function Header({ scrollY }: HeaderProps) {
         id="avatar"
         onPress={() => push('/(app)/Settings')}
       >
-        <AnimatedAvatar
-          style={[styles.avatar, animatedAvatarStyle]}
-          image="https://i.pinimg.com/736x/77/5b/a5/775ba539f6a59d678ee01d0353646e88.jpg"
-          size="md"
-          userId="dk3k293KK"
-        />
+        <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} image={user.avatar} size="md" userId={user.id} />
       </Transition.Boundary.Trigger>
     </Animated.View>
   )

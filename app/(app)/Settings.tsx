@@ -2,8 +2,7 @@ import Header from '@components/settings'
 import UserId from '@components/settings/UserId'
 import { SettingsGroup } from '@components/ui'
 import { SETTINGS_SECTIONS } from '@constants/settings'
-import { useInsets } from '@hooks'
-import type { User } from '@interfaces'
+import { useInsets, useMe } from '@hooks'
 import useSettingsScreenStore from '@stores/settings'
 import useStorageStore from '@stores/storage'
 import { useRouter } from 'expo-router'
@@ -15,19 +14,13 @@ import { StyleSheet } from 'react-native-unistyles'
 
 const AnimatedScrollView = Transition.createTransitionAwareComponent(Animated.ScrollView, { isScrollable: true })
 
-const user: User = {
-  display_name: 'FORTUNA 812',
-  id: 'dk3k293KK',
-  description: '',
-  avatar: 'https://i.pinimg.com/736x/77/5b/a5/775ba539f6a59d678ee01d0353646e88.jpg',
-}
-
 export default function Settings() {
   const scrollY = useSharedValue(0)
   const insets = useInsets()
   const { push } = useRouter()
   const mmkv = useStorageStore((state) => state.mmkv)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+  const { user, loading } = useMe()
 
   const settingsList = useMemo(
     () => SETTINGS_SECTIONS({ theme: 'Dark', language: 'English', push, storage: mmkv }),
@@ -42,7 +35,7 @@ export default function Settings() {
 
   return (
     <View style={styles.container}>
-      <Header scrollY={scrollY} user={user} loading={false} />
+      <Header scrollY={scrollY} user={user} loading={loading} />
       <AnimatedScrollView
         contentContainerStyle={styles.list(headerHeight, insets.bottom)}
         onScroll={scrollHandler}

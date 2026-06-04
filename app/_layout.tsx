@@ -3,11 +3,12 @@ import MessagesProvider from '@api/providers/MessagesContext'
 import SeenMessagesProvider from '@api/providers/SeenMessagesContext'
 import UserProvider from '@api/providers/UserContext'
 import { WebSocketProvider } from '@api/providers/WebSocketContext'
+import { clientPersister, queryClient } from '@api/queryClient'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import LogRocket from '@logrocket/react-native'
 import { SessionProvider } from '@providers/SessionProvider'
 import useStorageStore from '@stores/storage'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -16,16 +17,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native-unistyles'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 2,
-    },
-  },
-})
 
 export default function RootLayout() {
   const { ensureMMKV } = useStorageStore()
@@ -67,7 +58,7 @@ export default function RootLayout() {
         <KeyboardProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <StatusBar style="auto" />
-            <QueryClientProvider client={queryClient}>
+            <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: clientPersister }}>
               <SessionProvider>
                 <WebSocketProvider>
                   <UserProvider>
@@ -86,7 +77,7 @@ export default function RootLayout() {
                   </UserProvider>
                 </WebSocketProvider>
               </SessionProvider>
-            </QueryClientProvider>
+            </PersistQueryClientProvider>
           </GestureHandlerRootView>
         </KeyboardProvider>
       </SafeAreaProvider>

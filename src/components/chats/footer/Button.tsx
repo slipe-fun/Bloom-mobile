@@ -1,5 +1,5 @@
 import { Button, Icon } from '@components/ui'
-import { getFadeIn, getFadeOut, springy } from '@constants/animations'
+import { springy } from '@constants/animations'
 import useFooterStore from '@stores/footer'
 import { useRouter } from 'expo-router'
 import { type RefObject, useEffect } from 'react'
@@ -11,7 +11,7 @@ interface FooterAvatarProps {
   inputRef: RefObject<TextInput>
 }
 
-export default function FooterAvatar({ inputRef = null }: FooterAvatarProps) {
+export default function FooterButton({ inputRef = null }: FooterAvatarProps) {
   const { push } = useRouter()
   const search = useFooterStore((state) => state.search)
   const { theme } = useUnistyles()
@@ -40,8 +40,6 @@ export default function FooterAvatar({ inputRef = null }: FooterAvatarProps) {
 
   return (
     <Button
-      entering={getFadeIn()}
-      exiting={getFadeOut()}
       variant="icon"
       icon={
         <Animated.View style={animatedIconStyle}>
