@@ -1,4 +1,3 @@
-import { useInsets } from '@hooks'
 import MaskedView from '@react-native-masked-view/masked-view'
 import { type BlurTint, BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -14,7 +13,6 @@ interface GradientBlurProps {
   direction?: GradientDirection
   ref?: React.Ref<MaskedView>
   style?: StyleProp<ViewStyle>
-  keyboard?: boolean
   gray?: boolean
   behindKeyboard?: boolean
   blur?: boolean
@@ -26,17 +24,8 @@ const DIRECTIONS: Record<GradientDirection, { start: { x: number; y: number }; e
   'bottom-to-top': { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 1 } },
 }
 
-export default function GradientBlur({
-  direction = 'bottom-to-top',
-  ref,
-  style,
-  keyboard,
-  gray,
-  behindKeyboard,
-  blur = true,
-}: GradientBlurProps) {
+export default function GradientBlur({ direction = 'bottom-to-top', ref, style, gray, behindKeyboard, blur = true }: GradientBlurProps) {
   const { theme, rt } = useUnistyles()
-  const insets = useInsets()
 
   const isDark = rt.themeName.includes('dark')
   const tint: BlurTint = gray ? (isDark ? 'dark' : 'light') : isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
@@ -68,13 +57,13 @@ export default function GradientBlur({
     }
   }, [theme, gray, behindKeyboard])
 
-  const gradientStyles = [StyleSheet.absoluteFill, keyboard && { transform: [{ translateY: insets.bottom }] }, style]
+  const gradientStyles = [StyleSheet.absoluteFill, style]
 
   const { start, end } = DIRECTIONS[direction]
 
   return (
     <>
-      {!behindKeyboard || blur ? (
+      {blur && (
         <MaskedView
           ref={ref}
           pointerEvents="none"
@@ -91,7 +80,7 @@ export default function GradientBlur({
         >
           <BlurView style={StyleSheet.absoluteFill} intensity={10} tint={tint} />
         </MaskedView>
-      ) : null}
+      )}
 
       <LinearGradient
         pointerEvents="none"

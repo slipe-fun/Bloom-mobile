@@ -11,13 +11,12 @@ export const styles = StyleSheet.create((theme) => ({
   inputWrapper: ({ height, disabled, elevated }: InputStyleProps) => ({
     width: '100%',
     height,
-    backgroundColor: elevated ? theme.colors.pressable : theme.colors.foreground,
+    backgroundColor: elevated ? 'transparent' : theme.colors.foreground,
     borderRadius: theme.radius.full,
     borderCurve: 'continuous',
+    overflow: 'hidden',
     boxShadow: elevated ? `${theme.shadows.pressable} ${theme.colors.shadow}` : undefined,
     flexDirection: 'row',
-    borderColor: elevated ? theme.colors.border : 'transparent',
-    borderWidth: theme.borderWidth.md,
     opacity: disabled ? theme.opacity.secondaryText : 1,
     pointerEvents: disabled ? 'none' : 'auto',
     alignItems: 'center',
@@ -41,5 +40,16 @@ export const styles = StyleSheet.create((theme) => ({
     paddingRight: theme.spacing.md,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  blur: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: theme.colors.pressable,
+  },
+  borderOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderColor: theme.colors.border,
+    borderCurve: 'continuous',
+    borderWidth: theme.borderWidth.md,
+    borderRadius: theme.radius.full,
   },
 }))

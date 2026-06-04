@@ -35,7 +35,7 @@ export default function Footer() {
 
   return (
     <AnimatedStickyView offset={{ opened: -base.spacing.lg, closed: -insets.bottom }} style={[styles.container, animatedViewStyles]}>
-      <GradientBlur style={{ height: height }} keyboard behindKeyboard={height > calculatedFooter} />
+      <GradientBlur blur={false} style={{ height: height }} behindKeyboard={height > calculatedFooter} />
       <FooterSearch ref={inputRef} />
       <FooterButton inputRef={inputRef} />
     </AnimatedStickyView>

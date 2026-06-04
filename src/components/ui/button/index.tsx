@@ -1,10 +1,12 @@
 import { springy } from '@constants/animations'
 import { ICON_PRESSABLE_SCALE, PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
 import { base } from '@design/base'
+import { type BlurTint, BlurView } from 'expo-blur'
 import type React from 'react'
 import type { ComponentProps } from 'react'
 import { Pressable, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Button.styles'
 import { SIZE_MAP, type Size } from './constats'
 
@@ -19,6 +21,7 @@ interface ButtonProps extends ComponentProps<typeof AnimatedPressable> {
   size?: Size
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>
+  overlayStyle?: StyleProp<ViewStyle>
   icon?: React.JSX.Element | null | boolean
   children?: React.ReactNode
   elevated?: boolean
@@ -31,14 +34,19 @@ export default function Button({
   size = 'md',
   children,
   icon,
+  overlayStyle,
   style,
   labelStyle,
   elevated = true,
   ...props
 }: ButtonProps) {
   const scale = useSharedValue(1)
+  const { rt } = useUnistyles()
 
+  const isDark = rt.themeName.includes('dark')
+  const tint: BlurTint = isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
   let paddingHorizontal = 0
+
   if (variant !== 'icon') {
     switch (size) {
       case 'sm':
@@ -80,6 +88,12 @@ export default function Button({
       ref={ref}
       {...props}
     >
+      {elevated && (
+        <>
+          <BlurView tint={tint} style={styles.blur} intensity={50} />
+          <Animated.View style={[styles.borderOverlay, overlayStyle]} />
+        </>
+      )}
       {icon}
       {label && (
         <Text numberOfLines={1} style={[styles.label(SIZE_MAP[size]), labelStyle]}>

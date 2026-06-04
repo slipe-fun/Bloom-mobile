@@ -14,6 +14,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    boxShadow: elevated ? `${theme.shadows.pressable} ${theme.colors.shadow}` : undefined,
     height: size,
     width: size >= SIZE_MAP.xl ? '100%' : 'auto',
     overflow: 'hidden',
@@ -21,10 +22,7 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: size >= SIZE_MAP.xl ? 0 : paddingHorizontal,
     borderCurve: 'continuous',
     borderRadius: theme.radius.full,
-    boxShadow: elevated ? `${theme.shadows.pressable} ${theme.colors.shadow}` : undefined,
-    borderColor: elevated ? theme.colors.border : 'transparent',
-    borderWidth: theme.borderWidth.md,
-    backgroundColor: theme.colors.pressable,
+    backgroundColor: elevated ? 'transparent' : theme.colors.foreground,
     gap: isTextIcon ? theme.spacing.md - theme.spacing.xxs : 0,
   }),
   label: (size: number) => ({
@@ -32,4 +30,15 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: size >= SIZE_MAP.lg ? theme.fontSize.lg : theme.fontSize.md,
     fontFamily: theme.fontFamily.medium,
   }),
+  blur: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: theme.colors.pressable,
+  },
+  borderOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderColor: theme.colors.border,
+    borderCurve: 'continuous',
+    borderWidth: theme.borderWidth.md,
+    borderRadius: theme.radius.full,
+  },
 }))

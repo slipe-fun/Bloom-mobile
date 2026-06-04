@@ -1,5 +1,6 @@
 import { springy } from '@constants/animations'
 import { PRESSABLE_INPUT_SCALE } from '@constants/animations/values'
+import { type BlurTint, BlurView } from 'expo-blur'
 import type React from 'react'
 import { type StyleProp, TextInput, View, type ViewStyle } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -13,6 +14,7 @@ type InputProps = {
   ref?: React.Ref<TextInput>
   viewStyle?: StyleProp<ViewStyle>
   style?: StyleProp<ViewStyle>
+  overlayStyle?: StyleProp<ViewStyle>
   icon?: React.ReactNode
   button?: React.ReactNode
   disabled?: boolean
@@ -35,6 +37,7 @@ export default function Input({
   icon,
   button,
   disabled,
+  overlayStyle,
   basic,
   elevated = true,
   animation = true,
@@ -43,6 +46,8 @@ export default function Input({
   const { theme, rt } = useUnistyles()
   const scale = useSharedValue(1)
 
+  const isDark = rt.themeName.includes('dark')
+  const tint: BlurTint = isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
   const viewStyleMemo = styles.inputWrapper({ height: SIZE_MAP[size], disabled, elevated })
 
   const handlePress = (inn: boolean = true) => {
@@ -61,7 +66,7 @@ export default function Input({
       onTouchEnd={() => handlePress(false)}
       cursorColor={theme.colors.secondaryText}
       selectionColor={theme.colors.secondaryText}
-      keyboardAppearance={rt.themeName.includes('dark') ? 'dark' : 'light'}
+      keyboardAppearance={isDark ? 'dark' : 'light'}
       placeholderTextColor={theme.colors.secondaryText}
       style={[styles.input(!!icon, SIZE_MAP[size]), style]}
       {...props}
@@ -70,6 +75,13 @@ export default function Input({
 
   return !basic ? (
     <Animated.View style={[viewStyleMemo, viewStyle, animation ? animatedlStyle : undefined]}>
+      {elevated && (
+        <>
+          <BlurView tint={tint} style={styles.blur} intensity={50} />
+          <Animated.View style={[styles.borderOverlay, overlayStyle]} />
+        </>
+      )}
+
       {icon && <View style={styles.iconWrapper}>{icon}</View>}
       {inputComponent}
       {button}
