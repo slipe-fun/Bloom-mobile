@@ -42,6 +42,16 @@ export default function RootLayout() {
 
   useEffect(() => {
     ;(async () => {
+      const { default: getSKID } = await import('@lib/skid-v3')
+      const skid = getSKID()
+      try {
+        skid.keys.identity.generate()
+      } catch {}
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
       try {
         await ensureMMKV()
       } catch (error) {
