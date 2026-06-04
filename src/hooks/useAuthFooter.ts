@@ -1,13 +1,14 @@
-import { API_URL } from '@constants/api'
 import { quickSpring } from '@constants/easings'
 import { getE2EEKey, saveE2EEKey } from '@lib/icloud_keychain_storage'
-import { bytesToBase64 } from '@lib/skid-v3/src/utils'
+import { bytesToBase64, restoreBytes } from '@lib/skid-v3/src/utils'
+import { ed448 } from '@noble/curves/ed448.js'
 import useStorageStore from '@stores/storage'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Alert } from 'react-native'
 import { type SharedValue, useSharedValue, withSpring } from 'react-native-reanimated'
+import { authApi } from './api/useAuthFooter.api'
 
 interface UseAuthFooter {
   handleFaceIdAuth: () => void
@@ -42,18 +43,83 @@ export default function useAuthFooter(): UseAuthFooter {
           return
         }
 
-        const result = await LocalAuthentication.authenticateAsync({
+        const authResult = await LocalAuthentication.authenticateAsync({
           promptMessage: 'Log in via FaceID',
           fallbackLabel: 'Enter a password',
           disableDeviceFallback: false,
         })
 
-        if (result.success) {
+        if (authResult.success) {
           const loginData = await getE2EEKey()
+          const storage = mmkv ?? (await ensureMMKV())
 
           if (loginData) {
-            console.log(loginData)
-            return
+            const { default: getSKID } = await import('@lib/skid-v3')
+            const skid = getSKID()
+
+            const beginData = await authApi.loginBegin(loginData.userId)
+
+            const recovery_key = restoreBytes(loginData.key)
+            const encrypted_master_key = restoreBytes(beginData.keys.encrypted_master_key)
+            const encrypted_identity_keys = restoreBytes(beginData.keys.identity_keys.encrypted_secret_keys)
+
+            const server_pub_keys = restoreBytes(beginData.keys.identity_keys.public_keys)
+            const public_keys = {
+              ml_kem: { public_key: server_pub_keys.ml_kem_public_key },
+              ecdh: { public_key: server_pub_keys.ecdh_public_key },
+              ed: { public_key: server_pub_keys.ed_public_key },
+            }
+
+            const master_key = skid.keys.master_key.decrypt(encrypted_master_key, recovery_key, public_keys.ed.public_key)
+
+            const identity_keys_decrypted = skid.keys.identity.decrypt(
+              encrypted_identity_keys,
+              public_keys,
+              master_key,
+              public_keys.ed.public_key,
+            )
+
+            const identity_keys = {
+              ml_kem: {
+                public_key: public_keys.ml_kem.public_key,
+                secret_key: identity_keys_decrypted.ml_kem_secret_key,
+              },
+              ecdh: {
+                public_key: public_keys.ecdh.public_key,
+                secret_key: identity_keys_decrypted.ecdh_secret_key,
+              },
+              ed: {
+                public_key: public_keys.ed.public_key,
+                secret_key: identity_keys_decrypted.ed_secret_key,
+              },
+            }
+
+            const messageObj = {
+              challenge: beginData.challenge,
+              user_id: loginData.userId,
+            }
+            const messageBytes = new TextEncoder().encode(JSON.stringify(messageObj))
+            const signatureBytes = ed448.sign(messageBytes, identity_keys.ed.secret_key, {
+              context: new Uint8Array(0),
+            })
+            const signatureBase64 = bytesToBase64(signatureBytes)
+
+            const finishData = await authApi.loginFinish(loginData.userId, signatureBase64)
+
+            if (finishData?.user) {
+              storage.set('token', finishData?.token)
+              storage.set('session', JSON.stringify(finishData?.session))
+
+              const identity_keys_base64 = bytesToBase64(identity_keys)
+              const master_key_base64 = bytesToBase64(master_key)
+
+              storage.set('identity_keys', JSON.stringify(identity_keys_base64))
+              storage.set('master_key', master_key_base64)
+              storage.set('recovery_key', loginData.key)
+            } else {
+              progress.set(withSpring(1, quickSpring))
+              return
+            }
           } else {
             const { default: getSKID } = await import('@lib/skid-v3')
             const skid = getSKID()
@@ -69,11 +135,9 @@ export default function useAuthFooter(): UseAuthFooter {
             const master_key_base64 = bytesToBase64(master_key)
             const recovery_key_base64 = bytesToBase64(recovery_key)
 
-            const storage = mmkv ?? (await ensureMMKV())
-
             storage.set('identity_keys', JSON.stringify(identity_keys_base64))
-            storage.set('master_key', JSON.stringify(master_key_base64))
-            storage.set('recovery_key', JSON.stringify(recovery_key_base64))
+            storage.set('master_key', master_key_base64)
+            storage.set('recovery_key', recovery_key_base64)
 
             const encryptedIdentityKeysBase64 = bytesToBase64(encrypted_identity_keys)
             const encryptedMasterKeyBase64 = bytesToBase64(encrypted_master_key)
@@ -88,30 +152,17 @@ export default function useAuthFooter(): UseAuthFooter {
                 encrypted_secret_keys: encryptedIdentityKeysBase64,
                 public_keys: publicKeysBase64,
               },
-
               encrypted_master_key: encryptedMasterKeyBase64,
             }
 
-            const response = await fetch(`${API_URL}/auth/register`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(body),
-            })
+            const registerResult = await authApi.register(body)
 
-            if (!response.ok) {
-              console.log(await response.text())
-              return
-            }
-
-            const result = await response.json()
-
-            if (result?.user) {
-              storage.set('token', result?.token)
-              storage.set('session', JSON.stringify(result?.session))
-              await saveE2EEKey(result?.user?.id, recovery_key_base64)
+            if (registerResult?.user) {
+              storage.set('token', registerResult?.token)
+              storage.set('session', JSON.stringify(registerResult?.session))
+              await saveE2EEKey(registerResult?.user?.id, recovery_key_base64)
             } else {
+              progress.set(withSpring(1, quickSpring))
               return
             }
           }

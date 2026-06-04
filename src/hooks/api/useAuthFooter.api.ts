@@ -1,123 +1,50 @@
 import { API_URL } from '@constants/api'
-import { Buffer } from '@craftzdog/react-native-buffer'
-import { getSKID } from '@lib/skid/lazySkid'
 import axios from 'axios'
 
-interface PrivateKeysResponse {
-  ciphertext: string
-  nonce: string
-  salt: string
-}
-
-async function usernameHandler(token: string, username: string): Promise<void> {
-  try {
-    await axios.post(`${API_URL}/user/edit`, { username }, { headers: { Authorization: `Bearer ${token}` } })
-  } catch {}
-}
-
-async function passwordHandler(token: string, password: string, mmkv: any): Promise<void> {
-  const skid = await getSKID()
-  const privateKeys: PrivateKeysResponse | null = await axios
-    .get(`${API_URL}/chats/keys/private`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then((r) => r?.data)
-    .catch(() => null)
-
-  if (!privateKeys) {
-    const { hash, salt } = await skid.server.hashPassword(password)
-    const { ciphertext, nonce } = skid.server.encryptKeys(hash, new TextEncoder().encode('[]'))
-
-    await axios.post(
-      `${API_URL}/chats/keys/private`,
-      { ciphertext, nonce, salt: Buffer.from(salt).toString('base64') },
-      { headers: { Authorization: `Bearer ${token}` } },
-    )
-
-    mmkv.set('password', Buffer.from(hash).toString('base64'))
-    mmkv.set('salt', Buffer.from(salt).toString('base64'))
-    return
-  }
-
-  const { hash } = await skid.server.hashPassword(password, Buffer.from(privateKeys.salt, 'base64'))
-
-  mmkv.set('password', Buffer.from(hash).toString('base64'))
-  mmkv.set('salt', privateKeys.salt)
-
-  try {
-    const keys = skid.server.decryptKeys(hash, privateKeys.ciphertext, privateKeys.nonce)
-    mmkv.set('chats', JSON.stringify(keys.filter((k) => k.id)))
-  } catch {
-    console.log('FAILED TO DECRYPT KEYS')
+interface LoginBeginResponse {
+  challenge: string
+  keys: {
+    encrypted_master_key: string
+    identity_keys: {
+      encrypted_secret_keys: string
+      public_keys: {
+        ml_kem_public_key: string
+        ecdh_public_key: string
+        ed_public_key: string
+      }
+    }
   }
 }
+
+interface AuthResponse {
+  user: { id: string }
+  token: string
+  session: any
+}
+
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 export const authApi = {
-  async handleEmailStep(email: string) {
-    let exists: boolean = false
-
-    try {
-      const res = await axios.get(`${API_URL}/user/exists`, { params: { email } })
-      exists = res.data?.exists
-    } catch (error: any) {
-      if (!error?.response?.data?.exists) {
-        exists = false
-      } else {
-        throw new Error(error.response?.data?.message || 'Failed to check user')
-      }
-    }
-
-    if (exists) {
-      axios.post(`${API_URL}/auth/request-code`, { email }).catch(console.error)
-    } else {
-      const regRes = await axios.post(`${API_URL}/auth/register`, { email })
-      if (regRes.data?.error) throw new Error('Failed to register')
-    }
-
-    return { exists }
+  loginBegin: async (userId: string): Promise<LoginBeginResponse> => {
+    const { data } = await apiClient.get(`/auth/login/begin/${userId}`)
+    return data
   },
 
-  async handleOtpStep(email: string, otp: string) {
-    const data = await axios.post(`${API_URL}/auth/verify-code`, { email, code: otp })
-    return data.data // { token, user }
+  loginFinish: async (userId: string, signature: string): Promise<AuthResponse> => {
+    const { data } = await apiClient.post('/auth/login/finish', {
+      user_id: userId,
+      signature,
+    })
+    return data
   },
 
-  async handleUsernameAndPasswordStep(token: string, username: string, password: string, mmkv: any): Promise<void> {
-    await usernameHandler(token, username)
-    await passwordHandler(token, password, mmkv)
-  },
-
-  async addSessionKeys(token: string, keys: { ed_public_key: string; ecdh_public_key: string; kyber_public_key: string }): Promise<any> {
-    if (!token) throw new Error('Authorization token is required')
-    if (!keys?.ed_public_key || !keys?.ecdh_public_key || !keys?.kyber_public_key) {
-      throw new Error('All keys must be provided')
-    }
-
-    try {
-      const response = await axios.post(
-        `${API_URL}/session/add-keys`,
-        {
-          identity_pub: keys.ed_public_key,
-          ecdh_pub: keys.ecdh_public_key,
-          kyber_pub: keys.kyber_public_key,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-
-      return response.data
-    } catch (err: any) {
-      if (err.response) {
-        throw new Error(`Failed to add session keys: ${err.response.data}`)
-      } else if (err.request) {
-        throw new Error('No response from server')
-      } else {
-        throw new Error(`Request error: ${err.message}`)
-      }
-    }
+  register: async (payload: any): Promise<AuthResponse> => {
+    const { data } = await apiClient.post('/auth/register', payload)
+    return data
   },
 }
