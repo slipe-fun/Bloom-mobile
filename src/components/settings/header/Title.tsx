@@ -35,7 +35,7 @@ export default function SettingsTitle({ scrollY, user }: UserProps) {
 
   return (
     <Animated.Text onLayout={onTitleLayout} style={[styles.title, animatedStyle]}>
-      {user?.display_name}
+      {user?.display_name || user?.username}
     </Animated.Text>
   )
 }

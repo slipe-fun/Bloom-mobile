@@ -154,7 +154,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
         </Canvas>
       </Animated.View>
       <Transition.Boundary.View ref={avatarRef as any} style={avatarAnimatedStyle} id="avatar">
-        <Avatar size="2xl" onLoadEnd={captureAvatar} style={styles.avatar} image={user.avatar} userId={user.id} />
+        <Avatar size="2xl" onLoadEnd={captureAvatar} style={styles.avatar} image={user?.avatar} userId={user?.id} />
       </Transition.Boundary.View>
     </>
   )

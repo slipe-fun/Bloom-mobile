@@ -11,13 +11,19 @@ interface ChatLastMessageView extends ChatLastMessage {
 }
 
 export interface User {
-  display_name: string
-  id: string
+  id: number
+
   username?: string
-  description: string
-  avatar: string
-  friends_count?: number
-  email?: string
+
+  display_name?: string | null
+  description?: string | null
+  avatar?: string | null
+
+  date?: string
+
+  ml_kem_public_key?: string
+  ecdh_public_key?: string
+  ed_public_key?: string
 }
 
 export interface Message {

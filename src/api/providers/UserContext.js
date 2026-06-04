@@ -34,7 +34,7 @@ export default function UserProvider({ children }) {
   }, [token])
 
   useEffect(() => {
-    ;async () => {
+    ;(async () => {
       if (token !== '') {
         try {
           const user = await getMyUserRequest()
@@ -45,7 +45,7 @@ export default function UserProvider({ children }) {
           console.log(error)
         }
       }
-    }
+    })()
   }, [token])
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>

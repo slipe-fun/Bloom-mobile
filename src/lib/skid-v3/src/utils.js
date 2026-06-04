@@ -38,3 +38,55 @@ export function prepareForSigning(obj) {
   }
   return cleaned
 }
+
+export function bytesToBase64(obj) {
+  if (Buffer.isBuffer(obj) || obj instanceof Uint8Array) {
+    return Buffer.from(obj).toString('base64')
+  }
+
+  if (obj instanceof ArrayBuffer) {
+    return Buffer.from(new Uint8Array(obj)).toString('base64')
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(bytesToBase64)
+  }
+
+  if (obj && typeof obj === 'object') {
+    const result = {}
+
+    for (const [key, value] of Object.entries(obj)) {
+      result[key] = bytesToBase64(value)
+    }
+
+    return result
+  }
+
+  return obj
+}
+
+export function restoreBytes(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(restoreBytes)
+  }
+
+  if (obj && typeof obj === 'object') {
+    const result = {}
+
+    for (const [key, value] of Object.entries(obj)) {
+      result[key] = restoreBytes(value)
+    }
+
+    return result
+  }
+
+  if (typeof obj === 'string') {
+    try {
+      return base64ToBytes(obj)
+    } catch {
+      return obj
+    }
+  }
+
+  return obj
+}

@@ -1,13 +1,15 @@
 import * as Keychain from 'react-native-keychain'
 
 const SERVICE_ID = 'pw.bloom.app.icloud_storage'
+const ACCESS_GROUP = '8V2F65476R.pw.bloom.app'
 
-export async function saveE2EEKey(userId: string, keyHex: string): Promise<boolean> {
+export async function saveE2EEKey(userId: string, key: string): Promise<boolean> {
   try {
-    await Keychain.setGenericPassword(userId, keyHex, {
+    await Keychain.setGenericPassword(userId, key, {
       service: SERVICE_ID,
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       cloudSync: true,
+      accessGroup: ACCESS_GROUP,
     })
     return true
   } catch (error) {
@@ -16,17 +18,18 @@ export async function saveE2EEKey(userId: string, keyHex: string): Promise<boole
   }
 }
 
-export async function getE2EEKey(): Promise<{ userId: string; keyHex: string } | null> {
+export async function getE2EEKey(): Promise<{ userId: string; key: string } | null> {
   try {
     const credentials = await Keychain.getGenericPassword({
       service: SERVICE_ID,
       cloudSync: true,
+      accessGroup: ACCESS_GROUP,
     })
 
     if (credentials) {
       return {
         userId: credentials.username,
-        keyHex: credentials.password,
+        key: credentials.password,
       }
     }
     return null
@@ -41,6 +44,7 @@ export async function resetE2EEKey(): Promise<boolean> {
     await Keychain.resetGenericPassword({
       service: SERVICE_ID,
       cloudSync: true,
+      accessGroup: ACCESS_GROUP,
     })
     return true
   } catch (error) {

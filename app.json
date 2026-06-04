@@ -18,7 +18,10 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "pw.bloom.app",
-      "jsEngine": "hermes"
+      "jsEngine": "hermes",
+      "entitlements": {
+        "keychain-access-groups": ["$(AppIdentifierPrefix)pw.bloom.app"]
+      }
     },
     "android": {
       "adaptiveIcon": {
