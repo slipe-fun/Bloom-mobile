@@ -3,15 +3,17 @@ import type { SettingsSection } from '@interfaces'
 import { resetE2EEKey } from '@lib/icloud_keychain_storage'
 import type { Route } from 'expo-router'
 import type { MMKV } from 'react-native-mmkv'
+import { database } from 'src/db'
 
 type SettingsSectionProps = {
   theme: string
   language: string
   storage: MMKV
   push: (path: Route) => void
+  replace: (path: Route) => void
 }
 
-export const SETTINGS_SECTIONS = ({ theme, language, push, storage }: SettingsSectionProps): SettingsSection[] => [
+export const SETTINGS_SECTIONS = ({ theme, language, push, storage, replace }: SettingsSectionProps): SettingsSection[] => [
   {
     id: 'Account',
     title: 'settings.profile.title',
@@ -56,6 +58,12 @@ export const SETTINGS_SECTIONS = ({ theme, language, push, storage }: SettingsSe
     items: [
       {
         label: 'settings.account.logout',
+        action: async () => {
+          storage.clearAll()
+          database.write(async () => await database.unsafeResetDatabase())
+          queryClient.clear()
+          replace('/(auth)/Welcome')
+        },
         color: 'red',
         type: 'button',
       },

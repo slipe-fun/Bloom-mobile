@@ -17,13 +17,13 @@ const AnimatedScrollView = Transition.createTransitionAwareComponent(Animated.Sc
 export default function Settings() {
   const scrollY = useSharedValue(0)
   const insets = useInsets()
-  const { push } = useRouter()
+  const { push, replace } = useRouter()
   const mmkv = useStorageStore((state) => state.mmkv)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
   const { user, loading } = useMe()
 
   const settingsList = useMemo(
-    () => SETTINGS_SECTIONS({ theme: 'Dark', language: 'English', push, storage: mmkv }),
+    () => SETTINGS_SECTIONS({ theme: 'Dark', language: 'English', push, storage: mmkv, replace }),
     [push, mmkv, SETTINGS_SECTIONS],
   )
 

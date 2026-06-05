@@ -18,13 +18,6 @@ export default function useFaceIdAuth(): { handleFaceIdAuth: () => Promise<void>
   const { ensureMMKV } = useStorageStore()
   const isMounted = useRef(true)
 
-  useEffect(
-    () => () => {
-      isMounted.current = false
-    },
-    [],
-  )
-
   const fail = useCallback(
     (title: string, msg: string) => {
       Alert.alert(title, msg)
@@ -86,6 +79,13 @@ export default function useFaceIdAuth(): { handleFaceIdAuth: () => Promise<void>
       fail('Ошибка', err instanceof Error ? err.message : 'Произошла непредвиденная ошибка')
     }
   }, [stage, replace, navigate, progress, ensureMMKV, fail])
+
+  useEffect(
+    () => () => {
+      isMounted.current = false
+    },
+    [],
+  )
 
   return { handleFaceIdAuth, progress }
 }
