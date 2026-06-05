@@ -103,6 +103,10 @@ export function bytesToBase64(obj) {
 }
 
 export function restoreBytes(obj) {
+  if (obj instanceof Uint8Array) {
+    return obj
+  }
+
   if (Array.isArray(obj)) {
     return obj.map(restoreBytes)
   }

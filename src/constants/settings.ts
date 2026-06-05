@@ -1,4 +1,6 @@
+import { queryClient } from '@api/queryClient'
 import type { SettingsSection } from '@interfaces'
+import { resetE2EEKey } from '@lib/icloud_keychain_storage'
 import type { Route } from 'expo-router'
 import type { MMKV } from 'react-native-mmkv'
 
@@ -68,6 +70,18 @@ export const SETTINGS_SECTIONS = ({ theme, language, push, storage }: SettingsSe
         type: 'button',
         action: () => storage.clearAll(),
         label: 'Clear MMKV (Reload)',
+      },
+      {
+        color: 'red',
+        type: 'button',
+        action: () => resetE2EEKey(),
+        label: 'Clear iCloud',
+      },
+      {
+        color: 'red',
+        type: 'button',
+        action: () => queryClient.clear(),
+        label: 'Clear Query Cache',
       },
     ],
   },

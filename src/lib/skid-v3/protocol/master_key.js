@@ -42,7 +42,7 @@ export async function decryptMasterKey(encrypted_master_key, recovery_key, publi
   const derivedKey = await hkdfExpand(recovery_key, encrypted_master_key?.salt, new TextEncoder().encode('skid:v3:recovery_key'), 32)
 
   const aad = buildAAD('master_key', {
-    nonce: encrypted_master_key?.nonce,
+    nonce: Buffer.from(encrypted_master_key?.nonce),
   })
 
   const dataToVerify = new TextEncoder().encode(

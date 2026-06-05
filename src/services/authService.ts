@@ -1,6 +1,5 @@
 import { authApi } from '@api/auth.api'
 import { bytesToBase64, restoreBytes } from '@lib/skid-v3/src/utils'
-import { ed448 } from '@noble/curves/ed448.js'
 
 let skidInstance: any = null
 // biome-ignore lint/suspicious/noAssignInExpressions: <explanaton>
@@ -18,8 +17,8 @@ export const authService = {
       ed: { public_key: pubKeys.ed_public_key },
     }
 
-    const masterKey = skid.keys.master_key.decrypt(restoreBytes(begin.keys.encrypted_master_key), recoveryKey, pk.ed.public_key)
-    const decryptedId = skid.keys.identity.decrypt(
+    const masterKey = await skid.keys.master_key.decrypt(restoreBytes(begin.keys.encrypted_master_key), recoveryKey, pk.ed.public_key)
+    const decryptedId = await skid.keys.identity.decrypt(
       restoreBytes(begin.keys.identity_keys.encrypted_secret_keys),
       pk,
       masterKey,
@@ -33,7 +32,10 @@ export const authService = {
     }
 
     const msg = new TextEncoder().encode(JSON.stringify({ challenge: begin.challenge, user_id: userId }))
-    const sig = ed448.sign(msg, identity.ed.secret_key, { context: new Uint8Array(0) })
+    const privKeyObj = await crypto.subtle.importKey('pkcs8', identity.ed.secret_key, { name: 'Ed448' }, true, ['sign'])
+    const sigBits = await crypto.subtle.sign({ name: 'Ed448' }, privKeyObj, msg)
+    const sig = Buffer.from(sigBits)
+
     const finish = await authApi.loginFinish(userId, bytesToBase64(sig))
 
     if (!finish?.user) throw new Error('Не удалось завершить вход')
@@ -47,20 +49,23 @@ export const authService = {
 
   async register() {
     const skid = await getSkid()
-    const id = skid.keys.identity.generate()
-    const master = skid.keys.master_key.generate()
-    const recovery = skid.keys.recovery_key.generate()
+    const id = await skid.keys.identity.generate()
+    const master = await skid.keys.master_key.generate()
+    const recovery = await skid.keys.recovery_key.generate()
+
+    const encrypted_identity_keys = await skid.keys.identity.encrypt(id, master, id.ed.secret_key)
+    const encrypted_master_key = await skid.keys.master_key.encrypt(master, recovery, id.ed.secret_key)
 
     const body = {
       identity_keys: {
-        encrypted_secret_keys: bytesToBase64(skid.keys.identity.encrypt(id, master, id.ed.secret_key)),
+        encrypted_secret_keys: bytesToBase64(encrypted_identity_keys),
         public_keys: bytesToBase64({
           ml_kem_public_key: id.ml_kem.public_key,
           ecdh_public_key: id.ecdh.public_key,
           ed_public_key: id.ed.public_key,
         }),
       },
-      encrypted_master_key: bytesToBase64(skid.keys.master_key.encrypt(master, recovery, id.ed.secret_key)),
+      encrypted_master_key: bytesToBase64(encrypted_master_key),
     }
 
     const res = await authApi.register(body)

@@ -4,7 +4,7 @@ export function encrypt(key, content, nonce, aad) {
   const cipher = gcmsiv(key, nonce, aad)
   return {
     ciphertext: cipher.encrypt(content),
-    nonce
+    nonce,
   }
 }
 
