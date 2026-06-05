@@ -1,3 +1,9 @@
+import crypto from 'react-native-quick-crypto'
+
+export function sha256(data) {
+  return crypto.createHash('sha256').update(data).digest()
+}
+
 export function numberToBytes(number) {
   const buf = new ArrayBuffer(8)
   const view = new DataView(buf)

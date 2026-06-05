@@ -34,20 +34,18 @@ export async function generate_E2EE_Keys() {
   ])
 
   const ecdhPubKey = Buffer.from(ecdhResult.publicKey).subarray(12)
-  const ecdhSecKey = Buffer.from(ecdhResult.privateKey).subarray(16)
 
   const edPubKey = Buffer.from(edResult.publicKey).subarray(12)
-  const edSecKey = Buffer.from(edResult.privateKey).subarray(16)
 
   return {
     ml_kem: mlKemResult,
     ecdh: {
       public_key: ecdhPubKey,
-      secret_key: ecdhSecKey,
+      secret_key: ecdhResult.privateKey,
     },
     ed: {
       public_key: edPubKey,
-      secret_key: edSecKey,
+      secret_key: edResult.privateKey,
     },
   }
 }

@@ -1,6 +1,11 @@
-import { hkdf } from '@noble/hashes/hkdf.js'
-import { sha256 } from '@noble/hashes/sha2.js'
+import crypto from 'react-native-quick-crypto'
 
-export function hkdfExpand(key, salt, info, length) {
-  return hkdf(sha256, key, salt, info, length)
+export async function hkdfExpand(key, salt, info, length) {
+  return new Promise((resolve, reject) => {
+    crypto.hkdf('sha256', key, salt, info, length, (err, derivedKey) => {
+      if (err) return reject(err)
+
+      resolve(Buffer.from(derivedKey))
+    })
+  })
 }
