@@ -58,7 +58,7 @@ export default function Header({ scrollY }: HeaderProps) {
         entering={getFadeIn()}
         exiting={getFadeOut()}
         id="avatar"
-        onPress={() => push('/(app)/Settings')}
+        onPress={() => push('/(app)/(settings)')}
       >
         <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} image={user?.avatar} size="md" userId={user?.id} />
       </Transition.Boundary.Trigger>

@@ -9,7 +9,7 @@ export default function AppLayout() {
       <Stack.Screen name="index" options={screenTransition()} />
       <Stack.Screen name="chat/[chat]" options={screenTransition()} />
       <Stack.Screen name="NewMessage" options={sheetTransition()} />
-      <Stack.Screen name="Settings" options={zoomTransition()} />
+      <Stack.Screen name="(settings)" options={zoomTransition()} />
     </Stack>
   )
 }
