@@ -19,9 +19,9 @@ export const SETTINGS_SECTIONS = ({ theme, language, push, storage, replace }: S
     title: 'settings.profile.title',
     items: [
       {
-        action: () => push('/(app)/chat/[chat]'),
         icon: 'person.circle',
         label: 'settings.profile.myProfile',
+        action: () => push('/(app)/(settings)/Profile'),
       },
     ],
   },
@@ -33,11 +33,13 @@ export const SETTINGS_SECTIONS = ({ theme, language, push, storage, replace }: S
       {
         icon: 'sun',
         label: 'settings.app.appearance',
+        action: () => push('/(app)/(settings)/Appearance'),
         badgeLabel: theme,
       },
       {
         icon: 'globe',
         label: 'settings.app.language',
+        action: () => push('/(app)/(settings)/Language'),
         badgeLabel: language,
       },
     ],
@@ -49,6 +51,7 @@ export const SETTINGS_SECTIONS = ({ theme, language, push, storage, replace }: S
       {
         icon: 'key',
         label: 'settings.privacy.keyPassword',
+        action: () => push('/(app)/(settings)/KeyPassword'),
       },
     ],
   },

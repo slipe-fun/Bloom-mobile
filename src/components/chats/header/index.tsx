@@ -1,12 +1,12 @@
 import { useWebSocket } from '@api/providers/WebSocketContext'
 import { Avatar, GradientBlur } from '@components/ui'
-import { getFadeIn, getFadeOut, springy } from '@constants/animations'
+import { springy } from '@constants/animations'
 import { ICON_PRESSABLE_SCALE } from '@constants/animations/values'
 import { useInsets, useMe } from '@hooks'
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
+import { Pressable } from 'react-native'
 import Animated, { type SharedValue, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import Transition from 'react-native-screen-transitions'
 import { styles } from './header.styles'
 import Title from './Title'
 
@@ -50,18 +50,14 @@ export default function Header({ scrollY }: HeaderProps) {
     <Animated.View style={[styles.header(insets.top), animatedStyle]}>
       <GradientBlur direction="top-to-bottom" />
       <Title scrollY={scrollY} state={status} />
-      <Transition.Boundary.Trigger
+      <Pressable
         onTouchStart={() => handlePress(true)}
         onTouchMove={() => handlePress(false)}
         onTouchEnd={() => handlePress(false)}
-        // @ts-expect-error
-        entering={getFadeIn()}
-        exiting={getFadeOut()}
-        id="avatar"
         onPress={() => push('/(app)/(settings)')}
       >
         <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} image={user?.avatar} size="md" userId={user?.id} />
-      </Transition.Boundary.Trigger>
+      </Pressable>
     </Animated.View>
   )
 }

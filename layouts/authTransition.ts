@@ -1,15 +1,10 @@
 import { quickSpring } from '@constants/easings'
 import { interpolate } from 'react-native-reanimated'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
-import { UnistylesRuntime } from 'react-native-unistyles'
-
-export const TOP_OFFSET = 4
 
 export const authScreenTransition = (): BlankStackNavigationOptions => {
-  const color = UnistylesRuntime.getTheme().colors.background
-
   return {
-    // experimental_enableHighRefreshRate: true,
+    experimental_enableHighRefreshRate: true,
     gestureEnabled: false,
     gestureDirection: ['horizontal'],
     screenStyleInterpolator: ({
@@ -27,15 +22,11 @@ export const authScreenTransition = (): BlankStackNavigationOptions => {
           style: {
             transform: [{ translateX }],
             overflow: 'hidden',
-            borderRadius: 0,
-            borderCurve: 'continuous',
-            backgroundColor: color,
           },
         },
         backdrop: {
           style: {
             opacity: 0,
-            backgroundColor: color,
           },
         },
       }

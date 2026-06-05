@@ -3,16 +3,15 @@ import { interpolate } from 'react-native-reanimated'
 import Transition from 'react-native-screen-transitions'
 import type { BlankStackNavigationOptions } from 'react-native-screen-transitions/blank-stack'
 import { UnistylesRuntime } from 'react-native-unistyles'
+import { TOP_OFFSET } from './transition'
 
-export const TOP_OFFSET = 7
-
-export const screenTransition = (gestures: boolean = true): BlankStackNavigationOptions => {
+export const settingsTransition = (): BlankStackNavigationOptions => {
   const color = UnistylesRuntime.getTheme().colors.background
 
   return {
-    // experimental_enableHighRefreshRate: true,
-    gestureEnabled: gestures,
-    gestureDirection: ['horizontal'],
+    experimental_enableHighRefreshRate: true,
+    gestureEnabled: true,
+    gestureDirection: ['vertical'],
     screenStyleInterpolator: ({
       current: {
         layouts: { screen },
@@ -23,13 +22,13 @@ export const screenTransition = (gestures: boolean = true): BlankStackNavigation
     }) => {
       'worklet'
 
-      const translateX = interpolate(progress, [0, 1, 2], [screen.width, 0, -screen.width / 3], 'clamp')
+      const translateY = interpolate(progress, [0, 1, 2], [screen.height, 0, -screen.height / 3], 'clamp')
       const opacity = interpolate(progress, [0, 1, 2], [0, 0.3, 0], 'clamp')
 
       return {
         content: {
           style: {
-            transform: [{ translateX }],
+            transform: [{ translateY }],
             overflow: 'hidden',
             borderRadius: active.settled ? 0 : insets.top - TOP_OFFSET,
             borderCurve: 'continuous',
