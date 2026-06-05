@@ -1,24 +1,53 @@
-import { ed448, x448 } from '@noble/curves/ed448.js'
-import { randomBytes } from '@noble/hashes/utils.js'
-import { ml_kem768 } from '@noble/post-quantum/ml-kem.js'
+import crypto, { randomBytes } from 'react-native-quick-crypto'
 
-export function generate_E2EE_Keys() {
-  const { publicKey: kyberPublicKey, secretKey: kyberSecretKey } = ml_kem768.keygen()
-  const { publicKey: ecdhPublicKey, secretKey: ecdhSecretKey } = x448.keygen()
-  const { publicKey: edPublicKey, secretKey: edSecretKey } = ed448.keygen()
+function generateKeyPairAsync(type, options) {
+  return new Promise((resolve, reject) => {
+    crypto.generateKeyPair(type, options, (err, publicKey, privateKey) => {
+      if (err) return reject(err)
+      resolve({ publicKey, privateKey })
+    })
+  })
+}
+
+export async function generate_E2EE_Keys() {
+  const [mlKemResult, ecdhResult, edResult] = await Promise.all([
+    crypto.subtle.generateKey({ name: 'ML-KEM-768' }, true, ['encapsulateKey', 'decapsulateKey']).then(async (keyPair) => {
+      const [rawPubKey, rawSecKey] = await Promise.all([
+        crypto.subtle.exportKey('raw-public', keyPair.publicKey),
+        crypto.subtle.exportKey('raw-seed', keyPair.privateKey),
+      ])
+      return {
+        public_key: Buffer.from(rawPubKey),
+        secret_key: Buffer.from(rawSecKey),
+      }
+    }),
+
+    generateKeyPairAsync('x448', {
+      publicKeyEncoding: { type: 'spki', format: 'der' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'der' },
+    }),
+
+    generateKeyPairAsync('ed448', {
+      publicKeyEncoding: { type: 'spki', format: 'der' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'der' },
+    }),
+  ])
+
+  const ecdhPubKey = Buffer.from(ecdhResult.publicKey).subarray(12)
+  const ecdhSecKey = Buffer.from(ecdhResult.privateKey).subarray(16)
+
+  const edPubKey = Buffer.from(edResult.publicKey).subarray(12)
+  const edSecKey = Buffer.from(edResult.privateKey).subarray(16)
 
   return {
-    ml_kem: {
-      public_key: kyberPublicKey,
-      secret_key: kyberSecretKey,
-    },
+    ml_kem: mlKemResult,
     ecdh: {
-      public_key: ecdhPublicKey,
-      secret_key: ecdhSecretKey,
+      public_key: ecdhPubKey,
+      secret_key: ecdhSecKey,
     },
     ed: {
-      public_key: edPublicKey,
-      secret_key: edSecretKey,
+      public_key: edPubKey,
+      secret_key: edSecKey,
     },
   }
 }
