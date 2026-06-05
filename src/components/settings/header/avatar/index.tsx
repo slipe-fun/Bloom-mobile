@@ -36,7 +36,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const [capturedImage, setCapturedImage] = useState<SkImage | null>(null)
   const isFocused = useSharedValue(AppState.currentState === 'active')
 
-  const ISLAND_HEIGHT = 32
+  const ISLAND_HEIGHT = hasIsland ? 32 : 34
   const ISLAND_Y = ISLAND_HEIGHT / 2
   const ISLAND_R = 0
 

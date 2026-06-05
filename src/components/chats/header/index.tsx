@@ -60,7 +60,7 @@ export default function Header({ scrollY }: HeaderProps) {
         id="avatar"
         onPress={() => push('/(app)/Settings')}
       >
-        <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} image={user.avatar} size="md" userId={user.id} />
+        <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} image={user?.avatar} size="md" userId={user?.id} />
       </Transition.Boundary.Trigger>
     </Animated.View>
   )
