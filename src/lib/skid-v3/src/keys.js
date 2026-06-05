@@ -41,11 +41,11 @@ export async function generate_E2EE_Keys() {
     ml_kem: mlKemResult,
     ecdh: {
       public_key: ecdhPubKey,
-      secret_key: ecdhResult.privateKey,
+      secret_key: Buffer.from(ecdhResult.privateKey),
     },
     ed: {
       public_key: edPubKey,
-      secret_key: edResult.privateKey,
+      secret_key: Buffer.from(edResult.privateKey),
     },
   }
 }
