@@ -31,6 +31,7 @@ export default function AuthFooter() {
         size="xl"
         elevated={true}
         disabled={loading}
+        blur={false}
         layout={layoutAnimationSpringy}
         style={[styles.button, animatedButtonStyle]}
         variant="textIcon"
