@@ -25,6 +25,7 @@ interface ButtonProps extends ComponentProps<typeof AnimatedPressable> {
   icon?: React.JSX.Element | null | boolean
   children?: React.ReactNode
   elevated?: boolean
+  blur?: boolean
 }
 
 export default function Button({
@@ -38,6 +39,7 @@ export default function Button({
   style,
   labelStyle,
   elevated = true,
+  blur = true,
   ...props
 }: ButtonProps) {
   const scale = useSharedValue(1)
@@ -90,7 +92,7 @@ export default function Button({
     >
       {elevated && (
         <>
-          <BlurView tint={tint} style={styles.blur} intensity={50} />
+          {blur && <BlurView tint={tint} style={styles.blur} intensity={50} />}
           <Animated.View style={[styles.borderOverlay, overlayStyle]} />
         </>
       )}

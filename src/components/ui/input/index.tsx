@@ -21,6 +21,7 @@ type InputProps = {
   animation?: boolean
   elevated?: boolean
   basic?: boolean
+  blur?: boolean
 } & React.ComponentProps<typeof TextInput>
 
 const SIZE_MAP: Record<Size, number> = {
@@ -41,6 +42,7 @@ export default function Input({
   basic,
   elevated = true,
   animation = true,
+  blur = true,
   ...props
 }: InputProps) {
   const { theme, rt } = useUnistyles()
@@ -77,7 +79,7 @@ export default function Input({
     <Animated.View style={[viewStyleMemo, viewStyle, animation ? animatedlStyle : undefined]}>
       {elevated && (
         <>
-          <BlurView tint={tint} style={styles.blur} intensity={50} />
+          {blur && <BlurView tint={tint} style={styles.blur} intensity={50} />}
           <Animated.View style={[styles.borderOverlay, overlayStyle]} />
         </>
       )}
