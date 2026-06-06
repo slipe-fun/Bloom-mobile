@@ -31,16 +31,16 @@ export const SETTINGS_SECTIONS = ({ theme, language, push, storage, replace }: S
 
     items: [
       {
-        icon: 'sun',
-        label: 'settings.app.appearance',
-        action: () => push('/(app)/(settings)/Appearance'),
-        badgeLabel: theme,
-      },
-      {
         icon: 'globe',
         label: 'settings.app.language',
         action: () => push('/(app)/(settings)/Language'),
         badgeLabel: language,
+      },
+      {
+        icon: 'sun',
+        label: 'settings.app.appearance',
+        action: () => push('/(app)/(settings)/Appearance'),
+        badgeLabel: theme,
       },
     ],
   },

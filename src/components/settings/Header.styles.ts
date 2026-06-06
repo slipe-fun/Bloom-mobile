@@ -5,7 +5,6 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
     zIndex: 2,
     position: 'absolute',
     gap: theme.spacing.lg,
@@ -23,12 +22,15 @@ export const styles = StyleSheet.create((theme) => ({
     textAlign: 'center',
     marginBottom: theme.spacing.xxl,
   },
-  gradientWrapper: (height: number) => ({
+  gradientWrapper: (height: number, paddingTop: number) => ({
     width: '100%',
     position: 'absolute',
+    justifyContent: 'space-between',
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop,
+    flexDirection: 'row',
     zIndex: 1,
     height,
-    // backgroundColor: 'red',
   }),
   avatar: {
     boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,

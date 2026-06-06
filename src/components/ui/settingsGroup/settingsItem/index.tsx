@@ -1,4 +1,4 @@
-import { springy } from '@constants/animations'
+import { quickSpring } from '@constants/animations'
 import type { SettingsItem as SettingsItemType } from '@interfaces'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -10,23 +10,24 @@ import { styles } from './SettingsItem.styles'
 
 interface SettingsItemProps {
   item: SettingsItemType
+  last: boolean
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export default function SettingsItem({ item }: SettingsItemProps) {
+export default function SettingsItem({ item, last }: SettingsItemProps) {
   const { theme } = useUnistyles()
   const { t } = useTranslation('common')
-  const scale = useSharedValue(1)
+  const opacity = useSharedValue(1)
 
   const iconColor: string = theme.colors[item.color] ?? theme.colors.secondaryText
 
   const handlePress = (inn: boolean = true) => {
-    scale.set(withSpring(inn ? 1.03 : 1, springy))
+    opacity.set(withSpring(inn ? 0.25 : 1, quickSpring))
   }
 
   const animatedPressableStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.get() }],
+    opacity: opacity.get(),
   }))
 
   return (
@@ -35,18 +36,20 @@ export default function SettingsItem({ item }: SettingsItemProps) {
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       onPress={item.action}
-      style={[styles.container, animatedPressableStyle]}
+      style={[styles.container(item.type === 'button'), animatedPressableStyle]}
     >
       {item.type !== 'button' && <SettingsIcon icon={item.icon} color={iconColor} />}
-      {/* @ts-expect-error */}
-      <Text style={styles.label(item.type === 'button', item.color)}>{t(item.label)}</Text>
+      <View style={styles.content(last)}>
+        {/* @ts-expect-error */}
+        <Text style={styles.label(item.type === 'button', item.color)}>{t(item.label)}</Text>
 
-      {item.type !== 'button' && (
-        <View style={styles.rightSide}>
-          {typeof item.badgeLabel !== 'undefined' && <Text style={styles.badgeLabel}>{item.badgeLabel}</Text>}
-          <Icon icon={item.badgeIcon ?? 'chevron.right'} size={item.badgeIcon ? 24 : 20} color={theme.colors.secondaryText} />
-        </View>
-      )}
+        {item.type !== 'button' && (
+          <View style={styles.rightSide}>
+            {typeof item.badgeLabel !== 'undefined' && <Text style={styles.badgeLabel}>{item.badgeLabel}</Text>}
+            <Icon icon={item.badgeIcon ?? 'chevron.right'} size={item.badgeIcon ? 24 : 20} color={theme.colors.secondaryText} />
+          </View>
+        )}
+      </View>
     </AnimatedPressable>
   )
 }

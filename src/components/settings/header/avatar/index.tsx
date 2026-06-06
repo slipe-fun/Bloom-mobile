@@ -41,7 +41,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const ISLAND_R = 0
 
   const { START_Y, CENTER_X, CANVAS_HEIGHT } = useMemo(() => {
-    const startY = insets.top + 15
+    const startY = insets.top + 22
     return {
       START_Y: startY,
       CENTER_X: width / 2,

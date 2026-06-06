@@ -2,14 +2,14 @@ import MaskedView from '@react-native-masked-view/masked-view'
 import { type BlurTint, BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
-import { useMemo } from 'react'
-import { Easing, type StyleProp, type ViewStyle } from 'react-native'
+import { type ComponentProps, useMemo } from 'react'
+import { Easing, type StyleProp, type View, type ViewStyle } from 'react-native'
 import { easeGradient } from 'react-native-easing-gradient'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 type GradientDirection = 'top-to-bottom' | 'bottom-to-top' | 'bottom-left-to-top-right'
 
-interface GradientBlurProps {
+interface GradientBlurProps extends ComponentProps<typeof View> {
   direction?: GradientDirection
   ref?: React.Ref<MaskedView>
   style?: StyleProp<ViewStyle>
@@ -24,7 +24,15 @@ const DIRECTIONS: Record<GradientDirection, { start: { x: number; y: number }; e
   'bottom-to-top': { start: { x: 0.5, y: 0 }, end: { x: 0.5, y: 1 } },
 }
 
-export default function GradientBlur({ direction = 'bottom-to-top', ref, style, gray, behindKeyboard, blur = true }: GradientBlurProps) {
+export default function GradientBlur({
+  direction = 'bottom-to-top',
+  ref,
+  style,
+  gray,
+  behindKeyboard,
+  blur = true,
+  ...props
+}: GradientBlurProps) {
   const { theme, rt } = useUnistyles()
 
   const isDark = rt.themeName.includes('dark')
@@ -68,6 +76,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
           ref={ref}
           pointerEvents="none"
           style={gradientStyles}
+          {...props}
           maskElement={
             <LinearGradient
               start={start}
@@ -86,6 +95,7 @@ export default function GradientBlur({ direction = 'bottom-to-top', ref, style, 
         pointerEvents="none"
         start={start}
         end={end}
+        {...props}
         locations={grad.locations as any}
         colors={grad.colors as any}
         style={gradientStyles}

@@ -1,14 +1,10 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((_theme) => ({
   container: {
-    width: 32,
-    height: 32,
+    width: 52,
+    height: 52,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: theme.radius.full,
   },
 }))

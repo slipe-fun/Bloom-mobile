@@ -61,7 +61,6 @@ const styles = StyleSheet.create((theme) => ({
   },
   list: (paddingTop: number, paddingBottom: number) => ({
     paddingBottom,
-    gap: theme.spacing.lg,
     paddingTop,
     paddingHorizontal: theme.spacing.lg,
   }),

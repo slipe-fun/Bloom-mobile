@@ -7,9 +7,10 @@ export const styles = StyleSheet.create((theme) => ({
     overflow: 'visible',
   },
   group: {
-    gap: theme.spacing.sm,
     borderCurve: 'continuous',
     overflow: 'visible',
+    backgroundColor: theme.colors.sectionForeground,
+    borderRadius: theme.radius.xl,
   },
   title: {
     marginHorizontal: theme.radius.xxl / 2,
