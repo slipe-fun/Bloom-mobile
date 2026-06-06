@@ -23,7 +23,7 @@ const POSITION_RATIO = 1.62
 
 export default function Header({ scrollY, user, loading }: HeaderProps) {
   const insets = useInsets()
-  const { setSnapEndPosition, setHeaderHeight, snapEndPosition, headerHeight } = useSettingsScreenStore()
+  const { setSnapPosition, setHeaderHeight, snapPosition, headerHeight } = useSettingsScreenStore()
 
   const gradient = SIZE_MAP.md + insets.top + base.spacing.xxl
 
@@ -32,11 +32,11 @@ export default function Header({ scrollY, user, loading }: HeaderProps) {
       const header = event.nativeEvent.layout.height
 
       if (header !== headerHeight) {
-        setSnapEndPosition(header - gradient)
+        setSnapPosition(header - gradient)
         setHeaderHeight(header)
       }
     },
-    [headerHeight, gradient, setSnapEndPosition, setHeaderHeight],
+    [headerHeight, gradient, setSnapPosition, setHeaderHeight],
   )
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -45,7 +45,7 @@ export default function Header({ scrollY, user, loading }: HeaderProps) {
         translateY: interpolate(
           scrollY.get(),
           [-SCROLL_OVERSHOOT, 0, headerHeight / POSITION_RATIO],
-          [SCROLL_OVERSHOOT, 0, -snapEndPosition],
+          [SCROLL_OVERSHOOT, 0, -snapPosition],
           'clamp',
         ),
       },

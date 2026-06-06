@@ -20,6 +20,7 @@ export default function Settings() {
   const { push, replace } = useRouter()
   const mmkv = useStorageStore((state) => state.mmkv)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+  const snapPosition = useSettingsScreenStore((state) => state.snapPosition)
   const { user, loading } = useMe()
 
   const settingsList = useMemo(
@@ -39,6 +40,9 @@ export default function Settings() {
       <AnimatedScrollView
         contentContainerStyle={styles.list(headerHeight, insets.bottom)}
         onScroll={scrollHandler}
+        snapToOffsets={[0, headerHeight - snapPosition / 1.75]}
+        decelerationRate={1}
+        snapToEnd={false}
         showsVerticalScrollIndicator={false}
       >
         <UserId user={user} scrollY={scrollY} />

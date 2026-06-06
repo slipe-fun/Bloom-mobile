@@ -29,7 +29,7 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const { width } = useWindowDimensions()
   const hasIsland = DeviceInfo.hasDynamicIsland()
 
-  const snapEndPosition = useSettingsScreenStore((state) => state.snapEndPosition)
+  const snapPosition = useSettingsScreenStore((state) => state.snapPosition)
   const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
 
   const avatarRef = useRef<View>(null)
@@ -84,9 +84,9 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const canvasAnimatedStyle = useAnimatedStyle(
     () => ({
       opacity: scrollY.get() > 0.01 && isFocused.get() ? 1 : 0,
-      transform: [{ translateY: interpolate(scrollY.get(), [0, headerHeight / 1.62], [0, snapEndPosition], 'clamp') }],
+      transform: [{ translateY: interpolate(scrollY.get(), [0, headerHeight / 1.62], [0, snapPosition], 'clamp') }],
     }),
-    [headerHeight, snapEndPosition],
+    [headerHeight, snapPosition],
   )
 
   const avatarAnimatedStyle = useAnimatedStyle(() => ({
