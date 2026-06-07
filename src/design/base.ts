@@ -37,7 +37,7 @@ export const base = {
     /** 26px   */ xl: 26,
     /** 32px   */ xxl: 32,
     /** 42px   */ xxxl: 42,
-    /** 9999px */ full: 9999,
+    /** 999px  */ full: 999,
   },
   opacity: {
     /** 35%    */ secondaryText: 0.35,

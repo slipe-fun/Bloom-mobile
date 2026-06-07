@@ -17,7 +17,7 @@ export default function SettingsTitle({ scrollY, user }: UserProps) {
   const titleEndPosition = useSharedValue(0)
 
   const onTitleLayout = (event: LayoutChangeEvent) => {
-    titleEndPosition.set(event.nativeEvent.layout.height * 1.5)
+    titleEndPosition.set(event.nativeEvent.layout.height * 1.25)
   }
 
   const animatedStyle = useAnimatedStyle(

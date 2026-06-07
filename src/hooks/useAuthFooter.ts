@@ -27,7 +27,6 @@ export default function useFaceIdAuth(): { handleFaceIdAuth: () => Promise<void>
   )
 
   const handleFaceIdAuth = useCallback(async () => {
-    navigate('/(app)')
     try {
       if (stage === 'success') {
         replace('/(app)')
