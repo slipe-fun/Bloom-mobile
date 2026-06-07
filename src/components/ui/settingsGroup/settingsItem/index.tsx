@@ -24,7 +24,7 @@ export default function SettingsItem({ item, last }: SettingsItemProps) {
   const iconColor: string = theme.colors[item.color] ?? theme.colors.secondaryText
 
   const handlePress = (inn: boolean = true) => {
-    opacity.set(withSpring(inn ? 0.25 : 1, quickSpring))
+    item.type !== 'toggle' && opacity.set(withSpring(inn ? 0.25 : 1, quickSpring))
   }
 
   const animatedPressableStyle = useAnimatedStyle(() => ({

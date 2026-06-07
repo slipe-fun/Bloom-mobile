@@ -6,8 +6,11 @@ import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import { useSettingsStore } from '@stores/settings'
 import { useMemo } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView as ReactScrollView, View } from 'react-native'
+import Transition from 'react-native-screen-transitions'
 import { StyleSheet } from 'react-native-unistyles'
+
+const ScrollView = Transition.createTransitionAwareComponent(ReactScrollView, { isScrollable: true })
 
 export default function Appearance() {
   const theme = useSettingsStore((state) => state.theme)
