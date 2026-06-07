@@ -1,6 +1,6 @@
 import { base } from '@design/base'
 import type { User as UserType } from '@interfaces'
-import useSettingsScreenStore from '@stores/settings'
+import { useSettingsHeaderStore } from '@stores/settingsHeader'
 import type { LayoutChangeEvent, TextStyle } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { styles } from '../Header.styles'
@@ -13,7 +13,7 @@ interface UserProps {
 const POSITION_RATIO = 1.62
 
 export default function SettingsTitle({ scrollY, user }: UserProps) {
-  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+  const headerHeight = useSettingsHeaderStore((state) => state.headerHeight)
   const titleEndPosition = useSharedValue(0)
 
   const onTitleLayout = (event: LayoutChangeEvent) => {

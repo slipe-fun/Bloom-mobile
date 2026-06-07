@@ -1,5 +1,5 @@
 import type { User } from '@interfaces'
-import useSettingsScreenStore from '@stores/settings'
+import { useSettingsHeaderStore } from '@stores/settingsHeader'
 import type { TextStyle } from 'react-native'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { styles } from './Header.styles'
@@ -12,7 +12,7 @@ interface FloatingHeaderProps {
 const POSITION_RATIO = 1.62
 
 export default function UserId({ scrollY, user }: FloatingHeaderProps) {
-  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+  const headerHeight = useSettingsHeaderStore((state) => state.headerHeight)
 
   const animatedStyle = useAnimatedStyle(
     (): TextStyle => ({

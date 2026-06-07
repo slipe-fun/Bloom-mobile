@@ -1,21 +1,30 @@
 import SettingHeader from '@components/settings/settingHeader'
-import { Toggle } from '@components/ui'
+import { SettingsGroup } from '@components/ui'
 import { SIZE_MAP } from '@components/ui/button/constats'
+import { APPEARACNE_SECTIONS } from '@constants/settings/appearance'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
-import { useState } from 'react'
-import { View } from 'react-native'
+import { useSettingsStore } from '@stores/settings'
+import { useMemo } from 'react'
+import { ScrollView, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 export default function Appearance() {
-  const [s, ss] = useState(false)
+  const theme = useSettingsStore((state) => state.theme)
+  const setTheme = useSettingsStore((state) => state.setTheme)
   const insets = useInsets()
   const headerHeight = insets.top + base.spacing.xxl + SIZE_MAP.md
 
+  const settingsList = useMemo(() => APPEARACNE_SECTIONS({ theme, setTheme }), [theme, setTheme, APPEARACNE_SECTIONS])
+
   return (
-    <View style={[styles.container, { paddingTop: headerHeight + 200, paddingHorizontal: 16 }]}>
-      <SettingHeader title="settings.app.appearance" icon="sun" />
-      <Toggle value={s} onValueChange={ss} />
+    <View style={styles.container}>
+      <SettingHeader title="settings.app.appearance.title" icon="sun" />
+      <ScrollView contentContainerStyle={styles.list(headerHeight, insets.bottom)} showsVerticalScrollIndicator={false}>
+        {settingsList.map((item, _i) => (
+          <SettingsGroup section={item} key={item.id} />
+        ))}
+      </ScrollView>
     </View>
   )
 }

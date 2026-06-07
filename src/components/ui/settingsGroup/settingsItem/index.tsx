@@ -1,3 +1,4 @@
+import Toggle from '@components/ui/toggle'
 import { quickSpring } from '@constants/animations'
 import type { SettingsItem as SettingsItemType } from '@interfaces'
 import { useTranslation } from 'react-i18next'
@@ -36,20 +37,22 @@ export default function SettingsItem({ item, last }: SettingsItemProps) {
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       onPress={item.action}
-      style={[styles.container(item.type === 'button'), animatedPressableStyle]}
+      style={[styles.container(item.type === 'button', item.type === 'toggle'), animatedPressableStyle]}
     >
-      {item.type !== 'button' && <SettingsIcon icon={item.icon} color={iconColor} />}
-      <View style={styles.content(last)}>
+      {item.icon && <SettingsIcon icon={item.icon} color={iconColor} />}
+      <View style={styles.content(last, !!item.icon)}>
         {/* @ts-expect-error */}
         <Text style={styles.label(item.type === 'button', item.color)}>{t(item.label)}</Text>
 
-        {item.type !== 'button' && (
-          <View style={styles.rightSide}>
-            {typeof item.badgeLabel !== 'undefined' && <Text style={styles.badgeLabel}>{item.badgeLabel}</Text>}
-            <Icon icon={item.badgeIcon ?? 'chevron.right'} size={item.badgeIcon ? 24 : 20} color={theme.colors.secondaryText} />
-          </View>
-        )}
+        {item.type === 'link' ||
+          (item.type === undefined && (
+            <View style={styles.rightSide}>
+              {typeof item.badgeLabel !== 'undefined' && <Text style={styles.badgeLabel}>{item.badgeLabel}</Text>}
+              <Icon icon={item.badgeIcon ?? 'chevron.right'} size={item.badgeIcon ? 24 : 20} color={theme.colors.secondaryText} />
+            </View>
+          ))}
       </View>
+      {item.type === 'toggle' && <Toggle value={item.toggleValue} onValueChange={item.action} />}
     </AnimatedPressable>
   )
 }

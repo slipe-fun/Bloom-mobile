@@ -31,7 +31,10 @@
     },
     "app": {
       "title": "App",
-      "appearance": "Apperance",
+      "appearance": {
+        "title": "Appearance",
+        "automatic": "Automatic"
+      },
       "language": "Language"
     },
     "privacy": {

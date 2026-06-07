@@ -31,7 +31,10 @@
     },
     "app": {
       "title": "Приложение",
-      "appearance": "Тема",
+      "appearance": {
+        "title": "Внешний вид",
+        "automatic": "Автоматически"
+      },
       "language": "Язык"
     },
     "privacy": {

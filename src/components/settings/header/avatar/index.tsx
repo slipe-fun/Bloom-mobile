@@ -5,7 +5,7 @@ import { useInsets } from '@hooks'
 import type { User } from '@interfaces'
 import type { SkImage } from '@shopify/react-native-skia'
 import { Blur, Canvas, Fill, Group, Image, makeImageFromView, Paint, Shader } from '@shopify/react-native-skia'
-import useSettingsScreenStore from '@stores/settings'
+import { useSettingsHeaderStore } from '@stores/settingsHeader'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AppState, useWindowDimensions, type View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
@@ -29,8 +29,8 @@ export default function HeaderAvatar({ scrollY, user, loading }: HeaderAvatarPro
   const { width } = useWindowDimensions()
   const hasIsland = DeviceInfo.hasDynamicIsland()
 
-  const snapPosition = useSettingsScreenStore((state) => state.snapPosition)
-  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
+  const snapPosition = useSettingsHeaderStore((state) => state.snapPosition)
+  const headerHeight = useSettingsHeaderStore((state) => state.headerHeight)
 
   const avatarRef = useRef<View>(null)
   const [capturedImage, setCapturedImage] = useState<SkImage | null>(null)

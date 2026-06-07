@@ -3,7 +3,7 @@ import { SIZE_MAP } from '@components/ui/button/constats'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { User as UserType } from '@interfaces'
-import useSettingsScreenStore from '@stores/settings'
+import { useSettingsHeaderStore } from '@stores/settingsHeader'
 import { useRouter } from 'expo-router'
 import { useCallback } from 'react'
 import { type LayoutChangeEvent, View } from 'react-native'
@@ -27,7 +27,7 @@ export default function Header({ scrollY, user, loading }: HeaderProps) {
   const insets = useInsets()
   const { back } = useRouter()
   const { theme } = useUnistyles()
-  const { setSnapPosition, setHeaderHeight, snapPosition, headerHeight } = useSettingsScreenStore()
+  const { setSnapPosition, setHeaderHeight, snapPosition, headerHeight } = useSettingsHeaderStore()
 
   const gradient = SIZE_MAP.md + insets.top + base.spacing.xxl
 

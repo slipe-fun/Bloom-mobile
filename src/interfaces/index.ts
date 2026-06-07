@@ -77,6 +77,7 @@ export interface SettingsItem {
   badgeLabel?: string | number
   badgeIcon?: keyof typeof ICONS
   type?: 'link' | 'toggle' | 'button'
+  toggleValue?: boolean
   action?: () => void
 }
 

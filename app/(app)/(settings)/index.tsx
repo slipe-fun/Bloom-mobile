@@ -3,7 +3,7 @@ import UserId from '@components/settings/UserId'
 import { SettingsGroup } from '@components/ui'
 import { SETTINGS_SECTIONS } from '@constants/settings'
 import { useInsets, useMe } from '@hooks'
-import useSettingsScreenStore from '@stores/settings'
+import { useSettingsHeaderStore } from '@stores/settingsHeader'
 import useStorageStore from '@stores/storage'
 import { useRouter } from 'expo-router'
 import { useMemo } from 'react'
@@ -19,8 +19,8 @@ export default function Settings() {
   const insets = useInsets()
   const { push, replace } = useRouter()
   const mmkv = useStorageStore((state) => state.mmkv)
-  const headerHeight = useSettingsScreenStore((state) => state.headerHeight)
-  const snapPosition = useSettingsScreenStore((state) => state.snapPosition)
+  const headerHeight = useSettingsHeaderStore((state) => state.headerHeight)
+  const snapPosition = useSettingsHeaderStore((state) => state.snapPosition)
   const { user, loading } = useMe()
 
   const settingsList = useMemo(
