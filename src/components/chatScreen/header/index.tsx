@@ -5,7 +5,6 @@ import type { Chat } from '@interfaces'
 import { useNavigation } from '@react-navigation/native'
 import { Pressable, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Header.styles'
 
 type HeaderProps = {
@@ -16,7 +15,6 @@ type HeaderProps = {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function Header({ chat }: HeaderProps): React.ReactNode {
-  const { theme } = useUnistyles()
   const navigation = useNavigation()
   const insets = useInsets()
 
@@ -24,7 +22,7 @@ export default function Header({ chat }: HeaderProps): React.ReactNode {
     <Animated.View style={[styles.header, { paddingTop: insets.top }]}>
       <GradientBlur direction="top-to-bottom" />
       <Button variant="icon" onPress={() => navigation.goBack()}>
-        <Icon icon="chevron.left" color={theme.colors.text} />
+        <Icon icon="chevron.left" uniProps={(theme) => ({ color: theme.colors.text })} />
       </Button>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>{chat?.recipient?.display_name || chat?.recipient?.username}</Text>

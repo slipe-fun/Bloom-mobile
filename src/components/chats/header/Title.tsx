@@ -1,5 +1,6 @@
 import { Icon } from '@components/ui'
 import { charAnimationIn, charAnimationOut, layoutAnimationSpringy, springy, springyChar } from '@constants/animations'
+import { staticColors } from '@design/colors'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Animated, {
@@ -14,7 +15,6 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import type { Status } from '.'
 import { styles } from './header.styles'
@@ -27,7 +27,6 @@ interface TitleProps {
 export default function Title({ state, scrollY }: TitleProps) {
   const animatedTheme = useAnimatedTheme()
   const color = useSharedValue(0)
-  const { theme } = useUnistyles()
   const rotation = useSharedValue(0)
   const { t } = useTranslation('common')
   const rotating = useSharedValue(false)
@@ -73,7 +72,7 @@ export default function Title({ state, scrollY }: TitleProps) {
   return (
     <Animated.View key="connected" layout={layoutAnimationSpringy} style={styles.container}>
       <Animated.View style={animatedStyle} layout={layoutAnimationSpringy}>
-        <Icon color={theme.colors.primary} animatedProps={animatedProps} icon="logo" size={30} />
+        <Icon color={staticColors.primary} animatedProps={animatedProps} icon="logo" size={30} />
       </Animated.View>
       <Animated.View style={styles.row} layout={layoutAnimationSpringy}>
         {title.split('').map((char, i) => (

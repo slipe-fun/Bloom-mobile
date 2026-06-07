@@ -2,7 +2,6 @@ import { Button, Icon } from '@components/ui'
 import { getFadeIn, getFadeOut, layoutAnimation, paperplaneAnimationIn, paperplaneAnimationOut, quickSpring } from '@constants/animations'
 import { useEffect } from 'react'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 
 interface SendButtonProps {
@@ -11,7 +10,6 @@ interface SendButtonProps {
 }
 
 export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
-  const { theme } = useUnistyles()
   const animatedTheme = useAnimatedTheme()
   const color = useSharedValue(1)
 
@@ -27,11 +25,11 @@ export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
     <Button layout={layoutAnimation} style={animatedButtonStyle} onPress={handleSend} variant="icon">
       {hasValue ? (
         <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
-          <Icon icon="paperplane" color={theme.colors.white} />
+          <Icon icon="paperplane" uniProps={(theme) => ({ color: theme.colors.text })} />
         </Animated.View>
       ) : (
         <Animated.View key="waveform" entering={getFadeIn()} exiting={getFadeOut()}>
-          <Icon icon="waveform" color={theme.colors.text} />
+          <Icon icon="waveform" uniProps={(theme) => ({ color: theme.colors.text })} />
         </Animated.View>
       )}
     </Button>

@@ -5,12 +5,10 @@ import { APPEARACNE_SECTIONS } from '@constants/settings/appearance'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import { useSettingsStore } from '@stores/settings'
-import { useMemo } from 'react'
-import { ScrollView as ReactScrollView, View } from 'react-native'
+import { useEffect, useMemo } from 'react'
+import { View } from 'react-native'
 import Transition from 'react-native-screen-transitions'
 import { StyleSheet } from 'react-native-unistyles'
-
-const ScrollView = Transition.createTransitionAwareComponent(ReactScrollView, { isScrollable: true })
 
 export default function Appearance() {
   const theme = useSettingsStore((state) => state.theme)
@@ -18,16 +16,20 @@ export default function Appearance() {
   const insets = useInsets()
   const headerHeight = insets.top + base.spacing.xxl + SIZE_MAP.md
 
+  useEffect(() => {
+    console.log(theme)
+  }, [theme])
+
   const settingsList = useMemo(() => APPEARACNE_SECTIONS({ theme, setTheme }), [theme, setTheme, APPEARACNE_SECTIONS])
 
   return (
     <View style={styles.container}>
       <SettingHeader title="settings.app.appearance.title" icon="sun" />
-      <ScrollView contentContainerStyle={styles.list(headerHeight, insets.bottom)} showsVerticalScrollIndicator={false}>
+      <Transition.ScrollView contentContainerStyle={styles.list(headerHeight, insets.bottom)} showsVerticalScrollIndicator={false}>
         {settingsList.map((item, _i) => (
           <SettingsGroup section={item} key={item.id} />
         ))}
-      </ScrollView>
+      </Transition.ScrollView>
     </View>
   )
 }
@@ -39,8 +41,8 @@ const styles = StyleSheet.create((theme) => ({
   },
   list: (paddingTop: number, paddingBottom: number) => ({
     paddingBottom,
-    gap: theme.spacing.lg,
     paddingTop,
+    flex: 1,
     paddingHorizontal: theme.spacing.lg,
   }),
 }))

@@ -51,13 +51,9 @@ export default function Toggle({ value, onValueChange }: ToggleProps) {
       pressFactor.set(withSpring(1, springy))
     })
     .onEnd(() => {
-      const newValue = !isToggled.get()
+      const newValue = !isToggled.get
       animateTo(newValue)
       haptics.unbox().impact('light')
-
-      if (newValue !== value) {
-        scheduleOnRN(onValueChange, newValue)
-      }
     })
     .onFinalize(() => {
       pressFactor.set(withSpring(0, springy))
@@ -103,9 +99,12 @@ export default function Toggle({ value, onValueChange }: ToggleProps) {
 
   const gesture = Gesture.Exclusive(pan, tap)
 
-  const animatedTrackStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(colorProgress.get(), [0, 1], [theme.get().colors.switcher, theme.get().colors.primary]),
-  }))
+  const animatedTrackStyle = useAnimatedStyle(
+    () => ({
+      backgroundColor: interpolateColor(colorProgress.get(), [0, 1], [theme.get().colors.switcher, theme.get().colors.primary]),
+    }),
+    [theme],
+  )
 
   const animatedThumbStyle = useAnimatedStyle((): ViewStyle => {
     const scale = interpolate(pressFactor.get(), [0, 1], [1, 1.25])

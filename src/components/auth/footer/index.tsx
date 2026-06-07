@@ -2,16 +2,15 @@ import likeAnimation from '@assets/lottie/faceId.json'
 import { ActionText, AnimatedIcon, Button, Loader } from '@components/ui'
 import Shimmer from '@components/ui/Shimmer'
 import { authAnimationIn, getFadeIn, getFadeOut, layoutAnimationSpringy, springyChar } from '@constants/animations'
+import { staticColors } from '@design/colors'
 import { useAuthFooter } from '@hooks'
 import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import Animated, { interpolateColor, useAnimatedStyle } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Footer.styles'
 
 export default function AuthFooter() {
-  const { theme } = useUnistyles()
   const index = useNavigationState((state) => state.index)
   const { handleFaceIdAuth, progress } = useAuthFooter()
   const { t } = useTranslation('auth')
@@ -39,7 +38,7 @@ export default function AuthFooter() {
           index === 0 &&
           !loading && (
             <Animated.View layout={layoutAnimationSpringy} entering={getFadeIn()} exiting={getFadeOut()}>
-              <AnimatedIcon loop autoPlay color={theme.colors.white} size={26} source={likeAnimation} />
+              <AnimatedIcon loop color={staticColors.white} autoPlay size={26} source={likeAnimation} />
             </Animated.View>
           )
         }
@@ -47,7 +46,7 @@ export default function AuthFooter() {
         {/** @ts-ignore */}
         {index === 0 && <Shimmer borderWidth={1.35} borderRadius={99} />}
         {loading ? (
-          <Loader color={theme.colors.white} size={28} />
+          <Loader color={staticColors.white} size={28} />
         ) : (
           <Animated.View layout={layoutAnimationSpringy} style={styles.partsContainer}>
             {text.split(' ').map((part) => (

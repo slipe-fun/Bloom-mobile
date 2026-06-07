@@ -1,13 +1,13 @@
 import { Button, GradientBlur } from '@components/ui'
 import Icon from '@components/ui/Icon'
 import { layoutAnimation } from '@constants/animations'
+import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { Member, Message } from '@interfaces'
 import type { FlashListRef } from '@shopify/flash-list'
 import { useCallback, useState } from 'react'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
 import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './Footer.styles'
 import MessageInput from './MessageInput'
 import SendButton from './SendButton'
@@ -23,7 +23,6 @@ const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStic
 
 export default function Footer({ onSend, footerHeight, listRef, recipient }: FooterProps) {
   const insets = useInsets()
-  const { theme } = useUnistyles()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const [inputValue, setInputValue] = useState('')
 
@@ -44,13 +43,13 @@ export default function Footer({ onSend, footerHeight, listRef, recipient }: Foo
 
   return (
     <AnimatedKeyboardStickyView
-      offset={{ opened: -theme.spacing.sm - 2, closed: -insets.bottom }}
+      offset={{ opened: -base.spacing.sm - 2, closed: -insets.bottom }}
       layout={layoutAnimation}
       style={[styles.footer, animatedViewStyle]}
     >
-      <GradientBlur keyboard />
+      <GradientBlur />
       <Button layout={layoutAnimation} variant="icon">
-        <Icon icon="plus" color={theme.colors.text} />
+        <Icon icon="plus" uniProps={(theme) => ({ color: theme.colors.text })} />
       </Button>
 
       <MessageInput recipient={recipient} footerHeight={footerHeight} setValue={setInputValue} value={inputValue} />

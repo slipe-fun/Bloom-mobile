@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { type ColorValue, StyleSheet, View } from 'react-native'
 import Animated, { Easing, useAnimatedProps, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'
 import Svg, { Rect } from 'react-native-svg'
+import { withUnistyles } from 'react-native-unistyles'
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect)
 
@@ -12,13 +13,13 @@ interface DashedBoxProps {
   dashLength?: number
   gapLength?: number
   strokeWidth?: number
-  strokeColor?: ColorValue
+  color?: ColorValue
   duration?: number
   ref?: React.Ref<View>
   children?: React.ReactNode
 }
 
-export default function DashedBox({
+function DashedBox({
   children,
   width,
   height,
@@ -26,7 +27,7 @@ export default function DashedBox({
   dashLength = 15,
   gapLength = 15,
   strokeWidth = 4,
-  strokeColor = '#000',
+  color = '#000',
   duration = 1500,
   ref,
 }: DashedBoxProps) {
@@ -83,7 +84,7 @@ export default function DashedBox({
             rx={r}
             ry={r}
             fill="none"
-            stroke={strokeColor}
+            stroke={color}
             strokeWidth={strokeWidth}
             strokeDasharray={`${actualDash}, ${actualGap}`}
             strokeLinecap="round"
@@ -106,3 +107,5 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
 })
+
+export default withUnistyles(DashedBox)

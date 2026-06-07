@@ -4,7 +4,6 @@ import { quickSpring } from '@constants/easings'
 import type { SearchUser as SearchUserType } from '@interfaces'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './SearchUser.styles'
 
@@ -15,7 +14,6 @@ interface ChatProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function SearchUser({ user }: ChatProps) {
-  const { theme } = useUnistyles()
   const animatedTheme = useAnimatedTheme()
   const progress = useSharedValue(1)
 
@@ -40,7 +38,7 @@ export default function SearchUser({ user }: ChatProps) {
         <View style={styles.headerRow}>
           <Text style={styles.name}>{user?.display_name || user?.username}</Text>
 
-          <Icon icon="chevron.right" size={16} color={theme.colors.secondaryText} />
+          <Icon icon="chevron.right" size={16} uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
         </View>
 
         <Text numberOfLines={1} style={styles.username}>

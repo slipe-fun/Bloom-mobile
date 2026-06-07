@@ -3,6 +3,7 @@ import type React from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
 import Animated, { type AnimatedProps } from 'react-native-reanimated'
 import Svg, { Path } from 'react-native-svg'
+import { withUnistyles } from 'react-native-unistyles'
 
 const AnimatedPath = Animated.createAnimatedComponent(Path)
 
@@ -15,7 +16,7 @@ type IconProps = {
   ref?: React.Ref<any>
 }
 
-export default function Icon({ size = 26, color = 'white', icon, style, animatedProps, ref }: IconProps): React.JSX.Element {
+function Icon({ size = 26, color = 'white', icon, style, animatedProps, ref }: IconProps): React.JSX.Element {
   const pathData = ICONS[icon]
 
   return (
@@ -24,3 +25,5 @@ export default function Icon({ size = 26, color = 'white', icon, style, animated
     </Svg>
   )
 }
+
+export default withUnistyles(Icon)

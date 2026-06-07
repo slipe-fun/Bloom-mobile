@@ -9,13 +9,12 @@ import { useRouter } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { type ListRenderItem, Text, View } from 'react-native'
 import Transition from 'react-native-screen-transitions'
-import { StyleSheet, useUnistyles } from 'react-native-unistyles'
+import { StyleSheet } from 'react-native-unistyles'
 
 export default function NewMessage() {
   const [users, setUsers] = useState<User[]>([])
   const insets = useInsets()
   const [_loadingUsers, setLoadingUsers] = useState(false)
-  const { theme } = useUnistyles()
   const router = useRouter()
 
   const headerHeight = base.spacing.lg + base.spacing.md + 44
@@ -67,7 +66,7 @@ export default function NewMessage() {
       <View pointerEvents="box-only" style={styles.header}>
         <GradientBlur direction="top-to-bottom" />
         <Button onPress={handlePress} variant="icon">
-          <Icon icon="x" color={theme.colors.text} />
+          <Icon icon="x" uniProps={(theme) => ({ color: theme.colors.text })} />
         </Button>
         <Text style={styles.title}>Новый чат</Text>
       </View>

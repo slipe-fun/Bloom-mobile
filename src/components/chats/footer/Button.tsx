@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router'
 import { type RefObject, useEffect } from 'react'
 import type { TextInput } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 
 interface FooterAvatarProps {
   inputRef: RefObject<TextInput>
@@ -14,7 +13,6 @@ interface FooterAvatarProps {
 export default function FooterButton({ inputRef = null }: FooterAvatarProps) {
   const { push } = useRouter()
   const search = useFooterStore((state) => state.search)
-  const { theme } = useUnistyles()
   const setSearch = useFooterStore((state) => state.setSearch)
   const setSearchValue = useFooterStore((state) => state.setSearchValue)
   const rotate = useSharedValue(0)
@@ -43,7 +41,7 @@ export default function FooterButton({ inputRef = null }: FooterAvatarProps) {
       variant="icon"
       icon={
         <Animated.View style={animatedIconStyle}>
-          <Icon color={theme.colors.text} size={30} icon="plus" />
+          <Icon uniProps={(theme) => ({ color: theme.colors.text })} size={30} icon="plus" />
         </Animated.View>
       }
       size="lg"

@@ -5,7 +5,6 @@ import type { Chat as ChatType } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { interpolateColor, LayoutAnimationConfig, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './Chat.styles'
 
@@ -16,7 +15,6 @@ interface ChatProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function Chat({ chat }: ChatProps) {
-  const { theme } = useUnistyles()
   const animatedTheme = useAnimatedTheme()
   const progress = useSharedValue(1)
 
@@ -46,7 +44,7 @@ export default function Chat({ chat }: ChatProps) {
         <View style={styles.headerRow}>
           <Text style={styles.name}>Sasha</Text>
           <Text style={styles.secondary}>{lastMessage?.time}</Text>
-          <Icon icon="chevron.right" size={16} color={theme.colors.secondaryText} />
+          <Icon icon="chevron.right" size={16} uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
         </View>
         <LayoutAnimationConfig skipEntering skipExiting>
           <Animated.Text

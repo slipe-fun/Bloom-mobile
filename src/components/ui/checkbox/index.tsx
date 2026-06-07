@@ -1,9 +1,9 @@
 import { getFadeIn, getFadeOut, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
+import { staticColors } from '@design/colors'
 import type React from 'react'
 import { Pressable, type StyleProp, type View, type ViewStyle } from 'react-native'
 import { Haptics } from 'react-native-nitro-haptics'
 import Animated, { LayoutAnimationConfig } from 'react-native-reanimated'
-import { useUnistyles } from 'react-native-unistyles'
 import Icon from '../Icon'
 import { styles } from './Checkbox.styles'
 
@@ -16,8 +16,6 @@ type CheckboxProps = {
 } & React.ComponentProps<typeof Pressable>
 
 export default function Checkbox({ onValueChange, value, style, ref, onTouch, ...props }: CheckboxProps): React.JSX.Element {
-  const { theme } = useUnistyles()
-
   const onCheckBoxPressed = () => {
     onTouch ? onTouch() : Haptics.impact('light')
     onValueChange?.(!value)
@@ -30,7 +28,7 @@ export default function Checkbox({ onValueChange, value, style, ref, onTouch, ..
           <>
             <Animated.View style={styles.background} entering={zoomAnimationIn} exiting={zoomAnimationOut} key="checkboxBackground" />
             <Animated.View entering={getFadeIn()} exiting={getFadeOut()} key="checkboxIcon">
-              <Icon icon="checkmark" size={16} color={theme.colors.white} />
+              <Icon icon="checkmark" size={16} color={staticColors.white} />
             </Animated.View>
           </>
         ) : null}
