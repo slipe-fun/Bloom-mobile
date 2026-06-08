@@ -36,7 +36,7 @@ export default function GradientBlur({
   const { theme, rt } = useUnistyles()
 
   const isDark = rt.themeName.includes('dark')
-  const tint: BlurTint = gray ? (isDark ? 'dark' : 'light') : isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
+  const tint: BlurTint = isDark ? 'systemChromeMaterialDark' : gray ? 'light' : 'systemChromeMaterialLight'
 
   const { mask, grad } = useMemo(() => {
     const c = theme.colors
