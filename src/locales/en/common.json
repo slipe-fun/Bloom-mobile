@@ -33,7 +33,8 @@
       "title": "App",
       "appearance": {
         "title": "Appearance",
-        "automatic": "Automatic"
+        "automatic": "Automatic",
+        "darkToggle": "Dark theme"
       },
       "language": "Language"
     },

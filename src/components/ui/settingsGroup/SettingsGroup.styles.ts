@@ -8,7 +8,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   group: {
     borderCurve: 'continuous',
-    overflow: 'visible',
+    overflow: 'hidden',
     backgroundColor: theme.colors.sectionForeground,
     borderRadius: theme.radius.xl,
   },

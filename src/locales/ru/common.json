@@ -32,8 +32,9 @@
     "app": {
       "title": "Приложение",
       "appearance": {
-        "title": "Внешний вид",
-        "automatic": "Автоматически"
+        "title": "Оформление",
+        "automatic": "Автоматически",
+        "darkToggle": "Тёмная тема"
       },
       "language": "Язык"
     },

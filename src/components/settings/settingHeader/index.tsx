@@ -20,7 +20,7 @@ export default function SettingHeader({ title, icon, actionIcon, action }: Setti
 
   return (
     <View style={styles.header(insets.top)}>
-      <GradientBlur pointerEvents="none" gray direction="top-to-bottom" />
+      <GradientBlur pointerEvents="none" direction="top-to-bottom" />
       <Button
         variant="icon"
         icon={<Icon uniProps={(theme) => ({ color: theme.colors.text })} size={26} icon="chevron.left" />}

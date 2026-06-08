@@ -1,5 +1,6 @@
 import type { ICONS } from '@constants/icons'
 import type { staticColors } from '@design/colors'
+import type { JSX } from 'react'
 
 interface ChatLastMessage {
   content?: string
@@ -72,11 +73,12 @@ export type ColorKey = keyof typeof staticColors | null
 
 export interface SettingsItem {
   icon?: keyof typeof ICONS
-  label: string
+  label?: string
   color?: ColorKey
+  children?: JSX.Element
   badgeLabel?: string | number
   badgeIcon?: keyof typeof ICONS
-  type?: 'link' | 'toggle' | 'button'
+  type?: 'link' | 'toggle' | 'button' | 'custom'
   toggleValue?: boolean
   action?: () => void
 }
@@ -107,4 +109,10 @@ export interface ChatsEmptyCardData {
   avatar: any
   nameWidth: number
   messageWidth: number
+}
+
+export interface SettingsDemoMessageData {
+  avatar: any
+  messageWidth: number
+  me: boolean
 }

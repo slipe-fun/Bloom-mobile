@@ -1,3 +1,4 @@
+import Demonstration from '@components/settings/appearance/Demonstration'
 import SettingHeader from '@components/settings/settingHeader'
 import { SettingsGroup } from '@components/ui'
 import { SIZE_MAP } from '@components/ui/button/constats'
@@ -5,7 +6,7 @@ import { APPEARACNE_SECTIONS } from '@constants/settings/appearance'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import { useSettingsStore } from '@stores/settings'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { View } from 'react-native'
 import Transition from 'react-native-screen-transitions'
 import { StyleSheet } from 'react-native-unistyles'
@@ -16,11 +17,10 @@ export default function Appearance() {
   const insets = useInsets()
   const headerHeight = insets.top + base.spacing.xxl + SIZE_MAP.md
 
-  useEffect(() => {
-    console.log(theme)
-  }, [theme])
-
-  const settingsList = useMemo(() => APPEARACNE_SECTIONS({ theme, setTheme }), [theme, setTheme, APPEARACNE_SECTIONS])
+  const settingsList = useMemo(
+    () => APPEARACNE_SECTIONS({ theme, setTheme, demonstartion: <Demonstration key="demonstration" /> }),
+    [theme, setTheme, APPEARACNE_SECTIONS],
+  )
 
   return (
     <View style={styles.container}>

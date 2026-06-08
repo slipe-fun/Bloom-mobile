@@ -14,7 +14,7 @@ export const lightTheme = {
     pressable: '#ffffff80',
     sectionForeground: '#ffffff',
     foreground: '#f1f1f4',
-    foregroundTransparent: '#70708f1a',
+    foregroundTransparent: '#0000001c',
     indicator: '#0000001a',
     shadow: 'rgba(0, 0, 0, 0.06)',
     // Default gradient
@@ -36,7 +36,7 @@ export const darkTheme = {
   colors: {
     background: '#000000',
     text: '#ffffff',
-    grayBackground: '#0f0f10ff',
+    grayBackground: '#000000ff',
     secondaryText: '#ffffff59',
     contentText: '#ffffff80',
     switcher: '#595959',
