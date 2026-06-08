@@ -32,7 +32,7 @@ export default function SettingsItem({ item, last }: SettingsItemProps) {
       onTouchStart={() => handlePress(true)}
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
-      onPress={item.action}
+      onPress={item.type !== 'toggle' ? item.action : undefined}
       style={[styles.container(item.type === 'button', item.type === 'toggle'), animatedPressableStyle]}
     >
       {item.icon && <SettingsIcon icon={item.icon} color={item.color} />}
@@ -52,7 +52,7 @@ export default function SettingsItem({ item, last }: SettingsItemProps) {
             </View>
           ))}
       </View>
-      {item.type === 'toggle' && <Toggle value={item.toggleValue} onValueChange={item.action} />}
+      {item.type === 'toggle' && <Toggle value={item.toggleValue} onToggle={item.action} />}
     </AnimatedPressable>
   )
 }

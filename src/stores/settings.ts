@@ -1,4 +1,5 @@
 import { createStorage } from '@lib/storage'
+import switchTheme from 'react-native-theme-switch-animation'
 import { UnistylesRuntime, type UnistylesThemes } from 'react-native-unistyles'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
@@ -31,14 +32,26 @@ export const useSettingsStore = create<SettingsState>()(
       language: 'ru',
 
       setTheme: (mode) => {
-        set({ theme: mode })
+        switchTheme({
+          switchThemeFunction: () => {
+            set({ theme: mode })
 
-        if (mode === 'auto') {
-          UnistylesRuntime.setAdaptiveThemes(true)
-        } else {
-          UnistylesRuntime.setAdaptiveThemes(false)
-          UnistylesRuntime.setTheme(mode)
-        }
+            if (mode === 'auto') {
+              UnistylesRuntime.setAdaptiveThemes(true)
+            } else {
+              UnistylesRuntime.setAdaptiveThemes(false)
+              UnistylesRuntime.setTheme(mode)
+            }
+          },
+          animationConfig: {
+            type: 'fade',
+            duration: 250,
+            startingPoint: {
+              cxRatio: 0.5,
+              cyRatio: 0.5,
+            },
+          },
+        })
       },
 
       setLanguage: (lang) => {

@@ -16,10 +16,11 @@ import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, UnistylesRuntime, useUnistyles } from 'react-native-unistyles'
 
 export default function RootLayout() {
   const { ensureMMKV } = useStorageStore()
+  const { theme } = useUnistyles()
   const [fontsLoaded, fontError] = useFonts({
     'OpenRunde-Regular': require('@assets/fonts/OpenRunde-Regular.ttf'),
     'OpenRunde-Medium': require('@assets/fonts/OpenRunde-Medium.ttf'),
@@ -50,6 +51,12 @@ export default function RootLayout() {
       }
     })()
   }, [ensureMMKV])
+
+  useEffect(() => {
+    UnistylesRuntime.setRootViewBackgroundColor(theme.colors.background)
+    // @ts-expect-error
+    UnistylesRuntime.statusBar.setStyle(theme.statusbar.style, true)
+  }, [theme])
 
   return (
     fontsLoaded &&

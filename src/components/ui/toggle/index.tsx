@@ -1,7 +1,6 @@
-import { springy } from '@constants/animations'
+import { quickSpring, springy } from '@constants/animations'
 import { base } from '@design/base'
-import { useEffect } from 'react'
-import { View, type ViewStyle } from 'react-native'
+import { View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { Haptics } from 'react-native-nitro-haptics'
 import { NitroModules } from 'react-native-nitro-modules'
@@ -21,10 +20,10 @@ const haptics = NitroModules.box(Haptics)
 
 interface ToggleProps {
   value: boolean
-  onValueChange: (newValue: boolean) => void
+  onToggle: () => void
 }
 
-export default function Toggle({ value, onValueChange }: ToggleProps) {
+export default function Toggle({ value, onToggle }: ToggleProps) {
   const theme = useAnimatedTheme()
   const isToggled = useSharedValue(value)
   const isCrossed = useSharedValue(value)
@@ -33,87 +32,75 @@ export default function Toggle({ value, onValueChange }: ToggleProps) {
   const startProgress = useSharedValue(0)
   const pressFactor = useSharedValue(0)
 
-  const animateTo = (nextVal: boolean) => {
-    'worklet'
-    isToggled.set(nextVal)
-    isCrossed.set(nextVal)
-    const target = nextVal ? 1 : 0
-    progress.set(withSpring(target, springy))
-    colorProgress.set(withSpring(target, springy))
+  const triggerToggleWithDelay = () => {
+    onToggle?.()
   }
 
-  useEffect(() => {
-    animateTo(value)
-  }, [value])
+  const animateTo = (nextVal: boolean) => {
+    'worklet'
+    isToggled.value = nextVal
+    isCrossed.value = nextVal
+    const target = nextVal ? 1 : 0
+    progress.value = withSpring(target, springy)
+    colorProgress.value = withSpring(target, quickSpring, (finished) => {
+      finished && scheduleOnRN(triggerToggleWithDelay)
+    })
+  }
+
+  const onPressBegin = () => {
+    'worklet'
+    pressFactor.value = withSpring(1, springy)
+  }
+  const onPressFinalize = () => {
+    'worklet'
+    pressFactor.value = withSpring(0, springy)
+  }
 
   const tap = Gesture.Tap()
-    .onBegin(() => {
-      pressFactor.set(withSpring(1, springy))
-    })
+    .onBegin(onPressBegin)
     .onEnd(() => {
-      const newValue = !isToggled.get
-      animateTo(newValue)
+      animateTo(!isToggled.value)
       haptics.unbox().impact('light')
     })
-    .onFinalize(() => {
-      pressFactor.set(withSpring(0, springy))
-    })
+    .onFinalize(onPressFinalize)
 
   const pan = Gesture.Pan()
-    .onBegin(() => {
-      pressFactor.set(withSpring(1, springy))
-    })
+    .onBegin(onPressBegin)
     .onStart(() => {
-      startProgress.set(progress.get())
+      startProgress.value = progress.value
     })
     .onUpdate((event) => {
-      const rawProgress = startProgress.get() + event.translationX / BASE_TRAVEL
+      const rawProgress = startProgress.value + event.translationX / BASE_TRAVEL
 
-      let rubberProgress = rawProgress
-      if (rawProgress < 0) {
-        rubberProgress = Math.max(-0.2, rawProgress * 0.25)
-      } else if (rawProgress > 1) {
-        rubberProgress = Math.min(1.2, 1 + (rawProgress - 1) * 0.25)
-      }
+      const rubberProgress =
+        rawProgress < 0 ? Math.max(-0.2, rawProgress * 0.25) : rawProgress > 1 ? Math.min(1.2, 1 + (rawProgress - 1) * 0.25) : rawProgress
 
-      progress.set(rubberProgress)
+      progress.value = rubberProgress
 
       const crossedRight = rubberProgress > 0.5
-      if (isCrossed.get() !== crossedRight) {
-        isCrossed.set(crossedRight)
-        colorProgress.set(withSpring(crossedRight ? 1 : 0, springy))
+      if (isCrossed.value !== crossedRight) {
+        isCrossed.value = crossedRight
+        colorProgress.value = withSpring(crossedRight ? 1 : 0, springy)
         haptics.unbox().impact('light')
       }
     })
     .onEnd(() => {
-      const newValue = progress.get() > 0.5
-      animateTo(newValue)
-
-      if (newValue !== value) {
-        scheduleOnRN(onValueChange, newValue)
-      }
+      animateTo(progress.value > 0.5)
     })
-    .onFinalize(() => {
-      pressFactor.set(withSpring(0, springy))
-    })
+    .onFinalize(onPressFinalize)
 
   const gesture = Gesture.Exclusive(pan, tap)
 
-  const animatedTrackStyle = useAnimatedStyle(
-    () => ({
-      backgroundColor: interpolateColor(colorProgress.get(), [0, 1], [theme.get().colors.switcher, theme.get().colors.primary]),
-    }),
-    [theme],
-  )
+  const animatedTrackStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(colorProgress.value, [0, 1], [theme.value.colors.switcher, theme.value.colors.primary]),
+  }))
 
-  const animatedThumbStyle = useAnimatedStyle((): ViewStyle => {
-    const scale = interpolate(pressFactor.get(), [0, 1], [1, 1.25])
-    const translateX = interpolate(progress.get(), [0, 1], [0, BASE_TRAVEL])
-
-    return {
-      transform: [{ translateX }, { scale }],
-    }
-  })
+  const animatedThumbStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: interpolate(progress.value, [0, 1], [0, BASE_TRAVEL]) },
+      { scale: interpolate(pressFactor.value, [0, 1], [1, 1.25]) },
+    ],
+  }))
 
   return (
     <GestureDetector gesture={gesture}>

@@ -26,6 +26,9 @@ export const lightTheme = {
     border: '#0000000d',
     ...staticColors,
   },
+  statusbar: {
+    style: 'dark' as const,
+  },
   ...base,
 }
 
@@ -52,6 +55,9 @@ export const darkTheme = {
     grayGradientBlurEnd: '#0f0f1000',
     border: '#ffffff17',
     ...staticColors,
+  },
+  statusbar: {
+    style: 'light' as const,
   },
   ...base,
 }

@@ -81,6 +81,7 @@
     "react-native-screen-transitions": "^3.6.0",
     "react-native-screens": "4.19.0",
     "react-native-svg": "^15.15.1",
+    "react-native-theme-switch-animation": "^0.8.0",
     "react-native-unistyles": "^3.0.20",
     "zustand": "^5.0.9"
   },
