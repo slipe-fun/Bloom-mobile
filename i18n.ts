@@ -36,7 +36,7 @@ i18n
     resources,
     fallbackLng: 'en',
 
-    ns: ['common', 'auth', 'settings'],
+    ns: ['common', 'auth', 'settings', 'chat'],
     defaultNS: 'common',
 
     interpolation: {

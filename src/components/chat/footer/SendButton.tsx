@@ -1,37 +1,41 @@
-import { Button, Icon } from '@components/ui'
-import { getFadeIn, getFadeOut, layoutAnimation, paperplaneAnimationIn, paperplaneAnimationOut, quickSpring } from '@constants/animations'
+import { Icon } from '@components/ui'
+import { paperplaneAnimationIn, paperplaneAnimationOut, springy, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
 import { useEffect } from 'react'
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
+import { Pressable, View } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { styles } from './Footer.styles'
 
 interface SendButtonProps {
   handleSend: () => void
   hasValue: boolean
 }
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
 export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
-  const animatedTheme = useAnimatedTheme()
-  const color = useSharedValue(1)
+  const scale = useSharedValue(0)
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(color.get(), [1, 0], [animatedTheme.value.colors.pressable, animatedTheme.value.colors.primary]),
+    transform: [{ scale: scale.get() }],
+    opacity: scale.get(),
   }))
 
   useEffect(() => {
-    color.set(withSpring(hasValue ? 0 : 1, quickSpring))
+    scale.set(withSpring(hasValue ? 1 : 0, springy))
   }, [hasValue])
 
   return (
-    <Button layout={layoutAnimation} style={animatedButtonStyle} onPress={handleSend} variant="icon">
+    <View style={styles.sendButtonWrapper}>
       {hasValue ? (
-        <Animated.View key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
-          <Icon icon="paperplane" uniProps={(theme) => ({ color: theme.colors.text })} />
-        </Animated.View>
+        <AnimatedPressable style={{ zIndex: 1 }} key="paperplane" entering={paperplaneAnimationIn} exiting={paperplaneAnimationOut}>
+          <Icon size={24} icon="paperplane" uniProps={(theme) => ({ color: theme.colors.white })} />
+        </AnimatedPressable>
       ) : (
-        <Animated.View key="waveform" entering={getFadeIn()} exiting={getFadeOut()}>
-          <Icon icon="waveform" uniProps={(theme) => ({ color: theme.colors.text })} />
-        </Animated.View>
+        <AnimatedPressable key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
+          <Icon size={26} icon="waveform" uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
+        </AnimatedPressable>
       )}
-    </Button>
+      <Animated.View style={[styles.sendButtonBackground, animatedButtonStyle]} />
+    </View>
   )
 }

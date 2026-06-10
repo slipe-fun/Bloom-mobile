@@ -24,7 +24,7 @@ type InputProps = {
   blur?: boolean
 } & React.ComponentProps<typeof TextInput>
 
-const SIZE_MAP: Record<Size, number> = {
+export const SIZE_MAP: Record<Size, number> = {
   sm: 40,
   md: 44,
   lg: 48,
@@ -64,7 +64,6 @@ export default function Input({
     <TextInput
       ref={ref}
       onTouchStart={() => handlePress(true)}
-      onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       cursorColor={theme.colors.secondaryText}
       selectionColor={theme.colors.secondaryText}

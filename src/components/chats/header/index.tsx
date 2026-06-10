@@ -50,12 +50,7 @@ export default function Header({ scrollY }: HeaderProps) {
     <Animated.View style={[styles.header(insets.top), animatedStyle]}>
       <GradientBlur direction="top-to-bottom" />
       <Title scrollY={scrollY} state={status} />
-      <Pressable
-        onTouchStart={() => handlePress(true)}
-        onTouchMove={() => handlePress(false)}
-        onTouchEnd={() => handlePress(false)}
-        onPress={() => push('/(app)/(settings)')}
-      >
+      <Pressable onTouchStart={() => handlePress(true)} onTouchEnd={() => handlePress(false)} onPress={() => push('/(app)/(settings)')}>
         <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} image={user?.avatar} size="md" userId={user?.id} />
       </Pressable>
     </Animated.View>

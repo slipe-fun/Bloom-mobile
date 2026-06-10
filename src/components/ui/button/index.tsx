@@ -84,7 +84,6 @@ export default function Button({
     // @ts-expect-error
     <AnimatedPressable
       onTouchStart={() => handlePress(true)}
-      onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       style={[buttonStyle, style, animatedPressabelStyle]}
       ref={ref}

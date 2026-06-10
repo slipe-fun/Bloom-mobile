@@ -1,3 +1,4 @@
+import { SIZE_MAP } from '@components/ui/input'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -54,5 +55,19 @@ export const styles = StyleSheet.create((theme) => ({
     width: 36,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  sendButtonWrapper: {
+    height: '100%',
+    aspectRatio: 1 / 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.xs - 1,
+  },
+  sendButtonBackground: {
+    height: SIZE_MAP.md - theme.spacing.xs - 1 * 2,
+    position: 'absolute',
+    aspectRatio: 1 / 1,
+    borderRadius: theme.radius.full,
+    backgroundColor: theme.colors.primary,
   },
 }))
