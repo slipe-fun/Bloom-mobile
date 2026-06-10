@@ -3,6 +3,7 @@ import Icon from '@components/ui/Icon'
 import { getFadeIn, getFadeOut, quickSpring } from '@constants/animations'
 import type { Chat as ChatType } from '@interfaces'
 import formatSentTime from '@lib/formatSentTime'
+import { useRouter } from 'expo-router'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { interpolateColor, LayoutAnimationConfig, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
@@ -16,6 +17,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function Chat({ chat }: ChatProps) {
   const animatedTheme = useAnimatedTheme()
+  const { push } = useRouter()
   const progress = useSharedValue(1)
 
   const handlePress = (inn: boolean = true) => {
@@ -36,7 +38,7 @@ export default function Chat({ chat }: ChatProps) {
       onTouchStart={() => handlePress(true)}
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
-      //   onPress={onPressHandler}
+      onPress={() => push('/(app)/chat/342')}
       style={[styles.chat, animatedStyle]}
     >
       <Avatar style={styles.avatar} size="xl" image={chat?.avatar} userId={chat.toString()} />

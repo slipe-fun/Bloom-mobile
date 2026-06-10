@@ -1,6 +1,6 @@
 import { quickSpring, springy } from '@constants/animations'
 import { base } from '@design/base'
-import { View } from 'react-native'
+import { StyleSheet, View, type ViewStyle } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { Haptics } from 'react-native-nitro-haptics'
 import { NitroModules } from 'react-native-nitro-modules'
@@ -92,24 +92,25 @@ export default function Toggle({ value, onToggle }: ToggleProps) {
   const gesture = Gesture.Exclusive(pan, tap)
 
   const animatedTrackStyle = useAnimatedStyle(() => ({
-    position: 'absolute',
     borderRadius: theme.get().radius.full,
     borderCurve: 'continuous',
     backgroundColor: interpolateColor(colorProgress.value, [0, 1], [theme.value.colors.switcher, theme.value.colors.primary]),
   }))
 
-  const animatedThumbStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: interpolate(progress.value, [0, 1], [0, BASE_TRAVEL]) },
-      { scale: interpolate(pressFactor.value, [0, 1], [1, 1.25]) },
-    ],
-  }))
+  const animatedThumbStyle = useAnimatedStyle(
+    (): ViewStyle => ({
+      transform: [
+        { translateX: interpolate(progress.value, [0, 1], [0, BASE_TRAVEL]) },
+        { scale: interpolate(pressFactor.value, [0, 1], [1, 1.25]) },
+      ],
+    }),
+  )
 
   return (
     <GestureDetector gesture={gesture}>
       <View style={styles.wrapper}>
         <View style={styles.track(TRACK_HEIGHT, TRACK_WIDTH)}>
-          <Animated.View style={animatedTrackStyle} />
+          <Animated.View style={[StyleSheet.absoluteFill, animatedTrackStyle]} />
           <Animated.View style={animatedThumbStyle}>
             <View style={styles.thumb(THUMB_HEIGHT, THUMB_WIDTH)} />
           </Animated.View>

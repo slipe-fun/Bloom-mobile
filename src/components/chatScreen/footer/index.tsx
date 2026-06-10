@@ -1,45 +1,24 @@
 import { Button, GradientBlur } from '@components/ui'
 import Icon from '@components/ui/Icon'
-import { layoutAnimation } from '@constants/animations'
+import { layoutAnimation, quickSpring } from '@constants/animations'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
-import type { Member, Message } from '@interfaces'
-import type { FlashListRef } from '@shopify/flash-list'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { KeyboardStickyView, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
-import Animated, { interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { styles } from './Footer.styles'
 import MessageInput from './MessageInput'
-import SendButton from './SendButton'
-
-interface FooterProps {
-  onSend: (content: string, reply_to: number) => void
-  footerHeight: SharedValue<number>
-  listRef: FlashListRef<Message>
-  recipient: Member
-}
 
 const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
-export default function Footer({ onSend, footerHeight, listRef, recipient }: FooterProps) {
+export default function Footer() {
   const insets = useInsets()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
   const [inputValue, setInputValue] = useState('')
 
   const animatedViewStyle = useAnimatedStyle(() => ({
-    // paddingHorizontal: withSpring(keyboardProgress.get() > 0.1 ? theme.spacing.lg : theme.spacing.xxxl, quickSpring),
-    paddingHorizontal: interpolate(keyboardProgress.get(), [0, 1], [theme.spacing.xxxl, theme.spacing.lg]),
+    paddingHorizontal: withSpring(keyboardProgress.get() > 0.1 ? base.spacing.lg : base.spacing.xxxl, quickSpring),
   }))
-
-  const handleSendPress = useCallback(() => {
-    const trimmedValue = inputValue.trim()
-    if (!trimmedValue) return
-
-    listRef?.prepareForLayoutAnimationRender()
-    onSend(trimmedValue, 1)
-
-    setInputValue('')
-  }, [inputValue, onSend])
 
   return (
     <AnimatedKeyboardStickyView
@@ -52,8 +31,7 @@ export default function Footer({ onSend, footerHeight, listRef, recipient }: Foo
         <Icon icon="plus" uniProps={(theme) => ({ color: theme.colors.text })} />
       </Button>
 
-      <MessageInput recipient={recipient} footerHeight={footerHeight} setValue={setInputValue} value={inputValue} />
-      <SendButton handleSend={handleSendPress} hasValue={inputValue.trim().length > 0} />
+      <MessageInput setValue={setInputValue} value={inputValue} />
     </AnimatedKeyboardStickyView>
   )
 }
