@@ -45,7 +45,8 @@ export const useSettingsStore = create<SettingsState>()(
           },
           animationConfig: {
             type: 'fade',
-            duration: 250,
+            duration: 300,
+            captureType: 'hierarchy',
             startingPoint: {
               cxRatio: 0.5,
               cyRatio: 0.5,

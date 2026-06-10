@@ -11,16 +11,26 @@ import useStorageStore from '@stores/storage'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StyleSheet, UnistylesRuntime, useUnistyles } from 'react-native-unistyles'
 
+function ThemeManager() {
+  const { theme } = useUnistyles()
+
+  useLayoutEffect(() => {
+    UnistylesRuntime.setRootViewBackgroundColor(theme.colors.background)
+    // @ts-expect-error
+    UnistylesRuntime.statusBar.setStyle(theme.statusbar.style, true)
+  }, [theme])
+
+  return null
+}
+
 export default function RootLayout() {
   const { ensureMMKV } = useStorageStore()
-  const { theme } = useUnistyles()
   const [fontsLoaded, fontError] = useFonts({
     'OpenRunde-Regular': require('@assets/fonts/OpenRunde-Regular.ttf'),
     'OpenRunde-Medium': require('@assets/fonts/OpenRunde-Medium.ttf'),
@@ -52,19 +62,13 @@ export default function RootLayout() {
     })()
   }, [ensureMMKV])
 
-  useEffect(() => {
-    UnistylesRuntime.setRootViewBackgroundColor(theme.colors.background)
-    // @ts-expect-error
-    UnistylesRuntime.statusBar.setStyle(theme.statusbar.style, true)
-  }, [theme])
-
   return (
     fontsLoaded &&
     !fontError && (
       <SafeAreaProvider>
+        <ThemeManager />
         <KeyboardProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <StatusBar style="auto" />
             <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: clientPersister }}>
               <SessionProvider>
                 <WebSocketProvider>

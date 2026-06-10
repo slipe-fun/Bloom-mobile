@@ -51,8 +51,8 @@ export const darkTheme = {
     gradientBlurStart: '#000000e6',
     gradientBlurEnd: '#00000000',
     // Gray gradient
-    grayGradientBlurStart: '#0f0f10e6',
-    grayGradientBlurEnd: '#0f0f1000',
+    grayGradientBlurStart: '#000000e6',
+    grayGradientBlurEnd: '#00000000',
     border: '#ffffff17',
     ...staticColors,
   },

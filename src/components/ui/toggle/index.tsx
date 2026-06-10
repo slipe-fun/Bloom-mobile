@@ -92,6 +92,9 @@ export default function Toggle({ value, onToggle }: ToggleProps) {
   const gesture = Gesture.Exclusive(pan, tap)
 
   const animatedTrackStyle = useAnimatedStyle(() => ({
+    position: 'absolute',
+    borderRadius: theme.get().radius.full,
+    borderCurve: 'continuous',
     backgroundColor: interpolateColor(colorProgress.value, [0, 1], [theme.value.colors.switcher, theme.value.colors.primary]),
   }))
 
@@ -105,9 +108,12 @@ export default function Toggle({ value, onToggle }: ToggleProps) {
   return (
     <GestureDetector gesture={gesture}>
       <View style={styles.wrapper}>
-        <Animated.View style={[styles.track(TRACK_HEIGHT, TRACK_WIDTH), animatedTrackStyle]}>
-          <Animated.View style={[styles.thumb(THUMB_HEIGHT, THUMB_WIDTH), animatedThumbStyle]} />
-        </Animated.View>
+        <View style={styles.track(TRACK_HEIGHT, TRACK_WIDTH)}>
+          <Animated.View style={animatedTrackStyle} />
+          <Animated.View style={animatedThumbStyle}>
+            <View style={styles.thumb(THUMB_HEIGHT, THUMB_WIDTH)} />
+          </Animated.View>
+        </View>
       </View>
     </GestureDetector>
   )

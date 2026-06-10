@@ -40,7 +40,7 @@ export default function Settings() {
       <AnimatedScrollView
         contentContainerStyle={styles.list(headerHeight, insets.bottom)}
         onScroll={scrollHandler}
-        snapToOffsets={[0, headerHeight - snapPosition / 1.75]}
+        snapToOffsets={[0, headerHeight - snapPosition / 1.4]}
         decelerationRate={1}
         snapToEnd={false}
         showsVerticalScrollIndicator={false}
