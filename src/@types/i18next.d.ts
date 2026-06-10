@@ -7,6 +7,7 @@ declare module 'i18next' {
     defaultNS: 'common'
     resources: {
       common: typeof common
+      settings: typeof settings
       auth: typeof auth
     }
     returnNull: false

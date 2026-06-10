@@ -1,4 +1,5 @@
 import { createStorage } from '@lib/storage'
+import i18n from 'i18next'
 import switchTheme from 'react-native-theme-switch-animation'
 import { UnistylesRuntime, type UnistylesThemes } from 'react-native-unistyles'
 import { create } from 'zustand'
@@ -57,6 +58,7 @@ export const useSettingsStore = create<SettingsState>()(
 
       setLanguage: (lang) => {
         set({ language: lang })
+        i18n.changeLanguage(lang)
       },
     }),
     {

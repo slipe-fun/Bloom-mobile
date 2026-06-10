@@ -1,40 +1,30 @@
-import { createStorage } from '@lib/storage'
+import { type AppLanguage, useSettingsStore } from '@stores/settings'
 import i18n, { type LanguageDetectorModule } from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import * as RNLocalize from 'react-native-localize'
 import { resources } from 'src/locales'
 
-const STORE_KEY = 'settings'
-const STORE_LANGUAGE_KEY = 'settings.lang'
-
-const storage = createStorage(STORE_KEY)
-
 const languageDetector: LanguageDetectorModule = {
   type: 'languageDetector',
   init: () => {},
   detect: () => {
-    try {
-      const savedLanguage = storage.getString(STORE_LANGUAGE_KEY)
-      if (savedLanguage) {
-        return savedLanguage
-      }
-
-      const bestLng = RNLocalize.findBestLanguageTag(Object.keys(resources))
-      if (bestLng) {
-        return bestLng.languageTag
-      }
-
-      return 'en'
-    } catch (error) {
-      console.error('Error reading language from MMKV', error)
-      return 'en'
+    const savedLanguage = useSettingsStore.getState().language
+    if (savedLanguage) {
+      return savedLanguage
     }
+
+    const bestLng = RNLocalize.findBestLanguageTag(Object.keys(resources))
+    if (bestLng) {
+      return bestLng.languageTag
+    }
+
+    return 'en'
   },
-  cacheUserLanguage: (language: string) => {
-    try {
-      storage.set(STORE_LANGUAGE_KEY, language)
-    } catch (error) {
-      console.error('Error saving language to MMKV', error)
+  cacheUserLanguage: (language: AppLanguage) => {
+    const currentStoreLang = useSettingsStore.getState().language
+
+    if (currentStoreLang !== language) {
+      useSettingsStore.setState({ language: language })
     }
   },
 }
@@ -46,7 +36,7 @@ i18n
     resources,
     fallbackLng: 'en',
 
-    ns: ['common', 'auth'],
+    ns: ['common', 'auth', 'settings'],
     defaultNS: 'common',
 
     interpolation: {

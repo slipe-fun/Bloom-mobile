@@ -19,12 +19,12 @@ export default function Appearance() {
 
   const settingsList = useMemo(
     () => APPEARACNE_SECTIONS({ theme, setTheme, demonstartion: <Demonstration key="demonstration" /> }),
-    [theme, setTheme, APPEARACNE_SECTIONS],
+    [theme, setTheme],
   )
 
   return (
     <View style={styles.container}>
-      <SettingHeader title="settings.app.appearance.title" icon="sun" />
+      <SettingHeader title="app.appearance.title" icon="sun" />
       <Transition.ScrollView contentContainerStyle={styles.list(headerHeight, insets.bottom)} showsVerticalScrollIndicator={false}>
         {settingsList.map((item, _i) => (
           <SettingsGroup section={item} key={item.id} />

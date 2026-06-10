@@ -16,20 +16,21 @@ interface SettingsItemProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function SettingsItem({ item, last }: SettingsItemProps) {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('settings')
   const opacity = useSharedValue(1)
 
   const handlePress = (inn: boolean = true) => {
-    item.type !== 'toggle' && opacity.set(withSpring(inn ? 0.25 : 1, quickSpring))
+    item.type !== 'toggle' && !item.disabled && opacity.set(withSpring(inn ? 0.25 : 1, quickSpring))
   }
 
   const animatedPressableStyle = useAnimatedStyle(() => ({
-    opacity: opacity.get(),
+    opacity: item.disabled ? 0.25 : opacity.get(),
   }))
 
   return (
     <AnimatedPressable
       onTouchStart={() => handlePress(true)}
+      pointerEvents={item.disabled ? 'none' : undefined}
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
       onPress={item.type !== 'toggle' ? item.action : undefined}
@@ -37,13 +38,12 @@ export default function SettingsItem({ item, last }: SettingsItemProps) {
     >
       {item.icon && <SettingsIcon icon={item.icon} color={item.color} />}
       <View style={styles.content(last, !!item.icon)}>
-        {/* @ts-expect-error */}
         <Text style={styles.label(item.type === 'button', item.color)}>{t(item.label)}</Text>
 
         {item.type === 'link' ||
           (item.type === undefined && (
             <View style={styles.rightSide}>
-              {typeof item.badgeLabel !== 'undefined' && <Text style={styles.badgeLabel}>{item.badgeLabel}</Text>}
+              {typeof item.badgeLabel !== 'undefined' && <Text style={styles.badgeLabel}>{t(item.badgeLabel)}</Text>}
               <Icon
                 icon={item.badgeIcon ?? 'chevron.right'}
                 size={item.badgeIcon ? 24 : 20}

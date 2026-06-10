@@ -12,7 +12,7 @@ export const APPEARACNE_SECTIONS = ({ theme, demonstartion, setTheme }: Settings
     id: 'Automatic',
     items: [
       {
-        label: 'settings.app.appearance.automatic',
+        label: 'app.appearance.automatic',
         type: 'toggle',
         toggleValue: theme === 'auto',
         action: () => setTheme(theme === 'auto' ? 'light' : 'auto'),
@@ -21,15 +21,16 @@ export const APPEARACNE_SECTIONS = ({ theme, demonstartion, setTheme }: Settings
   },
   {
     id: 'Appearance',
-    title: 'settings.app.appearance.title',
+    title: 'app.appearance.title',
     items: [
       {
         type: 'custom',
         children: demonstartion,
       },
       {
-        label: 'settings.app.appearance.darkToggle',
+        label: 'app.appearance.darkToggle',
         type: 'toggle',
+        disabled: theme === 'auto',
         toggleValue: theme === 'dark',
         action: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
       },

@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export default function Language() {
   return (
     <View style={styles.container}>
-      <SettingHeader title="settings.app.language" icon="globe" />
+      <SettingHeader title="app.language.title" icon="globe" />
     </View>
   )
 }

@@ -29,7 +29,7 @@ export default function SettingHeader({ title, icon, actionIcon, action }: Setti
       />
       <View style={styles.titleWrapper}>
         <Icon uniProps={(theme) => ({ color: theme.colors.secondaryText })} size={24} icon={icon} />
-        <Text style={styles.title}>{t(title)}</Text>
+        <Text style={styles.title}>{t(`settings:${title}`)}</Text>
       </View>
       {action ? (
         <Button

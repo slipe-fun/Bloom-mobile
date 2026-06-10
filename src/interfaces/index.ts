@@ -76,6 +76,7 @@ export interface SettingsItem {
   label?: string
   color?: ColorKey
   children?: JSX.Element
+  disabled?: boolean
   badgeLabel?: string | number
   badgeIcon?: keyof typeof ICONS
   type?: 'link' | 'toggle' | 'button' | 'custom'

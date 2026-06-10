@@ -9,10 +9,9 @@ type SettingsGroupProps = {
 }
 
 export default function SettingsGroup({ section }: SettingsGroupProps) {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('settings')
   return (
     <View style={styles.container}>
-      {/* @ts-expect-error */}
       {section.title && <Text style={styles.title}>{t(section.title)}</Text>}
       <View style={styles.group}>
         {section.items.map((settingItem, index) =>

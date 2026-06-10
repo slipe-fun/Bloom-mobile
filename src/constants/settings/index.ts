@@ -16,51 +16,51 @@ type SettingsSectionProps = {
 export const SETTINGS_SECTIONS = ({ theme, language, push, storage, replace }: SettingsSectionProps): SettingsSection[] => [
   {
     id: 'Account',
-    title: 'settings.profile.title',
+    title: 'settings:profile.title',
     items: [
       {
         icon: 'person.circle',
-        label: 'settings.profile.myProfile',
+        label: 'settings:profile.myProfile',
         action: () => push('/(app)/(settings)/Profile'),
       },
     ],
   },
   {
     id: 'appSettings',
-    title: 'settings.app.title',
+    title: 'settings:app.title',
 
     items: [
       {
         icon: 'globe',
-        label: 'settings.app.language',
+        label: 'settings:app.language.title',
         action: () => push('/(app)/(settings)/Language'),
-        badgeLabel: language,
+        badgeLabel: `settings:app.language.${language}`,
       },
       {
         icon: 'sun',
-        label: 'settings.app.appearance.title',
+        label: 'settings:app.appearance.title',
         action: () => push('/(app)/(settings)/Appearance'),
-        badgeLabel: theme,
+        badgeLabel: `settings:app.appearance.${theme}`,
       },
     ],
   },
   {
     id: 'security',
-    title: 'settings.privacy.title',
+    title: 'settings:privacy.title',
     items: [
       {
         icon: 'key',
-        label: 'settings.privacy.keyPassword',
+        label: 'settings:privacy.keyPassword',
         action: () => push('/(app)/(settings)/KeyPassword'),
       },
     ],
   },
   {
     id: 'dangerZone',
-    title: 'settings.account.title',
+    title: 'settings:account.title',
     items: [
       {
-        label: 'settings.account.logout',
+        label: 'settings:account.logout',
         action: async () => {
           storage.clearAll()
           database.write(async () => await database.unsafeResetDatabase())

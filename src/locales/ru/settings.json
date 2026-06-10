@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "title": "Профиль",
+    "myProfile": "Мой профиль"
+  },
+  "app": {
+    "title": "Приложение",
+    "appearance": {
+      "title": "Оформление",
+      "automatic": "Автоматическое",
+      "darkToggle": "Тёмное",
+      // This for settings group
+      "auto": "Авто",
+      "dark": "Тёмное",
+      "light": "Светлое"
+    },
+    "language": {
+      "title": "Язык",
+      // This for settings group
+      "ru": "Русский",
+      "en": "Английский"
+    }
+  },
+  "privacy": {
+    "title": "Приватность",
+    "keyPassword": "Пароль ключа"
+  },
+  "account": {
+    "title": "Аккаунт",
+    "logout": "Очистить данные и выйти"
+  }
+}

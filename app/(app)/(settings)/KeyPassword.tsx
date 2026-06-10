@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export default function KeyPassword() {
   return (
     <View style={styles.container}>
-      <SettingHeader title="settings.privacy.keyPassword" icon="key" />
+      <SettingHeader title="privacy.keyPassword" icon="key" />
     </View>
   )
 }

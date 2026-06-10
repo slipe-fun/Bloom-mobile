@@ -1,5 +1,5 @@
-import Footer from '@components/chatScreen/footer'
-import Header from '@components/chatScreen/header'
+import Footer from '@components/chat/footer'
+import Header from '@components/chat/header'
 import { useLocalSearchParams } from 'expo-router'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'

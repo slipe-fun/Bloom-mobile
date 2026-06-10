@@ -23,28 +23,5 @@
         "subTitle": "No result found for your request"
       }
     }
-  },
-  "settings": {
-    "profile": {
-      "title": "Profile",
-      "myProfile": "My profile"
-    },
-    "app": {
-      "title": "App",
-      "appearance": {
-        "title": "Appearance",
-        "automatic": "Automatic",
-        "darkToggle": "Dark theme"
-      },
-      "language": "Language"
-    },
-    "privacy": {
-      "title": "Privacy & security",
-      "keyPassword": "Key password"
-    },
-    "account": {
-      "title": "Account & data",
-      "logout": "Wipe data and log out"
-    }
   }
 }

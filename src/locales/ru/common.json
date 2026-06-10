@@ -23,28 +23,5 @@
         "subTitle": "По вашему запросу не найдено результатов"
       }
     }
-  },
-  "settings": {
-    "profile": {
-      "title": "Профиль",
-      "myProfile": "Мой профиль"
-    },
-    "app": {
-      "title": "Приложение",
-      "appearance": {
-        "title": "Оформление",
-        "automatic": "Автоматически",
-        "darkToggle": "Тёмная тема"
-      },
-      "language": "Язык"
-    },
-    "privacy": {
-      "title": "Приватность",
-      "keyPassword": "Пароль ключа"
-    },
-    "account": {
-      "title": "Аккаунт",
-      "logout": "Очистить данные и выйти"
-    }
   }
 }

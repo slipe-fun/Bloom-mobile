@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "title": "Profile",
+    "myProfile": "My profile"
+  },
+  "app": {
+    "title": "App",
+    "appearance": {
+      "title": "Appearance",
+      "automatic": "Automatic",
+      "darkToggle": "Dark",
+      // This for settings group
+      "auto": "Auto",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "language": {
+      "title": "Language",
+      // This for settings group
+      "ru": "Russian",
+      "en": "English"
+    }
+  },
+  "privacy": {
+    "title": "Privacy & security",
+    "keyPassword": "Key password"
+  },
+  "account": {
+    "title": "Account & data",
+    "logout": "Wipe data and log out"
+  }
+}
