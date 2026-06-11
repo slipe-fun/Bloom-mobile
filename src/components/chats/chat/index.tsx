@@ -1,3 +1,4 @@
+import { useUser } from '@api/providers/UserContext'
 import { Avatar } from '@components/ui'
 import Icon from '@components/ui/Icon'
 import { getFadeIn, getFadeOut, quickSpring } from '@constants/animations'
@@ -19,6 +20,9 @@ export default function Chat({ chat }: ChatProps) {
   const animatedTheme = useAnimatedTheme()
   const { push } = useRouter()
   const progress = useSharedValue(1)
+  const user = useUser()
+
+  const chat_user = chat?.members?.find((member) => member?.id !== user?.id)
 
   const handlePress = (inn: boolean = true) => {
     progress.set(withSpring(inn ? 0 : 1, quickSpring))
@@ -41,10 +45,10 @@ export default function Chat({ chat }: ChatProps) {
       onPress={() => push('/(app)/chat/342')}
       style={[styles.chat, animatedStyle]}
     >
-      <Avatar style={styles.avatar} size="xl" image={chat?.avatar} userId={chat.toString()} />
+      <Avatar style={styles.avatar} size="xl" image={chat_user?.avatar} userId={chat_user?.id} />
       <View style={styles.content}>
         <View style={styles.headerRow}>
-          <Text style={styles.name}>Sasha</Text>
+          <Text style={styles.name}>{chat_user?.display_name || chat_user?.username}</Text>
           <Text style={styles.secondary}>{lastMessage?.time}</Text>
           <Icon icon="chevron.right" size={16} uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
         </View>

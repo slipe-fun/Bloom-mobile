@@ -1,4 +1,4 @@
-// import { useChatList } from '@api/providers/ChatsContext'
+import { useChatList } from '@api/providers/ChatsContext'
 import Chat from '@components/chats/chat'
 import Empty from '@components/chats/empty'
 import Footer, { FOOTER_HEIGHT } from '@components/chats/footer'
@@ -26,7 +26,7 @@ const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 export default function Chats() {
   const search = useFooterStore((state) => state.search)
-  const chats = Array.from({ length: 20 }, (_, i) => i)
+  const { chats } = useChatList()
   const { height } = useWindowDimensions()
   const insets = useInsets()
   const scrollY = useSharedValue(0)
@@ -41,7 +41,7 @@ export default function Chats() {
   }))
 
   const keyExtractor = useCallback((item: ChatType) => {
-    return String(item)
+    return item?.id
   }, [])
 
   const renderItem = useCallback(({ item }: { item: ChatType }) => {

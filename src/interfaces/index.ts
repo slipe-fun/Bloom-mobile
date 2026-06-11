@@ -43,10 +43,10 @@ export interface Message {
 export interface Chat {
   unreadCount?: number
   last_message?: ChatLastMessage
-  members?: Member[]
+  members?: User[]
   avatar?: string
   id?: number
-  recipient?: Member
+  recipient?: User
 }
 
 export interface ChatView extends Chat {
@@ -89,21 +89,6 @@ export interface SettingsSection {
   description?: string
   title?: string
   items: SettingsItem[]
-}
-
-export interface Member {
-  display_name?: string | null
-  id: number
-  username: string
-  avatar: string
-}
-
-export interface SearchUser {
-  date: Date
-  display_name: string | null
-  id: number
-  username: string | null
-  avatar: string
 }
 
 export interface ChatsEmptyCardData {
