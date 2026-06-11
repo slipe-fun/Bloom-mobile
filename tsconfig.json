@@ -22,7 +22,8 @@
       "@layouts/*": ["layouts/*"],
       "@providers/*": ["src/providers/*"],
       "@services/*": ["src/services/*"],
-      "@design/*": ["src/design/*"]
+      "@design/*": ["src/design/*"],
+      "@modules/*": ["modules/*"]
     },
     "isolatedModules": true,
     "noEmit": true,
@@ -33,6 +34,13 @@
     "emitDecoratorMetadata": false,
     "useDefineForClassFields": false
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "src/api/providers/WebSocketContext.js"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "src/api/providers/WebSocketContext.js",
+    "modules/hybrid-list-view/src/HybridListViewModule.tsx"
+  ],
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }

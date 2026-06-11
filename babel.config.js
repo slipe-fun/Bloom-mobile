@@ -25,6 +25,7 @@ module.exports = (api) => {
             '@layouts': './layouts',
             '@providers': './src/providers',
             '@design': './src/design',
+            '@modules': './modules',
           },
         },
       ],
