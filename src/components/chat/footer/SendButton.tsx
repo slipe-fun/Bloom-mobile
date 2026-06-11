@@ -6,13 +6,12 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { styles } from './Footer.styles'
 
 interface SendButtonProps {
-  handleSend: () => void
   hasValue: boolean
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
+export default function SendButton({ hasValue }: SendButtonProps) {
   const scale = useSharedValue(0)
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
@@ -32,7 +31,7 @@ export default function SendButton({ handleSend, hasValue }: SendButtonProps) {
         </AnimatedPressable>
       ) : (
         <AnimatedPressable key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
-          <Icon size={26} icon="waveform" uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
+          <Icon size={24} icon="waveform" uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
         </AnimatedPressable>
       )}
       <Animated.View style={[styles.sendButtonBackground, animatedButtonStyle]} />

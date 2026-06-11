@@ -24,6 +24,7 @@ interface ButtonProps extends ComponentProps<typeof AnimatedPressable> {
   overlayStyle?: StyleProp<ViewStyle>
   icon?: React.JSX.Element | null | boolean
   children?: React.ReactNode
+  scaleMethod?: number
   elevated?: boolean
   blur?: boolean
 }
@@ -38,6 +39,7 @@ export default function Button({
   overlayStyle,
   style,
   labelStyle,
+  scaleMethod,
   elevated = true,
   blur = true,
   ...props
@@ -65,7 +67,9 @@ export default function Button({
   }
 
   const handlePress = (inn: boolean = true) => {
-    scale.set(withSpring(inn ? (variant !== 'icon' ? PRESSABLE_INPUT_SCALE : ICON_PRESSABLE_SCALE) : 1, springy))
+    scale.set(
+      withSpring(inn ? (scaleMethod ? scaleMethod : variant !== 'icon' ? PRESSABLE_INPUT_SCALE : ICON_PRESSABLE_SCALE) : 1, springy),
+    )
   }
 
   const animatedPressabelStyle = useAnimatedStyle(() => ({

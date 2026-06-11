@@ -39,7 +39,7 @@ export default function Footer() {
     >
       <GradientBlur blur={false} style={{ height: height }} behindKeyboard={height > calculatedFooter} />
       <Button variant="icon">
-        <Icon icon="plus" uniProps={(theme) => ({ color: theme.colors.text })} />
+        <Icon size={24} icon="plus" uniProps={(theme) => ({ color: theme.colors.text })} />
       </Button>
 
       <MessageInput setValue={setInputValue} value={inputValue} />

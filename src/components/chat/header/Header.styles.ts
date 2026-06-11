@@ -4,7 +4,7 @@ export const styles = StyleSheet.create((theme) => ({
   header: {
     width: '100%',
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.xxxl + 10,
     flexDirection: 'row',
     zIndex: 1,
     top: 0,
@@ -13,21 +13,22 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing.lg,
   },
   title: {
-    width: '100%',
-    textAlign: 'center',
-    fontSize: theme.fontSize.md,
-    color: theme.colors.text,
     fontFamily: theme.fontFamily.semibold,
   },
-  time: {
-    width: '100%',
-    textAlign: 'center',
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.overlayText,
-    fontFamily: theme.fontFamily.medium,
+  user: {
+    flex: 1,
+    overflow: 'visible',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar: {
+    zIndex: 1,
+    boxShadow: `${theme.shadows.pressable} ${theme.colors.shadow}`,
   },
   titleWrapper: {
-    flex: 1,
-    justifyContent: 'center',
+    position: 'absolute',
+    top: 42,
+    paddingHorizontal: theme.spacing.lg - 2,
+    height: 36,
   },
 }))
