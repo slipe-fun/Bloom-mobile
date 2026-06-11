@@ -59,9 +59,11 @@ export default async function getChats() {
             const flag = false
 
             try {
-              chat_key = await skid.handshake.finalize(restoreBytes(chat?.handshake), sender_keys, recipient_keys, flag)
+              // isSender: false
+              chat_key = await skid.handshake.finalize(restoreBytes(chat?.handshake), recipient_keys, sender_keys, flag)
             } catch {
               try {
+                // isSender: true
                 chat_key = await skid.handshake.finalize(restoreBytes(chat?.handshake), sender_keys, recipient_keys, !flag)
               } catch {
                 chat_key = null
