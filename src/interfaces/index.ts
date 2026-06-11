@@ -18,7 +18,7 @@ export interface User {
   description?: string | null
   avatar?: string | null
   date?: string
-  ml_kem_public_key?: string
+  kyber_public_key?: string
   ecdh_public_key?: string
   ed_public_key?: string
 }

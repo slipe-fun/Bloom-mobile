@@ -1,7 +1,7 @@
 import { createSecureStorage } from '@lib/storage'
-import getMyUser from '../users/getMyUser'
+import getMySession from '../sessions/getMySession'
 
-export default async function (chat) {
+export default async function (chat, key) {
   // mmkv storage
   const Storage = await createSecureStorage('user-storage')
 
@@ -14,15 +14,15 @@ export default async function (chat) {
     chats = []
   }
 
-  const user = await getMyUser()
+  const session = await getMySession()
 
   // add chat to mmkv storage
   chats = [
     ...chats,
     {
       id: chat?.id,
-      members: chat?.members?.map((member) => ({ ...member, isMe: member?.id === user?.id })),
-      key: null,
+      members: chat?.members?.map((member) => ({ ...member, isMe: member?.id === session?.user_id })),
+      key,
     },
   ]
 
