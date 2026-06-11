@@ -1,14 +1,15 @@
+import createChat from '@api/lib/chats/create'
 import { Avatar } from '@components/ui'
 import Icon from '@components/ui/Icon'
 import { quickSpring } from '@constants/easings'
-import type { SearchUser as SearchUserType } from '@interfaces'
+import type { User } from '@interfaces'
 import { Pressable, Text, View } from 'react-native'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useAnimatedTheme } from 'react-native-unistyles/reanimated'
 import { styles } from './SearchUser.styles'
 
 interface ChatProps {
-  user: SearchUserType
+  user: User
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -21,6 +22,10 @@ export default function SearchUser({ user }: ChatProps) {
     progress.set(withSpring(inn ? 0 : 1, quickSpring))
   }
 
+  const openChat = () => {
+    createChat(user)
+  }
+
   const animatedStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(progress.get(), [1, 0], ['transparent', animatedTheme.get().colors.foregroundTransparent]),
   }))
@@ -30,6 +35,7 @@ export default function SearchUser({ user }: ChatProps) {
       onTouchStart={() => handlePress(true)}
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
+      onPress={openChat}
       //   onPress={onPressHandler}
       style={[styles.chat, animatedStyle]}
     >

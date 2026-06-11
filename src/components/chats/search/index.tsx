@@ -1,6 +1,6 @@
 import { getFadeIn, getFadeOut } from '@constants/animations'
 import { useInsets, useUsersSearch } from '@hooks'
-import type { SearchUser as SearchUserType } from '@interfaces'
+import type { User } from '@interfaces'
 import { FlashList, type ListRenderItem } from '@shopify/flash-list'
 import useFooterStore from '@stores/footer'
 import { useCallback, useMemo, useState } from 'react'
@@ -24,9 +24,9 @@ export default function Search() {
 
   const footerHeight = FOOTER_HEIGHT + insets.bottom
 
-  const keyExtractor = useCallback((item: SearchUserType) => String(item.id), [])
+  const keyExtractor = useCallback((item: User) => String(item.id), [])
 
-  const renderItem: ListRenderItem<SearchUserType> = useCallback(
+  const renderItem: ListRenderItem<User> = useCallback(
     ({ item }) => <SearchUser user={item} />,
 
     [],

@@ -1,7 +1,7 @@
 import { API_URL } from '@constants/api'
 import { createSecureStorage } from '@lib/storage'
 
-export default async function createChatRequest(recipient) {
+export default async function createChatRequest(recipient, handshake) {
   try {
     const Storage = await createSecureStorage('user-storage')
     const token = Storage.getString('token')
@@ -14,6 +14,7 @@ export default async function createChatRequest(recipient) {
       },
       body: JSON.stringify({
         recipient,
+        handshake,
       }),
     })
 
@@ -23,7 +24,7 @@ export default async function createChatRequest(recipient) {
 
     return await response.json()
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return null
   }
 }
