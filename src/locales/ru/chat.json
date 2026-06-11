@@ -1,5 +1,11 @@
 {
   "footer": {
     "input": "Введите сообщение..."
+  },
+  "empty": {
+    "title": "Чат пустоват",
+    "subTitleFirst": "Напишите",
+    "subTitleMessage": " Привет! ",
+    "subTitleSecond": "чтобы начать диалог первым!"
   }
 }

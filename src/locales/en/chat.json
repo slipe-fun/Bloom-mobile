@@ -1,5 +1,11 @@
 {
   "footer": {
     "input": "Type a message..."
+  },
+  "empty": {
+    "title": "Chat seems empty",
+    "subTitleFirst": "Say",
+    "subTitleMessage": " Hi! ",
+    "subTitleSecond": "to start the conversation first!"
   }
 }

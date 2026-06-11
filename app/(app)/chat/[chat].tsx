@@ -1,3 +1,4 @@
+import Empty from '@components/chat/Empty'
 import Footer from '@components/chat/footer'
 import Header from '@components/chat/header'
 import { useLocalSearchParams } from 'expo-router'
@@ -9,6 +10,7 @@ export default function Chat() {
 
   return (
     <View style={styles.container}>
+      <Empty />
       <Header />
       <Footer />
     </View>
