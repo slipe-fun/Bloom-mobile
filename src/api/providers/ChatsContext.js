@@ -1,6 +1,9 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
+import prepareForHanshake from '@api/lib/handshake/prepare'
+import getSkid from '@constants/skid'
 import getChatFromStorage from '@lib/getChatFromStorage'
 import { getSKID } from '@lib/skid/lazySkid'
+import { restoreBytes } from '@lib/skid-v3/src/utils'
 import { Q } from '@nozbe/watermelondb'
 import useStorageStore from '@stores/storage'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -188,11 +191,21 @@ export default function ChatsProvider({ children }) {
           }
 
           if (message?.type === 'chat.new') {
-            await addChatToStorage(message)
+            const skid = await getSkid()
 
-            addChat(message)
+            const { type, user_id, ...chat } = message
+            const recipient = chat?.members?.find((member) => member?.id !== user_id)
+
+            const { sender_keys, recipient_keys } = await prepareForHanshake(mmkv, recipient)
+
+            const chat_key = await skid.handshake.finalize(restoreBytes(chat?.handshake), recipient_keys, sender_keys, false)
+
+            await addChatToStorage(chat, Buffer.from(chat_key).toString('hex'))
+            addChat({ ...chat, key: Buffer.from(chat_key).toString('hex') })
           }
-        } catch {}
+        } catch (err) {
+          console.log(4323, err.stack)
+        }
       })
     }
   }, [ws])
