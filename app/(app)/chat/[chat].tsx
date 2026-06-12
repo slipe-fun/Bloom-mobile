@@ -18,6 +18,7 @@ export default function Chat() {
   const [data, setData] = useState<ListItem[]>([])
 
   const FOOTER_HEIGHT = SIZE_MAP.md + base.spacing.lg
+  const HEADER_HEIGHT = SIZE_MAP.md + base.spacing.xxxl + 16 + insets.top
 
   const listTheme = {
     backgroundColor: theme.colors.background,
@@ -36,7 +37,7 @@ export default function Chat() {
   return (
     <View style={styles.container}>
       <HybridListView
-        contentInsetTop={insets.top}
+        contentInsetTop={HEADER_HEIGHT}
         contentInsetBottom={FOOTER_HEIGHT}
         data={data}
         theme={listTheme}

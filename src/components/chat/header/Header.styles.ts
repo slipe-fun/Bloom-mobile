@@ -9,7 +9,6 @@ export const styles = StyleSheet.create((theme) => ({
     zIndex: 1,
     top: 0,
     position: 'absolute',
-    alignItems: 'center',
     gap: theme.spacing.lg,
   },
   title: {
