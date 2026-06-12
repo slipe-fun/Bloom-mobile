@@ -46,7 +46,7 @@ export default function Chat() {
       />
       {data.length < 1 && <Empty />}
       <Header />
-      <Footer handleSend={(event) => setData((prev) => [...prev, event])} />
+      <Footer handleSend={(event: ListItem) => setData((prev) => [...prev, event])} />
     </View>
   )
 }

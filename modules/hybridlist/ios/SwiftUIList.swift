@@ -30,8 +30,10 @@ struct SwiftUIList: View {
                     scrollToBottom(proxy: scrollProxy)
                 }
                 .onChange(of: data.count) { _ in
-                    withAnimation(springyAnimation) {
-                        scrollToBottom(proxy: scrollProxy)
+                    DispatchQueue.main.async {
+                        withAnimation(springyAnimation) {
+                            scrollToBottom(proxy: scrollProxy)
+                        }
                     }
                 }
             }
