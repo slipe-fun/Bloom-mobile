@@ -35,5 +35,7 @@ export interface OnItemPressEvent {
 export interface HybridListViewProps extends ViewProps {
   data: ListItem[]
   theme: ListTheme
+  contentInsetTop: number
+  contentInsetBottom: number
   onItemPress?: (event: OnItemPressEvent) => void
 }

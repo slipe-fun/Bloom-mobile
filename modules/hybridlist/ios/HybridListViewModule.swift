@@ -29,6 +29,12 @@ public class HybridListViewModule: Module {
       Prop("theme") { (view: HybridListViewContainer, theme: ListThemeRecord) in
         view.theme = theme
       }
+      Prop("contentInsetTop") { (view: HybridListViewContainer, prop: Double) in
+        view.contentInsetTop = prop
+      }
+      Prop("contentInsetBottom") { (view: HybridListViewContainer, prop: Double) in
+        view.contentInsetBottom = prop
+      }
       
       Events("onItemPress")
     }

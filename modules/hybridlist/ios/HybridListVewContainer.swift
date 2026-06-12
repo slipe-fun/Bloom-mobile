@@ -9,6 +9,14 @@ class HybridListViewContainer: ExpoView {
     var theme: ListThemeRecord? {
         didSet { updateView() }
     }
+
+     var contentInsetTop: Double = 0 {
+        didSet { updateView() }
+    }
+    
+     var contentInsetBottom: Double = 0 {
+        didSet { updateView() }
+    }
     
     let onItemPress = EventDispatcher()
 
@@ -21,7 +29,7 @@ class HybridListViewContainer: ExpoView {
             guard let self = self else { return }
             
             if #available(iOS 16.0, *) {
-                let swiftUIView = SwiftUIList(data: self.data, theme: theme) { index, item in
+                let swiftUIView = SwiftUIList(data: self.data, theme: theme, contentInsetTop: self.contentInsetTop, contentInsetBottom: self.contentInsetBottom) { index, item in
                     self.onItemPress([
                         "index": index,
                         "item": [

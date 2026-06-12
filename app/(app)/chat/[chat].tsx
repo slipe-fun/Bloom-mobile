@@ -1,29 +1,24 @@
 import Empty from '@components/chat/Empty'
 import Footer from '@components/chat/footer'
 import Header from '@components/chat/header'
+import { SIZE_MAP } from '@components/ui/button/constats'
+import { base } from '@design/base'
+import { useInsets } from '@hooks'
 import type { ListItem, OnItemPressEvent } from '@modules/hybridlist'
 import { HybridListView } from '@modules/hybridlist'
 import { useLocalSearchParams } from 'expo-router'
+import { useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 export default function Chat() {
-  const { chat } = useLocalSearchParams()
+  const { _chat } = useLocalSearchParams()
+  const insets = useInsets()
   const { theme } = useUnistyles()
+  const [data, setData] = useState<ListItem[]>([])
 
-  const mockData: ListItem[] = [
-    { id: 1, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 2, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 3, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 4, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 5, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 6, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 7, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 8, content: 'Элемент 1', seen: false, date: '123', me: true },
-    { id: 9, content: 'Элемент 1', seen: false, date: '123', me: true },
-  ]
+  const FOOTER_HEIGHT = SIZE_MAP.md + base.spacing.lg
 
-  // Статичный фоллбек для примера работы:
   const listTheme = {
     backgroundColor: theme.colors.background,
     textColor: theme.colors.text,
@@ -40,10 +35,17 @@ export default function Chat() {
 
   return (
     <View style={styles.container}>
-      <HybridListView data={mockData} theme={listTheme} onItemPress={handlePress} style={styles.list} />
-      {/* <Empty /> */}
+      <HybridListView
+        contentInsetTop={insets.top}
+        contentInsetBottom={FOOTER_HEIGHT}
+        data={data}
+        theme={listTheme}
+        onItemPress={handlePress}
+        style={styles.list}
+      />
+      {data.length < 1 && <Empty />}
       <Header />
-      <Footer />
+      <Footer handleSend={(event) => setData((prev) => [...prev, event])} />
     </View>
   )
 }

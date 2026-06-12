@@ -4,6 +4,15 @@ import type { HybridListViewProps } from './HybridChat.types'
 
 const NativeView: React.ComponentType<HybridListViewProps> = requireNativeViewManager('HybridListView')
 
-export default function HybridListView({ data, theme, onItemPress, style }: HybridListViewProps) {
-  return <NativeView data={data} theme={theme} onItemPress={onItemPress} style={style} />
+export default function HybridListView({ data, theme, contentInsetBottom, contentInsetTop, onItemPress, style }: HybridListViewProps) {
+  return (
+    <NativeView
+      contentInsetBottom={contentInsetBottom}
+      contentInsetTop={contentInsetTop}
+      data={data}
+      theme={theme}
+      onItemPress={onItemPress}
+      style={style}
+    />
+  )
 }

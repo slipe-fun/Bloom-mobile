@@ -1,16 +1,18 @@
 import { Input } from '@components/ui'
 import { SIZE_MAP } from '@components/ui/input'
 import { base } from '@design/base'
+import type { ListItem } from '@modules/hybridlist'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SendButton from './SendButton'
 
 type MessageInputProps = {
-  setValue: (value: string) => void
-  value: string
+  handleSend: (item: ListItem) => void
 }
 
-export default function MessageInput({ setValue, value }: MessageInputProps) {
+export default function MessageInput({ handleSend }: MessageInputProps) {
   const { t } = useTranslation('chat')
+  const [value, setValue] = useState('')
 
   return (
     <Input
@@ -25,7 +27,7 @@ export default function MessageInput({ setValue, value }: MessageInputProps) {
       onChangeText={setValue}
       placeholder={t('chat:footer.input')}
       submitBehavior="blurAndSubmit"
-      button={<SendButton hasValue={!!value.trim()} />}
+      button={<SendButton value={value} setValue={setValue} handleSend={handleSend} />}
       returnKeyType="search"
     />
   )

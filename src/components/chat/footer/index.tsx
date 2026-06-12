@@ -10,14 +10,13 @@ import { scheduleOnRN } from 'react-native-worklets'
 import { styles } from './Footer.styles'
 import MessageInput from './MessageInput'
 
-export const FOOTER_HEIGHT = SIZE_MAP.lg + base.spacing.xxl
+export const FOOTER_HEIGHT = SIZE_MAP.md + base.spacing.xxl
 
 const AnimatedKeyboardStickyView = Animated.createAnimatedComponent(KeyboardStickyView)
 
-export default function Footer() {
+export default function Footer({ handleSend }) {
   const insets = useInsets()
   const { progress: keyboardProgress } = useReanimatedKeyboardAnimation()
-  const [inputValue, setInputValue] = useState('')
   const calculatedFooter = FOOTER_HEIGHT + insets.bottom
   const [height, setHeight] = useState(calculatedFooter)
 
@@ -42,7 +41,7 @@ export default function Footer() {
         <Icon size={24} icon="plus" uniProps={(theme) => ({ color: theme.colors.text })} />
       </Button>
 
-      <MessageInput setValue={setInputValue} value={inputValue} />
+      <MessageInput handleSend={handleSend} />
     </AnimatedKeyboardStickyView>
   )
 }
