@@ -17,6 +17,11 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  pressable: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   sendButtonBackground: {
     height: SIZE_MAP.md - theme.spacing.xs * 2,
     position: 'absolute',

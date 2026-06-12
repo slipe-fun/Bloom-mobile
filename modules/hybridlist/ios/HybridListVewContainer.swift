@@ -47,6 +47,8 @@ class HybridListViewContainer: ExpoView {
                 if self.hostingController == nil {
                     let hosting = UIHostingController(rootView: erasedView)
                     hosting.view.backgroundColor = .clear
+                    hosting.view.insetsLayoutMarginsFromSafeArea = false
+                    hosting.view.clipsToBounds = true
                     hosting.view.translatesAutoresizingMaskIntoConstraints = false
                     
                     self.addSubview(hosting.view)

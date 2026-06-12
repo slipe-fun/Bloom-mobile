@@ -31,13 +31,13 @@ struct MessageCellView: View {
         Button(action: action) {
             HStack {
                 if item.me {
-                    Spacer(minLength: 64)
+                    Spacer(minLength: 55)
                 }
 
                 messageBubble
 
                 if !item.me {
-                    Spacer(minLength: 64)
+                    Spacer(minLength: 55)
                 }
             }
         }

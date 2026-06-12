@@ -38,7 +38,7 @@ export default function SendButton({ value, setValue, handleSend }: SendButtonPr
       {hasValue ? (
         <AnimatedPressable
           onPress={send}
-          style={{ zIndex: 1 }}
+          style={[styles.pressable, { zIndex: 1 }]}
           key="paperplane"
           entering={paperplaneAnimationIn}
           exiting={paperplaneAnimationOut}
@@ -46,7 +46,7 @@ export default function SendButton({ value, setValue, handleSend }: SendButtonPr
           <Icon size={24} icon="paperplane" uniProps={(theme) => ({ color: theme.colors.white })} />
         </AnimatedPressable>
       ) : (
-        <AnimatedPressable key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
+        <AnimatedPressable style={styles.pressable} key="waveform" entering={zoomAnimationIn} exiting={zoomAnimationOut}>
           <Icon size={24} icon="waveform" uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
         </AnimatedPressable>
       )}

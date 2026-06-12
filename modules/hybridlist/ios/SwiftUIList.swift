@@ -20,58 +20,37 @@ struct SwiftUIList: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollViewReader { scrollProxy in
-                ScrollView {
-                    messageList(geometry: geometry)
-                }
-                .scrollIndicators(.hidden)
-                .onAppear {
-                    scrollToBottom(proxy: scrollProxy)
-                }
-                .onChange(of: data.count) { _ in
-                    DispatchQueue.main.async {
-                        withAnimation(springyAnimation) {
-                            scrollToBottom(proxy: scrollProxy)
-                        }
-                    }
-                }
-            }
+        ScrollView {
+            messageList()
         }
+        .scrollIndicators(.hidden)
+        .scaleEffect(y: -1) 
         .background(listBackgroundColor)
         .ignoresSafeArea(.container, edges: .top)
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) {_ in 
-            isKeyboardVisible = true
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in 
+            withAnimation(springyAnimation) { isKeyboardVisible = true }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) {_ in 
-            isKeyboardVisible = false
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in 
+            withAnimation(springyAnimation) { isKeyboardVisible = false }
         }
     }
     
-    private func messageList(geometry: GeometryProxy) -> some View {
+    private func messageList() -> some View {
         LazyVStack(spacing: 8) {
-            ForEach(Array(data.enumerated()), id: \.element.id) { index, item in
+            ForEach(Array(data.enumerated()).reversed(), id: \.element.id) { index, item in
                 MessageCellView(item: item, theme: theme) {
                     onItemPress(index, item)
                 }
                 .padding(.horizontal, 16)
+                .scaleEffect(y: -1)
                 .transition(.asymmetric(
-                    insertion: .move(edge: .bottom).combined(with: .opacity),
+                    insertion: .move(edge: .top).combined(with: .opacity),
                     removal: .opacity
                 ))
-                .id(item.id)
             }
         }
-        .padding(.top, contentInsetTop)
-        .padding(.bottom, isKeyboardVisible ? max(0, contentInsetBottom + 10) : contentInsetBottom)
-        .animation(springyAnimation, value: contentInsetBottom)
-        .frame(minHeight: geometry.size.height, alignment: .bottom)
+        .padding(.bottom, contentInsetTop)
+        .padding(.top, isKeyboardVisible ? contentInsetBottom + 10 : contentInsetBottom)
         .animation(springyAnimation, value: data.count)
-    }
-    
-    private func scrollToBottom(proxy: ScrollViewProxy) {
-        if let lastId = data.last?.id {
-            proxy.scrollTo(lastId, anchor: .bottom)
-        }
     }
 }
