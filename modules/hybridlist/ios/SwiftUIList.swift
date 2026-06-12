@@ -26,6 +26,7 @@ extension Color {
     }
 }
 
+@available(iOS 16.0, *)
 struct SwiftUIList: View {
     let data: [ListItemRecord]
     let theme: ListThemeRecord

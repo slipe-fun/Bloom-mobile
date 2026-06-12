@@ -40,7 +40,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "src/api/providers/WebSocketContext.js",
-    "modules/hybrid-list-view/src/HybridListViewModule.tsx"
+    "modules/hybridlist/src/HybridListViewModule.tsx"
   ],
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }

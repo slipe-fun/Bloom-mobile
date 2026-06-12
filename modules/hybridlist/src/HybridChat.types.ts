@@ -1,5 +1,13 @@
 import type { ViewProps } from 'react-native'
 
+export type HybridChatModuleEvents = {
+  onChange: (params: ChangeEventPayload) => void
+}
+
+export type ChangeEventPayload = {
+  value: string
+}
+
 export interface ListItem {
   id: number
   content: string
