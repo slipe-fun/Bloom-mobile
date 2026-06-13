@@ -7,7 +7,7 @@ type SettingsSectionProps = {
   setTheme: (theme: string) => void
 }
 
-export const APPEARACNE_SECTIONS = ({ theme, demonstartion, setTheme }: SettingsSectionProps): SettingsSection[] => [
+export const APPEARANCE_SECTIONS = ({ theme, demonstartion, setTheme }: SettingsSectionProps): SettingsSection[] => [
   {
     id: 'Automatic',
     items: [

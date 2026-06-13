@@ -2,7 +2,7 @@ import Demonstration from '@components/settings/appearance/Demonstration'
 import SettingHeader from '@components/settings/settingHeader'
 import { SettingsGroup } from '@components/ui'
 import { SIZE_MAP } from '@components/ui/button/constats'
-import { APPEARACNE_SECTIONS } from '@constants/settings/appearance'
+import { APPEARANCE_SECTIONS } from '@constants/settings/appearance'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import { useSettingsStore } from '@stores/settings'
@@ -18,7 +18,7 @@ export default function Appearance() {
   const headerHeight = insets.top + base.spacing.xxl + SIZE_MAP.md
 
   const settingsList = useMemo(
-    () => APPEARACNE_SECTIONS({ theme, setTheme, demonstartion: <Demonstration key="demonstration" /> }),
+    () => APPEARANCE_SECTIONS({ theme, setTheme, demonstartion: <Demonstration key="demonstration" /> }),
     [theme, setTheme],
   )
 
