@@ -28,7 +28,7 @@ export default async function (ws, chat_id, messages, setMessages) {
         prev?.map((message) => {
           // change only last message status
           if (message?.id === lastMessage?.id) {
-            return { ...message, seen: new Date() }
+            return { ...message, seen: new Date().toString() }
           }
           return message
         }),
@@ -36,7 +36,7 @@ export default async function (ws, chat_id, messages, setMessages) {
     }
 
     // get last unseen message from local storage
-    const lastUnseenMessage = [...messages].reverse().find((m) => !m.seen && !m.isMe)
+    const lastUnseenMessage = [...messages].reverse().find((m) => !m.seen && !m.me)
     if (!lastUnseenMessage) return
 
     // send read request for last unseen message
@@ -59,7 +59,7 @@ export default async function (ws, chat_id, messages, setMessages) {
       prev?.map((message) => {
         // change only last unseen message status
         if (message?.id === lastUnseenMessage?.id) {
-          return { ...message, seen: new Date() }
+          return { ...message, seen: new Date().toString() }
         }
         return message
       }),

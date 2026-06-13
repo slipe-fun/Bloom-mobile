@@ -3,11 +3,11 @@ import Footer from '@components/chat/footer'
 import Header from '@components/chat/header'
 import { SIZE_MAP } from '@components/ui/button/constats'
 import { base } from '@design/base'
-import { useInsets } from '@hooks'
+import { useChatController, useInsets } from '@hooks'
 import type { ListItem, OnItemPressEvent } from '@modules/hybridlist'
 import { HybridListView } from '@modules/hybridlist'
 import useChatStore from '@stores/chat'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -15,7 +15,7 @@ export default function Chat() {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const chat = useChatStore((state) => state.chat)
-  const [data, setData] = useState<ListItem[]>([])
+  const { messages, seenID, addMessage, nextPage } = useChatController({ chat })
 
   const FOOTER_HEIGHT = SIZE_MAP.md + base.spacing.lg
   const HEADER_HEIGHT = SIZE_MAP.md + base.spacing.xxxl + 16 + insets.top
@@ -39,14 +39,14 @@ export default function Chat() {
       <HybridListView
         contentInsetTop={HEADER_HEIGHT}
         contentInsetBottom={FOOTER_HEIGHT}
-        data={data}
+        data={messages}
         theme={listTheme}
         onItemPress={handlePress}
         style={styles.list}
       />
-      {data.length < 1 && <Empty />}
+      {messages.length < 1 && <Empty />}
       <Header chat={chat} />
-      <Footer handleSend={(event) => setData((prev) => [...prev, event])} />
+      <Footer handleSend={(event) => addMessage(event?.content)} />
     </View>
   )
 }

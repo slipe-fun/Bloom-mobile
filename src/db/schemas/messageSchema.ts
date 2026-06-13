@@ -6,7 +6,7 @@ export const messageSchema = tableSchema({
     { name: 'server_id', type: 'number', isIndexed: true },
     { name: 'chat_id', type: 'number', isIndexed: true },
     { name: 'content', type: 'string' },
-    { name: 'author_id', type: 'number', isIndexed: true },
+    { name: 'author_id', type: 'string', isIndexed: true },
     { name: 'date', type: 'number', isIndexed: true },
     { name: 'seen', type: 'number', isOptional: true },
     { name: 'nonce', type: 'string', isOptional: true },

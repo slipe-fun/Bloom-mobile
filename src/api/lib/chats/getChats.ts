@@ -1,11 +1,11 @@
 import { API_URL } from '@constants/api'
 import getSkid from '@constants/skid'
-import getChatFromStorage from '@lib/getChatFromStorage'
 import { restoreBytes } from '@lib/skid-v3/src/utils'
 import { createSecureStorage } from '@lib/storage'
 import axios from 'axios'
 import prepareForHanshake from '../handshake/prepare'
 import getMySession from '../sessions/getMySession'
+import getChatFromStorage from './getChatFromStorage'
 
 export default async function getChats() {
   try {
@@ -56,6 +56,8 @@ export default async function getChats() {
             chats[chatIndex] = {
               id: chat?.id,
               key: chatInStorage?.key,
+              last_message: chat?.last_message,
+              last_read_message: chat?.last_read_message,
               me,
               recipient,
             }
@@ -84,6 +86,8 @@ export default async function getChats() {
             chats.push({
               id: chat?.id,
               key: Buffer.from(chat_key).toString('hex'),
+              last_message: chat?.last_message,
+              last_read_message: chat?.last_read_message,
               me,
               recipient,
             })

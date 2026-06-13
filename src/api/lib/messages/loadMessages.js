@@ -26,18 +26,18 @@ export default async function (mmkv, chat_id, messages, setMessages) {
 
     setMessages((prev) => mergeAndSort(prev, decrypted_messages))
   } else {
-    const userId = parseInt(mmkv.getString('user_id'), 10)
+    const session = JSON.parse(mmkv.getString('session'), 10)
 
     const mutatedMessages = nextMessages.map((message) => ({
       id: message.serverId,
       chatId: message.chatId,
       content: message.content,
       authorId: message.authorId,
-      date: message.date,
-      formatted_date: formatSentTime(message?.date),
+      raw_date: message?.date,
+      date: formatSentTime(message?.date),
       seen: message.seen,
       nonce: message.nonce,
-      isMe: message.authorId === userId,
+      me: message.authorId === session?.user_id,
     }))
 
     setMessages((prev) => mergeAndSort(prev, mutatedMessages))

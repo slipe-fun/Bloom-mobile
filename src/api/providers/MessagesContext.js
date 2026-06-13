@@ -1,7 +1,8 @@
+import getChatFromStorage from '@api/lib/chats/getChatFromStorage'
 import getReplyToMessageFromStorage from '@api/lib/messages/getReplyToMessageFromStorage'
+import getSkid from '@constants/skid'
 import formatSentTime from '@lib/formatSentTime'
-import getChatFromStorage from '@lib/getChatFromStorage'
-import { getSKID } from '@lib/skid/lazySkid'
+import { restoreBytes } from '@lib/skid-v3/src/utils'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { database } from 'src/db'
 import { useWebSocket } from './WebSocketContext'
@@ -26,7 +27,7 @@ export default function MessagesProvider({ children }) {
           return
         }
 
-        const skid = await getSKID()
+        const skid = await getSkid()
 
         // if socket type is message
         if (message?.type === 'message.new') {
@@ -46,7 +47,12 @@ export default function MessagesProvider({ children }) {
                 reply_to = reply_to_message
               }
 
-              reply_to = skid.aes.decrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+              reply_to = await skid.message.decrypt(
+                Buffer.from(key, 'hex'),
+                restoreBytes(message?.reply_to),
+                chat?.me?.id,
+                chat?.recipient?.id,
+              )
             } catch {}
           }
 
@@ -55,7 +61,7 @@ export default function MessagesProvider({ children }) {
                 id: message?.reply_to?.id,
                 chat_id: message?.chat_id,
                 content: reply_to?.content,
-                author_id: reply_to?.author_id || reply_to?.from_id,
+                author_id: reply_to?.author_id,
                 date: reply_to?.date,
                 seen: message?.reply_to?.seen,
               }
@@ -63,7 +69,7 @@ export default function MessagesProvider({ children }) {
 
           try {
             // decrypt message by general chat key
-            const decrypted = skid.aes.decrypt(message?.ciphertext, message?.nonce, key)
+            const decrypted = await skid.message.decrypt(Buffer.from(key, 'hex'), restoreBytes(message), chat?.me?.id, chat?.recipient?.id)
 
             // add decrypted message to messages var
             setMessages((prev) => [
@@ -73,7 +79,8 @@ export default function MessagesProvider({ children }) {
                 chat_id: message?.chat_id,
                 id: message?.id,
                 reply_to: reply_to_json,
-                formatted_date: formatSentTime(decrypted?.date),
+                raw_date: decrypted?.date,
+                date: formatSentTime(decrypted?.date),
                 nonce: message?.nonce,
                 raw: message,
               },
@@ -89,7 +96,7 @@ export default function MessagesProvider({ children }) {
                   msg.serverId = message?.id
                   msg.chatId = message?.chat_id
                   msg.content = decrypted?.content
-                  msg.authorId = decrypted?.from_id
+                  msg.authorId = decrypted?.author_id
                   msg.date = new Date()
                   msg.seen = null
                   msg.nonce = message?.nonce

@@ -1,25 +1,20 @@
 import useMessages from '@api/hooks/encryption/useMessages'
-import type { Chat as ChatType, Message } from '@interfaces'
-import type { FlashListRef } from '@shopify/flash-list'
+import type { Chat, Message } from '@interfaces'
 import { useEffect, useMemo, useState } from 'react'
 
 interface useChatControllerProps {
-  chat: string
-  listRef: FlashListRef<Message>
+  chat: Chat
 }
 
 interface useChatController {
-  _chat: ChatType
   nextPage: () => void
   seenID: number
-  addMessage: () => void
+  addMessage: (content: string, reply_to?: number) => Promise<void>
   messages: Message[]
 }
 
-export default function useChatController({ chat, listRef }: useChatControllerProps): useChatController {
-  const _chat = JSON.parse(chat) as ChatType
-
-  const { messages, addMessage, nextPage } = useMessages(_chat?.id)
+export default function useChatController({ chat }: useChatControllerProps): useChatController {
+  const { messages, addMessage, nextPage } = useMessages(chat?.id)
   const [seenID, setSeenID] = useState<number>(0)
 
   const CHAT_TIME_WINDOW = 5 * 60 * 1000
@@ -58,8 +53,7 @@ export default function useChatController({ chat, listRef }: useChatControllerPr
     })
 
     setSeenID(lastSeenId)
-    listRef?.scrollToEnd({ animated: true })
-  }, [messages, listRef])
+  }, [messages])
 
-  return { messages: computedMessages, addMessage, seenID, nextPage, _chat }
+  return { messages: computedMessages, addMessage, seenID, nextPage }
 }

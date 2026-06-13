@@ -1,14 +1,15 @@
+import getSkid from '@constants/skid'
 import formatSentTime from '@lib/formatSentTime'
-import getChatFromStorage from '@lib/getChatFromStorage'
-import { getSKID } from '@lib/skid/lazySkid'
+import { restoreBytes } from '@lib/skid-v3/src/utils'
 import { Q } from '@nozbe/watermelondb'
 import { database } from 'src/db'
+import getChatFromStorage from '../chats/getChatFromStorage'
 import getReplyToMessageFromStorage from './getReplyToMessageFromStorage'
 
 export default async function (mmkv, chat_id, messages) {
   if (!messages) return
 
-  const skid = await getSKID()
+  const skid = await getSkid()
 
   // is chat in storage check
   const chat = await getChatFromStorage(chat_id)
@@ -16,11 +17,8 @@ export default async function (mmkv, chat_id, messages) {
 
   const key = chat?.key
 
-  // user id
-  const userId = parseInt(mmkv.getString('user_id'), 10)
-
-  const decryptedMessages = messages
-    .map((message) => {
+  const rawDecrypted = await Promise.all(
+    messages.map(async (message) => {
       let reply_to
       if (message?.reply_to) {
         try {
@@ -29,7 +27,12 @@ export default async function (mmkv, chat_id, messages) {
           if (reply_to_message) {
             reply_to = reply_to_message
           } else {
-            reply_to = skid.aes.decrypt(message?.reply_to?.ciphertext, message?.reply_to?.nonce, key)
+            reply_to = await skid.message.decrypt(
+              Buffer.from(key, 'hex'),
+              restoreBytes(message?.reply_to),
+              chat?.me?.id,
+              chat?.recipient?.id,
+            )
           }
         } catch {}
       }
@@ -37,13 +40,19 @@ export default async function (mmkv, chat_id, messages) {
       try {
         // if kyber message sent by recipient then decrypt using both key pairs
         // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
-        const decrypted = skid.aes.decrypt(message?.ciphertext, message?.nonce, chat?.key)
+        const decrypted = await skid.message.decrypt(
+          Buffer.from(chat?.key, 'hex'),
+          restoreBytes(message),
+          chat?.me?.id,
+          chat?.recipient?.id,
+        )
 
         return {
           ...decrypted,
           chat_id: message?.chat_id,
           id: message?.id,
-          formatted_date: formatSentTime(decrypted?.date),
+          raw_date: decrypted?.date,
+          date: formatSentTime(decrypted?.date),
           seen: message?.seen,
           nonce: message?.nonce,
           reply_to: reply_to
@@ -51,8 +60,9 @@ export default async function (mmkv, chat_id, messages) {
                 id: message?.reply_to?.id,
                 chat_id: message?.chat_id,
                 content: reply_to?.content,
-                author_id: reply_to?.author_id || reply_to?.from_id,
-                date: reply_to?.date,
+                author_id: reply_to?.author_id,
+                raw_date: reply_to?.date,
+                date: formatSentTime(reply_to?.date),
                 seen: message?.reply_to?.seen,
               }
             : null,
@@ -60,12 +70,13 @@ export default async function (mmkv, chat_id, messages) {
       } catch {}
 
       return null
-    })
-    .filter(Boolean)
-    .map((message) => ({
-      ...message,
-      isMe: message?.from_id === userId,
-    }))
+    }),
+  )
+
+  const decryptedMessages = rawDecrypted.filter(Boolean).map((message) => ({
+    ...message,
+    me: message?.author_id === chat?.me?.id,
+  }))
 
   // write decrypted messages to local storage
   await database.write(async () => {
@@ -78,7 +89,7 @@ export default async function (mmkv, chat_id, messages) {
         await existing[0].update((m) => {
           m.chatId = message.chat_id
           m.content = message.content
-          m.authorId = message.from_id
+          m.authorId = message.author_id
           m.date = new Date(message.date)
           m.nonce = message.nonce
           m.replyToId = message?.reply_to?.id
@@ -88,7 +99,7 @@ export default async function (mmkv, chat_id, messages) {
           m.serverId = message?.id
           m.chatId = message.chat_id
           m.content = message.content
-          m.authorId = message.from_id
+          m.authorId = message.author_id
           m.date = new Date(message.date)
           m.seen = null
           m.nonce = message.nonce

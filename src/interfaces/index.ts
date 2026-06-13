@@ -24,8 +24,8 @@ export interface User extends ChatUser {
 
 export interface Message {
   id: number
-  date: Date
-  isMe?: boolean
+  date: string
+  me?: boolean
   isSending?: boolean
   content: string
   author_id: number
@@ -36,7 +36,6 @@ export interface Message {
   type?: string
   groupStart?: boolean
   groupEnd?: boolean
-  formatted_date?: string
 }
 
 export interface Chat {

@@ -1,14 +1,17 @@
 import encryptMessage from '@api/lib/encryptMessage'
 import mergeAndSort from '@api/lib/utils/mergeAndSort'
 import formatSentTime from '@lib/formatSentTime'
+import { bytesToBase64 } from '@lib/skid-v3/src/utils'
 import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
 import sendMessageAndSave from '../sendMessageAndSave'
 
-export default async function (mmkv, ws, content, reply_to, messages, setMessages, chat_id) {
+export default async function (mmkv, ws, content, reply_to, messages, setMessages, chat_id, author_id, key) {
   try {
     // send message socket
-    const message = await encryptMessage(content, chat_id, messages?.length)
-    if (!message) return
+    const encrypted = await encryptMessage(content, chat_id, key)
+    if (!encrypted) return
+
+    const message = bytesToBase64(encrypted)
 
     let _reply_to
     if (reply_to) {
@@ -26,7 +29,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
           id: _reply_to?.id,
           chat_id,
           content: _reply_to?.content,
-          author_id: _reply_to?.author_id || _reply_to?.from_id,
+          author_id: _reply_to?.author_id,
           date: _reply_to?.date,
           seen: _reply_to?.seen,
         }
@@ -37,14 +40,14 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
     // payload
     const newMsg = {
       id: lastId + 1,
-      isMe: true,
+      me: true,
       isSending: true,
       nonce: message?.nonce,
-      chat_id,
+      chatId: chat_id,
       content,
-      author_id: parseInt(mmkv?.getString('user_id'), 10),
-      date: new Date(),
-      formatted_date: formatSentTime(new Date().toString()),
+      authorId: author_id,
+      raw_date: new Date(),
+      date: formatSentTime(new Date().toString()),
       seen: false,
       reply_to: reply_to_json,
     }

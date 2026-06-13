@@ -4,7 +4,7 @@ import SwiftUI
 struct ListItemRecord: Record {
   @Field var id: Int
   @Field var content: String
-  @Field var seen: Bool
+  @Field var seen: String?
   @Field var date: String
   @Field var me: Bool
 }

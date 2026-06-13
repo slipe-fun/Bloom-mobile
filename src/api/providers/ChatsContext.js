@@ -1,8 +1,7 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
+import getChatFromStorage from '@api/lib/chats/getChatFromStorage'
 import prepareForHanshake from '@api/lib/handshake/prepare'
 import getSkid from '@constants/skid'
-import getChatFromStorage from '@lib/getChatFromStorage'
-import { getSKID } from '@lib/skid/lazySkid'
 import { restoreBytes } from '@lib/skid-v3/src/utils'
 import { Q } from '@nozbe/watermelondb'
 import useStorageStore from '@stores/storage'
@@ -35,7 +34,7 @@ export default function ChatsProvider({ children }) {
   }
 
   async function decryptMessage(message) {
-    const skid = await getSKID()
+    const skid = await getSkid()
     // get chat from mmkv storage
     const chat = await getChatFromStorage(message?.chat_id)
     if (!chat) return
@@ -46,7 +45,7 @@ export default function ChatsProvider({ children }) {
       // if kyber message sent by recipient then decrypt using both key pairs
       // or if message dont have encapsulated_key decrypt using just ciphertext, nonce and chat key (skid soft mode)
       return {
-        ...skid.aes.decrypt(message?.ciphertext, message?.nonce, key),
+        ...(await skid.message.decrypt(Buffer.from(key, 'hex'), restoreBytes(message), chat?.me?.id, chat?.recipient?.id)),
         chat_id: message?.chat_id,
         id: message?.id,
         seen: message?.seen,
@@ -163,7 +162,7 @@ export default function ChatsProvider({ children }) {
                   m.serverId = decryptedMessage?.id
                   m.chatId = decryptedMessage.chat_id
                   m.content = decryptedMessage.content
-                  m.authorId = decryptedMessage.from_id
+                  m.authorId = decryptedMessage.author_id
                   m.date = new Date(decryptedMessage.date)
                   m.seen = new Date(message?.seen)
                   m.nonce = decryptedMessage.nonce
@@ -203,9 +202,7 @@ export default function ChatsProvider({ children }) {
             await addChatToStorage(chat, Buffer.from(chat_key).toString('hex'))
             addChat({ ...chat, key: Buffer.from(chat_key).toString('hex') })
           }
-        } catch (err) {
-          console.log(4323, err.stack)
-        }
+        } catch {}
       })
     }
   }, [ws])

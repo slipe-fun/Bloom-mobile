@@ -14,7 +14,7 @@ export class Message extends Model {
   content!: string
 
   @field('author_id')
-  authorId!: number
+  authorId!: string
 
   @date('date')
   date!: Date

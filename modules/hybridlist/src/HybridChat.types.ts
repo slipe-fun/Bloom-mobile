@@ -11,7 +11,7 @@ export type ChangeEventPayload = {
 export interface ListItem {
   id: number
   content: string
-  seen: boolean
+  seen: string
   date: string
   me: boolean
 }

@@ -51,7 +51,7 @@ export default function Chat({ chat }: ChatProps) {
       <View style={styles.content}>
         <View style={styles.headerRow}>
           <Text style={styles.name}>{chat?.recipient?.display_name || chat?.recipient?.username}</Text>
-          <Text style={styles.secondary}>{lastMessage?.time}</Text>
+          {/* <Text style={styles.secondary}>{lastMessage?.time}</Text> */}
           <Icon icon="chevron.right" size={16} uniProps={(theme) => ({ color: theme.colors.secondaryText })} />
         </View>
         <LayoutAnimationConfig skipEntering skipExiting>

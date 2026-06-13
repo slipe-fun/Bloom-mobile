@@ -9,6 +9,7 @@ import loadMessages from '@api/lib/messages/loadMessages'
 import { useMessagesList } from '@api/providers/MessagesContext'
 import { useSeenMessagesList } from '@api/providers/SeenMessagesContext'
 import { useWebSocket } from '@api/providers/WebSocketContext'
+import useChatStore from '@stores/chat'
 import useStorageStore from '@stores/storage'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -19,6 +20,7 @@ export default function (chat_id) {
   const { messages: newMessages, clear: clearNewMessages } = useMessagesList()
   const { seenMessages: newSeenMessages, clear: clearNewSeenMessages } = useSeenMessagesList()
   const ws = useWebSocket()
+  const chat = useChatStore((state) => state.chat)
 
   // storages
   const { mmkv, ensureMMKV } = useStorageStore()
@@ -31,7 +33,7 @@ export default function (chat_id) {
   // ENCRYPT AND SEND MESSAGE
   const addMessage = async (content, reply_to) => {
     const storage = mmkv ?? (await ensureMMKV())
-    return encryptAndSendMessage(storage, ws, content, reply_to, messages, setMessages, chat_id)
+    return encryptAndSendMessage(storage, ws, content, reply_to, messages, setMessages, chat_id, chat?.me?.id, chat?.key)
   }
 
   const messagesWithDates = useMemo(() => {

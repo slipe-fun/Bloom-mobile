@@ -14,18 +14,18 @@ export default async function (mmkv, chat_id) {
     }
   })
   const messages = Array.from(uniqueByServerId.values()).slice(0, 20)
-  // user id
-  const userId = parseInt(mmkv.getString('user_id'), 10)
+  // user session
+  const session = JSON.parse(mmkv.getString('session'), 10)
   // add isMe param to message object
   return messages.map((message) => ({
     id: message.serverId,
     chatId: message.chatId,
     content: message.content,
     authorId: message.authorId,
-    date: message.date,
-    formatted_date: formatSentTime(message?.date),
-    seen: message.seen,
+    date: formatSentTime(message?.date),
+    raw_date: message?.date,
+    seen: String(message.seen),
     nonce: message.nonce,
-    isMe: message.authorId === userId,
+    me: message.authorId === session?.user_id,
   }))
 }
