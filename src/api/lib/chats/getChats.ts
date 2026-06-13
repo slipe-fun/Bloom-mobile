@@ -38,6 +38,14 @@ export default async function getChats() {
         // get chat from mmkv storage
         const chatInStorage = await getChatFromStorage(chat?.id)
 
+        const members = [...(chat?.members || [])].map((member) => {
+          const { kyber_public_key, ecdh_public_key, ed_public_key, ...user } = member
+          return user
+        })
+
+        const me = members.find((member) => member?.id === session?.user_id)
+        const recipient = members.find((member) => member?.id !== me?.id)
+
         // if chat exists in mmkv storage
         if (chat) {
           // find chat index
@@ -48,7 +56,9 @@ export default async function getChats() {
             chats[chatIndex] = {
               id: chat?.id,
               key: chatInStorage?.key,
-              members: [...(chat?.members || [])],
+              members,
+              me,
+              recipient,
             }
           } else {
             const recipient = chat?.members?.find((member) => member?.id !== session?.user_id)
@@ -75,7 +85,9 @@ export default async function getChats() {
             chats.push({
               id: chat?.id,
               key: Buffer.from(chat_key).toString('hex'),
-              members: [...(chat?.members || [])],
+              members,
+              me,
+              recipient,
             })
           }
         }
