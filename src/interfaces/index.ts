@@ -4,16 +4,19 @@ import type { JSX } from 'react'
 
 interface ChatLastMessage {
   content?: string
-  date?: Date
+  date?: string
 }
 
-export interface User {
+export interface ChatUser {
   id: string
   username?: string
   display_name?: string | null
   description?: string | null
   avatar?: string | null
   date?: string
+}
+
+export interface User extends ChatUser {
   kyber_public_key?: string
   ecdh_public_key?: string
   ed_public_key?: string
@@ -39,10 +42,10 @@ export interface Message {
 export interface Chat {
   unreadCount?: number
   last_message?: ChatLastMessage
-  members?: User[]
-  avatar?: string
   id?: number
-  recipient?: User
+  key: string
+  recipient?: ChatUser
+  me?: ChatUser
 }
 
 export interface DateHeader {

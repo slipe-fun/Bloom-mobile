@@ -39,11 +39,16 @@ export default function Header({ chat }: HeaderProps): React.ReactNode {
           scaleMethod={ICON_PRESSABLE_SCALE - 0.06}
           style={styles.titleWrapper}
           labelStyle={styles.title}
-          label="Dikiy Dikiens"
+          label={chat?.recipient?.display_name || chat?.recipient?.username}
           variant="text"
         />
         <Pressable onTouchStart={() => handlePress(true)} onTouchEnd={() => handlePress(false)}>
-          <AnimatedAvatar style={[styles.avatar, animatedAvatarStyle]} size="lg" userId="2323s" />
+          <AnimatedAvatar
+            style={[styles.avatar, animatedAvatarStyle]}
+            size="lg"
+            userId={chat?.recipient?.id}
+            image={chat?.recipient?.avatar}
+          />
         </Pressable>
       </View>
 

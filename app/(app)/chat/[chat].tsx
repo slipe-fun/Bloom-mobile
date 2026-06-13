@@ -6,15 +6,15 @@ import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import type { ListItem, OnItemPressEvent } from '@modules/hybridlist'
 import { HybridListView } from '@modules/hybridlist'
-import { useLocalSearchParams } from 'expo-router'
+import useChatStore from '@stores/chat'
 import { useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 export default function Chat() {
-  const { _chat } = useLocalSearchParams()
   const insets = useInsets()
   const { theme } = useUnistyles()
+  const chat = useChatStore((state) => state.chat)
   const [data, setData] = useState<ListItem[]>([])
 
   const FOOTER_HEIGHT = SIZE_MAP.md + base.spacing.lg
@@ -45,7 +45,7 @@ export default function Chat() {
         style={styles.list}
       />
       {data.length < 1 && <Empty />}
-      <Header />
+      <Header chat={chat} />
       <Footer handleSend={(event) => setData((prev) => [...prev, event])} />
     </View>
   )

@@ -30,7 +30,7 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       theme: 'auto',
-      language: 'ru',
+      language: undefined,
 
       setTheme: (mode) => {
         switchTheme({
