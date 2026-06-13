@@ -1,4 +1,5 @@
 import { Avatar } from '@components/ui'
+import { useMe } from '@hooks'
 import { useFocusEffect } from 'expo-router'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +10,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export default function Success() {
   const confettiRef = useRef<ConfettiMethods>(null)
   const { t } = useTranslation('auth')
+  const { user } = useMe()
 
   useFocusEffect(
     useCallback(() => {
@@ -18,10 +20,10 @@ export default function Success() {
   return (
     <View style={styles.container}>
       <Confetti ref={confettiRef} count={150} fadeOutOnEnd />
-      <Avatar style={styles.avatar} size="4xl" userId="123jdN$hDSb" />
+      <Avatar style={styles.avatar} size="4xl" userId={user?.id} />
       <View style={styles.textContainer}>
         <Text style={styles.welcome}>{t('auth:success.welcome')}</Text>
-        <Text style={styles.name}>Dikiy dikiens</Text>
+        <Text style={styles.name}>{user?.username}</Text>
       </View>
     </View>
   )
