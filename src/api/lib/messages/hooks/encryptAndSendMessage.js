@@ -1,5 +1,4 @@
 import encryptMessage from '@api/lib/encryptMessage'
-import mergeAndSort from '@api/lib/utils/mergeAndSort'
 import formatSentTime from '@lib/formatSentTime'
 import { bytesToBase64 } from '@lib/skid-v3/src/utils'
 import getReplyToMessageFromStorage from '../getReplyToMessageFromStorage'
@@ -52,20 +51,19 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
       reply_to: reply_to_json,
     }
 
-    setMessages((prev) => mergeAndSort(prev, [newMsg]))
+    setMessages((prev) => [...prev, newMsg])
 
     const response = await sendMessageAndSave(content, chat_id, message, reply_to)
     if (!response) return
 
-    setMessages((prev) =>
-      mergeAndSort(prev, [
-        {
-          ...newMsg,
-          id: response?.id,
-          isSending: false,
-        },
-      ]),
-    )
+    setMessages((prev) => [
+      ...prev,
+      {
+        ...newMsg,
+        id: response?.id,
+        isSending: false,
+      },
+    ])
   } catch (err) {
     console.log(err)
   }

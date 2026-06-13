@@ -1,6 +1,5 @@
 import decryptMessages from '@api/lib/messages/decryptMessages'
 import { getChatMessagesBeforeID } from '@api/lib/messages/getChatMessages'
-import mergeAndSort from '@api/lib/utils/mergeAndSort'
 import formatSentTime from '@lib/formatSentTime'
 import { Q } from '@nozbe/watermelondb'
 import { database } from 'src/db'
@@ -24,7 +23,7 @@ export default async function (mmkv, chat_id, messages, setMessages) {
 
     if (!decrypted_messages) return
 
-    setMessages((prev) => mergeAndSort(prev, decrypted_messages))
+    setMessages((prev) => [...prev, ...decrypted_messages])
   } else {
     const session = JSON.parse(mmkv.getString('session'), 10)
 
@@ -40,6 +39,6 @@ export default async function (mmkv, chat_id, messages, setMessages) {
       me: message.authorId === session?.user_id,
     }))
 
-    setMessages((prev) => mergeAndSort(prev, mutatedMessages))
+    setMessages((prev) => [...prev, ...mutatedMessages])
   }
 }

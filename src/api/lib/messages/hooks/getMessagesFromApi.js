@@ -1,4 +1,3 @@
-import mergeAndSort from '@api/lib/utils/mergeAndSort'
 import { Q } from '@nozbe/watermelondb'
 import { database } from 'src/db'
 import decryptMessages from '../decryptMessages'
@@ -18,5 +17,5 @@ export default async function (mmkv, setMessages, chat_id) {
 
   if (!decrypted_messages) return
 
-  setMessages((prev) => mergeAndSort(prev, decrypted_messages))
+  setMessages((prev) => [...prev, ...decrypted_messages])
 }

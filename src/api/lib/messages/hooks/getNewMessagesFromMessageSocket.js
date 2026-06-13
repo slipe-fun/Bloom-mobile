@@ -1,4 +1,3 @@
-import mergeAndSort from '@api/lib/utils/mergeAndSort'
 import filterMessagesByChatId from '../filterMessagesByChatId'
 
 export default function (mmkv, setMessages, newMessages, chat_id, messages, clearNewMessages) {
@@ -19,7 +18,7 @@ export default function (mmkv, setMessages, newMessages, chat_id, messages, clea
         return { ...newMessage, nonce: newMessage?.nonce }
       })
 
-      setMessages((prev) => mergeAndSort(prev, newFilteredMessages))
+      setMessages((prev) => [...prev, ...newFilteredMessages])
     }
 
     // clear context messages history

@@ -5,6 +5,7 @@ import getMessagesFromLocalStorage from '@api/lib/messages/hooks/getMessagesFrom
 import getNewMessagesFromMessageSocket from '@api/lib/messages/hooks/getNewMessagesFromMessageSocket'
 import sendSeenSocket from '@api/lib/messages/hooks/sendSeenSocket'
 import loadMessages from '@api/lib/messages/loadMessages'
+import uniqueById from '@api/lib/utils/uniqueById'
 // import addDateHeaders from '@api/lib/utils/date/addDateHeaders'
 import { useMessagesList } from '@api/providers/MessagesContext'
 import { useSeenMessagesList } from '@api/providers/SeenMessagesContext'
@@ -37,7 +38,7 @@ export default function (chat_id) {
   }
 
   const messagesWithDates = useMemo(() => {
-    return [...messages].reverse()
+    return uniqueById([...messages]).sort((a, b) => new Date(b.raw_date) - new Date(a.raw_date))
   }, [messages])
 
   // GET MESSAGES FROM API
