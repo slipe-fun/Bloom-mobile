@@ -211,39 +211,41 @@ export default function ChatsProvider({ children }) {
   }, [ws])
 
   useEffect(() => {
-    const subscriptions = []
+    if (chats) {
+      const subscriptions = []
 
-    chats.forEach((chat) => {
-      const collection = database.get('messages')
+      chats.forEach((chat) => {
+        const collection = database.get('messages')
 
-      const messagesQuery = collection.query(Q.where('chat_id', chat?.id || null), Q.sortBy('date', Q.desc), Q.take(1))
+        const messagesQuery = collection.query(Q.where('chat_id', chat?.id || null), Q.sortBy('date', Q.desc), Q.take(1))
 
-      const subscription = messagesQuery.observe().subscribe((messages) => {
-        if (messages.length > 0) {
-          const latestMessage = safeObject(messages[0])
+        const subscription = messagesQuery.observe().subscribe((messages) => {
+          if (messages.length > 0) {
+            const latestMessage = safeObject(messages[0])
 
-          setChats((prev) => {
-            const existingChat = prev.find((c) => c.id === chat.id)
-            if (existingChat?.last_message?.id === latestMessage.id) {
-              return prev
-            }
+            setChats((prev) => {
+              const existingChat = prev.find((c) => c.id === chat.id)
+              if (existingChat?.last_message?.id === latestMessage.id) {
+                return prev
+              }
 
-            const updated = prev.map((c) => (c.id === chat.id ? { ...c, last_message: latestMessage } : c))
+              const updated = prev.map((c) => (c.id === chat.id ? { ...c, last_message: latestMessage } : c))
 
-            return [...updated].sort((a, b) => {
-              const dateA = a.last_message?.date ? new Date(a.last_message.date).getTime() : 0
-              const dateB = b.last_message?.date ? new Date(b.last_message.date).getTime() : 0
-              return dateB - dateA
+              return [...updated].sort((a, b) => {
+                const dateA = a.last_message?.date ? new Date(a.last_message.date).getTime() : 0
+                const dateB = b.last_message?.date ? new Date(b.last_message.date).getTime() : 0
+                return dateB - dateA
+              })
             })
-          })
-        }
+          }
+        })
+
+        subscriptions.push(subscription)
       })
 
-      subscriptions.push(subscription)
-    })
-
-    return () => {
-      subscriptions.map((s) => s.unsubscribe())
+      return () => {
+        subscriptions.map((s) => s.unsubscribe())
+      }
     }
   }, [chats])
 

@@ -10,7 +10,8 @@ export default function (mmkv) {
     return {
       id: chat?.id,
       key: chat?.key,
-      members: chat?.members,
+      me: chat?.me,
+      recipient: chat?.recipient,
     }
   })
 }

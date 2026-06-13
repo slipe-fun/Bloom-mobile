@@ -56,7 +56,6 @@ export default async function getChats() {
             chats[chatIndex] = {
               id: chat?.id,
               key: chatInStorage?.key,
-              members,
               me,
               recipient,
             }
@@ -85,7 +84,6 @@ export default async function getChats() {
             chats.push({
               id: chat?.id,
               key: Buffer.from(chat_key).toString('hex'),
-              members,
               me,
               recipient,
             })
