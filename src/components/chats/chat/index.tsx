@@ -22,6 +22,8 @@ export default function Chat({ chat }: ChatProps) {
   const progress = useSharedValue(1)
   const user = useUser()
 
+  console.log(chat)
+
   const chat_user = chat?.members?.find((member) => member?.id !== user?.id)
 
   const handlePress = (inn: boolean = true) => {

@@ -7,10 +7,6 @@ interface ChatLastMessage {
   date?: Date
 }
 
-interface ChatLastMessageView extends ChatLastMessage {
-  time?: string
-}
-
 export interface User {
   id: string
   username?: string
@@ -49,10 +45,6 @@ export interface Chat {
   recipient?: User
 }
 
-export interface ChatView extends Chat {
-  lastMessage?: ChatLastMessageView
-}
-
 export interface DateHeader {
   _id: string
   type: string
@@ -60,15 +52,6 @@ export interface DateHeader {
   text: string
 }
 
-export interface Option {
-  icon?: keyof typeof ICONS
-  label?: string
-  action?: (payload?: string) => void
-  color?: string
-  separator?: boolean
-}
-
-export type IconType = 'transparent' | 'gradient'
 export type ColorKey = keyof typeof staticColors | null
 
 export interface SettingsItem {
