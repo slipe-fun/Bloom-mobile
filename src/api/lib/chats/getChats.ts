@@ -86,7 +86,7 @@ export default async function getChats() {
     storage.set('chats', JSON.stringify(chats))
 
     // return api response
-    return response.data
+    return chats
   } catch (error) {
     console.log(error)
   }
