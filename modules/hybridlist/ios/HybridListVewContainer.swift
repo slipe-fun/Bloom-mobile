@@ -10,11 +10,15 @@ class HybridListViewContainer: ExpoView {
         didSet { updateView() }
     }
 
-     var contentInsetTop: Double = 0 {
+    var contentInsetTop: Int = 0 {
         didSet { updateView() }
     }
     
-     var contentInsetBottom: Double = 0 {
+    var contentInsetBottom: Int = 0 {
+        didSet { updateView() }
+    }
+
+    var lastSeenId: Int = 0 {
         didSet { updateView() }
     }
     
@@ -29,7 +33,7 @@ class HybridListViewContainer: ExpoView {
             guard let self = self else { return }
             
             if #available(iOS 16.0, *) {
-                let swiftUIView = SwiftUIList(data: self.data, theme: theme, contentInsetTop: self.contentInsetTop, contentInsetBottom: self.contentInsetBottom) { index, item in
+                let swiftUIView = SwiftUIList(data: self.data, theme: theme, contentInsetTop: self.contentInsetTop, contentInsetBottom: self.contentInsetBottom, lastSeenId: self.lastSeenId) { index, item in
                     self.onItemPress([
                         "index": index,
                         "item": [
@@ -38,6 +42,11 @@ class HybridListViewContainer: ExpoView {
                             "seen": item.seen ?? NSNull(),
                             "date": item.date,
                             "me": item.me,
+                            "nonce": item.nonce,
+                            "chatId": item.chatId,
+                            "authorId": item.authorId,
+                            "groupEnd": item.groupEnd,
+                            "groupStart": item.groupStart,
                         ]
                     ])
                 }

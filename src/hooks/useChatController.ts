@@ -1,5 +1,6 @@
 import useMessages from '@api/hooks/encryption/useMessages'
-import type { Chat, Message } from '@interfaces'
+import type { Chat } from '@interfaces'
+import type { ListItem } from '@modules/hybridlist'
 import { useEffect, useMemo, useState } from 'react'
 
 interface useChatControllerProps {
@@ -10,7 +11,7 @@ interface useChatController {
   nextPage: () => void
   seenID: number
   addMessage: (content: string, reply_to?: number) => Promise<void>
-  messages: Message[]
+  messages: ListItem[]
 }
 
 export default function useChatController({ chat }: useChatControllerProps): useChatController {

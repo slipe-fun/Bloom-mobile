@@ -5,8 +5,9 @@ import Combine
 struct SwiftUIList: View {
     let data: [ListItemRecord]
     let theme: ListThemeRecord
-    let contentInsetTop: Double
-    let contentInsetBottom: Double
+    let contentInsetTop: Int
+    let lastSeenId: Int
+    let contentInsetBottom: Int
     let onItemPress: (Int, ListItemRecord) -> Void
 
     @State private var isKeyboardVisible = false
@@ -28,10 +29,10 @@ struct SwiftUIList: View {
         .background(listBackgroundColor)
         .ignoresSafeArea(.container, edges: .top)
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in 
-            withAnimation(springyAnimation) { isKeyboardVisible = true }
+            isKeyboardVisible = true
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in 
-            withAnimation(springyAnimation) { isKeyboardVisible = false }
+            isKeyboardVisible = false
         }
     }
     

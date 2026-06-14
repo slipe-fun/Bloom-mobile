@@ -14,6 +14,11 @@ export interface ListItem {
   seen: string
   date: string
   me: boolean
+  nonce: string
+  chatId: number
+  authorId: string
+  groundEnd: boolean
+  groupStart: boolean
 }
 
 export interface ListTheme {
@@ -36,6 +41,7 @@ export interface HybridListViewProps extends ViewProps {
   data: ListItem[]
   theme: ListTheme
   contentInsetTop: number
+  lastSeenId: number
   contentInsetBottom: number
   onItemPress?: (event: OnItemPressEvent) => void
 }

@@ -7,6 +7,11 @@ struct ListItemRecord: Record {
   @Field var seen: String? = nil
   @Field var date: String
   @Field var me: Bool
+  @Field var nonce: String
+  @Field var chatId: Int
+  @Field var authorId: String
+  @Field var groupEnd: Bool
+  @Field var groupStart: Bool
 }
 
 struct ListThemeRecord: Record {
@@ -31,6 +36,9 @@ public class HybridListViewModule: Module {
       }
       Prop("contentInsetTop") { (view: HybridListViewContainer, prop: Double) in
         view.contentInsetTop = prop
+      }
+      Prop("lastSeenId") { (view: HybridListViewContainer, prop: Int) in
+        view.lastSeenId = prop
       }
       Prop("contentInsetBottom") { (view: HybridListViewContainer, prop: Double) in
         view.contentInsetBottom = prop

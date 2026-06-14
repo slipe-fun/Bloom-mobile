@@ -4,10 +4,9 @@ import Header from '@components/chat/header'
 import { SIZE_MAP } from '@components/ui/button/constats'
 import { base } from '@design/base'
 import { useChatController, useInsets } from '@hooks'
-import type { ListItem, OnItemPressEvent } from '@modules/hybridlist'
+import type { OnItemPressEvent } from '@modules/hybridlist'
 import { HybridListView } from '@modules/hybridlist'
 import useChatStore from '@stores/chat'
-import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -41,6 +40,7 @@ export default function Chat() {
         contentInsetBottom={FOOTER_HEIGHT}
         data={messages}
         theme={listTheme}
+        lastSeenId={seenID}
         onItemPress={handlePress}
         style={styles.list}
       />
