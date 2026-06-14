@@ -2,38 +2,41 @@ import ExpoModulesCore
 import SwiftUI
 
 class HybridListViewContainer: ExpoView {
+    let store = HybridListStore()
+
+    private var hostingController: UIHostingController<SwiftUIList>?
+    let onItemPress = EventDispatcher()
+
+
     var data: [ListItemRecord] = [] {
-        didSet { updateView() }
+        didSet { store.data = data }
     }
     
     var theme: ListThemeRecord? {
-        didSet { updateView() }
+        didSet { store.theme = theme }
     }
 
     var contentInsetTop: Int = 0 {
-        didSet { updateView() }
+        didSet { store.contentInsetTop = contentInsetTop }
     }
     
     var contentInsetBottom: Int = 0 {
-        didSet { updateView() }
+        didSet { store.contentInsetBottom = contentInsetBottom }
     }
 
     var lastSeenId: Int = 0 {
-        didSet { updateView() }
+        didSet { store.lastSeenId = lastSeenId }
     }
-    
-    let onItemPress = EventDispatcher()
 
-    private var hostingController: UIHostingController<AnyView>?
+    required init(appContext: AppContext? = nil) {
+        super.init(appContext: appContext)
+        setupHostingController()
+    }
 
-    private func updateView() {
-        guard let theme = theme else { return }
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+    private func setupHostingController() {
             
             if #available(iOS 16.0, *) {
-                let swiftUIView = SwiftUIList(data: self.data, theme: theme, contentInsetTop: self.contentInsetTop, contentInsetBottom: self.contentInsetBottom, lastSeenId: self.lastSeenId) { index, item in
+                let swiftUIView = SwiftUIList(store: store) { index, item in
                     self.onItemPress([
                         "index": index,
                         "item": [
@@ -51,28 +54,22 @@ class HybridListViewContainer: ExpoView {
                     ])
                 }
                 
-                let erasedView = AnyView(swiftUIView)
-                
-                if self.hostingController == nil {
-                    let hosting = UIHostingController(rootView: erasedView)
-                    hosting.view.backgroundColor = .clear
-                    hosting.view.insetsLayoutMarginsFromSafeArea = false
-                    hosting.view.clipsToBounds = true
-                    hosting.view.translatesAutoresizingMaskIntoConstraints = false
-                    
-                    self.addSubview(hosting.view)
-                    
-                    NSLayoutConstraint.activate([
-                        hosting.view.topAnchor.constraint(equalTo: self.topAnchor),
-                        hosting.view.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-                        hosting.view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                        hosting.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-                    ])
-                    self.hostingController = hosting
-                } else {
-                    self.hostingController?.rootView = erasedView
-                }
+                let hosting = UIHostingController(rootView: swiftUIView)
+                hosting.view.backgroundColor = .clear
+                hosting.view.insetsLayoutMarginsFromSafeArea = false
+                hosting.view.clipsToBounds = true
+                hosting.view.translatesAutoresizingMaskIntoConstraints = false
+        
+                elf.addSubview(hosting.view)
+        
+                NSLayoutConstraint.activate([
+                    hosting.view.topAnchor.constraint(equalTo: self.topAnchor),
+                    hosting.view.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                    hosting.view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    hosting.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+                ])
+        
+                self.hostingController = hosting
             }
-        }
     }
 }

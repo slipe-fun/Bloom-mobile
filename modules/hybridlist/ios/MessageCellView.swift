@@ -1,10 +1,17 @@
 import SwiftUI
 
 @available(iOS 16.0, *)
-struct MessageCellView: View {
+struct MessageCellView: View, Equatable {
     let item: ListItemRecord
     let theme: ListThemeRecord
+    let isSeen: Bool
     let action: () -> Void
+
+    static func == (lhs: MessageCellView, rhs: MessageCellView) -> Bool {
+        lhs.item.id == rhs.item.id &&
+        lhs.item.content == rhs.item.content &&
+        lhs.isSeen == rhs.isSeen &&
+    }
 
     private var textColor: Color {
         Color(hex: item.me ? theme.whiteColor : theme.textColor)
@@ -34,7 +41,16 @@ struct MessageCellView: View {
                     Spacer(minLength: 55)
                 }
 
-                messageBubble
+                VStack(alignment: item.me ? .trailing : .leading, spacing: 4) {
+                    messageBubble
+                    
+                    if item.me && isSeen {
+                        Text(item.content)
+                            .font(.caption2)
+                            .foregroundColor(Color(hex: theme.secondaryTextColor))
+                            .transition(.opacity)
+                    }
+                }
 
                 if !item.me {
                     Spacer(minLength: 55)
@@ -42,5 +58,6 @@ struct MessageCellView: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
+        .animation(.spring(response: 0.4, dampingFraction: 0.65, blendDuration: 0), value: isSeen)
     }
 }
