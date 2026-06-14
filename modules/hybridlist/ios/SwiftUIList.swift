@@ -9,21 +9,32 @@ struct SwiftUIList: View {
 
     @State private var isKeyboardVisible = false
     
+    private let bottomSpacerId = "BOTTOM_SPACER"
+    
     private var listBackgroundColor: Color {
-        if let theme = store.theme {
-            return Color(hex: theme.backgroundColor)
-        }
-        return .clear
+        store.parsedTheme?.backgroundColor ?? .clear
     }
 
     private var springyAnimation: Animation {
-        .spring(response: 0.4, dampingFraction: 0.65, blendDuration: 0)
+        .interpolatingSpring(
+            mass: 0.2,
+            stiffness: 120.0,
+            damping: 12.0,
+            initialVelocity: 0.0
+        )
     }
     
     var body: some View {
-        if let theme = store.theme {
+        if let theme = store.parsedTheme {
             ScrollView {
-                messageList(theme: theme)
+                ScrollViewReader { proxy in
+                    messageList(theme: theme)
+                        .onChange(of: store.data) { _ in
+                            withAnimation(springyAnimation) {
+                                proxy.scrollTo(bottomSpacerId, anchor: .top)
+                            }
+                        }
+                }
             }
             .scrollIndicators(.hidden)
             .scaleEffect(y: -1) 
@@ -40,8 +51,12 @@ struct SwiftUIList: View {
         }
     }
     
-    private func messageList(theme: ListThemeRecord) -> some View {
+    private func messageList(theme: ParsedListTheme) -> some View {
         LazyVStack(spacing: 8) {
+            Color.clear
+                .frame(height: isKeyboardVisible ? store.contentInsetBottom + 10 : store.contentInsetBottom)
+                .id(bottomSpacerId)
+
             ForEach(Array(store.data.enumerated()).reversed(), id: \.element.id) { index, item in
                 let isSeen = item.id <= store.lastSeenId
 
@@ -51,6 +66,7 @@ struct SwiftUIList: View {
                 .equatable()
                 .padding(.horizontal, 16)
                 .scaleEffect(y: -1)
+                .id(item.id) 
                 .transition(.asymmetric(
                     insertion: .move(edge: .top).combined(with: .opacity),
                     removal: .opacity
@@ -58,7 +74,6 @@ struct SwiftUIList: View {
             }
         }
         .padding(.bottom, store.contentInsetTop)
-        .padding(.top, isKeyboardVisible ? store.contentInsetBottom + 10 : store.contentInsetBottom)
-        .animation(springyAnimation, value: store.data.count)
+        .animation(springyAnimation, value: store.data)
     }
 }

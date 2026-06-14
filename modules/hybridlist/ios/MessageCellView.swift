@@ -3,22 +3,23 @@ import SwiftUI
 @available(iOS 16.0, *)
 struct MessageCellView: View, Equatable {
     let item: ListItemRecord
-    let theme: ListThemeRecord
+    let theme: ParsedListTheme
     let isSeen: Bool
     let action: () -> Void
 
     static func == (lhs: MessageCellView, rhs: MessageCellView) -> Bool {
         lhs.item.id == rhs.item.id &&
         lhs.item.content == rhs.item.content &&
-        lhs.isSeen == rhs.isSeen
+        lhs.isSeen == rhs.isSeen &&
+        lhs.theme == rhs.theme
     }
 
     private var textColor: Color {
-        Color(hex: item.me ? theme.whiteColor : theme.textColor)
+        item.me ? theme.whiteColor : theme.textColor
     }
 
     private var backgroundColor: Color {
-        Color(hex: item.me ? theme.primaryColor : theme.foregroundColor)
+        item.me ? theme.primaryColor : theme.foregroundColor
     }
 
     private var messageBubble: some View {
@@ -47,7 +48,7 @@ struct MessageCellView: View, Equatable {
                     if item.me && isSeen {
                         Text(item.content)
                             .font(.caption2)
-                            .foregroundColor(Color(hex: theme.secondaryTextColor))
+                            .foregroundColor(theme.secondaryTextColor)
                             .transition(.opacity)
                     }
                 }

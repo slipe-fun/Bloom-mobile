@@ -23,6 +23,14 @@ struct ListThemeRecord: Record {
   @Field var foregroundColor: String
 }
 
+extension ListItemRecord: Equatable {
+    public static func == (lhs: ListItemRecord, rhs: ListItemRecord) -> Bool {
+        lhs.id == rhs.id && 
+        lhs.seen == rhs.seen && 
+        lhs.content == rhs.content
+    }
+}
+
 public class HybridListViewModule: Module {
   public func definition() -> ModuleDefinition {
     Name("HybridListView")

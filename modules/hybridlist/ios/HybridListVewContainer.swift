@@ -12,7 +12,11 @@ class HybridListViewContainer: ExpoView {
     }
     
     var theme: ListThemeRecord? {
-        didSet { store.theme = theme }
+        didSet { 
+            if let theme = theme {
+                store.parsedTheme = ParsedListTheme(from: theme)
+            } 
+        }
     }
 
     var contentInsetTop: Double = 0 {
