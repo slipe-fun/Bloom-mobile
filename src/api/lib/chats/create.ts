@@ -21,5 +21,5 @@ export default async function createChat(recipient: User) {
   const chat = await createChatRequest(recipient?.id, handshake_payload)
   if (!chat) return
 
-  await addChatToStorage(chat, Buffer.from(chat_key).toString('hex'))
+  return await addChatToStorage(chat, Buffer.from(chat_key).toString('hex'))
 }

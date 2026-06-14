@@ -16,18 +16,26 @@ export default async function (chat, key) {
 
   const session = await getMySession()
 
+  const members = [...(chat?.members || [])].map((member) => {
+    const { kyber_public_key, ecdh_public_key, ed_public_key, ...user } = member
+    return user
+  })
+
+  const me = members.find((member) => member?.id === session?.user_id)
+  const recipient = members.find((member) => member?.id !== me?.id)
+
+  const storageChat = {
+    id: chat?.id,
+    me,
+    recipient,
+    key,
+  }
+
   // add chat to mmkv storage
-  chats = [
-    ...chats,
-    {
-      id: chat?.id,
-      members: chat?.members?.map((member) => ({ ...member, isMe: member?.id === session?.user_id })),
-      key,
-    },
-  ]
+  chats = [...chats, storageChat]
 
   // save changes
   Storage.set('chats', JSON.stringify(chats))
 
-  return chats
+  return storageChat
 }
