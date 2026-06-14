@@ -45,7 +45,7 @@ export default function SearchUser({ user }: ChatProps) {
     const createdChat = await createChat(user)
     addChat(createdChat)
     setChat(createdChat)
-    push(`/(app)/chat/${chat?.id}`)
+    push(`/(app)/chat/${createdChat?.id}`)
   }
 
   const animatedStyle = useAnimatedStyle(() => ({
