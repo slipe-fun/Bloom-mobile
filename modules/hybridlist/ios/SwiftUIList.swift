@@ -3,15 +3,17 @@ import Combine
 
 @available(iOS 16.0, *)
 struct SwiftUIList: View {
-
-    @ObservableObject var store: HybridListStore
+    @ObservedObject var store: HybridListStore
 
     let onItemPress: (Int, ListItemRecord) -> Void
 
     @State private var isKeyboardVisible = false
     
     private var listBackgroundColor: Color {
-        Color(hex: theme.backgroundColor)
+        if let theme = store.theme {
+            return Color(hex: theme.backgroundColor)
+        }
+        return .clear
     }
 
     private var springyAnimation: Animation {
@@ -20,34 +22,33 @@ struct SwiftUIList: View {
     
     var body: some View {
         if let theme = store.theme {
-             ScrollView {
-            messageList()
-        }
-        .scrollIndicators(.hidden)
-        .scaleEffect(y: -1) 
-        .background(listBackgroundColor)
-        .ignoresSafeArea(.container, edges: .top)
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in 
-            isKeyboardVisible = true
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in 
-            isKeyboardVisible = false
-        }
+            ScrollView {
+                messageList(theme: theme)
+            }
+            .scrollIndicators(.hidden)
+            .scaleEffect(y: -1) 
+            .background(listBackgroundColor)
+            .ignoresSafeArea(.container, edges: .top)
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in 
+                isKeyboardVisible = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in 
+                isKeyboardVisible = false
+            }
         } else {
             Color.clear
         }
-       
     }
     
-    private func messageList() -> some View {
+    private func messageList(theme: ListThemeRecord) -> some View {
         LazyVStack(spacing: 8) {
-            ForEach(Array(data.enumerated()).reversed(), id: \.element.id) { index, item in
+            ForEach(Array(store.data.enumerated()).reversed(), id: \.element.id) { index, item in
                 let isSeen = item.id <= store.lastSeenId
 
                 MessageCellView(item: item, theme: theme, isSeen: isSeen) {
                     onItemPress(index, item)
                 }
-                .equtable()
+                .equatable()
                 .padding(.horizontal, 16)
                 .scaleEffect(y: -1)
                 .transition(.asymmetric(
@@ -56,8 +57,8 @@ struct SwiftUIList: View {
                 ))
             }
         }
-        .padding(.bottom, contentInsetTop)
-        .padding(.top, isKeyboardVisible ? contentInsetBottom + 10 : contentInsetBottom)
-        .animation(springyAnimation, value: data.count)
+        .padding(.bottom, store.contentInsetTop)
+        .padding(.top, isKeyboardVisible ? store.contentInsetBottom + 10 : store.contentInsetBottom)
+        .animation(springyAnimation, value: store.data.count)
     }
 }

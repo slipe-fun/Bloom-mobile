@@ -10,7 +10,7 @@ struct MessageCellView: View, Equatable {
     static func == (lhs: MessageCellView, rhs: MessageCellView) -> Bool {
         lhs.item.id == rhs.item.id &&
         lhs.item.content == rhs.item.content &&
-        lhs.isSeen == rhs.isSeen &&
+        lhs.isSeen == rhs.isSeen
     }
 
     private var textColor: Color {
