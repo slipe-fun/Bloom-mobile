@@ -22,30 +22,10 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 export default function SearchUser({ user }: ChatProps) {
   const animatedTheme = useAnimatedTheme()
   const progress = useSharedValue(1)
-  const { push } = useRouter()
-  const setChat = useChatStore((state) => state.setChat)
-  const { mmkv, ensureMMKV } = useStorageStore()
-  const { addChat } = useChatList()
+  const { actions } = useChatList()
 
   const handlePress = (inn: boolean = true) => {
     progress.set(withSpring(inn ? 0 : 1, quickSpring))
-  }
-
-  const openChat = async () => {
-    const storage = mmkv ?? (await ensureMMKV())
-    const chats = getChatsFromStorage(storage)
-
-    const chat = chats.find((chat) => chat?.recipient?.id === user?.id)
-    if (chat) {
-      setChat(chat)
-      push(`/(app)/chat/${chat?.id}`)
-      return
-    }
-
-    const createdChat = await createChat(user)
-    addChat(createdChat)
-    setChat(createdChat)
-    push(`/(app)/chat/${createdChat?.id}`)
   }
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -57,7 +37,7 @@ export default function SearchUser({ user }: ChatProps) {
       onTouchStart={() => handlePress(true)}
       onTouchMove={() => handlePress(false)}
       onTouchEnd={() => handlePress(false)}
-      onPress={openChat}
+      onPress={() => actions.openOrCreateChat(user)}
       //   onPress={onPressHandler}
       style={[styles.chat, animatedStyle]}
     >
