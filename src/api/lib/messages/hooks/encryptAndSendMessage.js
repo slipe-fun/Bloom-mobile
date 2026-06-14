@@ -34,7 +34,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
         }
       : null
 
-    const lastId = messages?.length > 0 ? messages[messages.length - 1].id : 0
+    const lastId = messages?.length > 0 ? messages[0].id : 0
 
     // payload
     const newMsg = {
@@ -47,7 +47,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
       authorId: author_id,
       raw_date: new Date(),
       date: formatSentTime(new Date().toString()),
-      seen: false,
+      seen: undefined,
       reply_to: reply_to_json,
     }
 

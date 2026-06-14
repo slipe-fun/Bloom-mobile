@@ -35,7 +35,7 @@ class HybridListViewContainer: ExpoView {
                         "item": [
                             "id": item.id,
                             "content": item.content,
-                            "seen": item.seen,
+                            "seen": item.seen ?? NSNull(),
                             "date": item.date,
                             "me": item.me,
                         ]

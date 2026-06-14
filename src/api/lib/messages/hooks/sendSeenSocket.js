@@ -4,10 +4,10 @@ import { database } from 'src/db'
 
 export default async function (ws, chat_id, messages, setMessages) {
   try {
-    const lastMessage = messages[messages?.length - 1]
+    const lastMessage = messages[0]
 
     // if message not seen and message sent by recipient
-    if (!lastMessage?.seen && !lastMessage?.isMe) {
+    if (!lastMessage?.seen && !lastMessage?.me) {
       // send read messages request
       const response = await readMessagesRequest(chat_id, [lastMessage?.id])
       if (!response) return

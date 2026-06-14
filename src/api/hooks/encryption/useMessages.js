@@ -26,20 +26,20 @@ export default function (chat_id) {
   // storages
   const { mmkv, ensureMMKV } = useStorageStore()
 
+  const messagesWithDates = useMemo(() => {
+    return uniqueById([...messages]).sort((a, b) => new Date(b.raw_date) - new Date(a.raw_date))
+  }, [messages])
+
   const nextPage = async () => {
     const storage = mmkv ?? (await ensureMMKV())
-    return loadMessages(storage, chat_id, messages, setMessages)
+    return loadMessages(storage, chat_id, messagesWithDates, setMessages)
   }
 
   // ENCRYPT AND SEND MESSAGE
   const addMessage = async (content, reply_to) => {
     const storage = mmkv ?? (await ensureMMKV())
-    return encryptAndSendMessage(storage, ws, content, reply_to, messages, setMessages, chat_id, chat?.me?.id, chat?.key)
+    return encryptAndSendMessage(storage, ws, content, reply_to, messagesWithDates, setMessages, chat_id, chat?.me?.id, chat?.key)
   }
-
-  const messagesWithDates = useMemo(() => {
-    return uniqueById([...messages]).sort((a, b) => new Date(b.raw_date) - new Date(a.raw_date))
-  }, [messages])
 
   // GET MESSAGES FROM API
   useEffect(() => {
@@ -65,8 +65,8 @@ export default function (chat_id) {
       return
     }
 
-    getNewMessagesFromMessageSocket(mmkv, setMessages, newMessages, chat_id, messages, clearNewMessages)
-  }, [mmkv, newMessages, chat_id, messages])
+    getNewMessagesFromMessageSocket(mmkv, setMessages, newMessages, chat_id, messagesWithDates, clearNewMessages)
+  }, [mmkv, newMessages, chat_id, messagesWithDates])
 
   // GET CHANGES OF SEEN MESSAGES STATUS
   useEffect(() => {
@@ -75,8 +75,8 @@ export default function (chat_id) {
 
   // SEND SEEN SOCKET
   useEffect(() => {
-    sendSeenSocket(ws, chat_id, messages, setMessages)
-  }, [messages])
+    sendSeenSocket(ws, chat_id, messagesWithDates, setMessages)
+  }, [messagesWithDates])
 
   return { messages: messagesWithDates, addMessage, nextPage }
 }
