@@ -29,7 +29,7 @@ struct SwiftUIList: View {
             ScrollView {
                 ScrollViewReader { proxy in
                     messageList(theme: theme)
-                        .onChange(of: store.data) { _ in
+                        .onChange(of: store.data.count) { _ in
                             withAnimation(springyAnimation) {
                                 proxy.scrollTo(bottomSpacerId, anchor: .top)
                             }

@@ -1,6 +1,5 @@
 import { Icon } from '@components/ui'
 import { paperplaneAnimationIn, paperplaneAnimationOut, springy, zoomAnimationIn, zoomAnimationOut } from '@constants/animations'
-import type { ListItem } from '@modules/hybridlist'
 import { useEffect } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -9,7 +8,7 @@ import { styles } from './Footer.styles'
 interface SendButtonProps {
   value: string
   setValue: (value: string) => void
-  handleSend: (item: ListItem) => void
+  handleSend: (item: string) => void
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -25,7 +24,7 @@ export default function SendButton({ value, setValue, handleSend }: SendButtonPr
   }))
 
   const send = () => {
-    handleSend({ id: Math.floor(Math.random() * 10000), content: value, seen: false, date: '123', me: true })
+    handleSend(value)
     setValue('')
   }
 

@@ -46,7 +46,7 @@ export default function Chat() {
       />
       {messages.length < 1 && <Empty />}
       <Header chat={chat} />
-      <Footer handleSend={(event) => addMessage(event?.content)} />
+      <Footer handleSend={(event) => addMessage(event)} />
     </View>
   )
 }
