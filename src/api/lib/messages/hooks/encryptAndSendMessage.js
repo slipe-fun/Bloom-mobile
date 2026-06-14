@@ -41,6 +41,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
       id: lastId + 1,
       me: true,
       isSending: true,
+      isSuccessful: false,
       nonce: message?.nonce,
       chatId: chat_id,
       content,
@@ -54,7 +55,18 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
     setMessages((prev) => [...prev, newMsg])
 
     const response = await sendMessageAndSave(content, chat_id, message, reply_to)
-    if (!response) return
+    if (!response) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          ...newMsg,
+          id: response?.id,
+          isSending: false,
+          isSuccessful: false,
+        },
+      ])
+      return
+    }
 
     setMessages((prev) => [
       ...prev,
@@ -62,6 +74,7 @@ export default async function (mmkv, ws, content, reply_to, messages, setMessage
         ...newMsg,
         id: response?.id,
         isSending: false,
+        isSuccessful: true,
       },
     ])
   } catch (err) {
