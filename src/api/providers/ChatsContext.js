@@ -1,11 +1,14 @@
 import addChatToStorage from '@api/lib/chats/addChatToStorage'
+import createChat from '@api/lib/chats/create'
 import getChatFromStorage from '@api/lib/chats/getChatFromStorage'
 import prepareForHanshake from '@api/lib/handshake/prepare'
 import getSkid from '@constants/skid'
 import { restoreBytes } from '@lib/skid-v3/src/utils'
 import { Q } from '@nozbe/watermelondb'
+import useChatStore from '@stores/chat'
 import useStorageStore from '@stores/storage'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useRouter } from 'expo-router'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { database } from 'src/db'
 import getChats from '../lib/chats/getChats'
 import getChatsFromStorage from '../lib/chats/getChatsFromStorage'
@@ -20,6 +23,9 @@ export default function ChatsProvider({ children }) {
   const ws = useWebSocket()
   // storages
   const { mmkv } = useStorageStore()
+
+  const { push } = useRouter()
+  const setChat = useChatStore((state) => state.setChat)
 
   function safeObject(obj) {
     if (!obj) return null
@@ -246,7 +252,26 @@ export default function ChatsProvider({ children }) {
     }
   }, [chats])
 
-  return <ChatsContext.Provider value={{ chats, addChat }}>{children}</ChatsContext.Provider>
+  const actions = useMemo(
+    () => ({
+      openOrCreateChat: async (user) => {
+        const chat = chats.find((c) => c?.recipient?.id === user?.id)
+        if (chat) {
+          setChat(chat)
+          push(`/(app)/chat/${chat.id}`)
+          return
+        }
+
+        const createdChat = await createChat(user)
+        addChat(createdChat)
+        setChat(createdChat)
+        push(`/(app)/chat/${createdChat?.id}`)
+      },
+    }),
+    [chats],
+  )
+
+  return <ChatsContext.Provider value={{ chats, addChat, actions }}>{children}</ChatsContext.Provider>
 }
 
 export const useChatList = () => useContext(ChatsContext)
