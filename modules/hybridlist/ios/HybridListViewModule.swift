@@ -31,6 +31,8 @@ extension ListItemRecord: Equatable {
     }
 }
 
+extension ListItemRecord: Identifiable {}
+
 public class HybridListViewModule: Module {
   public func definition() -> ModuleDefinition {
     Name("HybridListView")

@@ -23,16 +23,28 @@ struct MessageCellView: View, Equatable {
     }
 
     private var messageBubble: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(item.content)
-                .font(.custom("OpenRunde-Medium", size: 16))
-                .foregroundColor(textColor)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .frame(minWidth: 60, minHeight: 44)
-        .background(backgroundColor)
-        .cornerRadius(26)
+        let invisibleSpaceForTime = Text("\u{00A0}\u{00A0}" + item.date)
+            .font(.custom("OpenRunde-Regular", size: 12))
+            .foregroundColor(.clear)
+
+        return (Text(item.content)
+            .font(.custom("OpenRunde-Medium", size: 16))
+            .foregroundColor(textColor)
+            + invisibleSpaceForTime)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .frame(minWidth: 60, minHeight: 44, alignment: .leading)
+            .background(backgroundColor)
+            .cornerRadius(26)
+            
+            .overlay(
+                Text(item.date)
+                    .font(.custom("OpenRunde-Regular", size: 12))
+                    .foregroundColor(textColor.opacity(0.5))
+                    .padding(.trailing, 14)
+                    .padding(.bottom, 10),
+                alignment: .bottomTrailing
+            )
     }
 
     var body: some View {
@@ -46,7 +58,7 @@ struct MessageCellView: View, Equatable {
                     messageBubble
                     
                     if item.me && isSeen {
-                        Text(item.content)
+                        Text(item.seen ?? "Read") 
                             .font(.caption2)
                             .foregroundColor(theme.secondaryTextColor)
                             .transition(.opacity)

@@ -57,11 +57,13 @@ struct SwiftUIList: View {
                 .frame(height: isKeyboardVisible ? store.contentInsetBottom + 10 : store.contentInsetBottom)
                 .id(bottomSpacerId)
 
-            ForEach(Array(store.data.enumerated()).reversed(), id: \.element.id) { index, item in
+            ForEach(store.data.enumerated().reversed(), id: \.element.id) { index, item in
                 let isSeen = item.id <= store.lastSeenId
 
                 MessageCellView(item: item, theme: theme, isSeen: isSeen) {
-                    onItemPress(index, item)
+                    if let index = store.data.firstIndex(of: item) {
+                        onItemPress(index, item)
+                    }
                 }
                 .equatable()
                 .padding(.horizontal, 16)
