@@ -31,18 +31,18 @@ struct MessageCellView: View, Equatable {
             .font(.custom("OpenRunde-Medium", size: 16))
             .foregroundColor(textColor)
             + invisibleSpaceForTime)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .frame(minWidth: 60, minHeight: 44, alignment: .leading)
+            .padding(.horizontal, 15)
+            .padding(.vertical, 11)
+            .frame(minWidth: 60, minHeight: 40, alignment: .leading)
             .background(backgroundColor)
-            .cornerRadius(26)
+            .cornerRadius(21)
             
             .overlay(
                 Text(item.date)
                     .font(.custom("OpenRunde-Regular", size: 12))
                     .foregroundColor(textColor.opacity(0.5))
-                    .padding(.trailing, 14)
-                    .padding(.bottom, 10),
+                    .padding(.trailing, 13)
+                    .padding(.bottom, 9),
                 alignment: .bottomTrailing
             )
     }

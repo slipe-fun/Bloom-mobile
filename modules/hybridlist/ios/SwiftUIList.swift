@@ -52,9 +52,9 @@ struct SwiftUIList: View {
     }
     
     private func messageList(theme: ParsedListTheme) -> some View {
-        LazyVStack(spacing: 8) {
+        LazyVStack(spacing: 4) {
             Color.clear
-                .frame(height: isKeyboardVisible ? store.contentInsetBottom + 10 : store.contentInsetBottom)
+                .frame(height: isKeyboardVisible ? store.contentInsetBottom + 12 : store.contentInsetBottom)
                 .id(bottomSpacerId)
 
             ForEach(store.data.enumerated().reversed(), id: \.element.id) { index, item in

@@ -14,9 +14,10 @@ export default function Chat() {
   const insets = useInsets()
   const { theme } = useUnistyles()
   const chat = useChatStore((state) => state.chat)
+  const footerHeight = useChatStore((state) => state.footerHeight)
   const { messages, seenID, addMessage, nextPage } = useChatController({ chat })
 
-  const FOOTER_HEIGHT = SIZE_MAP.md + base.spacing.lg
+  const FOOTER_HEIGHT = footerHeight - insets.bottom - base.spacing.lg
   const HEADER_HEIGHT = SIZE_MAP.md + base.spacing.xxxl + 16 + insets.top
 
   const listTheme = {

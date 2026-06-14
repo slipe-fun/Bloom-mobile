@@ -1,8 +1,11 @@
 import { Input } from '@components/ui'
 import { SIZE_MAP } from '@components/ui/input'
 import { base } from '@design/base'
+import { useInsets } from '@hooks'
+import useChatStore from '@stores/chat'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { LayoutChangeEvent } from 'react-native'
 import SendButton from './SendButton'
 
 type MessageInputProps = {
@@ -12,11 +15,18 @@ type MessageInputProps = {
 export default function MessageInput({ handleSend }: MessageInputProps) {
   const { t } = useTranslation('chat')
   const [value, setValue] = useState('')
+  const insets = useInsets()
+  const setFooterHeight = useChatStore((state) => state.setFooterHeight)
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    setFooterHeight(insets.bottom + event.nativeEvent.layout.height + base.spacing.xxl)
+  }
 
   return (
     <Input
       value={value}
       size="md"
+      onLayout={handleLayout}
       viewStyle={{ flex: 1, borderRadius: SIZE_MAP.md / 2, height: 'auto', minHeight: SIZE_MAP.md }}
       elevated={true}
       multiline
