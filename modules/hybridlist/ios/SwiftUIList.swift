@@ -8,7 +8,7 @@ struct IndexedListItem: Identifiable, Equatable {
     var id: ListItemRecord.ID { element.id }
     
     static func == (lhs: IndexedListItem, rhs: IndexedListItem) -> Bool {
-        lhs.index == rhs.index && lhs.element.id == rhs.element.id
+        lhs.index == rhs.index && lhs.element == rhs.element
     }
 }
 

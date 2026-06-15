@@ -7,6 +7,7 @@ import { useChatController, useInsets } from '@hooks'
 import type { OnItemPressEvent } from '@modules/hybridlist'
 import { HybridListView } from '@modules/hybridlist'
 import useChatStore from '@stores/chat'
+import { useCallback } from 'react'
 import { View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
@@ -29,10 +30,10 @@ export default function Chat() {
     foregroundColor: theme.colors.foreground,
   }
 
-  const handlePress = (event: OnItemPressEvent) => {
+  const handlePress = useCallback((event: OnItemPressEvent) => {
     const { index, item } = event.nativeEvent
     console.log(`Нажат элемент #${index}:`, item)
-  }
+  }, [])
 
   return (
     <View style={styles.container}>

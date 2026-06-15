@@ -17,7 +17,7 @@ export interface ListItem {
   nonce: string
   chatId: number
   authorId: string
-  groundEnd: boolean
+  groupEnd: boolean
   groupStart: boolean
 }
 

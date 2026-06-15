@@ -38,7 +38,8 @@ class HybridListViewContainer: ExpoView {
 
     private func setupHostingController() {
         if #available(iOS 16.0, *) {
-            let swiftUIView = SwiftUIList(store: store) { index, item in
+            let swiftUIView = SwiftUIList(store: store) { [weak self] index, item in
+                guard let self = self else { return }
                 self.onItemPress([
                     "index": index,
                     "item": [
