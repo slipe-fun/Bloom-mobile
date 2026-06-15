@@ -58,7 +58,7 @@ struct MessageCellView: View, Equatable {
                     messageBubble
                     
                     if item.me && isSeen {
-                        Text(item.seen) 
+                        Text(item.seen ?? "Read") 
                             .font(.custom("OpenRunde-Medium", size: 14))
                             .foregroundColor(theme.secondaryTextColor)
                             .transition(.opacity)

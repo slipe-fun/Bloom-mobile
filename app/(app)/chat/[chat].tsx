@@ -19,7 +19,7 @@ export default function Chat() {
   const { messages, seenID, addMessage, nextPage } = useChatController({ chat })
 
   const FOOTER_HEIGHT = footerHeight - insets.bottom - base.spacing.lg
-  const HEADER_HEIGHT = SIZE_MAP.md + base.spacing.xxxl + 16 + insets.top
+  const HEADER_HEIGHT = SIZE_MAP.md + base.spacing.xxxl + 24 + insets.top
 
   const listTheme = {
     backgroundColor: theme.colors.background,

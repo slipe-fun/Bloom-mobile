@@ -103,7 +103,7 @@ struct PureListView: View, Equatable {
                         .scaleEffect(y: -1)
                         .id(indexedItem.element.id) 
                         .transition(.asymmetric(
-                            insertion: .blurAndOffset(y: -contentInsetBottom * 2.5, blur: 8),
+                            insertion: .blurAndOffset(y: -contentInsetBottom * 2.5, blur: 10),
                             removal: .opacity
                         ))
                     }
