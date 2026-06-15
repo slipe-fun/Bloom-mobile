@@ -35,7 +35,7 @@ struct MessageCellView: View, Equatable {
             .padding(.vertical, 11)
             .frame(minWidth: 60, minHeight: 40, alignment: .leading)
             .background(backgroundColor)
-            .cornerRadius(21)
+            .cornerRadius(22)
             
             .overlay(
                 Text(item.date)
@@ -54,12 +54,12 @@ struct MessageCellView: View, Equatable {
                     Spacer(minLength: 55)
                 }
 
-                VStack(alignment: item.me ? .trailing : .leading, spacing: 4) {
+                VStack(alignment: item.me ? .trailing : .leading, spacing: 8) {
                     messageBubble
                     
                     if item.me && isSeen {
-                        Text(item.seen ?? "Read") 
-                            .font(.caption2)
+                        Text(item.seen) 
+                            .font(.custom("OpenRunde-Medium", size: 14))
                             .foregroundColor(theme.secondaryTextColor)
                             .transition(.opacity)
                     }
