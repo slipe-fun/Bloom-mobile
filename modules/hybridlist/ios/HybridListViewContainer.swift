@@ -75,4 +75,37 @@ class HybridListViewContainer: ExpoView {
             self.hostingController = hosting
         }
     }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        
+        if #available(iOS 16.0, *) {
+            if window != nil {
+                if let parentVC = self.parentViewController, let hosting = hostingController {
+                    if hosting.parent == nil {
+                        parentVC.addChild(hosting)
+                        hosting.didMove(toParent: parentVC)
+                    }
+                }
+            } else {
+                if let hosting = hostingController {
+                    hosting.willMove(toParent: nil)
+                    hosting.removeFromParent()
+                }
+            }
+        }
+    }
+}
+
+fileprivate extension UIView {
+    var parentViewController: UIViewController? {
+        var parentResponder: UIResponder? = self
+        while parentResponder != nil {
+            parentResponder = parentResponder?.next
+            if let viewController = parentResponder as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
+    }
 }
