@@ -35,9 +35,9 @@ export default function MessageInput({ handleSend }: MessageInputProps) {
       numberOfLines={6}
       onChangeText={setValue}
       placeholder={t('chat:footer.input')}
-      submitBehavior="blurAndSubmit"
+      submitBehavior="newline"
       button={<SendButton value={value} setValue={setValue} handleSend={handleSend} />}
-      returnKeyType="send"
+      returnKeyType="default"
     />
   )
 }
