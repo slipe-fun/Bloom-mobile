@@ -7,21 +7,12 @@ struct SwiftUIList: View {
 
     let onItemPress: (Int, ListItemRecord) -> Void
 
-    @State private var isKeyboardVisible = false
+    @State private var keyboardHeight: CGFloat = 0
     
     private let bottomSpacerId = "BOTTOM_SPACER"
     
     private var listBackgroundColor: Color {
         store.parsedTheme?.backgroundColor ?? .clear
-    }
-
-    private var springyAnimation: Animation {
-        .interpolatingSpring(
-            mass: 0.2,
-            stiffness: 120.0,
-            damping: 12.0,
-            initialVelocity: 0.0
-        )
     }
     
     var body: some View {
@@ -30,21 +21,29 @@ struct SwiftUIList: View {
                 ScrollViewReader { proxy in
                     messageList(theme: theme)
                         .onChange(of: store.data.count) { _ in
-                            withAnimation(springyAnimation) {
+                            withAnimation(.springy) {
                                 proxy.scrollTo(bottomSpacerId, anchor: .top)
                             }
                         }
                 }
             }
             .scrollIndicators(.hidden)
-            .scaleEffect(y: -1) 
+            .scaleEffect(y: -1)
             .background(listBackgroundColor)
+            .scrollDismissesKeyboard(.immediately)
             .ignoresSafeArea(.container, edges: .top)
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in 
-                isKeyboardVisible = true
+            .ignoresSafeArea(.keyboard, edges: .vertical)
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in 
+                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                    withAnimation(.springy) {
+                        self.keyboardHeight = keyboardFrame.height - 12
+                    }
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in 
-                isKeyboardVisible = false
+                withAnimation(.springy) {
+                    self.keyboardHeight = 0
+                }
             }
         } else {
             Color.clear
@@ -54,7 +53,7 @@ struct SwiftUIList: View {
     private func messageList(theme: ParsedListTheme) -> some View {
         LazyVStack(spacing: 4) {
             Color.clear
-                .frame(height: isKeyboardVisible ? store.contentInsetBottom + 12 : store.contentInsetBottom)
+                .frame(height: keyboardHeight + store.contentInsetBottom)
                 .id(bottomSpacerId)
 
             ForEach(store.data.enumerated().reversed(), id: \.element.id) { index, item in
@@ -76,6 +75,7 @@ struct SwiftUIList: View {
             }
         }
         .padding(.bottom, store.contentInsetTop)
-        .animation(springyAnimation, value: store.data)
+        .animation(.springy, value: store.data)
+        .animation(.springy, value: store.contentInsetBottom)
     }
 }

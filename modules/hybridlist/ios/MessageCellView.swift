@@ -71,6 +71,6 @@ struct MessageCellView: View, Equatable {
             }
         }
         .buttonStyle(PlainButtonStyle())
-        .animation(.spring(response: 0.4, dampingFraction: 0.65, blendDuration: 0), value: isSeen)
+        .animation(.springy, value: isSeen)
     }
 }
