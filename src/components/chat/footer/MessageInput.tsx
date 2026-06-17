@@ -3,7 +3,7 @@ import { SIZE_MAP } from '@components/ui/input'
 import { base } from '@design/base'
 import { useInsets } from '@hooks'
 import useChatStore from '@stores/chat'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LayoutChangeEvent } from 'react-native'
 import SendButton from './SendButton'
@@ -21,6 +21,10 @@ export default function MessageInput({ handleSend }: MessageInputProps) {
   const handleLayout = (event: LayoutChangeEvent) => {
     setFooterHeight(insets.bottom + event.nativeEvent.layout.height + base.spacing.xxl)
   }
+
+  useEffect(() => {
+    return () => setFooterHeight(0)
+  }, [])
 
   return (
     <Input

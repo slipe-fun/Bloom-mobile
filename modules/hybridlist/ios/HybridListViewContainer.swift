@@ -95,7 +95,7 @@ class HybridListViewContainer: ExpoView {
                     }
                 }
             } else {
-                if let hosting.parent != nil {
+                if hosting.parent != nil {
                     hosting.willMove(toParent: nil)
                     hosting.removeFromParent()
                 }

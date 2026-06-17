@@ -41,7 +41,7 @@ export default function FooterButton({ inputRef = null }: FooterAvatarProps) {
       variant="icon"
       icon={
         <Animated.View style={animatedIconStyle}>
-          <Icon uniProps={(theme) => ({ color: theme.colors.text })} size={30} icon="plus" />
+          <Icon uniProps={(theme) => ({ color: theme.colors.text })} size={28} icon="plus" />
         </Animated.View>
       }
       size="lg"

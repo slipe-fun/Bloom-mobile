@@ -5,7 +5,7 @@ extension Color {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
 
         guard let int = UInt64(hex, radix: 16) else {
-            self.init(.sRGB, red: 1. green: 1, blue: 1, opacity: 1)
+            self.init(.sRGB, red: 1, green: 1, blue: 1, opacity: 1)
             return
         }
 

@@ -46,7 +46,7 @@ struct SwiftUIList: View {
     var body: some View {
         if let theme = store.parsedTheme {
             PureListView(
-                items: indexedData,
+                items: store.indexedItems,
                 theme: theme,
                 lastSeenId: store.lastSeenId,
                 contentInsetBottom: store.contentInsetBottom,
