@@ -43,12 +43,6 @@ struct SwiftUIList: View {
         store.parsedTheme?.backgroundColor ?? .clear
     }
     
-    private var indexedData: [IndexedListItem] {
-        store.data.enumerated().map { 
-            IndexedListItem(index: $0.offset, element: $0.element) 
-        }
-    }
-    
     var body: some View {
         if let theme = store.parsedTheme {
             PureListView(

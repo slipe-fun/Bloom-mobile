@@ -3,8 +3,12 @@ import SwiftUI
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
+
+        guard let int = UInt64(hex, radix: 16) else {
+            self.init(.sRGB, red: 1. green: 1, blue: 1, opacity: 1)
+            return
+        }
+
         let a, r, g, b: UInt64
         switch hex.count {
         case 3:

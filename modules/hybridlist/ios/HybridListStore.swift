@@ -22,6 +22,7 @@ struct ParsedListTheme: Equatable {
 
 class HybridListStore: ObservableObject {
     @Published var data: [ListItemRecord] = []
+    @Published var indexedItems: [IndexedListItem] = []
     @Published var parsedTheme: ParsedListTheme? = nil
     @Published var contentInsetTop: Double = 0
     @Published var contentInsetBottom: Double = 0

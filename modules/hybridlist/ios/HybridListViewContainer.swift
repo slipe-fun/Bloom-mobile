@@ -8,7 +8,13 @@ class HybridListViewContainer: ExpoView {
     let onItemPress = EventDispatcher()
 
     var data: [ListItemRecord] = [] {
-        didSet { store.data = data }
+        didSet { 
+            store.data = data
+
+            store.indexedItems = data.enumerated().map {
+                IndexedListItem(index: $0.offset, element: $0.element)
+            }
+        }
     }
     
     var theme: ListThemeRecord? {
@@ -80,15 +86,16 @@ class HybridListViewContainer: ExpoView {
         super.didMoveToWindow()
         
         if #available(iOS 16.0, *) {
+            guard let hosting = hostingController else { return }
             if window != nil {
-                if let parentVC = self.parentViewController, let hosting = hostingController {
+                if let parentVC = self.parentViewController, hosting.parent == nil {
                     if hosting.parent == nil {
                         parentVC.addChild(hosting)
                         hosting.didMove(toParent: parentVC)
                     }
                 }
             } else {
-                if let hosting = hostingController {
+                if let hosting.parent != nil {
                     hosting.willMove(toParent: nil)
                     hosting.removeFromParent()
                 }
