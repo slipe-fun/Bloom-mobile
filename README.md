@@ -103,6 +103,7 @@ The project follows a standard Expo / React Native architecture.
 - `layouts/` — Navigation stack and it's transitions.
 - `assets/` — Static files, images, and fonts.
 - `scripts/` — Utility scripts.
+- `modules/` — Native modules written for iOS.
 
 ### Available Scripts
 Generate an icon list:
